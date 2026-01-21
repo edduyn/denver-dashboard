@@ -8,6 +8,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#0f172a">
+    <meta http-equiv="refresh" content="600">
     <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIkRlbnZlciBTYXRlbGxpdGUgRGFzaGJvYXJkIiwKICAic2hvcnRfbmFtZSI6ICJEZW52ZXIgODg5IiwKICAic3RhcnRfdXJsIjogIi4iLAogICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLAogICJiYWNrZ3JvdW5kX2NvbG9yIjogIiMwZjE3MmEiLAogICJ0aGVtZV9jb2xvciI6ICIjMGYxNzJhIiwKICAib3JpZW50YXRpb24iOiAiYW55Igp9">
     <title>Denver Satellite Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -26,6 +27,7 @@
         .authenticated #dashboard { display: block; }
         ::-webkit-scrollbar { display: none; }
         body { -ms-overflow-style: none; scrollbar-width: none; }
+        .paused-indicator { background: rgba(239, 68, 68, 0.9); }
     </style>
 </head>
 <body class="bg-gradient-to-br from-slate-900 to-slate-800 min-h-screen">
@@ -54,10 +56,6 @@
                 </button>
                 <p id="errorMsg" class="text-red-400 text-sm text-center hidden">Incorrect access code</p>
             </div>
-            <div id="installPrompt" class="hidden mt-4 p-3 bg-purple-600/20 border border-purple-500/50 rounded-xl">
-                <p class="text-purple-300 text-sm mb-2">📱 Install as fullscreen app?</p>
-                <button onclick="installApp()" class="w-full py-2 bg-purple-600 text-white font-bold rounded-lg text-sm">Install Dashboard App</button>
-            </div>
         </div>
     </div>
 
@@ -73,9 +71,9 @@
                     </div>
                 </div>
                 <div class="flex items-center gap-4">
-                    <button onclick="toggleKiosk()" id="kioskBtn" class="px-3 py-2 rounded-lg text-xs font-semibold bg-slate-700 text-slate-300 hover:bg-slate-600 flex items-center gap-2">
-                        <span id="kioskIcon">▶️</span>
-                        <span id="kioskText">Auto</span>
+                    <button onclick="toggleKiosk()" id="kioskBtn" class="px-3 py-2 rounded-lg text-xs font-semibold bg-emerald-600 text-white flex items-center gap-2">
+                        <span id="kioskIcon">⏸️</span>
+                        <span id="kioskText">Stop</span>
                     </button>
                     <button onclick="toggleFullscreen()" class="px-3 py-2 rounded-lg text-xs font-semibold bg-slate-700 text-slate-300 hover:bg-slate-600">⛶</button>
                     <button onclick="logout()" class="px-3 py-2 rounded-lg text-xs font-semibold bg-slate-700 text-slate-300 hover:bg-slate-600">🔒</button>
@@ -86,12 +84,22 @@
                 </div>
             </div>
 
-            <div id="kioskIndicator" class="hidden bg-emerald-500/20 border border-emerald-500/50 rounded-xl p-3 mb-4 flex items-center justify-between">
+            <div id="kioskIndicator" class="bg-emerald-500/20 border border-emerald-500/50 rounded-xl p-3 mb-4 flex items-center justify-between">
                 <div class="flex items-center gap-2">
                     <span class="kiosk-indicator text-emerald-400">●</span>
                     <span class="text-emerald-400 text-sm font-semibold">Display Mode</span>
+                    <span class="text-emerald-400/60 text-xs ml-2">(tap to pause)</span>
                 </div>
                 <div class="text-emerald-400 text-sm"><span id="scrollStatus">Scrolling...</span> Next in <span id="countdown">20</span>s</div>
+            </div>
+            
+            <div id="pausedIndicator" class="hidden paused-indicator rounded-xl p-3 mb-4 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <span class="text-white">⏸️</span>
+                    <span class="text-white text-sm font-semibold">PAUSED</span>
+                    <span class="text-white/80 text-xs ml-2">(tap to resume)</span>
+                </div>
+                <div class="text-white text-sm">Auto-resume in <span id="pauseCountdown">30</span>s</div>
             </div>
 
             <div class="flex gap-2 mb-6 flex-wrap">
@@ -141,7 +149,6 @@
                     <div class="bg-slate-700 rounded-xl p-3"><div class="flex items-center justify-between mb-2"><div class="flex items-center gap-2"><span class="w-7 h-7 bg-emerald-500 text-white rounded-lg flex items-center justify-center font-bold text-xs">10</span><div><h4 class="text-white font-bold text-sm">Vendor Disputes</h4><p class="text-slate-400 text-xs">5 day notify</p></div></div><div class="text-right"><p class="text-lg font-black text-emerald-400">100%</p></div></div><div class="h-2 bg-slate-600 rounded-full"><div class="h-2 bg-emerald-500 rounded-full" style="width:100%"></div></div><p class="text-xs text-slate-400 mt-1">📝 1/1 on time</p></div>
                     <div class="bg-slate-700 rounded-xl p-3"><div class="flex items-center justify-between mb-2"><div class="flex items-center gap-2"><span class="w-7 h-7 bg-slate-500 text-white rounded-lg flex items-center justify-center font-bold text-xs">11</span><div><h4 class="text-white font-bold text-sm">Risk Mgmt</h4><p class="text-slate-400 text-xs">Reduce risk</p></div></div><div class="text-right"><p class="text-lg font-black text-slate-400">TBD</p></div></div><div class="h-2 bg-slate-600 rounded-full"><div class="h-2 bg-slate-500 rounded-full" style="width:0%"></div></div></div>
                 </div>
-                <div id="goals-bottom"></div>
             </div>
 
             <!-- ACTIONS TAB -->
@@ -192,7 +199,6 @@
                         <div class="bg-emerald-500/20 rounded-xl p-3"><h4 class="font-bold text-emerald-400 mb-2 text-xs">✅ TOP</h4><ul class="space-y-1 text-white text-xs"><li class="flex justify-between"><span>Sean Macoomb</span><span class="text-emerald-400">66%⭐</span></li><li class="flex justify-between"><span>Julia Langford</span><span class="text-emerald-400">44%</span></li><li class="flex justify-between"><span>Michael Huber</span><span class="text-emerald-400">33%</span></li><li class="flex justify-between"><span>Guillermo Tovar</span><span class="text-emerald-400">32%</span></li></ul></div>
                     </div>
                 </div>
-                <div id="actions-bottom"></div>
             </div>
 
             <!-- OVERVIEW TAB -->
@@ -213,7 +219,6 @@
                     <div class="bg-slate-700 rounded-2xl p-4"><h3 class="text-sm font-bold text-white mb-3">📋 WOs</h3><div class="grid grid-cols-2 gap-2"><div class="bg-slate-600 rounded-lg p-2 text-center"><p class="text-lg font-black text-white">90</p><p class="text-xs text-slate-400">Open</p></div><div class="bg-emerald-500/20 rounded-lg p-2 text-center"><p class="text-lg font-black text-emerald-400">16</p><p class="text-xs">Billed</p></div><div class="bg-amber-500/20 rounded-lg p-2 text-center"><p class="text-lg font-black text-amber-400">16</p><p class="text-xs">30-59d</p></div><div class="bg-red-500/20 rounded-lg p-2 text-center"><p class="text-lg font-black text-red-400">11</p><p class="text-xs">90+d</p></div></div></div>
                     <div class="bg-slate-800 rounded-2xl p-4 border border-slate-600"><h3 class="text-sm font-bold text-white mb-3">📈 Trend</h3><div class="space-y-1 text-xs"><div class="flex justify-between"><span class="text-slate-400">2020</span><span class="text-emerald-400">67.9%</span></div><div class="flex justify-between"><span class="text-slate-400">2021</span><span class="text-emerald-400">68.4%</span></div><div class="flex justify-between"><span class="text-slate-400">2022</span><span class="text-amber-400">51.1%</span></div><div class="flex justify-between"><span class="text-slate-400">2023</span><span class="text-amber-400">52.6%</span></div><div class="flex justify-between"><span class="text-slate-400">2024</span><span class="text-red-400">43.2%</span></div><div class="flex justify-between"><span class="text-slate-400">2025</span><span class="text-amber-400">47.6%</span></div><div class="flex justify-between border-t border-slate-600 pt-1 mt-1"><span class="text-slate-400">Jan 26</span><span class="text-red-400 font-bold">24.2%</span></div></div></div>
                 </div>
-                <div id="overview-bottom"></div>
             </div>
 
             <!-- EMPLOYEES TAB -->
@@ -236,7 +241,6 @@
                         <div class="flex justify-between items-center p-2 bg-red-500/20 rounded-xl"><div class="flex items-center gap-2"><span class="w-6 h-6 bg-red-600 text-white rounded-full flex items-center justify-center font-bold text-xs">12</span><span class="text-white text-sm">Douglas Riera</span></div><div class="flex items-center gap-2"><span class="font-bold text-white text-sm">0.0h</span><span class="bg-red-600 text-white px-2 py-1 rounded-full text-xs">0%⚠️</span></div></div>
                     </div>
                 </div>
-                <div id="employees-bottom"></div>
             </div>
 
             <!-- WORK ORDERS TAB -->
@@ -270,10 +274,9 @@
                         <div><div class="flex justify-between text-sm mb-1"><span class="text-slate-300">90+d</span><span class="text-red-400">11 (12%)</span></div><div class="h-2 bg-slate-600 rounded-full"><div class="h-2 bg-red-500 rounded-full" style="width:12%"></div></div></div>
                     </div>
                 </div>
-                <div id="workorders-bottom"></div>
             </div>
 
-            <!-- QUOTES TAB (NEW) -->
+            <!-- QUOTES TAB -->
             <div id="quotes" class="tab">
                 <div class="bg-gradient-to-r from-orange-600 to-red-600 rounded-2xl p-4 text-white mb-6">
                     <div class="flex items-center justify-between mb-4">
@@ -281,7 +284,7 @@
                             <span class="text-3xl">📝</span>
                             <div>
                                 <h2 class="text-xl font-black">OPEN QUOTES</h2>
-                                <p class="opacity-80 text-sm">Target: Complete within 14 days</p>
+                                <p class="opacity-80 text-sm">Target: 14 days max</p>
                             </div>
                         </div>
                         <div class="text-right">
@@ -290,46 +293,39 @@
                         </div>
                     </div>
                     <div class="grid grid-cols-3 gap-3">
-                        <div class="bg-white/20 rounded-xl p-2 text-center"><p class="text-2xl font-black">12</p><p class="text-xs opacity-80">Total Open</p></div>
+                        <div class="bg-white/20 rounded-xl p-2 text-center"><p class="text-2xl font-black">12</p><p class="text-xs opacity-80">Total</p></div>
                         <div class="bg-white/20 rounded-xl p-2 text-center"><p class="text-2xl font-black text-red-200">10</p><p class="text-xs opacity-80">Overdue</p></div>
                         <div class="bg-white/20 rounded-xl p-2 text-center"><p class="text-2xl font-black">2</p><p class="text-xs opacity-80">On Track</p></div>
                     </div>
                 </div>
-
                 <div class="bg-red-900/30 border border-red-500/50 rounded-2xl p-4 mb-6">
-                    <h3 class="text-base font-bold text-red-400 mb-3">🚨 OVERDUE QUOTES (>14 days)</h3>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-xs">
-                            <thead><tr class="text-left text-slate-400"><th class="pb-2">Customer</th><th class="pb-2">Reg#</th><th class="pb-2">Days</th><th class="pb-2">Status</th></tr></thead>
-                            <tbody class="text-white">
-                                <tr class="border-t border-red-500/30"><td class="py-1">Falcon Field Services</td><td class="font-mono">N969AF</td><td class="text-red-400 font-bold">293</td><td>Sent</td></tr>
-                                <tr class="border-t border-red-500/30"><td class="py-1">757BD LLC</td><td class="font-mono">N7BD</td><td class="text-red-400 font-bold">243</td><td>Sent</td></tr>
-                                <tr class="border-t border-red-500/30"><td class="py-1">Air Methods LLC</td><td class="font-mono">N781HC</td><td class="text-red-400 font-bold">155</td><td>Not Sent</td></tr>
-                                <tr class="border-t border-red-500/30"><td class="py-1">Business Aviators</td><td class="font-mono">N1870E</td><td class="text-red-400 font-bold">134</td><td>Not Sent</td></tr>
-                                <tr class="border-t border-red-500/30"><td class="py-1">GD International</td><td class="font-mono">N199GD</td><td class="text-red-400 font-bold">126</td><td>Not Sent</td></tr>
-                                <tr class="border-t border-red-500/30"><td class="py-1">Steiner Aviation</td><td class="font-mono">N70RL</td><td class="text-red-400 font-bold">112</td><td>Not Sent</td></tr>
-                                <tr class="border-t border-red-500/30"><td class="py-1">Int'l Jet Aviation</td><td class="font-mono">N56HS</td><td class="text-red-400 font-bold">103</td><td>Agreement</td></tr>
-                                <tr class="border-t border-red-500/30"><td class="py-1">Marietta Silos</td><td class="font-mono">N193PP</td><td class="text-red-400 font-bold">84</td><td>Not Sent</td></tr>
-                                <tr class="border-t border-red-500/30"><td class="py-1">Peregrine</td><td class="font-mono">-</td><td class="text-red-400 font-bold">36</td><td>Sent</td></tr>
-                                <tr class="border-t border-red-500/30"><td class="py-1">INAB, LLC</td><td class="font-mono">N551TH</td><td class="text-red-400 font-bold">30</td><td>Sent</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
+                    <h3 class="text-base font-bold text-red-400 mb-3">🚨 OVERDUE (>14 days)</h3>
+                    <table class="w-full text-xs">
+                        <thead><tr class="text-left text-slate-400"><th class="pb-2">Customer</th><th class="pb-2">Reg#</th><th class="pb-2">Days</th><th class="pb-2">Status</th></tr></thead>
+                        <tbody class="text-white">
+                            <tr class="border-t border-red-500/30"><td class="py-1">Falcon Field</td><td class="font-mono">N969AF</td><td class="text-red-400 font-bold">293</td><td>Sent</td></tr>
+                            <tr class="border-t border-red-500/30"><td class="py-1">757BD LLC</td><td class="font-mono">N7BD</td><td class="text-red-400 font-bold">243</td><td>Sent</td></tr>
+                            <tr class="border-t border-red-500/30"><td class="py-1">Air Methods</td><td class="font-mono">N781HC</td><td class="text-red-400 font-bold">155</td><td>Not Sent</td></tr>
+                            <tr class="border-t border-red-500/30"><td class="py-1">Business Aviators</td><td class="font-mono">N1870E</td><td class="text-red-400 font-bold">134</td><td>Not Sent</td></tr>
+                            <tr class="border-t border-red-500/30"><td class="py-1">GD International</td><td class="font-mono">N199GD</td><td class="text-red-400 font-bold">126</td><td>Not Sent</td></tr>
+                            <tr class="border-t border-red-500/30"><td class="py-1">Steiner Aviation</td><td class="font-mono">N70RL</td><td class="text-red-400 font-bold">112</td><td>Not Sent</td></tr>
+                            <tr class="border-t border-red-500/30"><td class="py-1">Int'l Jet</td><td class="font-mono">N56HS</td><td class="text-red-400 font-bold">103</td><td>Agreement</td></tr>
+                            <tr class="border-t border-red-500/30"><td class="py-1">Marietta Silos</td><td class="font-mono">N193PP</td><td class="text-red-400 font-bold">84</td><td>Not Sent</td></tr>
+                            <tr class="border-t border-red-500/30"><td class="py-1">Peregrine</td><td class="font-mono">-</td><td class="text-red-400 font-bold">36</td><td>Sent</td></tr>
+                            <tr class="border-t border-red-500/30"><td class="py-1">INAB, LLC</td><td class="font-mono">N551TH</td><td class="text-red-400 font-bold">30</td><td>Sent</td></tr>
+                        </tbody>
+                    </table>
                 </div>
-
                 <div class="bg-emerald-900/30 border border-emerald-500/50 rounded-2xl p-4">
                     <h3 class="text-base font-bold text-emerald-400 mb-3">✅ ON TRACK (≤14 days)</h3>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-xs">
-                            <thead><tr class="text-left text-slate-400"><th class="pb-2">Customer</th><th class="pb-2">Reg#</th><th class="pb-2">Days</th><th class="pb-2">Status</th></tr></thead>
-                            <tbody class="text-white">
-                                <tr class="border-t border-emerald-500/30"><td class="py-1">Silver Dollar Aviation</td><td class="font-mono">N707EL</td><td class="text-emerald-400 font-bold">12</td><td>Sent</td></tr>
-                                <tr class="border-t border-emerald-500/30"><td class="py-1">KW Flight LLC</td><td class="font-mono">N729KF</td><td class="text-emerald-400 font-bold">6</td><td>Not Sent</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
+                    <table class="w-full text-xs">
+                        <thead><tr class="text-left text-slate-400"><th class="pb-2">Customer</th><th class="pb-2">Reg#</th><th class="pb-2">Days</th><th class="pb-2">Status</th></tr></thead>
+                        <tbody class="text-white">
+                            <tr class="border-t border-emerald-500/30"><td class="py-1">Silver Dollar</td><td class="font-mono">N707EL</td><td class="text-emerald-400 font-bold">12</td><td>Sent</td></tr>
+                            <tr class="border-t border-emerald-500/30"><td class="py-1">KW Flight</td><td class="font-mono">N729KF</td><td class="text-emerald-400 font-bold">6</td><td>Not Sent</td></tr>
+                        </tbody>
+                    </table>
                 </div>
-                <div id="quotes-bottom"></div>
             </div>
 
             <!-- QUALITY TAB -->
@@ -360,7 +356,6 @@
                         <div class="bg-white/10 rounded-xl p-3 text-center"><p class="text-purple-300 text-xs">Focus</p><p class="text-sm font-bold text-white">RTS, Parts</p></div>
                     </div>
                 </div>
-                <div id="quality-bottom"></div>
             </div>
 
             <!-- RANKINGS TAB -->
@@ -389,12 +384,11 @@
                         <div class="bg-white/20 rounded-xl p-2 text-center"><p class="text-xs opacity-80">KC</p><p class="text-lg font-black">28.2%+</p></div>
                     </div>
                 </div>
-                <div id="rankings-bottom"></div>
             </div>
 
             <div class="mt-6 pt-4 border-t border-slate-700 flex justify-between text-xs text-slate-500">
                 <p>Duncan Aviation • Denver 889</p>
-                <p>01/21/26</p>
+                <p>Auto-refresh: 10min | 01/21/26</p>
             </div>
         </div>
     </div>
@@ -402,14 +396,57 @@
     <script>
         const ACCESS_CODE = 'denver889';
         let deferredPrompt;
-        window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; document.getElementById('installPrompt').classList.remove('hidden'); });
-        function installApp() { if (deferredPrompt) { deferredPrompt.prompt(); deferredPrompt.userChoice.then((r) => { deferredPrompt = null; document.getElementById('installPrompt').classList.add('hidden'); }); } }
-        function checkPassword() { var input = document.getElementById('passwordInput').value; if (input === ACCESS_CODE) { document.body.classList.add('authenticated'); localStorage.setItem('denver_auth', 'true'); document.getElementById('errorMsg').classList.add('hidden'); } else { document.getElementById('errorMsg').classList.remove('hidden'); document.getElementById('passwordInput').value = ''; } }
-        function logout() { document.body.classList.remove('authenticated'); localStorage.removeItem('denver_auth'); document.getElementById('passwordInput').value = ''; }
-        if (localStorage.getItem('denver_auth') === 'true') { document.body.classList.add('authenticated'); }
-        function toggleFullscreen() { if (!document.fullscreenElement) { document.documentElement.requestFullscreen().catch(e => {}); } else { document.exitFullscreen(); } }
+        window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; });
+        
+        function checkPassword() { 
+            var input = document.getElementById('passwordInput').value; 
+            if (input === ACCESS_CODE) { 
+                document.body.classList.add('authenticated'); 
+                localStorage.setItem('denver_auth', 'true'); 
+                document.getElementById('errorMsg').classList.add('hidden');
+                // Auto-start display mode and fullscreen after login
+                setTimeout(() => {
+                    if (!kioskMode) toggleKiosk();
+                    tryFullscreen();
+                }, 500);
+            } else { 
+                document.getElementById('errorMsg').classList.remove('hidden'); 
+                document.getElementById('passwordInput').value = ''; 
+            } 
+        }
+        
+        function logout() { 
+            document.body.classList.remove('authenticated'); 
+            localStorage.removeItem('denver_auth'); 
+            document.getElementById('passwordInput').value = ''; 
+        }
+        
+        // Auto-login and start if previously authenticated
+        if (localStorage.getItem('denver_auth') === 'true') { 
+            document.body.classList.add('authenticated');
+            // Auto-start display mode after page load
+            setTimeout(() => {
+                if (!kioskMode) toggleKiosk();
+                tryFullscreen();
+            }, 1000);
+        }
+        
+        function tryFullscreen() {
+            if (!document.fullscreenElement && document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen().catch(e => {});
+            }
+        }
+        
+        function toggleFullscreen() { 
+            if (!document.fullscreenElement) { 
+                document.documentElement.requestFullscreen().catch(e => {}); 
+            } else { 
+                document.exitFullscreen(); 
+            } 
+        }
 
         let kioskMode = false, animationId = null, countdownInterval = null, countdown = 20;
+        let isPaused = false, pauseTimeout = null, pauseCountdown = 30, pauseCountdownInterval = null;
         const tabs = ['goals', 'actions', 'overview', 'employees', 'workorders', 'quotes', 'quality', 'rankings'];
         let currentTabIndex = 0, scrollPosition = 0, scrollDirection = 1, maxScroll = 0, lastTime = 0;
 
@@ -418,14 +455,23 @@
             document.querySelectorAll('.tabBtn').forEach(b => { b.style.backgroundColor = '#334155'; b.style.color = '#cbd5e1'; });
             document.getElementById(tabName).classList.add('active');
             var btn = document.querySelector('[data-tab="' + tabName + '"]');
-            if (btn) { btn.style.backgroundColor = tabName === 'goals' ? '#9333ea' : tabName === 'actions' ? '#ef4444' : tabName === 'quotes' ? '#ea580c' : '#f59e0b'; btn.style.color = 'white'; }
+            if (btn) { 
+                var colors = { goals: '#9333ea', actions: '#ef4444', quotes: '#ea580c' };
+                btn.style.backgroundColor = colors[tabName] || '#f59e0b'; 
+                btn.style.color = 'white'; 
+            }
             currentTabIndex = tabs.indexOf(tabName);
-            window.scrollTo(0, 0); scrollPosition = 0; scrollDirection = 1;
-            if (kioskMode) { countdown = 20; setTimeout(() => { maxScroll = document.documentElement.scrollHeight - window.innerHeight; }, 100); }
+            window.scrollTo(0, 0); 
+            scrollPosition = 0; 
+            scrollDirection = 1;
+            if (kioskMode && !isPaused) { 
+                countdown = 20; 
+                setTimeout(() => { maxScroll = document.documentElement.scrollHeight - window.innerHeight; }, 100); 
+            }
         }
 
         function smoothScrollLoop(t) {
-            if (!kioskMode) return;
+            if (!kioskMode || isPaused) return;
             if (!lastTime) lastTime = t;
             var dt = t - lastTime; lastTime = t;
             var step = (maxScroll / 9000) * dt;
@@ -437,22 +483,113 @@
             animationId = requestAnimationFrame(smoothScrollLoop);
         }
 
+        function pauseScrolling() {
+            if (!kioskMode) return;
+            isPaused = true;
+            if (animationId) cancelAnimationFrame(animationId);
+            if (countdownInterval) clearInterval(countdownInterval);
+            
+            document.getElementById('kioskIndicator').classList.add('hidden');
+            document.getElementById('pausedIndicator').classList.remove('hidden');
+            
+            // Start pause countdown (auto-resume in 30s)
+            pauseCountdown = 30;
+            document.getElementById('pauseCountdown').textContent = pauseCountdown;
+            
+            if (pauseCountdownInterval) clearInterval(pauseCountdownInterval);
+            pauseCountdownInterval = setInterval(() => {
+                pauseCountdown--;
+                document.getElementById('pauseCountdown').textContent = pauseCountdown;
+                if (pauseCountdown <= 0) {
+                    resumeScrolling();
+                }
+            }, 1000);
+        }
+
+        function resumeScrolling() {
+            if (!kioskMode) return;
+            isPaused = false;
+            
+            if (pauseCountdownInterval) clearInterval(pauseCountdownInterval);
+            
+            document.getElementById('pausedIndicator').classList.add('hidden');
+            document.getElementById('kioskIndicator').classList.remove('hidden');
+            
+            lastTime = 0;
+            maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+            animationId = requestAnimationFrame(smoothScrollLoop);
+            
+            countdown = 20;
+            countdownInterval = setInterval(() => { 
+                if (!isPaused) {
+                    countdown--; 
+                    document.getElementById('countdown').textContent = countdown; 
+                    if (countdown <= 0) { 
+                        currentTabIndex = (currentTabIndex + 1) % tabs.length; 
+                        openTab(tabs[currentTabIndex]); 
+                    }
+                }
+            }, 1000);
+        }
+
+        // Tap/click to pause/resume
+        document.addEventListener('click', (e) => {
+            // Don't pause if clicking buttons or inputs
+            if (e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT' || e.target.closest('button')) return;
+            if (!kioskMode) return;
+            
+            if (isPaused) {
+                resumeScrolling();
+            } else {
+                pauseScrolling();
+            }
+        });
+
         function toggleKiosk() {
             kioskMode = !kioskMode;
-            var btn = document.getElementById('kioskBtn'), icon = document.getElementById('kioskIcon'), text = document.getElementById('kioskText'), ind = document.getElementById('kioskIndicator');
+            var btn = document.getElementById('kioskBtn'), icon = document.getElementById('kioskIcon'), text = document.getElementById('kioskText');
+            var kioskInd = document.getElementById('kioskIndicator'), pausedInd = document.getElementById('pausedIndicator');
+            
             if (kioskMode) {
-                btn.classList.remove('bg-slate-700', 'text-slate-300'); btn.classList.add('bg-emerald-600', 'text-white');
-                icon.textContent = '⏸️'; text.textContent = 'Stop'; ind.classList.remove('hidden');
-                countdown = 20; scrollPosition = 0; scrollDirection = 1; lastTime = 0;
+                btn.classList.remove('bg-slate-700', 'text-slate-300'); 
+                btn.classList.add('bg-emerald-600', 'text-white');
+                icon.textContent = '⏸️'; 
+                text.textContent = 'Stop';
+                kioskInd.classList.remove('hidden');
+                pausedInd.classList.add('hidden');
+                isPaused = false;
+                countdown = 20; 
+                scrollPosition = 0; 
+                scrollDirection = 1; 
+                lastTime = 0;
                 maxScroll = document.documentElement.scrollHeight - window.innerHeight;
                 animationId = requestAnimationFrame(smoothScrollLoop);
-                countdownInterval = setInterval(() => { countdown--; document.getElementById('countdown').textContent = countdown; if (countdown <= 0) { currentTabIndex = (currentTabIndex + 1) % tabs.length; openTab(tabs[currentTabIndex]); } }, 1000);
+                countdownInterval = setInterval(() => { 
+                    if (!isPaused) {
+                        countdown--; 
+                        document.getElementById('countdown').textContent = countdown; 
+                        if (countdown <= 0) { 
+                            currentTabIndex = (currentTabIndex + 1) % tabs.length; 
+                            openTab(tabs[currentTabIndex]); 
+                        }
+                    }
+                }, 1000);
             } else {
-                btn.classList.remove('bg-emerald-600', 'text-white'); btn.classList.add('bg-slate-700', 'text-slate-300');
-                icon.textContent = '▶️'; text.textContent = 'Auto'; ind.classList.add('hidden');
-                if (animationId) cancelAnimationFrame(animationId); if (countdownInterval) clearInterval(countdownInterval); lastTime = 0;
+                btn.classList.remove('bg-emerald-600', 'text-white'); 
+                btn.classList.add('bg-slate-700', 'text-slate-300');
+                icon.textContent = '▶️'; 
+                text.textContent = 'Auto';
+                kioskInd.classList.add('hidden');
+                pausedInd.classList.add('hidden');
+                isPaused = false;
+                if (animationId) cancelAnimationFrame(animationId); 
+                if (countdownInterval) clearInterval(countdownInterval);
+                if (pauseCountdownInterval) clearInterval(pauseCountdownInterval);
+                lastTime = 0;
             }
         }
+        
+        // Wake lock to keep screen on
         (async () => { try { if ('wakeLock' in navigator) await navigator.wakeLock.request('screen'); } catch(e) {} })();
     </script>
 </body>
