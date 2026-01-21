@@ -21,17 +21,14 @@
         .checkbox-item:has(input:checked) { opacity: 0.5; text-decoration: line-through; }
         .kiosk-indicator { animation: pulse 2s infinite; }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
-        html { scroll-behavior: smooth; }
         html, body { overscroll-behavior: none; -webkit-overflow-scrolling: touch; }
         #loginScreen { display: flex; }
         #dashboard { display: none; }
         .authenticated #loginScreen { display: none; }
         .authenticated #dashboard { display: block; }
-        /* Fullscreen styles */
         @media all and (display-mode: standalone) {
             body { padding-top: env(safe-area-inset-top); }
         }
-        /* Hide scrollbar but allow scrolling */
         ::-webkit-scrollbar { display: none; }
         body { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
@@ -62,7 +59,6 @@
                 </button>
                 <p id="errorMsg" class="text-red-400 text-sm text-center hidden">Incorrect access code</p>
             </div>
-            <!-- Install prompt -->
             <div id="installPrompt" class="hidden mt-4 p-3 bg-purple-600/20 border border-purple-500/50 rounded-xl">
                 <p class="text-purple-300 text-sm mb-2">📱 Install as fullscreen app?</p>
                 <button onclick="installApp()" class="w-full py-2 bg-purple-600 text-white font-bold rounded-lg text-sm">Install Dashboard App</button>
@@ -143,213 +139,136 @@
                 </div>
 
                 <div class="space-y-3">
-                    <!-- Goal 1 -->
                     <div class="bg-slate-700 rounded-xl p-4">
                         <div class="flex items-center justify-between mb-2">
                             <div class="flex items-center gap-3">
                                 <span class="w-8 h-8 bg-red-500 text-white rounded-lg flex items-center justify-center font-bold text-sm">1</span>
-                                <div>
-                                    <h4 class="text-white font-bold text-sm">Financial Objectives</h4>
-                                    <p class="text-slate-400 text-xs">Meet budget targets (Revenue + Net Income)</p>
-                                </div>
+                                <div><h4 class="text-white font-bold text-sm">Financial Objectives</h4><p class="text-slate-400 text-xs">Meet budget targets</p></div>
                             </div>
-                            <div class="text-right">
-                                <p class="text-xl font-black text-red-400">12%</p>
-                                <p class="text-xs text-slate-400">$35K / $694K Jan</p>
-                            </div>
+                            <div class="text-right"><p class="text-xl font-black text-red-400">12%</p><p class="text-xs text-slate-400">$35K / $694K</p></div>
                         </div>
                         <div class="h-2 bg-slate-600 rounded-full"><div class="h-2 bg-red-500 rounded-full" style="width:12%"></div></div>
-                        <p class="text-xs text-slate-400 mt-2">📝 A/B ratio 24.2% vs 58.5% target. Focus on billable work assignment.</p>
+                        <p class="text-xs text-slate-400 mt-2">📝 A/B ratio 24.2% vs 58.5% target. Focus on billable work.</p>
                     </div>
 
-                    <!-- Goal 2 -->
                     <div class="bg-slate-700 rounded-xl p-4">
                         <div class="flex items-center justify-between mb-2">
                             <div class="flex items-center gap-3">
                                 <span class="w-8 h-8 bg-amber-500 text-white rounded-lg flex items-center justify-center font-bold text-sm">2</span>
-                                <div>
-                                    <h4 class="text-white font-bold text-sm">Net Promoter Score</h4>
-                                    <p class="text-slate-400 text-xs">12 survey responses/year</p>
-                                </div>
+                                <div><h4 class="text-white font-bold text-sm">Net Promoter Score</h4><p class="text-slate-400 text-xs">12 surveys/year</p></div>
                             </div>
-                            <div class="text-right">
-                                <p class="text-xl font-black text-amber-400">0%</p>
-                                <p class="text-xs text-slate-400">0 / 12 responses</p>
-                            </div>
+                            <div class="text-right"><p class="text-xl font-black text-amber-400">0%</p><p class="text-xs text-slate-400">0 / 12</p></div>
                         </div>
                         <div class="h-2 bg-slate-600 rounded-full"><div class="h-2 bg-amber-500 rounded-full" style="width:0%"></div></div>
-                        <p class="text-xs text-slate-400 mt-2">📝 2025 ref: 10 responses, avg 9.7 score. Request surveys after completed work.</p>
+                        <p class="text-xs text-slate-400 mt-2">📝 2025: 10 responses, avg 9.7. Request surveys after work.</p>
                     </div>
 
-                    <!-- Goal 3 -->
                     <div class="bg-slate-700 rounded-xl p-4">
                         <div class="flex items-center justify-between mb-2">
                             <div class="flex items-center gap-3">
                                 <span class="w-8 h-8 bg-amber-500 text-white rounded-lg flex items-center justify-center font-bold text-sm">3</span>
-                                <div>
-                                    <h4 class="text-white font-bold text-sm">Training Plan</h4>
-                                    <p class="text-slate-400 text-xs">Complete 8 courses per PDT</p>
-                                </div>
+                                <div><h4 class="text-white font-bold text-sm">Training Plan</h4><p class="text-slate-400 text-xs">8 courses per PDT</p></div>
                             </div>
-                            <div class="text-right">
-                                <p class="text-xl font-black text-amber-400">38%</p>
-                                <p class="text-xs text-slate-400">3 / 8 scheduled</p>
-                            </div>
+                            <div class="text-right"><p class="text-xl font-black text-amber-400">38%</p><p class="text-xs text-slate-400">3 / 8</p></div>
                         </div>
                         <div class="h-2 bg-slate-600 rounded-full"><div class="h-2 bg-amber-500 rounded-full" style="width:38%"></div></div>
-                        <p class="text-xs text-slate-400 mt-2">📝 Huber 1/28, Noris 2/26, Armando 3/18. Need 5 more scheduled.</p>
+                        <p class="text-xs text-slate-400 mt-2">📝 Huber 1/28, Noris 2/26, Armando 3/18. Need 5 more.</p>
                     </div>
 
-                    <!-- Goal 4 -->
                     <div class="bg-slate-700 rounded-xl p-4">
                         <div class="flex items-center justify-between mb-2">
                             <div class="flex items-center gap-3">
                                 <span class="w-8 h-8 bg-amber-500 text-white rounded-lg flex items-center justify-center font-bold text-sm">4</span>
-                                <div>
-                                    <h4 class="text-white font-bold text-sm">Flat-Rate System</h4>
-                                    <p class="text-slate-400 text-xs">Implement 3-tier pricing system</p>
-                                </div>
+                                <div><h4 class="text-white font-bold text-sm">Flat-Rate System</h4><p class="text-slate-400 text-xs">3-tier pricing</p></div>
                             </div>
-                            <div class="text-right">
-                                <p class="text-xl font-black text-amber-400">10%</p>
-                                <p class="text-xs text-slate-400">In Progress</p>
-                            </div>
+                            <div class="text-right"><p class="text-xl font-black text-amber-400">10%</p><p class="text-xs text-slate-400">In Progress</p></div>
                         </div>
                         <div class="h-2 bg-slate-600 rounded-full"><div class="h-2 bg-amber-500 rounded-full" style="width:10%"></div></div>
-                        <p class="text-xs text-slate-400 mt-2">📝 Kickoff 1/8, review meeting 3/9. Need WO data for tier analysis.</p>
+                        <p class="text-xs text-slate-400 mt-2">📝 Kickoff 1/8, review 3/9. Need WO data for tiers.</p>
                     </div>
 
-                    <!-- Goal 5 -->
                     <div class="bg-slate-700 rounded-xl p-4">
                         <div class="flex items-center justify-between mb-2">
                             <div class="flex items-center gap-3">
                                 <span class="w-8 h-8 bg-slate-500 text-white rounded-lg flex items-center justify-center font-bold text-sm">5</span>
-                                <div>
-                                    <h4 class="text-white font-bold text-sm">Customer Experience</h4>
-                                    <p class="text-slate-400 text-xs">Manage availability & communication</p>
-                                </div>
+                                <div><h4 class="text-white font-bold text-sm">Customer Experience</h4><p class="text-slate-400 text-xs">Availability & communication</p></div>
                             </div>
-                            <div class="text-right">
-                                <p class="text-xl font-black text-slate-400">TBD</p>
-                                <p class="text-xs text-slate-400">Pending metrics</p>
-                            </div>
+                            <div class="text-right"><p class="text-xl font-black text-slate-400">TBD</p><p class="text-xs text-slate-400">Pending</p></div>
                         </div>
                         <div class="h-2 bg-slate-600 rounded-full"><div class="h-2 bg-slate-500 rounded-full" style="width:0%"></div></div>
-                        <p class="text-xs text-slate-400 mt-2">📝 Need to define KPIs. Consider response time, availability tracking.</p>
+                        <p class="text-xs text-slate-400 mt-2">📝 Need to define KPIs.</p>
                     </div>
 
-                    <!-- Goal 6 -->
                     <div class="bg-slate-700 rounded-xl p-4">
                         <div class="flex items-center justify-between mb-2">
                             <div class="flex items-center gap-3">
                                 <span class="w-8 h-8 bg-emerald-500 text-white rounded-lg flex items-center justify-center font-bold text-sm">6</span>
-                                <div>
-                                    <h4 class="text-white font-bold text-sm">Shop Expenses</h4>
-                                    <p class="text-slate-400 text-xs">Stay within $1.17M annual budget</p>
-                                </div>
+                                <div><h4 class="text-white font-bold text-sm">Shop Expenses</h4><p class="text-slate-400 text-xs">$1.17M annual budget</p></div>
                             </div>
-                            <div class="text-right">
-                                <p class="text-xl font-black text-emerald-400">100%</p>
-                                <p class="text-xs text-slate-400">On Track</p>
-                            </div>
+                            <div class="text-right"><p class="text-xl font-black text-emerald-400">100%</p><p class="text-xs text-slate-400">On Track</p></div>
                         </div>
                         <div class="h-2 bg-slate-600 rounded-full"><div class="h-2 bg-emerald-500 rounded-full" style="width:100%"></div></div>
-                        <p class="text-xs text-slate-400 mt-2">📝 Jan budget: $97.5K. Monitor monthly variance closely.</p>
+                        <p class="text-xs text-slate-400 mt-2">📝 Jan budget: $97.5K. Monitor variance.</p>
                     </div>
 
-                    <!-- Goal 7 -->
                     <div class="bg-slate-700 rounded-xl p-4">
                         <div class="flex items-center justify-between mb-2">
                             <div class="flex items-center gap-3">
                                 <span class="w-8 h-8 bg-amber-500 text-white rounded-lg flex items-center justify-center font-bold text-sm">7</span>
-                                <div>
-                                    <h4 class="text-white font-bold text-sm">Audit Compliance</h4>
-                                    <p class="text-slate-400 text-xs">Zero findings on FAA/internal audits</p>
-                                </div>
+                                <div><h4 class="text-white font-bold text-sm">Audit Compliance</h4><p class="text-slate-400 text-xs">Zero findings</p></div>
                             </div>
-                            <div class="text-right">
-                                <p class="text-xl font-black text-amber-400">0%</p>
-                                <p class="text-xs text-slate-400">0 audits in 2026</p>
-                            </div>
+                            <div class="text-right"><p class="text-xl font-black text-amber-400">0%</p><p class="text-xs text-slate-400">0 audits</p></div>
                         </div>
                         <div class="h-2 bg-slate-600 rounded-full"><div class="h-2 bg-amber-500 rounded-full" style="width:0%"></div></div>
-                        <p class="text-xs text-slate-400 mt-2">📝 2025: 16 QI findings + 34 tech discrepancies. Focus: RTS, parts ID, flam locker.</p>
+                        <p class="text-xs text-slate-400 mt-2">📝 2025: 50 issues. Focus: RTS, parts ID, flam locker.</p>
                     </div>
 
-                    <!-- Goal 8 -->
                     <div class="bg-slate-700 rounded-xl p-4">
                         <div class="flex items-center justify-between mb-2">
                             <div class="flex items-center gap-3">
                                 <span class="w-8 h-8 bg-red-500 text-white rounded-lg flex items-center justify-center font-bold text-sm">8</span>
-                                <div>
-                                    <h4 class="text-white font-bold text-sm">Monthly Budget</h4>
-                                    <p class="text-slate-400 text-xs">Meet all monthly financial metrics</p>
-                                </div>
+                                <div><h4 class="text-white font-bold text-sm">Monthly Budget</h4><p class="text-slate-400 text-xs">Meet monthly metrics</p></div>
                             </div>
-                            <div class="text-right">
-                                <p class="text-xl font-black text-red-400">12%</p>
-                                <p class="text-xs text-slate-400">Jan tracking</p>
-                            </div>
+                            <div class="text-right"><p class="text-xl font-black text-red-400">12%</p><p class="text-xs text-slate-400">Jan tracking</p></div>
                         </div>
                         <div class="h-2 bg-slate-600 rounded-full"><div class="h-2 bg-red-500 rounded-full" style="width:12%"></div></div>
-                        <p class="text-xs text-slate-400 mt-2">📝 Jan Revenue: $35K / $694K (5%). Need $659K more by month end.</p>
+                        <p class="text-xs text-slate-400 mt-2">📝 Jan: $35K / $694K. Need $659K more.</p>
                     </div>
 
-                    <!-- Goal 9 -->
                     <div class="bg-slate-700 rounded-xl p-4">
                         <div class="flex items-center justify-between mb-2">
                             <div class="flex items-center gap-3">
                                 <span class="w-8 h-8 bg-emerald-500 text-white rounded-lg flex items-center justify-center font-bold text-sm">9</span>
-                                <div>
-                                    <h4 class="text-white font-bold text-sm">Dealer Programs</h4>
-                                    <p class="text-slate-400 text-xs">Track renewals & success rate</p>
-                                </div>
+                                <div><h4 class="text-white font-bold text-sm">Dealer Programs</h4><p class="text-slate-400 text-xs">Track renewals</p></div>
                             </div>
-                            <div class="text-right">
-                                <p class="text-xl font-black text-emerald-400">94%</p>
-                                <p class="text-xs text-slate-400">44/47 renewed</p>
-                            </div>
+                            <div class="text-right"><p class="text-xl font-black text-emerald-400">94%</p><p class="text-xs text-slate-400">44/47</p></div>
                         </div>
                         <div class="h-2 bg-slate-600 rounded-full"><div class="h-2 bg-emerald-500 rounded-full" style="width:94%"></div></div>
-                        <p class="text-xs text-slate-400 mt-2">📝 44 paid, 3 declined. Est revenue: $1,735,404. Keep tracking renewals.</p>
+                        <p class="text-xs text-slate-400 mt-2">📝 44 paid, 3 declined. Est: $1.7M revenue.</p>
                     </div>
 
-                    <!-- Goal 10 -->
                     <div class="bg-slate-700 rounded-xl p-4">
                         <div class="flex items-center justify-between mb-2">
                             <div class="flex items-center gap-3">
                                 <span class="w-8 h-8 bg-emerald-500 text-white rounded-lg flex items-center justify-center font-bold text-sm">10</span>
-                                <div>
-                                    <h4 class="text-white font-bold text-sm">Vendor Disputes</h4>
-                                    <p class="text-slate-400 text-xs">Communicate to BZ within 5 days</p>
-                                </div>
+                                <div><h4 class="text-white font-bold text-sm">Vendor Disputes</h4><p class="text-slate-400 text-xs">Notify BZ in 5 days</p></div>
                             </div>
-                            <div class="text-right">
-                                <p class="text-xl font-black text-emerald-400">100%</p>
-                                <p class="text-xs text-slate-400">1/1 on time</p>
-                            </div>
+                            <div class="text-right"><p class="text-xl font-black text-emerald-400">100%</p><p class="text-xs text-slate-400">1/1</p></div>
                         </div>
                         <div class="h-2 bg-slate-600 rounded-full"><div class="h-2 bg-emerald-500 rounded-full" style="width:100%"></div></div>
-                        <p class="text-xs text-slate-400 mt-2">📝 CT8VA Dassault dispute - notified BZ 1/20. Keep logging all disputes.</p>
+                        <p class="text-xs text-slate-400 mt-2">📝 CT8VA Dassault - notified BZ 1/20.</p>
                     </div>
 
-                    <!-- Goal 11 -->
                     <div class="bg-slate-700 rounded-xl p-4">
                         <div class="flex items-center justify-between mb-2">
                             <div class="flex items-center gap-3">
                                 <span class="w-8 h-8 bg-slate-500 text-white rounded-lg flex items-center justify-center font-bold text-sm">11</span>
-                                <div>
-                                    <h4 class="text-white font-bold text-sm">Risk Management</h4>
-                                    <p class="text-slate-400 text-xs">Identify & reduce risk score</p>
-                                </div>
+                                <div><h4 class="text-white font-bold text-sm">Risk Management</h4><p class="text-slate-400 text-xs">Reduce risk score</p></div>
                             </div>
-                            <div class="text-right">
-                                <p class="text-xl font-black text-slate-400">TBD</p>
-                                <p class="text-xs text-slate-400">Pending</p>
-                            </div>
+                            <div class="text-right"><p class="text-xl font-black text-slate-400">TBD</p><p class="text-xs text-slate-400">Pending</p></div>
                         </div>
                         <div class="h-2 bg-slate-600 rounded-full"><div class="h-2 bg-slate-500 rounded-full" style="width:0%"></div></div>
-                        <p class="text-xs text-slate-400 mt-2">📝 Need to define risk metrics. Consider: old WOs, unbilled work, safety.</p>
+                        <p class="text-xs text-slate-400 mt-2">📝 Need to define risk metrics.</p>
                     </div>
                 </div>
                 <div id="goals-bottom"></div>
@@ -362,71 +281,62 @@
                         <span class="text-2xl md:text-3xl">🎯</span>
                         <div>
                             <h2 class="text-lg md:text-xl font-black">TODAY'S MISSION</h2>
-                            <p class="opacity-90 text-sm">Every billable hour counts. Every old WO closed helps.</p>
+                            <p class="opacity-90 text-sm">Every billable hour counts.</p>
                         </div>
                     </div>
-                    <div class="grid grid-cols-3 gap-3 md:gap-4">
-                        <div class="bg-white/20 rounded-xl p-3 md:p-4 text-center">
-                            <p class="text-2xl md:text-3xl font-black">+34.3</p>
-                            <p class="text-xs opacity-80">pts to A/B target</p>
+                    <div class="grid grid-cols-3 gap-3">
+                        <div class="bg-white/20 rounded-xl p-3 text-center"><p class="text-2xl font-black">+34.3</p><p class="text-xs opacity-80">pts to target</p></div>
+                        <div class="bg-white/20 rounded-xl p-3 text-center"><p class="text-2xl font-black">11</p><p class="text-xs opacity-80">WOs 90+ days</p></div>
+                        <div class="bg-white/20 rounded-xl p-3 text-center"><p class="text-2xl font-black">20th</p><p class="text-xs opacity-80">of 21 shops</p></div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
+                    <div class="bg-slate-700 rounded-2xl p-4">
+                        <h3 class="text-base font-bold text-white mb-4">☀️ MORNING</h3>
+                        <div class="space-y-2">
+                            <label class="checkbox-item flex items-center gap-3 p-2 bg-slate-600 rounded-xl cursor-pointer"><input type="checkbox" class="w-4 h-4 rounded"><span class="text-white text-sm">Review Time Sold</span></label>
+                            <label class="checkbox-item flex items-center gap-3 p-2 bg-slate-600 rounded-xl cursor-pointer"><input type="checkbox" class="w-4 h-4 rounded"><span class="text-white text-sm">Check Anchor for billing</span></label>
+                            <label class="checkbox-item flex items-center gap-3 p-2 bg-slate-600 rounded-xl cursor-pointer"><input type="checkbox" class="w-4 h-4 rounded"><span class="text-white text-sm">Assign BILLABLE work first</span></label>
+                            <label class="checkbox-item flex items-center gap-3 p-2 bg-slate-600 rounded-xl cursor-pointer"><input type="checkbox" class="w-4 h-4 rounded"><span class="text-white text-sm">Touch base with low performers</span></label>
                         </div>
-                        <div class="bg-white/20 rounded-xl p-3 md:p-4 text-center">
-                            <p class="text-2xl md:text-3xl font-black">11</p>
-                            <p class="text-xs opacity-80">WOs 90+ days</p>
-                        </div>
-                        <div class="bg-white/20 rounded-xl p-3 md:p-4 text-center">
-                            <p class="text-2xl md:text-3xl font-black">20th</p>
-                            <p class="text-xs opacity-80">of 21 shops</p>
+                    </div>
+                    <div class="bg-slate-700 rounded-2xl p-4">
+                        <h3 class="text-base font-bold text-white mb-4">🌙 END OF DAY</h3>
+                        <div class="space-y-2">
+                            <label class="checkbox-item flex items-center gap-3 p-2 bg-slate-600 rounded-xl cursor-pointer"><input type="checkbox" class="w-4 h-4 rounded"><span class="text-white text-sm">Pull daily reports</span></label>
+                            <label class="checkbox-item flex items-center gap-3 p-2 bg-slate-600 rounded-xl cursor-pointer"><input type="checkbox" class="w-4 h-4 rounded"><span class="text-white text-sm">Upload to Claude</span></label>
+                            <label class="checkbox-item flex items-center gap-3 p-2 bg-slate-600 rounded-xl cursor-pointer"><input type="checkbox" class="w-4 h-4 rounded"><span class="text-white text-sm">Bill completed WOs</span></label>
+                            <label class="checkbox-item flex items-center gap-3 p-2 bg-slate-600 rounded-xl cursor-pointer"><input type="checkbox" class="w-4 h-4 rounded"><span class="text-white text-sm">Plan tomorrow</span></label>
                         </div>
                     </div>
                 </div>
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 mb-6">
-                    <div class="bg-slate-700 rounded-2xl p-4 md:p-6">
-                        <h3 class="text-base md:text-lg font-bold text-white mb-4">☀️ MORNING CHECKLIST</h3>
-                        <div class="space-y-2 md:space-y-3">
-                            <label class="checkbox-item flex items-center gap-3 p-2 md:p-3 bg-slate-600 rounded-xl cursor-pointer"><input type="checkbox" class="w-4 h-4 md:w-5 md:h-5 rounded"><span class="text-white text-sm">Review yesterday's Time Sold</span></label>
-                            <label class="checkbox-item flex items-center gap-3 p-2 md:p-3 bg-slate-600 rounded-xl cursor-pointer"><input type="checkbox" class="w-4 h-4 md:w-5 md:h-5 rounded"><span class="text-white text-sm">Check Anchor for WOs ready to bill</span></label>
-                            <label class="checkbox-item flex items-center gap-3 p-2 md:p-3 bg-slate-600 rounded-xl cursor-pointer"><input type="checkbox" class="w-4 h-4 md:w-5 md:h-5 rounded"><span class="text-white text-sm">Assign techs to BILLABLE work first</span></label>
-                            <label class="checkbox-item flex items-center gap-3 p-2 md:p-3 bg-slate-600 rounded-xl cursor-pointer"><input type="checkbox" class="w-4 h-4 md:w-5 md:h-5 rounded"><span class="text-white text-sm">Touch base with low performers</span></label>
-                        </div>
-                    </div>
-                    <div class="bg-slate-700 rounded-2xl p-4 md:p-6">
-                        <h3 class="text-base md:text-lg font-bold text-white mb-4">🌙 END OF DAY CHECKLIST</h3>
-                        <div class="space-y-2 md:space-y-3">
-                            <label class="checkbox-item flex items-center gap-3 p-2 md:p-3 bg-slate-600 rounded-xl cursor-pointer"><input type="checkbox" class="w-4 h-4 md:w-5 md:h-5 rounded"><span class="text-white text-sm">Pull daily reports</span></label>
-                            <label class="checkbox-item flex items-center gap-3 p-2 md:p-3 bg-slate-600 rounded-xl cursor-pointer"><input type="checkbox" class="w-4 h-4 md:w-5 md:h-5 rounded"><span class="text-white text-sm">Upload to Claude for analysis</span></label>
-                            <label class="checkbox-item flex items-center gap-3 p-2 md:p-3 bg-slate-600 rounded-xl cursor-pointer"><input type="checkbox" class="w-4 h-4 md:w-5 md:h-5 rounded"><span class="text-white text-sm">Bill completed WOs</span></label>
-                            <label class="checkbox-item flex items-center gap-3 p-2 md:p-3 bg-slate-600 rounded-xl cursor-pointer"><input type="checkbox" class="w-4 h-4 md:w-5 md:h-5 rounded"><span class="text-white text-sm">Plan tomorrow's assignments</span></label>
-                        </div>
+                <div class="bg-red-900/30 border border-red-500/50 rounded-2xl p-4 mb-6">
+                    <h3 class="text-base font-bold text-red-400 mb-4">🚨 CRITICAL TODAY</h3>
+                    <div class="space-y-2">
+                        <label class="checkbox-item flex items-start gap-3 p-2 bg-red-500/20 rounded-xl cursor-pointer"><input type="checkbox" class="w-4 h-4 rounded mt-1"><div><span class="text-white font-semibold text-sm">Douglas Riera Guzman - 0 billable</span><p class="text-red-300 text-xs">Reassign to customer work</p></div></label>
+                        <label class="checkbox-item flex items-start gap-3 p-2 bg-red-500/20 rounded-xl cursor-pointer"><input type="checkbox" class="w-4 h-4 rounded mt-1"><div><span class="text-white font-semibold text-sm">DFPJA - 237 days</span><p class="text-red-300 text-xs">PC-12 Archangel STC</p></div></label>
+                        <label class="checkbox-item flex items-start gap-3 p-2 bg-red-500/20 rounded-xl cursor-pointer"><input type="checkbox" class="w-4 h-4 rounded mt-1"><div><span class="text-white font-semibold text-sm">Kauffman Land - 161 days</span><p class="text-red-300 text-xs">Bill in January</p></div></label>
                     </div>
                 </div>
-                <div class="bg-red-900/30 border border-red-500/50 rounded-2xl p-4 md:p-6 mb-6">
-                    <h3 class="text-base md:text-lg font-bold text-red-400 mb-4">🚨 CRITICAL - DO TODAY</h3>
-                    <div class="space-y-2 md:space-y-3">
-                        <label class="checkbox-item flex items-start gap-3 p-2 md:p-3 bg-red-500/20 rounded-xl cursor-pointer"><input type="checkbox" class="w-4 h-4 md:w-5 md:h-5 rounded mt-1"><div><span class="text-white font-semibold text-sm">Douglas Riera Guzman - 0 billable hrs</span><p class="text-red-300 text-xs">Reassign to customer work</p></div></label>
-                        <label class="checkbox-item flex items-start gap-3 p-2 md:p-3 bg-red-500/20 rounded-xl cursor-pointer"><input type="checkbox" class="w-4 h-4 md:w-5 md:h-5 rounded mt-1"><div><span class="text-white font-semibold text-sm">DFPJA - 237 days (Duncan Dallas)</span><p class="text-red-300 text-xs">PC-12 Archangel STC project</p></div></label>
-                        <label class="checkbox-item flex items-start gap-3 p-2 md:p-3 bg-red-500/20 rounded-xl cursor-pointer"><input type="checkbox" class="w-4 h-4 md:w-5 md:h-5 rounded mt-1"><div><span class="text-white font-semibold text-sm">Kauffman Land (CG41A/43A) - 161 days</span><p class="text-red-300 text-xs">Will bill in January</p></div></label>
-                    </div>
-                </div>
-                <div class="bg-slate-700 rounded-2xl p-4 md:p-6">
-                    <h3 class="text-base md:text-lg font-bold text-white mb-4">👥 EMPLOYEE FOCUS</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="bg-red-500/20 rounded-xl p-3 md:p-4">
+                <div class="bg-slate-700 rounded-2xl p-4">
+                    <h3 class="text-base font-bold text-white mb-4">👥 EMPLOYEE FOCUS</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-red-500/20 rounded-xl p-3">
                             <h4 class="font-bold text-red-400 mb-2 text-sm">❌ Need Attention</h4>
-                            <ul class="space-y-1 text-white text-xs md:text-sm">
-                                <li class="flex justify-between"><span>Douglas Riera Guzman</span><span class="text-red-400">0%</span></li>
-                                <li class="flex justify-between"><span>Jose Noris</span><span class="text-red-400">9.6%</span></li>
-                                <li class="flex justify-between"><span>John Watson</span><span class="text-red-400">10.7%</span></li>
-                                <li class="flex justify-between"><span>Kenneth O Smith</span><span class="text-red-400">17.3%</span></li>
+                            <ul class="space-y-1 text-white text-xs">
+                                <li class="flex justify-between"><span>Douglas Riera</span><span class="text-red-400">0%</span></li>
+                                <li class="flex justify-between"><span>Jose Noris</span><span class="text-red-400">10%</span></li>
+                                <li class="flex justify-between"><span>John Watson</span><span class="text-red-400">11%</span></li>
+                                <li class="flex justify-between"><span>Kenneth Smith</span><span class="text-red-400">17%</span></li>
                             </ul>
                         </div>
-                        <div class="bg-emerald-500/20 rounded-xl p-3 md:p-4">
+                        <div class="bg-emerald-500/20 rounded-xl p-3">
                             <h4 class="font-bold text-emerald-400 mb-2 text-sm">✅ Top Performers</h4>
-                            <ul class="space-y-1 text-white text-xs md:text-sm">
-                                <li class="flex justify-between"><span>Sean R Macoomb</span><span class="text-emerald-400">66.0% ⭐</span></li>
-                                <li class="flex justify-between"><span>Julia Langford</span><span class="text-emerald-400">44.2%</span></li>
-                                <li class="flex justify-between"><span>Michael Huber</span><span class="text-emerald-400">32.9%</span></li>
-                                <li class="flex justify-between"><span>Guillermo Tovar Sanchez</span><span class="text-emerald-400">32.2%</span></li>
+                            <ul class="space-y-1 text-white text-xs">
+                                <li class="flex justify-between"><span>Sean Macoomb</span><span class="text-emerald-400">66%⭐</span></li>
+                                <li class="flex justify-between"><span>Julia Langford</span><span class="text-emerald-400">44%</span></li>
+                                <li class="flex justify-between"><span>Michael Huber</span><span class="text-emerald-400">33%</span></li>
+                                <li class="flex justify-between"><span>Guillermo Tovar</span><span class="text-emerald-400">32%</span></li>
                             </ul>
                         </div>
                     </div>
@@ -436,43 +346,43 @@
 
             <!-- OVERVIEW TAB -->
             <div id="overview" class="tab">
-                <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 mb-6">
-                    <div class="bg-gradient-to-br from-amber-500 to-orange-600 rounded-2xl p-4 md:p-6 text-white shadow-xl"><p class="text-xs uppercase opacity-80">MTD Revenue</p><p class="text-2xl md:text-4xl font-black mt-2">$35K</p><p class="text-xs opacity-80 mt-1">5.1% of $694K</p></div>
-                    <div class="bg-slate-700 rounded-2xl p-4 md:p-6 text-white shadow-xl"><p class="text-xs uppercase text-slate-400">Billable Hrs</p><p class="text-2xl md:text-4xl font-black mt-2">386</p><p class="text-xs text-slate-400 mt-1">Customer work</p></div>
-                    <div class="bg-slate-700 rounded-2xl p-4 md:p-6 text-white shadow-xl"><p class="text-xs uppercase text-slate-400">Bought Hrs</p><p class="text-2xl md:text-4xl font-black mt-2">1,594</p><p class="text-xs text-slate-400 mt-1">Hours paid</p></div>
-                    <div class="bg-slate-700 rounded-2xl p-4 md:p-6 text-white shadow-xl"><p class="text-xs uppercase text-slate-400">A/B Ratio</p><p class="text-2xl md:text-4xl font-black mt-2 text-red-400">24.2%</p><p class="text-xs text-slate-400 mt-1">Target: 58.5%</p></div>
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+                    <div class="bg-gradient-to-br from-amber-500 to-orange-600 rounded-2xl p-4 text-white shadow-xl"><p class="text-xs uppercase opacity-80">MTD Revenue</p><p class="text-2xl font-black mt-2">$35K</p><p class="text-xs opacity-80 mt-1">5% of $694K</p></div>
+                    <div class="bg-slate-700 rounded-2xl p-4 text-white shadow-xl"><p class="text-xs uppercase text-slate-400">Billable Hrs</p><p class="text-2xl font-black mt-2">386</p><p class="text-xs text-slate-400 mt-1">Customer work</p></div>
+                    <div class="bg-slate-700 rounded-2xl p-4 text-white shadow-xl"><p class="text-xs uppercase text-slate-400">Bought Hrs</p><p class="text-2xl font-black mt-2">1,594</p><p class="text-xs text-slate-400 mt-1">Hours paid</p></div>
+                    <div class="bg-slate-700 rounded-2xl p-4 text-white shadow-xl"><p class="text-xs uppercase text-slate-400">A/B Ratio</p><p class="text-2xl font-black mt-2 text-red-400">24.2%</p><p class="text-xs text-slate-400 mt-1">Target: 58.5%</p></div>
                 </div>
-                <div class="bg-gradient-to-r from-red-600 to-orange-600 rounded-2xl p-4 md:p-6 text-white mb-6 flex items-center gap-4 flex-wrap">
-                    <div class="text-3xl md:text-4xl">⚠️</div>
-                    <div class="flex-1 min-w-48"><h3 class="font-bold text-base md:text-lg">A/B Ratio Critical</h3><p class="opacity-90 text-sm">24.2% vs 58.5% target • 72% internal hours</p></div>
-                    <div class="text-right"><p class="text-4xl md:text-5xl font-black">-34.3</p><p class="opacity-80 text-sm">pts below target</p></div>
+                <div class="bg-gradient-to-r from-red-600 to-orange-600 rounded-2xl p-4 text-white mb-6 flex items-center gap-4 flex-wrap">
+                    <div class="text-3xl">⚠️</div>
+                    <div class="flex-1 min-w-48"><h3 class="font-bold text-base">A/B Ratio Critical</h3><p class="opacity-90 text-sm">24.2% vs 58.5% target</p></div>
+                    <div class="text-right"><p class="text-4xl font-black">-34.3</p><p class="opacity-80 text-sm">pts below</p></div>
                 </div>
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
-                    <div class="bg-slate-700 rounded-2xl p-4 md:p-6"><h3 class="text-base md:text-lg font-bold text-white mb-4">📊 Hours Breakdown</h3><div class="space-y-3"><div><div class="flex justify-between text-sm mb-1"><span class="text-slate-300">Billable</span><span class="text-amber-400">386 hrs (27%)</span></div><div class="h-3 bg-slate-600 rounded-full"><div class="h-3 bg-amber-500 rounded-full" style="width:27%"></div></div></div><div><div class="flex justify-between text-sm mb-1"><span class="text-slate-300">Shop WO</span><span class="text-slate-400">1,025 hrs (73%)</span></div><div class="h-3 bg-slate-600 rounded-full"><div class="h-3 bg-slate-500 rounded-full" style="width:73%"></div></div></div></div></div>
-                    <div class="bg-slate-700 rounded-2xl p-4 md:p-6"><h3 class="text-base md:text-lg font-bold text-white mb-4">📋 WO Status</h3><div class="grid grid-cols-2 gap-3"><div class="bg-slate-600 rounded-xl p-3 text-center"><p class="text-xl md:text-2xl font-black text-white">90</p><p class="text-xs text-slate-400">Open WOs</p></div><div class="bg-emerald-500/20 rounded-xl p-3 text-center"><p class="text-xl md:text-2xl font-black text-emerald-400">16</p><p class="text-xs text-emerald-400">Billed MTD</p></div><div class="bg-amber-500/20 rounded-xl p-3 text-center"><p class="text-xl md:text-2xl font-black text-amber-400">16</p><p class="text-xs text-amber-400">30-59 days</p></div><div class="bg-red-500/20 rounded-xl p-3 text-center"><p class="text-xl md:text-2xl font-black text-red-400">11</p><p class="text-xs text-red-400">90+ days</p></div></div></div>
-                    <div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-4 md:p-6 border border-slate-600"><h3 class="text-base md:text-lg font-bold text-white mb-4">📈 6-Year A/B Trend</h3><div class="space-y-2 text-sm"><div class="flex justify-between"><span class="text-slate-400">2020</span><span class="text-emerald-400 font-bold">67.9%</span></div><div class="flex justify-between"><span class="text-slate-400">2021</span><span class="text-emerald-400 font-bold">68.4%</span></div><div class="flex justify-between"><span class="text-slate-400">2022</span><span class="text-amber-400 font-bold">51.1%</span></div><div class="flex justify-between"><span class="text-slate-400">2023</span><span class="text-amber-400 font-bold">52.6%</span></div><div class="flex justify-between"><span class="text-slate-400">2024</span><span class="text-red-400 font-bold">43.2%</span></div><div class="flex justify-between"><span class="text-slate-400">2025</span><span class="text-amber-400 font-bold">47.6%</span></div><div class="flex justify-between border-t border-slate-600 pt-2 mt-2"><span class="text-slate-400">Jan 2026</span><span class="text-red-400 font-bold">24.2% ↓</span></div></div></div>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                    <div class="bg-slate-700 rounded-2xl p-4"><h3 class="text-base font-bold text-white mb-4">📊 Hours</h3><div class="space-y-3"><div><div class="flex justify-between text-sm mb-1"><span class="text-slate-300">Billable</span><span class="text-amber-400">386 (27%)</span></div><div class="h-3 bg-slate-600 rounded-full"><div class="h-3 bg-amber-500 rounded-full" style="width:27%"></div></div></div><div><div class="flex justify-between text-sm mb-1"><span class="text-slate-300">Shop WO</span><span class="text-slate-400">1,025 (73%)</span></div><div class="h-3 bg-slate-600 rounded-full"><div class="h-3 bg-slate-500 rounded-full" style="width:73%"></div></div></div></div></div>
+                    <div class="bg-slate-700 rounded-2xl p-4"><h3 class="text-base font-bold text-white mb-4">📋 WO Status</h3><div class="grid grid-cols-2 gap-3"><div class="bg-slate-600 rounded-xl p-3 text-center"><p class="text-xl font-black text-white">90</p><p class="text-xs text-slate-400">Open</p></div><div class="bg-emerald-500/20 rounded-xl p-3 text-center"><p class="text-xl font-black text-emerald-400">16</p><p class="text-xs text-emerald-400">Billed</p></div><div class="bg-amber-500/20 rounded-xl p-3 text-center"><p class="text-xl font-black text-amber-400">16</p><p class="text-xs text-amber-400">30-59d</p></div><div class="bg-red-500/20 rounded-xl p-3 text-center"><p class="text-xl font-black text-red-400">11</p><p class="text-xs text-red-400">90+d</p></div></div></div>
+                    <div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-4 border border-slate-600"><h3 class="text-base font-bold text-white mb-4">📈 6-Year Trend</h3><div class="space-y-2 text-sm"><div class="flex justify-between"><span class="text-slate-400">2020</span><span class="text-emerald-400 font-bold">67.9%</span></div><div class="flex justify-between"><span class="text-slate-400">2021</span><span class="text-emerald-400 font-bold">68.4%</span></div><div class="flex justify-between"><span class="text-slate-400">2022</span><span class="text-amber-400 font-bold">51.1%</span></div><div class="flex justify-between"><span class="text-slate-400">2023</span><span class="text-amber-400 font-bold">52.6%</span></div><div class="flex justify-between"><span class="text-slate-400">2024</span><span class="text-red-400 font-bold">43.2%</span></div><div class="flex justify-between"><span class="text-slate-400">2025</span><span class="text-amber-400 font-bold">47.6%</span></div><div class="flex justify-between border-t border-slate-600 pt-2 mt-2"><span class="text-slate-400">Jan 26</span><span class="text-red-400 font-bold">24.2%↓</span></div></div></div>
                 </div>
                 <div id="overview-bottom"></div>
             </div>
 
             <!-- EMPLOYEES TAB -->
             <div id="employees" class="tab">
-                <div class="bg-slate-700 rounded-2xl p-4 md:p-6">
-                    <h3 class="text-base md:text-lg font-bold text-white mb-2">👥 Employee Performance (Billable Hours MTD)</h3>
-                    <p class="text-xs md:text-sm text-slate-400 mb-4">Target A/B: 58.5%</p>
-                    <div class="space-y-2 md:space-y-3">
-                        <div class="flex justify-between items-center p-2 md:p-3 bg-emerald-500/20 rounded-xl"><div class="flex items-center gap-2 md:gap-3"><span class="w-6 h-6 md:w-8 md:h-8 bg-emerald-600 text-white rounded-full flex items-center justify-center font-bold text-xs md:text-sm">1</span><span class="text-white text-sm">Sean R Macoomb</span></div><div class="flex items-center gap-2"><span class="font-bold text-white text-sm">81.6h</span><span class="bg-emerald-500 text-white px-2 py-1 rounded-full text-xs">66%✓</span></div></div>
-                        <div class="flex justify-between items-center p-2 md:p-3 bg-slate-600 rounded-xl"><div class="flex items-center gap-2 md:gap-3"><span class="w-6 h-6 md:w-8 md:h-8 bg-slate-500 text-white rounded-full flex items-center justify-center font-bold text-xs md:text-sm">2</span><span class="text-white text-sm">Julia Langford</span></div><div class="flex items-center gap-2"><span class="font-bold text-white text-sm">53.5h</span><span class="bg-amber-500 text-white px-2 py-1 rounded-full text-xs">44%</span></div></div>
-                        <div class="flex justify-between items-center p-2 md:p-3 bg-slate-600 rounded-xl"><div class="flex items-center gap-2 md:gap-3"><span class="w-6 h-6 md:w-8 md:h-8 bg-slate-500 text-white rounded-full flex items-center justify-center font-bold text-xs md:text-sm">3</span><span class="text-white text-sm">Juan R Medina</span></div><div class="flex items-center gap-2"><span class="font-bold text-white text-sm">42.5h</span><span class="bg-amber-500 text-white px-2 py-1 rounded-full text-xs">32%</span></div></div>
-                        <div class="flex justify-between items-center p-2 md:p-3 bg-slate-600 rounded-xl"><div class="flex items-center gap-2 md:gap-3"><span class="w-6 h-6 md:w-8 md:h-8 bg-slate-500 text-white rounded-full flex items-center justify-center font-bold text-xs md:text-sm">4</span><span class="text-white text-sm">Guillermo Tovar Sanchez</span></div><div class="flex items-center gap-2"><span class="font-bold text-white text-sm">38.5h</span><span class="bg-amber-500 text-white px-2 py-1 rounded-full text-xs">32%</span></div></div>
-                        <div class="flex justify-between items-center p-2 md:p-3 bg-slate-600 rounded-xl"><div class="flex items-center gap-2 md:gap-3"><span class="w-6 h-6 md:w-8 md:h-8 bg-slate-500 text-white rounded-full flex items-center justify-center font-bold text-xs md:text-sm">5</span><span class="text-white text-sm">Kim D Owen</span></div><div class="flex items-center gap-2"><span class="font-bold text-white text-sm">37.3h</span><span class="bg-amber-500 text-white px-2 py-1 rounded-full text-xs">32%</span></div></div>
-                        <div class="flex justify-between items-center p-2 md:p-3 bg-slate-600 rounded-xl"><div class="flex items-center gap-2 md:gap-3"><span class="w-6 h-6 md:w-8 md:h-8 bg-slate-500 text-white rounded-full flex items-center justify-center font-bold text-xs md:text-sm">6</span><span class="text-white text-sm">Michael Huber</span></div><div class="flex items-center gap-2"><span class="font-bold text-white text-sm">35.5h</span><span class="bg-amber-500 text-white px-2 py-1 rounded-full text-xs">33%</span></div></div>
-                        <div class="flex justify-between items-center p-2 md:p-3 bg-slate-600 rounded-xl"><div class="flex items-center gap-2 md:gap-3"><span class="w-6 h-6 md:w-8 md:h-8 bg-slate-500 text-white rounded-full flex items-center justify-center font-bold text-xs md:text-sm">7</span><span class="text-white text-sm">Armando Triana-Cruz</span></div><div class="flex items-center gap-2"><span class="font-bold text-white text-sm">31.5h</span><span class="bg-amber-500 text-white px-2 py-1 rounded-full text-xs">28%</span></div></div>
-                        <div class="flex justify-between items-center p-2 md:p-3 bg-slate-600 rounded-xl"><div class="flex items-center gap-2 md:gap-3"><span class="w-6 h-6 md:w-8 md:h-8 bg-slate-500 text-white rounded-full flex items-center justify-center font-bold text-xs md:text-sm">8</span><span class="text-white text-sm">Kenneth O Smith</span></div><div class="flex items-center gap-2"><span class="font-bold text-white text-sm">22.0h</span><span class="bg-red-500 text-white px-2 py-1 rounded-full text-xs">17%</span></div></div>
-                        <div class="flex justify-between items-center p-2 md:p-3 bg-slate-600 rounded-xl"><div class="flex items-center gap-2 md:gap-3"><span class="w-6 h-6 md:w-8 md:h-8 bg-slate-500 text-white rounded-full flex items-center justify-center font-bold text-xs md:text-sm">9</span><span class="text-white text-sm">Andrew Watson</span></div><div class="flex items-center gap-2"><span class="font-bold text-white text-sm">21.0h</span><span class="bg-red-500 text-white px-2 py-1 rounded-full text-xs">19%</span></div></div>
-                        <div class="flex justify-between items-center p-2 md:p-3 bg-slate-600 rounded-xl"><div class="flex items-center gap-2 md:gap-3"><span class="w-6 h-6 md:w-8 md:h-8 bg-slate-500 text-white rounded-full flex items-center justify-center font-bold text-xs md:text-sm">10</span><span class="text-white text-sm">John Watson</span></div><div class="flex items-center gap-2"><span class="font-bold text-white text-sm">12.0h</span><span class="bg-red-500 text-white px-2 py-1 rounded-full text-xs">11%</span></div></div>
-                        <div class="flex justify-between items-center p-2 md:p-3 bg-slate-600 rounded-xl"><div class="flex items-center gap-2 md:gap-3"><span class="w-6 h-6 md:w-8 md:h-8 bg-slate-500 text-white rounded-full flex items-center justify-center font-bold text-xs md:text-sm">11</span><span class="text-white text-sm">Jose Noris</span></div><div class="flex items-center gap-2"><span class="font-bold text-white text-sm">11.0h</span><span class="bg-red-500 text-white px-2 py-1 rounded-full text-xs">10%</span></div></div>
-                        <div class="flex justify-between items-center p-2 md:p-3 bg-red-500/20 rounded-xl"><div class="flex items-center gap-2 md:gap-3"><span class="w-6 h-6 md:w-8 md:h-8 bg-red-600 text-white rounded-full flex items-center justify-center font-bold text-xs md:text-sm">12</span><span class="text-white text-sm">Douglas Riera Guzman</span></div><div class="flex items-center gap-2"><span class="font-bold text-white text-sm">0.0h</span><span class="bg-red-600 text-white px-2 py-1 rounded-full text-xs">0%⚠️</span></div></div>
+                <div class="bg-slate-700 rounded-2xl p-4">
+                    <h3 class="text-base font-bold text-white mb-2">👥 Employee Performance</h3>
+                    <p class="text-xs text-slate-400 mb-4">Target: 58.5%</p>
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center p-2 bg-emerald-500/20 rounded-xl"><div class="flex items-center gap-2"><span class="w-6 h-6 bg-emerald-600 text-white rounded-full flex items-center justify-center font-bold text-xs">1</span><span class="text-white text-sm">Sean Macoomb</span></div><div class="flex items-center gap-2"><span class="font-bold text-white text-sm">81.6h</span><span class="bg-emerald-500 text-white px-2 py-1 rounded-full text-xs">66%✓</span></div></div>
+                        <div class="flex justify-between items-center p-2 bg-slate-600 rounded-xl"><div class="flex items-center gap-2"><span class="w-6 h-6 bg-slate-500 text-white rounded-full flex items-center justify-center font-bold text-xs">2</span><span class="text-white text-sm">Julia Langford</span></div><div class="flex items-center gap-2"><span class="font-bold text-white text-sm">53.5h</span><span class="bg-amber-500 text-white px-2 py-1 rounded-full text-xs">44%</span></div></div>
+                        <div class="flex justify-between items-center p-2 bg-slate-600 rounded-xl"><div class="flex items-center gap-2"><span class="w-6 h-6 bg-slate-500 text-white rounded-full flex items-center justify-center font-bold text-xs">3</span><span class="text-white text-sm">Juan Medina</span></div><div class="flex items-center gap-2"><span class="font-bold text-white text-sm">42.5h</span><span class="bg-amber-500 text-white px-2 py-1 rounded-full text-xs">32%</span></div></div>
+                        <div class="flex justify-between items-center p-2 bg-slate-600 rounded-xl"><div class="flex items-center gap-2"><span class="w-6 h-6 bg-slate-500 text-white rounded-full flex items-center justify-center font-bold text-xs">4</span><span class="text-white text-sm">Guillermo Tovar</span></div><div class="flex items-center gap-2"><span class="font-bold text-white text-sm">38.5h</span><span class="bg-amber-500 text-white px-2 py-1 rounded-full text-xs">32%</span></div></div>
+                        <div class="flex justify-between items-center p-2 bg-slate-600 rounded-xl"><div class="flex items-center gap-2"><span class="w-6 h-6 bg-slate-500 text-white rounded-full flex items-center justify-center font-bold text-xs">5</span><span class="text-white text-sm">Kim Owen</span></div><div class="flex items-center gap-2"><span class="font-bold text-white text-sm">37.3h</span><span class="bg-amber-500 text-white px-2 py-1 rounded-full text-xs">32%</span></div></div>
+                        <div class="flex justify-between items-center p-2 bg-slate-600 rounded-xl"><div class="flex items-center gap-2"><span class="w-6 h-6 bg-slate-500 text-white rounded-full flex items-center justify-center font-bold text-xs">6</span><span class="text-white text-sm">Michael Huber</span></div><div class="flex items-center gap-2"><span class="font-bold text-white text-sm">35.5h</span><span class="bg-amber-500 text-white px-2 py-1 rounded-full text-xs">33%</span></div></div>
+                        <div class="flex justify-between items-center p-2 bg-slate-600 rounded-xl"><div class="flex items-center gap-2"><span class="w-6 h-6 bg-slate-500 text-white rounded-full flex items-center justify-center font-bold text-xs">7</span><span class="text-white text-sm">Armando Triana</span></div><div class="flex items-center gap-2"><span class="font-bold text-white text-sm">31.5h</span><span class="bg-amber-500 text-white px-2 py-1 rounded-full text-xs">28%</span></div></div>
+                        <div class="flex justify-between items-center p-2 bg-slate-600 rounded-xl"><div class="flex items-center gap-2"><span class="w-6 h-6 bg-slate-500 text-white rounded-full flex items-center justify-center font-bold text-xs">8</span><span class="text-white text-sm">Kenneth Smith</span></div><div class="flex items-center gap-2"><span class="font-bold text-white text-sm">22.0h</span><span class="bg-red-500 text-white px-2 py-1 rounded-full text-xs">17%</span></div></div>
+                        <div class="flex justify-between items-center p-2 bg-slate-600 rounded-xl"><div class="flex items-center gap-2"><span class="w-6 h-6 bg-slate-500 text-white rounded-full flex items-center justify-center font-bold text-xs">9</span><span class="text-white text-sm">Andrew Watson</span></div><div class="flex items-center gap-2"><span class="font-bold text-white text-sm">21.0h</span><span class="bg-red-500 text-white px-2 py-1 rounded-full text-xs">19%</span></div></div>
+                        <div class="flex justify-between items-center p-2 bg-slate-600 rounded-xl"><div class="flex items-center gap-2"><span class="w-6 h-6 bg-slate-500 text-white rounded-full flex items-center justify-center font-bold text-xs">10</span><span class="text-white text-sm">John Watson</span></div><div class="flex items-center gap-2"><span class="font-bold text-white text-sm">12.0h</span><span class="bg-red-500 text-white px-2 py-1 rounded-full text-xs">11%</span></div></div>
+                        <div class="flex justify-between items-center p-2 bg-slate-600 rounded-xl"><div class="flex items-center gap-2"><span class="w-6 h-6 bg-slate-500 text-white rounded-full flex items-center justify-center font-bold text-xs">11</span><span class="text-white text-sm">Jose Noris</span></div><div class="flex items-center gap-2"><span class="font-bold text-white text-sm">11.0h</span><span class="bg-red-500 text-white px-2 py-1 rounded-full text-xs">10%</span></div></div>
+                        <div class="flex justify-between items-center p-2 bg-red-500/20 rounded-xl"><div class="flex items-center gap-2"><span class="w-6 h-6 bg-red-600 text-white rounded-full flex items-center justify-center font-bold text-xs">12</span><span class="text-white text-sm">Douglas Riera</span></div><div class="flex items-center gap-2"><span class="font-bold text-white text-sm">0.0h</span><span class="bg-red-600 text-white px-2 py-1 rounded-full text-xs">0%⚠️</span></div></div>
                     </div>
                 </div>
                 <div id="employees-bottom"></div>
@@ -480,33 +390,33 @@
 
             <!-- WORK ORDERS TAB -->
             <div id="workorders" class="tab">
-                <div class="bg-red-900/30 border border-red-500/50 rounded-2xl p-4 md:p-6 mb-6">
-                    <h3 class="text-base md:text-lg font-bold text-red-400 mb-4">🚨 Critical WOs (90+ days)</h3>
+                <div class="bg-red-900/30 border border-red-500/50 rounded-2xl p-4 mb-6">
+                    <h3 class="text-base font-bold text-red-400 mb-4">🚨 Critical WOs (90+)</h3>
                     <div class="overflow-x-auto">
-                        <table class="w-full text-xs md:text-sm">
+                        <table class="w-full text-xs">
                             <thead><tr class="text-left text-slate-400"><th class="pb-2">WO#</th><th class="pb-2">Days</th><th class="pb-2">Customer</th><th class="pb-2">Notes</th></tr></thead>
                             <tbody class="text-white">
-                                <tr class="border-t border-red-500/30 bg-yellow-500/10"><td class="py-2 font-mono">DFPJA</td><td class="text-red-400 font-bold">237</td><td>Duncan Dallas</td><td class="text-yellow-400 text-xs">🟡 PC-12 Archangel STC</td></tr>
-                                <tr class="border-t border-red-500/30"><td class="py-2 font-mono">CG41A</td><td class="text-red-400 font-bold">182</td><td>Kauffman Land</td><td class="text-blue-400 text-xs">Bills in Jan</td></tr>
-                                <tr class="border-t border-red-500/30"><td class="py-2 font-mono">CG43A</td><td class="text-red-400 font-bold">181</td><td>Kauffman Land</td><td class="text-blue-400 text-xs">Bills in Jan</td></tr>
+                                <tr class="border-t border-red-500/30 bg-yellow-500/10"><td class="py-2 font-mono">DFPJA</td><td class="text-red-400 font-bold">237</td><td>Duncan Dallas</td><td class="text-yellow-400">🟡 Archangel STC</td></tr>
+                                <tr class="border-t border-red-500/30"><td class="py-2 font-mono">CG41A</td><td class="text-red-400 font-bold">182</td><td>Kauffman</td><td class="text-blue-400">Bills Jan</td></tr>
+                                <tr class="border-t border-red-500/30"><td class="py-2 font-mono">CG43A</td><td class="text-red-400 font-bold">181</td><td>Kauffman</td><td class="text-blue-400">Bills Jan</td></tr>
                                 <tr class="border-t border-red-500/30"><td class="py-2 font-mono">DLBTA</td><td class="text-red-400 font-bold">156</td><td>Duncan Denver</td><td></td></tr>
                                 <tr class="border-t border-red-500/30"><td class="py-2 font-mono">CL4CB</td><td class="text-red-400 font-bold">132</td><td>Business Aviators</td><td></td></tr>
                                 <tr class="border-t border-red-500/30"><td class="py-2 font-mono">DN1KA</td><td class="text-red-400 font-bold">125</td><td>Int'l Jet</td><td></td></tr>
                                 <tr class="border-t border-red-500/30"><td class="py-2 font-mono">DN1KB</td><td class="text-red-400 font-bold">122</td><td>Int'l Jet</td><td></td></tr>
                                 <tr class="border-t border-red-500/30"><td class="py-2 font-mono">DNQXA</td><td class="text-red-400 font-bold">117</td><td>Sierra Nevada</td><td></td></tr>
-                                <tr class="border-t border-red-500/30 bg-blue-500/10"><td class="py-2 font-mono">CMJHA</td><td class="text-red-400 font-bold">112</td><td>Business Aviators</td><td class="text-blue-400 text-xs">⏳ Honeywell free install</td></tr>
-                                <tr class="border-t border-red-500/30"><td class="py-2 font-mono">DNXCA</td><td class="text-red-400 font-bold">92</td><td>-</td><td class="text-blue-400 text-xs">Honeywell part</td></tr>
+                                <tr class="border-t border-red-500/30 bg-blue-500/10"><td class="py-2 font-mono">CMJHA</td><td class="text-red-400 font-bold">112</td><td>Business Aviators</td><td class="text-blue-400">⏳ Honeywell</td></tr>
+                                <tr class="border-t border-red-500/30"><td class="py-2 font-mono">DNXCA</td><td class="text-red-400 font-bold">92</td><td>-</td><td class="text-blue-400">Honeywell</td></tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
-                <div class="bg-slate-700 rounded-2xl p-4 md:p-6">
-                    <h3 class="text-base md:text-lg font-bold text-white mb-4">⏰ Aging Analysis</h3>
-                    <div class="space-y-4">
-                        <div><div class="flex justify-between text-sm mb-1"><span class="text-slate-300">Under 30 days</span><span class="text-emerald-400">56 WOs (62%)</span></div><div class="h-3 bg-slate-600 rounded-full"><div class="h-3 bg-emerald-500 rounded-full" style="width:62%"></div></div></div>
-                        <div><div class="flex justify-between text-sm mb-1"><span class="text-slate-300">30-59 days</span><span class="text-amber-400">16 WOs (18%)</span></div><div class="h-3 bg-slate-600 rounded-full"><div class="h-3 bg-amber-500 rounded-full" style="width:18%"></div></div></div>
-                        <div><div class="flex justify-between text-sm mb-1"><span class="text-slate-300">60-89 days</span><span class="text-orange-400">7 WOs (8%)</span></div><div class="h-3 bg-slate-600 rounded-full"><div class="h-3 bg-orange-500 rounded-full" style="width:8%"></div></div></div>
-                        <div><div class="flex justify-between text-sm mb-1"><span class="text-slate-300">90+ days</span><span class="text-red-400">11 WOs (12%)</span></div><div class="h-3 bg-slate-600 rounded-full"><div class="h-3 bg-red-500 rounded-full" style="width:12%"></div></div></div>
+                <div class="bg-slate-700 rounded-2xl p-4">
+                    <h3 class="text-base font-bold text-white mb-4">⏰ Aging</h3>
+                    <div class="space-y-3">
+                        <div><div class="flex justify-between text-sm mb-1"><span class="text-slate-300">Under 30d</span><span class="text-emerald-400">56 (62%)</span></div><div class="h-3 bg-slate-600 rounded-full"><div class="h-3 bg-emerald-500 rounded-full" style="width:62%"></div></div></div>
+                        <div><div class="flex justify-between text-sm mb-1"><span class="text-slate-300">30-59d</span><span class="text-amber-400">16 (18%)</span></div><div class="h-3 bg-slate-600 rounded-full"><div class="h-3 bg-amber-500 rounded-full" style="width:18%"></div></div></div>
+                        <div><div class="flex justify-between text-sm mb-1"><span class="text-slate-300">60-89d</span><span class="text-orange-400">7 (8%)</span></div><div class="h-3 bg-slate-600 rounded-full"><div class="h-3 bg-orange-500 rounded-full" style="width:8%"></div></div></div>
+                        <div><div class="flex justify-between text-sm mb-1"><span class="text-slate-300">90+d</span><span class="text-red-400">11 (12%)</span></div><div class="h-3 bg-slate-600 rounded-full"><div class="h-3 bg-red-500 rounded-full" style="width:12%"></div></div></div>
                     </div>
                 </div>
                 <div id="workorders-bottom"></div>
@@ -514,62 +424,62 @@
 
             <!-- QUALITY TAB -->
             <div id="quality" class="tab">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-6">
-                    <div class="bg-slate-700 rounded-2xl p-4 md:p-6">
-                        <h3 class="text-base md:text-lg font-bold text-white mb-4">🔍 QI Audit Findings (2025)</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <div class="bg-slate-700 rounded-2xl p-4">
+                        <h3 class="text-base font-bold text-white mb-4">🔍 QI Audits (2025)</h3>
                         <div class="grid grid-cols-2 gap-3 mb-4">
-                            <div class="bg-slate-600 rounded-xl p-3 text-center"><p class="text-2xl font-black text-red-400">16</p><p class="text-xs text-slate-400">Total Findings</p></div>
-                            <div class="bg-slate-600 rounded-xl p-3 text-center"><p class="text-2xl font-black text-emerald-400">3/7</p><p class="text-xs text-slate-400">Clean Audits</p></div>
+                            <div class="bg-slate-600 rounded-xl p-3 text-center"><p class="text-2xl font-black text-red-400">16</p><p class="text-xs text-slate-400">Findings</p></div>
+                            <div class="bg-slate-600 rounded-xl p-3 text-center"><p class="text-2xl font-black text-emerald-400">3/7</p><p class="text-xs text-slate-400">Clean</p></div>
                         </div>
                         <div class="space-y-2 text-sm">
                             <div class="flex justify-between"><span class="text-slate-300">Jun</span><span class="text-amber-400">2</span></div>
                             <div class="flex justify-between"><span class="text-slate-300">Jul</span><span class="text-red-400">7</span></div>
-                            <div class="flex justify-between"><span class="text-slate-300">Aug</span><span class="text-emerald-400">0 ✅</span></div>
-                            <div class="flex justify-between"><span class="text-slate-300">Sep</span><span class="text-emerald-400">0 ✅</span></div>
+                            <div class="flex justify-between"><span class="text-slate-300">Aug</span><span class="text-emerald-400">0✅</span></div>
+                            <div class="flex justify-between"><span class="text-slate-300">Sep</span><span class="text-emerald-400">0✅</span></div>
                             <div class="flex justify-between"><span class="text-slate-300">Oct</span><span class="text-amber-400">4</span></div>
-                            <div class="flex justify-between"><span class="text-slate-300">Nov</span><span class="text-emerald-400">0 ✅</span></div>
+                            <div class="flex justify-between"><span class="text-slate-300">Nov</span><span class="text-emerald-400">0✅</span></div>
                             <div class="flex justify-between"><span class="text-slate-300">Dec</span><span class="text-amber-400">3</span></div>
                         </div>
                     </div>
-                    <div class="bg-slate-700 rounded-2xl p-4 md:p-6">
-                        <h3 class="text-base md:text-lg font-bold text-white mb-4">📋 Tech Discrepancies (2025)</h3>
+                    <div class="bg-slate-700 rounded-2xl p-4">
+                        <h3 class="text-base font-bold text-white mb-4">📋 Tech Discrepancies (2025)</h3>
                         <div class="grid grid-cols-2 gap-3 mb-4">
-                            <div class="bg-slate-600 rounded-xl p-3 text-center"><p class="text-2xl font-black text-red-400">34</p><p class="text-xs text-slate-400">Total Issues</p></div>
-                            <div class="bg-slate-600 rounded-xl p-3 text-center"><p class="text-2xl font-black text-emerald-400">6/12</p><p class="text-xs text-slate-400">Clean Months</p></div>
+                            <div class="bg-slate-600 rounded-xl p-3 text-center"><p class="text-2xl font-black text-red-400">34</p><p class="text-xs text-slate-400">Issues</p></div>
+                            <div class="bg-slate-600 rounded-xl p-3 text-center"><p class="text-2xl font-black text-emerald-400">6/12</p><p class="text-xs text-slate-400">Clean</p></div>
                         </div>
                         <div class="space-y-2 text-sm">
-                            <div class="flex justify-between"><span class="text-slate-300">Q1</span><span class="text-emerald-400">0 ✅</span></div>
+                            <div class="flex justify-between"><span class="text-slate-300">Q1</span><span class="text-emerald-400">0✅</span></div>
                             <div class="flex justify-between"><span class="text-slate-300">Q2</span><span class="text-amber-400">8</span></div>
-                            <div class="flex justify-between"><span class="text-slate-300">Q3</span><span class="text-emerald-400">0 ✅</span></div>
+                            <div class="flex justify-between"><span class="text-slate-300">Q3</span><span class="text-emerald-400">0✅</span></div>
                             <div class="flex justify-between"><span class="text-slate-300">Oct</span><span class="text-red-400">11</span></div>
                             <div class="flex justify-between"><span class="text-slate-300">Nov</span><span class="text-red-400">9</span></div>
                             <div class="flex justify-between"><span class="text-slate-300">Dec</span><span class="text-amber-400">6</span></div>
                         </div>
                     </div>
                 </div>
-                <div class="bg-gradient-to-r from-purple-900 to-indigo-900 rounded-2xl p-4 md:p-6">
+                <div class="bg-gradient-to-r from-purple-900 to-indigo-900 rounded-2xl p-4">
                     <h3 class="text-lg font-bold text-white mb-4">🎯 GOAL #7: Zero Findings</h3>
                     <div class="grid grid-cols-3 gap-4">
-                        <div class="bg-white/10 rounded-xl p-4 text-center"><p class="text-purple-300 text-xs">2025 Issues</p><p class="text-3xl font-black text-white">50</p></div>
-                        <div class="bg-white/10 rounded-xl p-4 text-center"><p class="text-purple-300 text-xs">2026 Target</p><p class="text-3xl font-black text-emerald-400">0</p></div>
+                        <div class="bg-white/10 rounded-xl p-4 text-center"><p class="text-purple-300 text-xs">2025</p><p class="text-3xl font-black text-white">50</p></div>
+                        <div class="bg-white/10 rounded-xl p-4 text-center"><p class="text-purple-300 text-xs">Target</p><p class="text-3xl font-black text-emerald-400">0</p></div>
                         <div class="bg-white/10 rounded-xl p-4 text-center"><p class="text-purple-300 text-xs">Focus</p><p class="text-sm font-bold text-white">RTS, Parts, Flam</p></div>
                     </div>
                 </div>
                 <div id="quality-bottom"></div>
             </div>
 
-            <!-- NETWORK RANKINGS TAB -->
+            <!-- RANKINGS TAB -->
             <div id="rankings" class="tab">
-                <div class="bg-slate-700 rounded-2xl p-4 md:p-6 mb-6">
-                    <div class="flex justify-between items-center mb-4"><h3 class="text-base md:text-lg font-bold text-white">🏆 Network Rankings (Jan 16)</h3><div class="text-right"><p class="text-xs text-slate-400">Network Avg</p><p class="text-xl font-black text-amber-400">45.3%</p></div></div>
+                <div class="bg-slate-700 rounded-2xl p-4 mb-6">
+                    <div class="flex justify-between items-center mb-4"><h3 class="text-base font-bold text-white">🏆 Network Rankings</h3><div class="text-right"><p class="text-xs text-slate-400">Avg</p><p class="text-xl font-black text-amber-400">45.3%</p></div></div>
                     <div class="overflow-x-auto">
-                        <table class="w-full text-xs md:text-sm">
+                        <table class="w-full text-xs">
                             <thead><tr class="text-left text-slate-400 border-b border-slate-600"><th class="pb-2">#</th><th class="pb-2">Shop</th><th class="pb-2 text-right">A/B</th></tr></thead>
                             <tbody class="text-white">
                                 <tr class="border-t border-slate-600"><td>1</td><td>Scottsdale</td><td class="text-right text-emerald-400 font-bold">86.2%</td></tr>
                                 <tr class="border-t border-slate-600"><td>2</td><td>Seattle</td><td class="text-right text-emerald-400 font-bold">75.9%</td></tr>
                                 <tr class="border-t border-slate-600"><td>3</td><td>Portland</td><td class="text-right text-emerald-400 font-bold">75.1%</td></tr>
-                                <tr class="border-t border-slate-600 text-slate-500"><td colspan="3">... shops 4-17 ...</td></tr>
+                                <tr class="border-t border-slate-600 text-slate-500"><td colspan="3">... 4-17 ...</td></tr>
                                 <tr class="border-t border-slate-600"><td>18</td><td>Kansas City</td><td class="text-right text-red-400">28.1%</td></tr>
                                 <tr class="border-t border-slate-600"><td>19</td><td>St. Louis</td><td class="text-right text-red-400">21.2%</td></tr>
                                 <tr class="border-t border-slate-600 bg-red-500/20"><td class="font-bold">20</td><td class="font-bold">Denver</td><td class="text-right text-red-400 font-bold">16.5%</td></tr>
@@ -578,12 +488,12 @@
                         </table>
                     </div>
                 </div>
-                <div class="bg-gradient-to-r from-red-600 to-orange-600 rounded-2xl p-4 md:p-6 text-white">
-                    <h3 class="font-bold text-base mb-4">🎯 Path to Move Up</h3>
+                <div class="bg-gradient-to-r from-red-600 to-orange-600 rounded-2xl p-4 text-white">
+                    <h3 class="font-bold text-base mb-4">🎯 Path Up</h3>
                     <div class="grid grid-cols-3 gap-3">
-                        <div class="bg-white/20 rounded-xl p-3 text-center"><p class="text-xs opacity-80">Pass Houston</p><p class="text-xl font-black">Done ✓</p></div>
-                        <div class="bg-white/20 rounded-xl p-3 text-center"><p class="text-xs opacity-80">Pass St. Louis</p><p class="text-xl font-black">21.3%+</p></div>
-                        <div class="bg-white/20 rounded-xl p-3 text-center"><p class="text-xs opacity-80">Pass KC</p><p class="text-xl font-black">28.2%+</p></div>
+                        <div class="bg-white/20 rounded-xl p-3 text-center"><p class="text-xs opacity-80">Houston</p><p class="text-xl font-black">Done✓</p></div>
+                        <div class="bg-white/20 rounded-xl p-3 text-center"><p class="text-xs opacity-80">St. Louis</p><p class="text-xl font-black">21.3%+</p></div>
+                        <div class="bg-white/20 rounded-xl p-3 text-center"><p class="text-xs opacity-80">KC</p><p class="text-xl font-black">28.2%+</p></div>
                     </div>
                 </div>
                 <div id="rankings-bottom"></div>
@@ -638,22 +548,22 @@
         
         function toggleFullscreen() {
             if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen().catch(err => {
-                    alert('Fullscreen not supported. Try adding to Home Screen instead.');
-                });
+                document.documentElement.requestFullscreen().catch(err => {});
             } else {
                 document.exitFullscreen();
             }
         }
 
         let kioskMode = false;
-        let kioskInterval = null;
+        let animationId = null;
+        let countdownInterval = null;
         let countdown = 20;
         const tabs = ['goals', 'actions', 'overview', 'employees', 'workorders', 'quality', 'rankings'];
         let currentTabIndex = 0;
         let scrollPosition = 0;
         let scrollDirection = 1;
         let maxScroll = 0;
+        let lastTime = 0;
 
         function openTab(tabName) {
             var tabElements = document.getElementsByClassName('tab');
@@ -674,14 +584,38 @@
             if (kioskMode) { 
                 countdown = 20;
                 setTimeout(() => { maxScroll = document.documentElement.scrollHeight - window.innerHeight; }, 100);
-                updateScrollStatus();
             }
         }
 
-        function updateScrollStatus() {
-            var statusEl = document.getElementById('scrollStatus');
+        function smoothScrollLoop(currentTime) {
+            if (!kioskMode) return;
+            
+            if (!lastTime) lastTime = currentTime;
+            var deltaTime = currentTime - lastTime;
+            lastTime = currentTime;
+            
+            // Scroll speed: pixels per millisecond (adjust for smoothness)
+            var scrollSpeed = maxScroll / 9000; // Takes ~9 seconds to scroll full page
+            var scrollStep = scrollSpeed * deltaTime;
+            
+            scrollPosition += scrollStep * scrollDirection;
+            
+            // Reverse at boundaries
+            if (scrollPosition >= maxScroll) {
+                scrollPosition = maxScroll;
+                scrollDirection = -1;
+            } else if (scrollPosition <= 0) {
+                scrollPosition = 0;
+                scrollDirection = 1;
+            }
+            
+            window.scrollTo(0, scrollPosition);
+            
+            // Update status
             var pct = maxScroll > 0 ? Math.round((scrollPosition / maxScroll) * 100) : 0;
-            statusEl.textContent = 'Scroll ' + pct + '%';
+            document.getElementById('scrollStatus').textContent = 'Scroll ' + pct + '%';
+            
+            animationId = requestAnimationFrame(smoothScrollLoop);
         }
 
         function toggleKiosk() {
@@ -700,27 +634,16 @@
                 countdown = 20;
                 scrollPosition = 0;
                 scrollDirection = 1;
+                lastTime = 0;
                 maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-                updateScrollStatus();
                 
-                kioskInterval = setInterval(function() {
+                // Start smooth scrolling with requestAnimationFrame
+                animationId = requestAnimationFrame(smoothScrollLoop);
+                
+                // Countdown for tab switching
+                countdownInterval = setInterval(function() {
                     countdown--;
                     document.getElementById('countdown').textContent = countdown;
-                    
-                    var scrollStep = Math.max(maxScroll / 18, 20);
-                    scrollPosition += scrollStep * scrollDirection;
-                    
-                    if (scrollPosition >= maxScroll) {
-                        scrollPosition = maxScroll;
-                        scrollDirection = -1;
-                    } else if (scrollPosition <= 0) {
-                        scrollPosition = 0;
-                        scrollDirection = 1;
-                    }
-                    
-                    window.scrollTo({ top: scrollPosition, behavior: 'smooth' });
-                    updateScrollStatus();
-                    
                     if (countdown <= 0) {
                         currentTabIndex = (currentTabIndex + 1) % tabs.length;
                         openTab(tabs[currentTabIndex]);
@@ -732,13 +655,15 @@
                 icon.textContent = '▶️';
                 text.textContent = 'Auto-Rotate';
                 indicator.classList.add('hidden');
-                if (kioskInterval) clearInterval(kioskInterval);
+                if (animationId) cancelAnimationFrame(animationId);
+                if (countdownInterval) clearInterval(countdownInterval);
+                lastTime = 0;
             }
         }
 
         async function requestWakeLock() {
             try { if ('wakeLock' in navigator) await navigator.wakeLock.request('screen'); }
-            catch (err) { console.log('Wake Lock not supported'); }
+            catch (err) {}
         }
         requestWakeLock();
     </script>
