@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Denver Satellite Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: system-ui, -apple-system, sans-serif; }
+        .tab { display: none; }
+        .tab.active { display: block; }
+        .checkbox-item:has(input:checked) { opacity: 0.5; text-decoration: line-through; }
+        .kiosk-indicator { animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        html { scroll-behavior: smooth; }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-900 to-slate-800 min-h-screen p-4 md:p-6">
+    <div class="max-w-6xl mx-auto">
+        <div id="topAnchor"></div>
+        <div class="flex justify-between items-center mb-6 flex-wrap gap-4">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-amber-500 to-orange-600 rounded-xl flex items-center justify-center shadow-lg">
+                    <span class="text-white font-black text-base md:text-lg">889</span>
+                </div>
+                <div>
+                    <h1 class="text-xl md:text-2xl font-black text-white">Denver Satellite</h1>
+                    <p class="text-slate-400 text-xs md:text-sm">Department 889 • Daily Dashboard</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-4">
+                <button onclick="toggleKiosk()" id="kioskBtn" class="px-3 py-2 rounded-lg text-xs font-semibold bg-slate-700 text-slate-300 hover:bg-slate-600 flex items-center gap-2">
+                    <span id="kioskIcon">▶️</span>
+                    <span id="kioskText">Auto-Rotate</span>
+                </button>
+                <div class="text-right">
+                    <p class="text-xs text-slate-500 uppercase">Last Updated</p>
+                    <p class="text-sm md:text-lg font-bold text-white">January 21, 2026</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="kioskIndicator" class="hidden bg-emerald-500/20 border border-emerald-500/50 rounded-xl p-3 mb-4 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <span class="kiosk-indicator text-emerald-400">●</span>
+                <span class="text-emerald-400 text-sm font-semibold">Display Mode Active</span>
+            </div>
+            <div class="text-emerald-400 text-sm"><span id="scrollStatus">Scrolling...</span> Next tab in <span id="countdown">20</span>s</div>
+        </div>
+
+        <div class="flex gap-2 mb-6 flex-wrap">
+            <button onclick="openTab('actions')" data-tab="actions" class="tabBtn px-4 py-2 rounded-xl font-semibold text-xs md:text-sm bg-red-500 text-white">⚡ Actions</button>
+            <button onclick="openTab('overview')" data-tab="overview" class="tabBtn px-4 py-2 rounded-xl font-semibold text-xs md:text-sm bg-slate-700 text-slate-300">Overview</button>
+            <button onclick="openTab('employees')" data-tab="employees" class="tabBtn px-4 py-2 rounded-xl font-semibold text-xs md:text-sm bg-slate-700 text-slate-300">Employees</button>
+            <button onclick="openTab('workorders')" data-tab="workorders" class="tabBtn px-4 py-2 rounded-xl font-semibold text-xs md:text-sm bg-slate-700 text-slate-300">Work Orders</button>
+            <button onclick="openTab('rankings')" data-tab="rankings" class="tabBtn px-4 py-2 rounded-xl font-semibold text-xs md:text-sm bg-slate-700 text-slate-300">Rankings</button>
+        </div>
+
+        <!-- TODAY'S ACTIONS TAB -->
+        <div id="actions" class="tab active">
+            <div class="bg-gradient-to-r from-red-600 to-orange-600 rounded-2xl p-4 md:p-6 text-white mb-6">
+                <div class="flex items-center gap-3 mb-4">
+                    <span class="text-2xl md:text-3xl">🎯</span>
+                    <div>
+                        <h2 class="text-lg md:text-xl font-black">TODAY'S MISSION</h2>
+                        <p class="opacity-90 text-sm">Every billable hour counts. Every old WO closed helps.</p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-3 gap-3 md:gap-4">
+                    <div class="bg-white/20 rounded-xl p-3 md:p-4 text-center">
+                        <p class="text-2xl md:text-3xl font-black">+34.3</p>
+                        <p class="text-xs opacity-80">pts to A/B target</p>
+                    </div>
+                    <div class="bg-white/20 rounded-xl p-3 md:p-4 text-center">
+                        <p class="text-2xl md:text-3xl font-black">11</p>
+                        <p class="text-xs opacity-80">WOs 90+ days</p>
+                    </div>
+                    <div class="bg-white/20 rounded-xl p-3 md:p-4 text-center">
+                        <p class="text-2xl md:text-3xl font-black">20th</p>
+                        <p class="text-xs opacity-80">of 21 shops</p>
+                    </div>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 mb-6">
+                <div class="bg-slate-700 rounded-2xl p-4 md:p-6">
+                    <h3 class="text-base md:text-lg font-bold text-white mb-4">☀️ MORNING CHECKLIST</h3>
+                    <div class="space-y-2 md:space-y-3">
+                        <label class="checkbox-item flex items-center gap-3 p-2 md:p-3 bg-slate-600 rounded-xl cursor-pointer"><input type="checkbox" class="w-4 h-4 md:w-5 md:h-5 rounded"><span class="text-white text-sm">Review yesterday's Time Sold</span></label>
+                        <label class="checkbox-item flex items-center gap-3 p-2 md:p-3 bg-slate-600 rounded-xl cursor-pointer"><input type="checkbox" class="w-4 h-4 md:w-5 md:h-5 rounded"><span class="text-white text-sm">Check Anchor for WOs ready to bill</span></label>
+                        <label class="checkbox-item flex items-center gap-3 p-2 md:p-3 bg-slate-600 rounded-xl cursor-pointer"><input type="checkbox" class="w-4 h-4 md:w-5 md:h-5 rounded"><span class="text-white text-sm">Assign techs to BILLABLE work first</span></label>
+                        <label class="checkbox-item flex items-center gap-3 p-2 md:p-3 bg-slate-600 rounded-xl cursor-pointer"><input type="checkbox" class="w-4 h-4 md:w-5 md:h-5 rounded"><span class="text-white text-sm">Touch base with low performers</span></label>
+                    </div>
+                </div>
+                <div class="bg-slate-700 rounded-2xl p-4 md:p-6">
+                    <h3 class="text-base md:text-lg font-bold text-white mb-4">🌙 END OF DAY CHECKLIST</h3>
+                    <div class="space-y-2 md:space-y-3">
+                        <label class="checkbox-item flex items-center gap-3 p-2 md:p-3 bg-slate-600 rounded-xl cursor-pointer"><input type="checkbox" class="w-4 h-4 md:w-5 md:h-5 rounded"><span class="text-white text-sm">Pull daily reports</span></label>
+                        <label class="checkbox-item flex items-center gap-3 p-2 md:p-3 bg-slate-600 rounded-xl cursor-pointer"><input type="checkbox" class="w-4 h-4 md:w-5 md:h-5 rounded"><span class="text-white text-sm">Upload to Claude for analysis</span></label>
+                        <label class="checkbox-item flex items-center gap-3 p-2 md:p-3 bg-slate-600 rounded-xl cursor-pointer"><input type="checkbox" class="w-4 h-4 md:w-5 md:h-5 rounded"><span class="text-white text-sm">Bill completed WOs</span></label>
+                        <label class="checkbox-item flex items-center gap-3 p-2 md:p-3 bg-slate-600 rounded-xl cursor-pointer"><input type="checkbox" class="w-4 h-4 md:w-5 md:h-5 rounded"><span class="text-white text-sm">Plan tomorrow's assignments</span></label>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-red-900/30 border border-red-500/50 rounded-2xl p-4 md:p-6 mb-6">
+                <h3 class="text-base md:text-lg font-bold text-red-400 mb-4">🚨 CRITICAL - DO TODAY</h3>
+                <div class="space-y-2 md:space-y-3">
+                    <label class="checkbox-item flex items-start gap-3 p-2 md:p-3 bg-red-500/20 rounded-xl cursor-pointer"><input type="checkbox" class="w-4 h-4 md:w-5 md:h-5 rounded mt-1"><div><span class="text-white font-semibold text-sm">Douglas Riera Guzman - 0 billable hrs</span><p class="text-red-300 text-xs">Reassign to customer work</p></div></label>
+                    <label class="checkbox-item flex items-start gap-3 p-2 md:p-3 bg-red-500/20 rounded-xl cursor-pointer"><input type="checkbox" class="w-4 h-4 md:w-5 md:h-5 rounded mt-1"><div><span class="text-white font-semibold text-sm">DFPJA - 237 days (Duncan Dallas)</span><p class="text-red-300 text-xs">Bill or close?</p></div></label>
+                    <label class="checkbox-item flex items-start gap-3 p-2 md:p-3 bg-red-500/20 rounded-xl cursor-pointer"><input type="checkbox" class="w-4 h-4 md:w-5 md:h-5 rounded mt-1"><div><span class="text-white font-semibold text-sm">Kauffman Land (CG4NA/B/C) - 175-182 days</span><p class="text-red-300 text-xs">3 WOs stuck - what's blocking?</p></div></label>
+                </div>
+            </div>
+            <div class="bg-slate-700 rounded-2xl p-4 md:p-6">
+                <h3 class="text-base md:text-lg font-bold text-white mb-4">👥 EMPLOYEE FOCUS</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-red-500/20 rounded-xl p-3 md:p-4">
+                        <h4 class="font-bold text-red-400 mb-2 text-sm">❌ Need Attention</h4>
+                        <ul class="space-y-1 text-white text-xs md:text-sm">
+                            <li class="flex justify-between"><span>Douglas Riera Guzman</span><span class="text-red-400">0%</span></li>
+                            <li class="flex justify-between"><span>Jose Noris</span><span class="text-red-400">9.6%</span></li>
+                            <li class="flex justify-between"><span>John Watson</span><span class="text-red-400">10.7%</span></li>
+                            <li class="flex justify-between"><span>Kenneth O Smith</span><span class="text-red-400">17.3%</span></li>
+                        </ul>
+                    </div>
+                    <div class="bg-emerald-500/20 rounded-xl p-3 md:p-4">
+                        <h4 class="font-bold text-emerald-400 mb-2 text-sm">✅ Top Performers</h4>
+                        <ul class="space-y-1 text-white text-xs md:text-sm">
+                            <li class="flex justify-between"><span>Sean R Macoomb</span><span class="text-emerald-400">66.0% ⭐</span></li>
+                            <li class="flex justify-between"><span>Julia Langford</span><span class="text-emerald-400">44.2%</span></li>
+                            <li class="flex justify-between"><span>Michael Huber</span><span class="text-emerald-400">32.9%</span></li>
+                            <li class="flex justify-between"><span>Guillermo Tovar Sanchez</span><span class="text-emerald-400">32.2%</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div id="actions-bottom"></div>
+        </div>
+
+        <!-- OVERVIEW TAB -->
+        <div id="overview" class="tab">
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 mb-6">
+                <div class="bg-gradient-to-br from-amber-500 to-orange-600 rounded-2xl p-4 md:p-6 text-white shadow-xl"><p class="text-xs uppercase opacity-80">MTD Revenue</p><p class="text-2xl md:text-4xl font-black mt-2">$35K</p><p class="text-xs opacity-80 mt-1">5.1% of $694K</p></div>
+                <div class="bg-slate-700 rounded-2xl p-4 md:p-6 text-white shadow-xl"><p class="text-xs uppercase text-slate-400">Billable Hrs</p><p class="text-2xl md:text-4xl font-black mt-2">386</p><p class="text-xs text-slate-400 mt-1">Customer work</p></div>
+                <div class="bg-slate-700 rounded-2xl p-4 md:p-6 text-white shadow-xl"><p class="text-xs uppercase text-slate-400">Bought Hrs</p><p class="text-2xl md:text-4xl font-black mt-2">1,594</p><p class="text-xs text-slate-400 mt-1">Hours paid</p></div>
+                <div class="bg-slate-700 rounded-2xl p-4 md:p-6 text-white shadow-xl"><p class="text-xs uppercase text-slate-400">A/B Ratio</p><p class="text-2xl md:text-4xl font-black mt-2 text-red-400">24.2%</p><p class="text-xs text-slate-400 mt-1">Target: 58.5%</p></div>
+            </div>
+            <div class="bg-gradient-to-r from-red-600 to-orange-600 rounded-2xl p-4 md:p-6 text-white mb-6 flex items-center gap-4 flex-wrap">
+                <div class="text-3xl md:text-4xl">⚠️</div>
+                <div class="flex-1 min-w-48"><h3 class="font-bold text-base md:text-lg">A/B Ratio Critical</h3><p class="opacity-90 text-sm">24.2% vs 58.5% target • 72% internal hours</p></div>
+                <div class="text-right"><p class="text-4xl md:text-5xl font-black">-34.3</p><p class="opacity-80 text-sm">pts below target</p></div>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
+                <div class="bg-slate-700 rounded-2xl p-4 md:p-6"><h3 class="text-base md:text-lg font-bold text-white mb-4">📊 Hours Breakdown</h3><div class="space-y-3"><div><div class="flex justify-between text-sm mb-1"><span class="text-slate-300">Billable</span><span class="text-amber-400">386 hrs (27%)</span></div><div class="h-3 bg-slate-600 rounded-full"><div class="h-3 bg-amber-500 rounded-full" style="width:27%"></div></div></div><div><div class="flex justify-between text-sm mb-1"><span class="text-slate-300">Shop WO</span><span class="text-slate-400">1,025 hrs (73%)</span></div><div class="h-3 bg-slate-600 rounded-full"><div class="h-3 bg-slate-500 rounded-full" style="width:73%"></div></div></div></div></div>
+                <div class="bg-slate-700 rounded-2xl p-4 md:p-6"><h3 class="text-base md:text-lg font-bold text-white mb-4">📋 WO Status</h3><div class="grid grid-cols-2 gap-3"><div class="bg-slate-600 rounded-xl p-3 text-center"><p class="text-xl md:text-2xl font-black text-white">90</p><p class="text-xs text-slate-400">Open WOs</p></div><div class="bg-emerald-500/20 rounded-xl p-3 text-center"><p class="text-xl md:text-2xl font-black text-emerald-400">16</p><p class="text-xs text-emerald-400">Billed MTD</p></div><div class="bg-amber-500/20 rounded-xl p-3 text-center"><p class="text-xl md:text-2xl font-black text-amber-400">16</p><p class="text-xs text-amber-400">30-59 days</p></div><div class="bg-red-500/20 rounded-xl p-3 text-center"><p class="text-xl md:text-2xl font-black text-red-400">11</p><p class="text-xs text-red-400">90+ days</p></div></div></div>
+                <div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-4 md:p-6 border border-slate-600"><h3 class="text-base md:text-lg font-bold text-white mb-4">📈 6-Year A/B Trend</h3><div class="space-y-2 text-sm"><div class="flex justify-between"><span class="text-slate-400">2020</span><span class="text-emerald-400 font-bold">67.9%</span></div><div class="flex justify-between"><span class="text-slate-400">2021</span><span class="text-emerald-400 font-bold">68.4%</span></div><div class="flex justify-between"><span class="text-slate-400">2022</span><span class="text-amber-400 font-bold">51.1%</span></div><div class="flex justify-between"><span class="text-slate-400">2023</span><span class="text-amber-400 font-bold">52.6%</span></div><div class="flex justify-between"><span class="text-slate-400">2024</span><span class="text-red-400 font-bold">43.2%</span></div><div class="flex justify-between"><span class="text-slate-400">2025</span><span class="text-amber-400 font-bold">47.6%</span></div><div class="flex justify-between border-t border-slate-600 pt-2 mt-2"><span class="text-slate-400">Jan 2026</span><span class="text-red-400 font-bold">24.2% ↓</span></div></div></div>
+            </div>
+            <div id="overview-bottom"></div>
+        </div>
+
+        <!-- EMPLOYEES TAB -->
+        <div id="employees" class="tab">
+            <div class="bg-slate-700 rounded-2xl p-4 md:p-6">
+                <h3 class="text-base md:text-lg font-bold text-white mb-2">👥 Employee Performance (Billable Hours MTD)</h3>
+                <p class="text-xs md:text-sm text-slate-400 mb-4">Target A/B: 58.5%</p>
+                <div class="space-y-2 md:space-y-3">
+                    <div class="flex justify-between items-center p-2 md:p-3 bg-emerald-500/20 rounded-xl"><div class="flex items-center gap-2 md:gap-3"><span class="w-6 h-6 md:w-8 md:h-8 bg-emerald-600 text-white rounded-full flex items-center justify-center font-bold text-xs md:text-sm">1</span><span class="text-white text-sm">Sean R Macoomb</span></div><div class="flex items-center gap-2"><span class="font-bold text-white text-sm">81.6h</span><span class="bg-emerald-500 text-white px-2 py-1 rounded-full text-xs">66%✓</span></div></div>
+                    <div class="flex justify-between items-center p-2 md:p-3 bg-slate-600 rounded-xl"><div class="flex items-center gap-2 md:gap-3"><span class="w-6 h-6 md:w-8 md:h-8 bg-slate-500 text-white rounded-full flex items-center justify-center font-bold text-xs md:text-sm">2</span><span class="text-white text-sm">Julia Langford</span></div><div class="flex items-center gap-2"><span class="font-bold text-white text-sm">53.5h</span><span class="bg-amber-500 text-white px-2 py-1 rounded-full text-xs">44%</span></div></div>
+                    <div class="flex justify-between items-center p-2 md:p-3 bg-slate-600 rounded-xl"><div class="flex items-center gap-2 md:gap-3"><span class="w-6 h-6 md:w-8 md:h-8 bg-slate-500 text-white rounded-full flex items-center justify-center font-bold text-xs md:text-sm">3</span><span class="text-white text-sm">Juan R Medina</span></div><div class="flex items-center gap-2"><span class="font-bold text-white text-sm">42.5h</span><span class="bg-amber-500 text-white px-2 py-1 rounded-full text-xs">32%</span></div></div>
+                    <div class="flex justify-between items-center p-2 md:p-3 bg-slate-600 rounded-xl"><div class="flex items-center gap-2 md:gap-3"><span class="w-6 h-6 md:w-8 md:h-8 bg-slate-500 text-white rounded-full flex items-center justify-center font-bold text-xs md:text-sm">4</span><span class="text-white text-sm">Guillermo Tovar Sanchez</span></div><div class="flex items-center gap-2"><span class="font-bold text-white text-sm">38.5h</span><span class="bg-amber-500 text-white px-2 py-1 rounded-full text-xs">32%</span></div></div>
+                    <div class="flex justify-between items-center p-2 md:p-3 bg-slate-600 rounded-xl"><div class="flex items-center gap-2 md:gap-3"><span class="w-6 h-6 md:w-8 md:h-8 bg-slate-500 text-white rounded-full flex items-center justify-center font-bold text-xs md:text-sm">5</span><span class="text-white text-sm">Kim D Owen</span></div><div class="flex items-center gap-2"><span class="font-bold text-white text-sm">37.3h</span><span class="bg-amber-500 text-white px-2 py-1 rounded-full text-xs">32%</span></div></div>
+                    <div class="flex justify-between items-center p-2 md:p-3 bg-slate-600 rounded-xl"><div class="flex items-center gap-2 md:gap-3"><span class="w-6 h-6 md:w-8 md:h-8 bg-slate-500 text-white rounded-full flex items-center justify-center font-bold text-xs md:text-sm">6</span><span class="text-white text-sm">Michael Huber</span></div><div class="flex items-center gap-2"><span class="font-bold text-white text-sm">35.5h</span><span class="bg-amber-500 text-white px-2 py-1 rounded-full text-xs">33%</span></div></div>
+                    <div class="flex justify-between items-center p-2 md:p-3 bg-slate-600 rounded-xl"><div class="flex items-center gap-2 md:gap-3"><span class="w-6 h-6 md:w-8 md:h-8 bg-slate-500 text-white rounded-full flex items-center justify-center font-bold text-xs md:text-sm">7</span><span class="text-white text-sm">Armando Triana-Cruz</span></div><div class="flex items-center gap-2"><span class="font-bold text-white text-sm">31.5h</span><span class="bg-amber-500 text-white px-2 py-1 rounded-full text-xs">28%</span></div></div>
+                    <div class="flex justify-between items-center p-2 md:p-3 bg-slate-600 rounded-xl"><div class="flex items-center gap-2 md:gap-3"><span class="w-6 h-6 md:w-8 md:h-8 bg-slate-500 text-white rounded-full flex items-center justify-center font-bold text-xs md:text-sm">8</span><span class="text-white text-sm">Kenneth O Smith</span></div><div class="flex items-center gap-2"><span class="font-bold text-white text-sm">22.0h</span><span class="bg-red-500 text-white px-2 py-1 rounded-full text-xs">17%</span></div></div>
+                    <div class="flex justify-between items-center p-2 md:p-3 bg-slate-600 rounded-xl"><div class="flex items-center gap-2 md:gap-3"><span class="w-6 h-6 md:w-8 md:h-8 bg-slate-500 text-white rounded-full flex items-center justify-center font-bold text-xs md:text-sm">9</span><span class="text-white text-sm">Andrew Watson</span></div><div class="flex items-center gap-2"><span class="font-bold text-white text-sm">21.0h</span><span class="bg-red-500 text-white px-2 py-1 rounded-full text-xs">19%</span></div></div>
+                    <div class="flex justify-between items-center p-2 md:p-3 bg-slate-600 rounded-xl"><div class="flex items-center gap-2 md:gap-3"><span class="w-6 h-6 md:w-8 md:h-8 bg-slate-500 text-white rounded-full flex items-center justify-center font-bold text-xs md:text-sm">10</span><span class="text-white text-sm">John Watson</span></div><div class="flex items-center gap-2"><span class="font-bold text-white text-sm">12.0h</span><span class="bg-red-500 text-white px-2 py-1 rounded-full text-xs">11%</span></div></div>
+                    <div class="flex justify-between items-center p-2 md:p-3 bg-slate-600 rounded-xl"><div class="flex items-center gap-2 md:gap-3"><span class="w-6 h-6 md:w-8 md:h-8 bg-slate-500 text-white rounded-full flex items-center justify-center font-bold text-xs md:text-sm">11</span><span class="text-white text-sm">Jose Noris</span></div><div class="flex items-center gap-2"><span class="font-bold text-white text-sm">11.0h</span><span class="bg-red-500 text-white px-2 py-1 rounded-full text-xs">10%</span></div></div>
+                    <div class="flex justify-between items-center p-2 md:p-3 bg-red-500/20 rounded-xl"><div class="flex items-center gap-2 md:gap-3"><span class="w-6 h-6 md:w-8 md:h-8 bg-red-600 text-white rounded-full flex items-center justify-center font-bold text-xs md:text-sm">12</span><span class="text-white text-sm">Douglas Riera Guzman</span></div><div class="flex items-center gap-2"><span class="font-bold text-white text-sm">0.0h</span><span class="bg-red-600 text-white px-2 py-1 rounded-full text-xs">0%⚠️</span></div></div>
+                </div>
+            </div>
+            <div id="employees-bottom"></div>
+        </div>
+
+        <!-- WORK ORDERS TAB -->
+        <div id="workorders" class="tab">
+            <div class="bg-red-900/30 border border-red-500/50 rounded-2xl p-4 md:p-6 mb-6">
+                <h3 class="text-base md:text-lg font-bold text-red-400 mb-4">🚨 Critical WOs (90+ days)</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-xs md:text-sm">
+                        <thead><tr class="text-left text-slate-400"><th class="pb-2">WO#</th><th class="pb-2">Days</th><th class="pb-2">Customer</th><th class="pb-2">Status</th></tr></thead>
+                        <tbody class="text-white">
+                            <tr class="border-t border-red-500/30"><td class="py-2 font-mono">DFPJA</td><td class="text-red-400 font-bold">237</td><td>Duncan Dallas</td><td>Tentative</td></tr>
+                            <tr class="border-t border-red-500/30"><td class="py-2 font-mono">CG4NA</td><td class="text-red-400 font-bold">182</td><td>Kauffman Land</td><td>RTS complete</td></tr>
+                            <tr class="border-t border-red-500/30"><td class="py-2 font-mono">CG4NB</td><td class="text-red-400 font-bold">181</td><td>Kauffman Land</td><td>Satellite</td></tr>
+                            <tr class="border-t border-red-500/30"><td class="py-2 font-mono">CG4NC</td><td class="text-red-400 font-bold">175</td><td>Kauffman Land</td><td>BillHold</td></tr>
+                            <tr class="border-t border-red-500/30"><td class="py-2 font-mono">DLBTA</td><td class="text-red-400 font-bold">156</td><td>Duncan Denver</td><td>Work Recv</td></tr>
+                            <tr class="border-t border-red-500/30"><td class="py-2 font-mono">CL4CB</td><td class="text-red-400 font-bold">132</td><td>Business Aviators</td><td>Work Recv</td></tr>
+                            <tr class="border-t border-red-500/30"><td class="py-2 font-mono">DN1KA</td><td class="text-red-400 font-bold">125</td><td>Int'l Jet Aviation</td><td>Work Recv</td></tr>
+                            <tr class="border-t border-red-500/30"><td class="py-2 font-mono">DN1KB</td><td class="text-red-400 font-bold">122</td><td>Int'l Jet Aviation</td><td>Shipped</td></tr>
+                            <tr class="border-t border-red-500/30"><td class="py-2 font-mono">DNQXA</td><td class="text-red-400 font-bold">117</td><td>Sierra Nevada</td><td>Work Recv</td></tr>
+                            <tr class="border-t border-red-500/30"><td class="py-2 font-mono">CMJHA</td><td class="text-red-400 font-bold">112</td><td>Business Aviators</td><td>Part Ord</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="bg-slate-700 rounded-2xl p-4 md:p-6">
+                <h3 class="text-base md:text-lg font-bold text-white mb-4">⏰ Aging Analysis</h3>
+                <div class="space-y-4">
+                    <div><div class="flex justify-between text-sm mb-1"><span class="text-slate-300">Under 30 days</span><span class="text-emerald-400">56 WOs (62%)</span></div><div class="h-3 bg-slate-600 rounded-full"><div class="h-3 bg-emerald-500 rounded-full" style="width:62%"></div></div></div>
+                    <div><div class="flex justify-between text-sm mb-1"><span class="text-slate-300">30-59 days</span><span class="text-amber-400">16 WOs (18%)</span></div><div class="h-3 bg-slate-600 rounded-full"><div class="h-3 bg-amber-500 rounded-full" style="width:18%"></div></div></div>
+                    <div><div class="flex justify-between text-sm mb-1"><span class="text-slate-300">60-89 days</span><span class="text-orange-400">7 WOs (8%)</span></div><div class="h-3 bg-slate-600 rounded-full"><div class="h-3 bg-orange-500 rounded-full" style="width:8%"></div></div></div>
+                    <div><div class="flex justify-between text-sm mb-1"><span class="text-slate-300">90+ days (Critical)</span><span class="text-red-400">11 WOs (12%)</span></div><div class="h-3 bg-slate-600 rounded-full"><div class="h-3 bg-red-500 rounded-full" style="width:12%"></div></div></div>
+                </div>
+            </div>
+            <div id="workorders-bottom"></div>
+        </div>
+
+        <!-- NETWORK RANKINGS TAB -->
+        <div id="rankings" class="tab">
+            <div class="bg-slate-700 rounded-2xl p-4 md:p-6 mb-6">
+                <div class="flex justify-between items-center mb-4 md:mb-6"><h3 class="text-base md:text-lg font-bold text-white">🏆 Network A/B Rankings (Jan 16)</h3><div class="text-right"><p class="text-xs text-slate-400">Network Avg</p><p class="text-xl md:text-2xl font-black text-amber-400">45.3%</p></div></div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-xs md:text-sm">
+                        <thead><tr class="text-left text-slate-400 border-b border-slate-600"><th class="pb-2">#</th><th class="pb-2">Shop</th><th class="pb-2 text-right">A/B</th><th class="pb-2 text-right">Gap</th></tr></thead>
+                        <tbody class="text-white">
+                            <tr class="border-t border-slate-600"><td class="py-2">1</td><td>Scottsdale</td><td class="text-right text-emerald-400 font-bold">86.2%</td><td class="text-right text-emerald-400">+31.6</td></tr>
+                            <tr class="border-t border-slate-600"><td class="py-2">2</td><td>Seattle</td><td class="text-right text-emerald-400 font-bold">75.9%</td><td class="text-right text-emerald-400">+24.2</td></tr>
+                            <tr class="border-t border-slate-600"><td class="py-2">3</td><td>Portland</td><td class="text-right text-emerald-400 font-bold">75.1%</td><td class="text-right text-emerald-400">+13.7</td></tr>
+                            <tr class="border-t border-slate-600 text-slate-500"><td class="py-2" colspan="4">... shops 4-17 ...</td></tr>
+                            <tr class="border-t border-slate-600"><td class="py-2">18</td><td>Kansas City</td><td class="text-right text-red-400">28.1%</td><td class="text-right text-red-400">-35.2</td></tr>
+                            <tr class="border-t border-slate-600"><td class="py-2">19</td><td>St. Louis</td><td class="text-right text-red-400">21.2%</td><td class="text-right text-red-400">-31.5</td></tr>
+                            <tr class="border-t border-slate-600 bg-red-500/20"><td class="py-2 font-bold">20</td><td class="font-bold">Denver</td><td class="text-right text-red-400 font-bold">16.5%</td><td class="text-right text-red-400 font-bold">-42.0</td></tr>
+                            <tr class="border-t border-slate-600"><td class="py-2">21</td><td>Houston</td><td class="text-right text-red-400">13.5%</td><td class="text-right text-red-400">-51.8</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="bg-gradient-to-r from-red-600 to-orange-600 rounded-2xl p-4 md:p-6 text-white">
+                <h3 class="font-bold text-base md:text-xl mb-4">🎯 Path to Move Up</h3>
+                <div class="grid grid-cols-3 gap-3 md:gap-4">
+                    <div class="bg-white/20 rounded-xl p-3 md:p-4 text-center"><p class="text-xs opacity-80">Pass Houston</p><p class="text-lg md:text-2xl font-black">Done ✓</p></div>
+                    <div class="bg-white/20 rounded-xl p-3 md:p-4 text-center"><p class="text-xs opacity-80">Pass St. Louis</p><p class="text-lg md:text-2xl font-black">21.3%+</p></div>
+                    <div class="bg-white/20 rounded-xl p-3 md:p-4 text-center"><p class="text-xs opacity-80">Pass KC</p><p class="text-lg md:text-2xl font-black">28.2%+</p></div>
+                </div>
+            </div>
+            <div id="rankings-bottom"></div>
+        </div>
+
+        <div class="mt-8 pt-4 border-t border-slate-700 flex justify-between text-xs text-slate-500 flex-wrap gap-2">
+            <p>Duncan Aviation • Denver 889</p>
+            <p>Updated: 01/21/26</p>
+        </div>
+    </div>
+    <script>
+        let kioskMode = false;
+        let countdownInterval = null;
+        let scrollInterval = null;
+        let countdown = 20;
+        const tabs = ['actions', 'overview', 'employees', 'workorders', 'rankings'];
+        let currentTabIndex = 0;
+        let isScrolling = false;
+        let scrollPhase = 'top'; // 'top', 'scrolling', 'bottom'
+
+        function openTab(tabName) {
+            var tabElements = document.getElementsByClassName('tab');
+            for (var i = 0; i < tabElements.length; i++) { tabElements[i].classList.remove('active'); }
+            var btns = document.getElementsByClassName('tabBtn');
+            for (var i = 0; i < btns.length; i++) { btns[i].style.backgroundColor = '#334155'; btns[i].style.color = '#cbd5e1'; }
+            document.getElementById(tabName).classList.add('active');
+            var activeBtn = document.querySelector('[data-tab="' + tabName + '"]');
+            if (activeBtn) {
+                activeBtn.style.backgroundColor = tabName === 'actions' ? '#ef4444' : '#f59e0b';
+                activeBtn.style.color = 'white';
+            }
+            currentTabIndex = tabs.indexOf(tabName);
+            
+            // Reset scroll to top when changing tabs
+            window.scrollTo({ top: 0, behavior: 'instant' });
+            
+            if (kioskMode) { 
+                countdown = 20;
+                scrollPhase = 'top';
+                updateScrollStatus();
+            }
+        }
+
+        function updateScrollStatus() {
+            var statusEl = document.getElementById('scrollStatus');
+            if (scrollPhase === 'top') {
+                statusEl.textContent = 'Viewing top...';
+            } else if (scrollPhase === 'scrolling') {
+                statusEl.textContent = 'Scrolling ↓';
+            } else {
+                statusEl.textContent = 'Viewing bottom...';
+            }
+        }
+
+        function toggleKiosk() {
+            kioskMode = !kioskMode;
+            var btn = document.getElementById('kioskBtn');
+            var icon = document.getElementById('kioskIcon');
+            var text = document.getElementById('kioskText');
+            var indicator = document.getElementById('kioskIndicator');
+
+            if (kioskMode) {
+                btn.classList.remove('bg-slate-700', 'text-slate-300');
+                btn.classList.add('bg-emerald-600', 'text-white');
+                icon.textContent = '⏸️';
+                text.textContent = 'Stop';
+                indicator.classList.remove('hidden');
+                countdown = 20;
+                scrollPhase = 'top';
+                updateScrollStatus();
+                
+                countdownInterval = setInterval(function() {
+                    countdown--;
+                    document.getElementById('countdown').textContent = countdown;
+                    
+                    // At 10 seconds, start scrolling down
+                    if (countdown === 10 && scrollPhase === 'top') {
+                        scrollPhase = 'scrolling';
+                        updateScrollStatus();
+                        
+                        // Smooth scroll to bottom
+                        var activeTab = tabs[currentTabIndex];
+                        var bottomEl = document.getElementById(activeTab + '-bottom');
+                        if (bottomEl) {
+                            bottomEl.scrollIntoView({ behavior: 'smooth', block: 'end' });
+                        } else {
+                            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+                        }
+                        
+                        // After scroll animation, mark as at bottom
+                        setTimeout(function() {
+                            scrollPhase = 'bottom';
+                            updateScrollStatus();
+                        }, 1500);
+                    }
+                    
+                    // At 0 seconds, go to next tab
+                    if (countdown <= 0) {
+                        currentTabIndex = (currentTabIndex + 1) % tabs.length;
+                        openTab(tabs[currentTabIndex]);
+                        countdown = 20;
+                        scrollPhase = 'top';
+                        updateScrollStatus();
+                    }
+                }, 1000);
+            } else {
+                btn.classList.remove('bg-emerald-600', 'text-white');
+                btn.classList.add('bg-slate-700', 'text-slate-300');
+                icon.textContent = '▶️';
+                text.textContent = 'Auto-Rotate';
+                indicator.classList.add('hidden');
+                if (countdownInterval) { clearInterval(countdownInterval); }
+            }
+        }
+
+        // Prevent screen sleep
+        async function requestWakeLock() {
+            try {
+                if ('wakeLock' in navigator) {
+                    await navigator.wakeLock.request('screen');
+                }
+            } catch (err) {
+                console.log('Wake Lock not supported');
+            }
+        }
+        requestWakeLock();
+    </script>
+</body>
+</html>
