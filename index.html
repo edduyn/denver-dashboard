@@ -2,26 +2,38 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="robots" content="noindex, nofollow">
     <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#0f172a">
+    <meta name="apple-mobile-web-app-title" content="Denver 889">
+    <meta name="application-name" content="Denver 889">
+    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIkRlbnZlciBTYXRlbGxpdGUgRGFzaGJvYXJkIiwKICAic2hvcnRfbmFtZSI6ICJEZW52ZXIgODg5IiwKICAic3RhcnRfdXJsIjogIi4iLAogICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLAogICJiYWNrZ3JvdW5kX2NvbG9yIjogIiMwZjE3MmEiLAogICJ0aGVtZV9jb2xvciI6ICIjMGYxNzJhIiwKICAib3JpZW50YXRpb24iOiAiYW55Igp9">
     <title>Denver Satellite Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { font-family: system-ui, -apple-system, sans-serif; }
+        * { -webkit-tap-highlight-color: transparent; }
+        body { font-family: system-ui, -apple-system, sans-serif; overscroll-behavior: none; }
         .tab { display: none; }
         .tab.active { display: block; }
         .checkbox-item:has(input:checked) { opacity: 0.5; text-decoration: line-through; }
         .kiosk-indicator { animation: pulse 2s infinite; }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
         html { scroll-behavior: smooth; }
+        html, body { overscroll-behavior: none; -webkit-overflow-scrolling: touch; }
         #loginScreen { display: flex; }
         #dashboard { display: none; }
         .authenticated #loginScreen { display: none; }
         .authenticated #dashboard { display: block; }
-        .progress-ring { transform: rotate(-90deg); }
-        .progress-ring-circle { transition: stroke-dashoffset 0.5s ease; }
+        /* Fullscreen styles */
+        @media all and (display-mode: standalone) {
+            body { padding-top: env(safe-area-inset-top); }
+        }
+        /* Hide scrollbar but allow scrolling */
+        ::-webkit-scrollbar { display: none; }
+        body { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
 <body class="bg-gradient-to-br from-slate-900 to-slate-800 min-h-screen">
@@ -50,6 +62,11 @@
                 </button>
                 <p id="errorMsg" class="text-red-400 text-sm text-center hidden">Incorrect access code</p>
             </div>
+            <!-- Install prompt -->
+            <div id="installPrompt" class="hidden mt-4 p-3 bg-purple-600/20 border border-purple-500/50 rounded-xl">
+                <p class="text-purple-300 text-sm mb-2">📱 Install as fullscreen app?</p>
+                <button onclick="installApp()" class="w-full py-2 bg-purple-600 text-white font-bold rounded-lg text-sm">Install Dashboard App</button>
+            </div>
         </div>
     </div>
 
@@ -70,12 +87,15 @@
                         <span id="kioskIcon">▶️</span>
                         <span id="kioskText">Auto-Rotate</span>
                     </button>
-                    <button onclick="logout()" class="px-3 py-2 rounded-lg text-xs font-semibold bg-slate-700 text-slate-300 hover:bg-slate-600">
-                        🔒 Lock
+                    <button onclick="toggleFullscreen()" class="px-3 py-2 rounded-lg text-xs font-semibold bg-slate-700 text-slate-300 hover:bg-slate-600">
+                        ⛶ Full
                     </button>
-                    <div class="text-right">
-                        <p class="text-xs text-slate-500 uppercase">Last Updated</p>
-                        <p class="text-sm md:text-lg font-bold text-white">January 21, 2026</p>
+                    <button onclick="logout()" class="px-3 py-2 rounded-lg text-xs font-semibold bg-slate-700 text-slate-300 hover:bg-slate-600">
+                        🔒
+                    </button>
+                    <div class="text-right hidden md:block">
+                        <p class="text-xs text-slate-500 uppercase">Updated</p>
+                        <p class="text-sm font-bold text-white">01/21/26</p>
                     </div>
                 </div>
             </div>
@@ -464,18 +484,18 @@
                     <h3 class="text-base md:text-lg font-bold text-red-400 mb-4">🚨 Critical WOs (90+ days)</h3>
                     <div class="overflow-x-auto">
                         <table class="w-full text-xs md:text-sm">
-                            <thead><tr class="text-left text-slate-400"><th class="pb-2">WO#</th><th class="pb-2">Days</th><th class="pb-2">Customer</th><th class="pb-2">Status</th><th class="pb-2">Notes</th></tr></thead>
+                            <thead><tr class="text-left text-slate-400"><th class="pb-2">WO#</th><th class="pb-2">Days</th><th class="pb-2">Customer</th><th class="pb-2">Notes</th></tr></thead>
                             <tbody class="text-white">
-                                <tr class="border-t border-red-500/30 bg-yellow-500/10"><td class="py-2 font-mono">DFPJA</td><td class="text-red-400 font-bold">237</td><td>Duncan Dallas</td><td>In Work</td><td class="text-yellow-400 text-xs">🟡 PC-12 Archangel STC</td></tr>
-                                <tr class="border-t border-red-500/30"><td class="py-2 font-mono">CG41A</td><td class="text-red-400 font-bold">182</td><td>Kauffman Land</td><td>In Work</td><td class="text-blue-400 text-xs">Bills in Jan</td></tr>
-                                <tr class="border-t border-red-500/30"><td class="py-2 font-mono">CG43A</td><td class="text-red-400 font-bold">181</td><td>Kauffman Land</td><td>In Work</td><td class="text-blue-400 text-xs">Bills in Jan</td></tr>
-                                <tr class="border-t border-red-500/30"><td class="py-2 font-mono">DLBTA</td><td class="text-red-400 font-bold">156</td><td>Duncan Denver</td><td>Work Recv</td><td></td></tr>
-                                <tr class="border-t border-red-500/30"><td class="py-2 font-mono">CL4CB</td><td class="text-red-400 font-bold">132</td><td>Business Aviators</td><td>Work Recv</td><td></td></tr>
-                                <tr class="border-t border-red-500/30"><td class="py-2 font-mono">DN1KA</td><td class="text-red-400 font-bold">125</td><td>Int'l Jet Aviation</td><td>Work Recv</td><td></td></tr>
-                                <tr class="border-t border-red-500/30"><td class="py-2 font-mono">DN1KB</td><td class="text-red-400 font-bold">122</td><td>Int'l Jet Aviation</td><td>Shipped</td><td></td></tr>
-                                <tr class="border-t border-red-500/30"><td class="py-2 font-mono">DNQXA</td><td class="text-red-400 font-bold">117</td><td>Sierra Nevada</td><td>Work Recv</td><td></td></tr>
-                                <tr class="border-t border-red-500/30 bg-blue-500/10"><td class="py-2 font-mono">CMJHA</td><td class="text-red-400 font-bold">112</td><td>Business Aviators</td><td>Vendor</td><td class="text-blue-400 text-xs">⏳ Honeywell EDG-100 free install</td></tr>
-                                <tr class="border-t border-red-500/30"><td class="py-2 font-mono">DNXCA</td><td class="text-red-400 font-bold">92</td><td>-</td><td>In Work</td><td class="text-blue-400 text-xs">Honeywell part on order</td></tr>
+                                <tr class="border-t border-red-500/30 bg-yellow-500/10"><td class="py-2 font-mono">DFPJA</td><td class="text-red-400 font-bold">237</td><td>Duncan Dallas</td><td class="text-yellow-400 text-xs">🟡 PC-12 Archangel STC</td></tr>
+                                <tr class="border-t border-red-500/30"><td class="py-2 font-mono">CG41A</td><td class="text-red-400 font-bold">182</td><td>Kauffman Land</td><td class="text-blue-400 text-xs">Bills in Jan</td></tr>
+                                <tr class="border-t border-red-500/30"><td class="py-2 font-mono">CG43A</td><td class="text-red-400 font-bold">181</td><td>Kauffman Land</td><td class="text-blue-400 text-xs">Bills in Jan</td></tr>
+                                <tr class="border-t border-red-500/30"><td class="py-2 font-mono">DLBTA</td><td class="text-red-400 font-bold">156</td><td>Duncan Denver</td><td></td></tr>
+                                <tr class="border-t border-red-500/30"><td class="py-2 font-mono">CL4CB</td><td class="text-red-400 font-bold">132</td><td>Business Aviators</td><td></td></tr>
+                                <tr class="border-t border-red-500/30"><td class="py-2 font-mono">DN1KA</td><td class="text-red-400 font-bold">125</td><td>Int'l Jet</td><td></td></tr>
+                                <tr class="border-t border-red-500/30"><td class="py-2 font-mono">DN1KB</td><td class="text-red-400 font-bold">122</td><td>Int'l Jet</td><td></td></tr>
+                                <tr class="border-t border-red-500/30"><td class="py-2 font-mono">DNQXA</td><td class="text-red-400 font-bold">117</td><td>Sierra Nevada</td><td></td></tr>
+                                <tr class="border-t border-red-500/30 bg-blue-500/10"><td class="py-2 font-mono">CMJHA</td><td class="text-red-400 font-bold">112</td><td>Business Aviators</td><td class="text-blue-400 text-xs">⏳ Honeywell free install</td></tr>
+                                <tr class="border-t border-red-500/30"><td class="py-2 font-mono">DNXCA</td><td class="text-red-400 font-bold">92</td><td>-</td><td class="text-blue-400 text-xs">Honeywell part</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -486,7 +506,7 @@
                         <div><div class="flex justify-between text-sm mb-1"><span class="text-slate-300">Under 30 days</span><span class="text-emerald-400">56 WOs (62%)</span></div><div class="h-3 bg-slate-600 rounded-full"><div class="h-3 bg-emerald-500 rounded-full" style="width:62%"></div></div></div>
                         <div><div class="flex justify-between text-sm mb-1"><span class="text-slate-300">30-59 days</span><span class="text-amber-400">16 WOs (18%)</span></div><div class="h-3 bg-slate-600 rounded-full"><div class="h-3 bg-amber-500 rounded-full" style="width:18%"></div></div></div>
                         <div><div class="flex justify-between text-sm mb-1"><span class="text-slate-300">60-89 days</span><span class="text-orange-400">7 WOs (8%)</span></div><div class="h-3 bg-slate-600 rounded-full"><div class="h-3 bg-orange-500 rounded-full" style="width:8%"></div></div></div>
-                        <div><div class="flex justify-between text-sm mb-1"><span class="text-slate-300">90+ days (Critical)</span><span class="text-red-400">11 WOs (12%)</span></div><div class="h-3 bg-slate-600 rounded-full"><div class="h-3 bg-red-500 rounded-full" style="width:12%"></div></div></div>
+                        <div><div class="flex justify-between text-sm mb-1"><span class="text-slate-300">90+ days</span><span class="text-red-400">11 WOs (12%)</span></div><div class="h-3 bg-slate-600 rounded-full"><div class="h-3 bg-red-500 rounded-full" style="width:12%"></div></div></div>
                     </div>
                 </div>
                 <div id="workorders-bottom"></div>
@@ -502,13 +522,13 @@
                             <div class="bg-slate-600 rounded-xl p-3 text-center"><p class="text-2xl font-black text-emerald-400">3/7</p><p class="text-xs text-slate-400">Clean Audits</p></div>
                         </div>
                         <div class="space-y-2 text-sm">
-                            <div class="flex justify-between"><span class="text-slate-300">June</span><span class="text-amber-400">2 ⚠️</span></div>
-                            <div class="flex justify-between"><span class="text-slate-300">July</span><span class="text-red-400">7 ❌</span></div>
+                            <div class="flex justify-between"><span class="text-slate-300">Jun</span><span class="text-amber-400">2</span></div>
+                            <div class="flex justify-between"><span class="text-slate-300">Jul</span><span class="text-red-400">7</span></div>
                             <div class="flex justify-between"><span class="text-slate-300">Aug</span><span class="text-emerald-400">0 ✅</span></div>
-                            <div class="flex justify-between"><span class="text-slate-300">Sept</span><span class="text-emerald-400">0 ✅</span></div>
-                            <div class="flex justify-between"><span class="text-slate-300">Oct</span><span class="text-amber-400">4 ⚠️</span></div>
+                            <div class="flex justify-between"><span class="text-slate-300">Sep</span><span class="text-emerald-400">0 ✅</span></div>
+                            <div class="flex justify-between"><span class="text-slate-300">Oct</span><span class="text-amber-400">4</span></div>
                             <div class="flex justify-between"><span class="text-slate-300">Nov</span><span class="text-emerald-400">0 ✅</span></div>
-                            <div class="flex justify-between"><span class="text-slate-300">Dec</span><span class="text-amber-400">3 ⚠️</span></div>
+                            <div class="flex justify-between"><span class="text-slate-300">Dec</span><span class="text-amber-400">3</span></div>
                         </div>
                     </div>
                     <div class="bg-slate-700 rounded-2xl p-4 md:p-6">
@@ -518,41 +538,21 @@
                             <div class="bg-slate-600 rounded-xl p-3 text-center"><p class="text-2xl font-black text-emerald-400">6/12</p><p class="text-xs text-slate-400">Clean Months</p></div>
                         </div>
                         <div class="space-y-2 text-sm">
-                            <div class="flex justify-between"><span class="text-slate-300">Jan-Mar</span><span class="text-emerald-400">0 ✅</span></div>
-                            <div class="flex justify-between"><span class="text-slate-300">Apr-Jun</span><span class="text-amber-400">8 ⚠️</span></div>
-                            <div class="flex justify-between"><span class="text-slate-300">Jul-Sep</span><span class="text-emerald-400">0 ✅</span></div>
-                            <div class="flex justify-between"><span class="text-slate-300">Oct</span><span class="text-red-400">11 ❌</span></div>
-                            <div class="flex justify-between"><span class="text-slate-300">Nov</span><span class="text-red-400">9 ❌</span></div>
-                            <div class="flex justify-between"><span class="text-slate-300">Dec</span><span class="text-amber-400">6 ⚠️</span></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-6">
-                    <div class="bg-red-900/30 border border-red-500/50 rounded-2xl p-4 md:p-6">
-                        <h3 class="text-base font-bold text-red-400 mb-3">❌ Top Tech Issues</h3>
-                        <div class="space-y-2 text-sm">
-                            <div class="flex justify-between text-white"><span>Ken</span><span class="text-red-400">7</span></div>
-                            <div class="flex justify-between text-white"><span>Cruza</span><span class="text-red-400">6</span></div>
-                            <div class="flex justify-between text-white"><span>Smikz</span><span class="text-red-400">6</span></div>
-                            <div class="flex justify-between text-white"><span>Macos</span><span class="text-amber-400">3</span></div>
-                        </div>
-                    </div>
-                    <div class="bg-amber-900/30 border border-amber-500/50 rounded-2xl p-4 md:p-6">
-                        <h3 class="text-base font-bold text-amber-400 mb-3">⚠️ Common Problems</h3>
-                        <div class="space-y-2 text-sm">
-                            <div class="flex justify-between text-white"><span>RTS/Paperwork</span><span>12</span></div>
-                            <div class="flex justify-between text-white"><span>Work Auth Unsigned</span><span>11</span></div>
-                            <div class="flex justify-between text-white"><span>Missing Info</span><span>6</span></div>
-                            <div class="flex justify-between text-white"><span>Parts Traceability</span><span>5</span></div>
+                            <div class="flex justify-between"><span class="text-slate-300">Q1</span><span class="text-emerald-400">0 ✅</span></div>
+                            <div class="flex justify-between"><span class="text-slate-300">Q2</span><span class="text-amber-400">8</span></div>
+                            <div class="flex justify-between"><span class="text-slate-300">Q3</span><span class="text-emerald-400">0 ✅</span></div>
+                            <div class="flex justify-between"><span class="text-slate-300">Oct</span><span class="text-red-400">11</span></div>
+                            <div class="flex justify-between"><span class="text-slate-300">Nov</span><span class="text-red-400">9</span></div>
+                            <div class="flex justify-between"><span class="text-slate-300">Dec</span><span class="text-amber-400">6</span></div>
                         </div>
                     </div>
                 </div>
                 <div class="bg-gradient-to-r from-purple-900 to-indigo-900 rounded-2xl p-4 md:p-6">
-                    <h3 class="text-lg font-bold text-white mb-4">🎯 GOAL #7: Zero Audit Findings</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div class="bg-white/10 rounded-xl p-4 text-center"><p class="text-purple-300 text-xs uppercase">2025 Total Issues</p><p class="text-3xl font-black text-white">50</p><p class="text-sm text-purple-300">16 audit + 34 tech</p></div>
-                        <div class="bg-white/10 rounded-xl p-4 text-center"><p class="text-purple-300 text-xs uppercase">2026 Target</p><p class="text-3xl font-black text-emerald-400">0</p><p class="text-sm text-purple-300">Zero tolerance</p></div>
-                        <div class="bg-white/10 rounded-xl p-4 text-center"><p class="text-purple-300 text-xs uppercase">Focus Areas</p><p class="text-lg font-bold text-white">RTS, Parts ID, Flam Locker</p></div>
+                    <h3 class="text-lg font-bold text-white mb-4">🎯 GOAL #7: Zero Findings</h3>
+                    <div class="grid grid-cols-3 gap-4">
+                        <div class="bg-white/10 rounded-xl p-4 text-center"><p class="text-purple-300 text-xs">2025 Issues</p><p class="text-3xl font-black text-white">50</p></div>
+                        <div class="bg-white/10 rounded-xl p-4 text-center"><p class="text-purple-300 text-xs">2026 Target</p><p class="text-3xl font-black text-emerald-400">0</p></div>
+                        <div class="bg-white/10 rounded-xl p-4 text-center"><p class="text-purple-300 text-xs">Focus</p><p class="text-sm font-bold text-white">RTS, Parts, Flam</p></div>
                     </div>
                 </div>
                 <div id="quality-bottom"></div>
@@ -561,43 +561,61 @@
             <!-- NETWORK RANKINGS TAB -->
             <div id="rankings" class="tab">
                 <div class="bg-slate-700 rounded-2xl p-4 md:p-6 mb-6">
-                    <div class="flex justify-between items-center mb-4 md:mb-6"><h3 class="text-base md:text-lg font-bold text-white">🏆 Network A/B Rankings (Jan 16)</h3><div class="text-right"><p class="text-xs text-slate-400">Network Avg</p><p class="text-xl md:text-2xl font-black text-amber-400">45.3%</p></div></div>
+                    <div class="flex justify-between items-center mb-4"><h3 class="text-base md:text-lg font-bold text-white">🏆 Network Rankings (Jan 16)</h3><div class="text-right"><p class="text-xs text-slate-400">Network Avg</p><p class="text-xl font-black text-amber-400">45.3%</p></div></div>
                     <div class="overflow-x-auto">
                         <table class="w-full text-xs md:text-sm">
-                            <thead><tr class="text-left text-slate-400 border-b border-slate-600"><th class="pb-2">#</th><th class="pb-2">Shop</th><th class="pb-2 text-right">A/B</th><th class="pb-2 text-right">Gap</th></tr></thead>
+                            <thead><tr class="text-left text-slate-400 border-b border-slate-600"><th class="pb-2">#</th><th class="pb-2">Shop</th><th class="pb-2 text-right">A/B</th></tr></thead>
                             <tbody class="text-white">
-                                <tr class="border-t border-slate-600"><td class="py-2">1</td><td>Scottsdale</td><td class="text-right text-emerald-400 font-bold">86.2%</td><td class="text-right text-emerald-400">+31.6</td></tr>
-                                <tr class="border-t border-slate-600"><td class="py-2">2</td><td>Seattle</td><td class="text-right text-emerald-400 font-bold">75.9%</td><td class="text-right text-emerald-400">+24.2</td></tr>
-                                <tr class="border-t border-slate-600"><td class="py-2">3</td><td>Portland</td><td class="text-right text-emerald-400 font-bold">75.1%</td><td class="text-right text-emerald-400">+13.7</td></tr>
-                                <tr class="border-t border-slate-600 text-slate-500"><td class="py-2" colspan="4">... shops 4-17 ...</td></tr>
-                                <tr class="border-t border-slate-600"><td class="py-2">18</td><td>Kansas City</td><td class="text-right text-red-400">28.1%</td><td class="text-right text-red-400">-35.2</td></tr>
-                                <tr class="border-t border-slate-600"><td class="py-2">19</td><td>St. Louis</td><td class="text-right text-red-400">21.2%</td><td class="text-right text-red-400">-31.5</td></tr>
-                                <tr class="border-t border-slate-600 bg-red-500/20"><td class="py-2 font-bold">20</td><td class="font-bold">Denver</td><td class="text-right text-red-400 font-bold">16.5%</td><td class="text-right text-red-400 font-bold">-42.0</td></tr>
-                                <tr class="border-t border-slate-600"><td class="py-2">21</td><td>Houston</td><td class="text-right text-red-400">13.5%</td><td class="text-right text-red-400">-51.8</td></tr>
+                                <tr class="border-t border-slate-600"><td>1</td><td>Scottsdale</td><td class="text-right text-emerald-400 font-bold">86.2%</td></tr>
+                                <tr class="border-t border-slate-600"><td>2</td><td>Seattle</td><td class="text-right text-emerald-400 font-bold">75.9%</td></tr>
+                                <tr class="border-t border-slate-600"><td>3</td><td>Portland</td><td class="text-right text-emerald-400 font-bold">75.1%</td></tr>
+                                <tr class="border-t border-slate-600 text-slate-500"><td colspan="3">... shops 4-17 ...</td></tr>
+                                <tr class="border-t border-slate-600"><td>18</td><td>Kansas City</td><td class="text-right text-red-400">28.1%</td></tr>
+                                <tr class="border-t border-slate-600"><td>19</td><td>St. Louis</td><td class="text-right text-red-400">21.2%</td></tr>
+                                <tr class="border-t border-slate-600 bg-red-500/20"><td class="font-bold">20</td><td class="font-bold">Denver</td><td class="text-right text-red-400 font-bold">16.5%</td></tr>
+                                <tr class="border-t border-slate-600"><td>21</td><td>Houston</td><td class="text-right text-red-400">13.5%</td></tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
                 <div class="bg-gradient-to-r from-red-600 to-orange-600 rounded-2xl p-4 md:p-6 text-white">
-                    <h3 class="font-bold text-base md:text-xl mb-4">🎯 Path to Move Up</h3>
-                    <div class="grid grid-cols-3 gap-3 md:gap-4">
-                        <div class="bg-white/20 rounded-xl p-3 md:p-4 text-center"><p class="text-xs opacity-80">Pass Houston</p><p class="text-lg md:text-2xl font-black">Done ✓</p></div>
-                        <div class="bg-white/20 rounded-xl p-3 md:p-4 text-center"><p class="text-xs opacity-80">Pass St. Louis</p><p class="text-lg md:text-2xl font-black">21.3%+</p></div>
-                        <div class="bg-white/20 rounded-xl p-3 md:p-4 text-center"><p class="text-xs opacity-80">Pass KC</p><p class="text-lg md:text-2xl font-black">28.2%+</p></div>
+                    <h3 class="font-bold text-base mb-4">🎯 Path to Move Up</h3>
+                    <div class="grid grid-cols-3 gap-3">
+                        <div class="bg-white/20 rounded-xl p-3 text-center"><p class="text-xs opacity-80">Pass Houston</p><p class="text-xl font-black">Done ✓</p></div>
+                        <div class="bg-white/20 rounded-xl p-3 text-center"><p class="text-xs opacity-80">Pass St. Louis</p><p class="text-xl font-black">21.3%+</p></div>
+                        <div class="bg-white/20 rounded-xl p-3 text-center"><p class="text-xs opacity-80">Pass KC</p><p class="text-xl font-black">28.2%+</p></div>
                     </div>
                 </div>
                 <div id="rankings-bottom"></div>
             </div>
 
-            <div class="mt-8 pt-4 border-t border-slate-700 flex justify-between text-xs text-slate-500 flex-wrap gap-2">
+            <div class="mt-6 pt-4 border-t border-slate-700 flex justify-between text-xs text-slate-500">
                 <p>Duncan Aviation • Denver 889</p>
-                <p>Updated: 01/21/26</p>
+                <p>01/21/26</p>
             </div>
         </div>
     </div>
 
     <script>
         const ACCESS_CODE = 'denver889';
+        let deferredPrompt;
+        
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            document.getElementById('installPrompt').classList.remove('hidden');
+        });
+        
+        function installApp() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((result) => {
+                    deferredPrompt = null;
+                    document.getElementById('installPrompt').classList.add('hidden');
+                });
+            }
+        }
+        
         function checkPassword() {
             var input = document.getElementById('passwordInput').value;
             if (input === ACCESS_CODE) {
@@ -616,6 +634,16 @@
         }
         if (localStorage.getItem('denver_auth') === 'true') {
             document.body.classList.add('authenticated');
+        }
+        
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    alert('Fullscreen not supported. Try adding to Home Screen instead.');
+                });
+            } else {
+                document.exitFullscreen();
+            }
         }
 
         let kioskMode = false;
@@ -645,7 +673,7 @@
             scrollDirection = 1;
             if (kioskMode) { 
                 countdown = 20;
-                maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+                setTimeout(() => { maxScroll = document.documentElement.scrollHeight - window.innerHeight; }, 100);
                 updateScrollStatus();
             }
         }
@@ -653,7 +681,7 @@
         function updateScrollStatus() {
             var statusEl = document.getElementById('scrollStatus');
             var pct = maxScroll > 0 ? Math.round((scrollPosition / maxScroll) * 100) : 0;
-            statusEl.textContent = 'Scrolling ' + pct + '%';
+            statusEl.textContent = 'Scroll ' + pct + '%';
         }
 
         function toggleKiosk() {
@@ -675,16 +703,13 @@
                 maxScroll = document.documentElement.scrollHeight - window.innerHeight;
                 updateScrollStatus();
                 
-                // Smooth continuous scroll
                 kioskInterval = setInterval(function() {
                     countdown--;
                     document.getElementById('countdown').textContent = countdown;
                     
-                    // Smooth scroll - move ~5% of page per second
                     var scrollStep = Math.max(maxScroll / 18, 20);
                     scrollPosition += scrollStep * scrollDirection;
                     
-                    // Bounce at top/bottom
                     if (scrollPosition >= maxScroll) {
                         scrollPosition = maxScroll;
                         scrollDirection = -1;
@@ -696,7 +721,6 @@
                     window.scrollTo({ top: scrollPosition, behavior: 'smooth' });
                     updateScrollStatus();
                     
-                    // Move to next tab when countdown reaches 0
                     if (countdown <= 0) {
                         currentTabIndex = (currentTabIndex + 1) % tabs.length;
                         openTab(tabs[currentTabIndex]);
