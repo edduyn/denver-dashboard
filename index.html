@@ -2,471 +2,877 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="theme-color" content="#0f172a">
-    <meta http-equiv="refresh" content="600">
     <title>Denver Satellite Dashboard</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="manifest" href="data:application/json,{&quot;name&quot;:&quot;Denver Dashboard&quot;,&quot;short_name&quot;:&quot;Denver&quot;,&quot;display&quot;:&quot;standalone&quot;}">
     <style>
-        * { -webkit-tap-highlight-color: transparent; }
-        body { font-family: system-ui, -apple-system, sans-serif; overscroll-behavior: none; }
-        .tab { display: none; }
-        .tab.active { display: block; }
-        .checkbox-item:has(input:checked) { opacity: 0.5; text-decoration: line-through; }
-        .kiosk-indicator { animation: pulse 2s infinite; }
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
-        html, body { overscroll-behavior: none; -webkit-overflow-scrolling: touch; }
-        #loginScreen { display: flex; }
-        #dashboard { display: none; }
-        .authenticated #loginScreen { display: none; }
-        .authenticated #dashboard { display: block; }
-        ::-webkit-scrollbar { display: none; }
-        body { -ms-overflow-style: none; scrollbar-width: none; }
-        .paused-indicator { background: rgba(239, 68, 68, 0.9); }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); color: #fff; min-height: 100vh; }
+        
+        /* Login Screen */
+        .login-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
+        .login-box { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border-radius: 20px; padding: 40px; text-align: center; max-width: 400px; width: 100%; }
+        .login-box h1 { color: #f59e0b; margin-bottom: 10px; font-size: 1.8em; }
+        .login-box p { color: #94a3b8; margin-bottom: 30px; }
+        .login-box input { width: 100%; padding: 15px; border: 2px solid #334155; background: #1e293b; color: #fff; border-radius: 10px; font-size: 16px; margin-bottom: 15px; }
+        .login-box input:focus { outline: none; border-color: #f59e0b; }
+        .login-box button { width: 100%; padding: 15px; background: #f59e0b; color: #000; border: none; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; }
+        .login-box button:hover { background: #d97706; }
+        .error-msg { color: #ef4444; margin-top: 10px; display: none; }
+        
+        /* Main Dashboard */
+        .dashboard { display: none; min-height: 100vh; }
+        .header { background: rgba(0,0,0,0.3); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+        .header-left { display: flex; align-items: center; gap: 15px; }
+        .logo { height: 40px; }
+        .header h1 { font-size: 1.3em; color: #f59e0b; }
+        .header-right { display: flex; gap: 10px; align-items: center; }
+        .header-btn { padding: 8px 15px; border-radius: 8px; border: none; cursor: pointer; font-size: 14px; font-weight: 500; }
+        .btn-full { background: #3b82f6; color: #fff; }
+        .btn-rotate { background: #10b981; color: #fff; }
+        .btn-lock { background: #64748b; color: #fff; }
+        .status-indicator { padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+        .status-active { background: #10b981; color: #fff; }
+        .status-paused { background: #ef4444; color: #fff; }
+        
+        /* Tabs */
+        .tabs { display: flex; background: rgba(0,0,0,0.2); padding: 10px; gap: 5px; overflow-x: auto; }
+        .tab { padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 500; white-space: nowrap; transition: all 0.3s; }
+        .tab:hover { background: rgba(255,255,255,0.1); }
+        .tab.active { background: #f59e0b; color: #000; }
+        .tab-goals { border-left: 3px solid #8b5cf6; }
+        .tab-actions { border-left: 3px solid #ef4444; }
+        .tab-overview { border-left: 3px solid #3b82f6; }
+        .tab-employees { border-left: 3px solid #10b981; }
+        .tab-workorders { border-left: 3px solid #f97316; }
+        .tab-quotes { border-left: 3px solid #ec4899; }
+        .tab-quality { border-left: 3px solid #06b6d4; }
+        .tab-rankings { border-left: 3px solid #eab308; }
+        .tab-training { border-left: 3px solid #a855f7; }
+        
+        /* Content */
+        .content { padding: 20px; display: none; }
+        .content.active { display: block; }
+        
+        /* Cards */
+        .card { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border-radius: 15px; padding: 20px; margin-bottom: 15px; }
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .card-title { font-size: 1.1em; color: #f59e0b; }
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+        
+        /* Metrics */
+        .metric { text-align: center; padding: 15px; background: rgba(0,0,0,0.2); border-radius: 10px; }
+        .metric-value { font-size: 2em; font-weight: bold; color: #f59e0b; }
+        .metric-label { color: #94a3b8; font-size: 0.9em; margin-top: 5px; }
+        .metric-sub { color: #64748b; font-size: 0.8em; }
+        
+        /* Progress Bars */
+        .progress-container { margin: 10px 0; }
+        .progress-bar { height: 20px; background: #334155; border-radius: 10px; overflow: hidden; }
+        .progress-fill { height: 100%; border-radius: 10px; transition: width 0.5s; }
+        .progress-green { background: linear-gradient(90deg, #10b981, #34d399); }
+        .progress-amber { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+        .progress-red { background: linear-gradient(90deg, #ef4444, #f87171); }
+        
+        /* Tables */
+        .table-container { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        th { color: #f59e0b; font-weight: 600; }
+        tr:hover { background: rgba(255,255,255,0.05); }
+        
+        /* Status Badges */
+        .badge { padding: 4px 10px; border-radius: 20px; font-size: 0.8em; font-weight: 600; }
+        .badge-green { background: #10b981; color: #fff; }
+        .badge-amber { background: #f59e0b; color: #000; }
+        .badge-red { background: #ef4444; color: #fff; }
+        .badge-blue { background: #3b82f6; color: #fff; }
+        .badge-gray { background: #64748b; color: #fff; }
+        
+        /* Goal Cards */
+        .goal-card { background: rgba(0,0,0,0.2); border-radius: 12px; padding: 15px; margin-bottom: 12px; }
+        .goal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .goal-title { font-weight: 600; }
+        .goal-progress { display: flex; align-items: center; gap: 10px; }
+        .goal-pct { font-size: 1.2em; font-weight: bold; }
+        .goal-notes { color: #94a3b8; font-size: 0.85em; margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.1); }
+        
+        /* Action Items */
+        .action-item { display: flex; align-items: center; gap: 12px; padding: 12px; background: rgba(0,0,0,0.2); border-radius: 8px; margin-bottom: 8px; }
+        .action-check { width: 24px; height: 24px; border: 2px solid #64748b; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .action-check.checked { background: #10b981; border-color: #10b981; }
+        .action-check.checked::after { content: '✓'; color: #fff; font-weight: bold; }
+        .action-text { flex: 1; }
+        .action-priority { padding: 2px 8px; border-radius: 4px; font-size: 0.75em; }
+        .priority-high { background: #ef4444; color: #fff; }
+        .priority-med { background: #f59e0b; color: #000; }
+        
+        /* Alert Banner */
+        .alert-banner { background: linear-gradient(90deg, #ef4444, #dc2626); padding: 15px 20px; text-align: center; font-weight: 600; }
+        
+        /* Rankings specific */
+        .rank-item { display: flex; align-items: center; gap: 15px; padding: 10px; border-radius: 8px; margin-bottom: 5px; }
+        .rank-item.denver { background: rgba(245, 158, 11, 0.2); border: 2px solid #f59e0b; }
+        .rank-num { width: 30px; height: 30px; background: #334155; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+        .rank-shop { flex: 1; }
+        .rank-value { font-weight: bold; }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .card-grid { grid-template-columns: 1fr 1fr; }
+            .header h1 { font-size: 1.1em; }
+            .metric-value { font-size: 1.5em; }
+        }
     </style>
 </head>
-<body class="bg-gradient-to-br from-slate-900 to-slate-800 min-h-screen">
-    
-    <!-- LOGIN SCREEN -->
-    <div id="loginScreen" class="min-h-screen flex items-center justify-center p-6">
-        <div class="bg-slate-700 rounded-2xl p-8 max-w-md w-full shadow-2xl">
-            <div class="flex items-center justify-center gap-3 mb-6">
-                <img src="data:image/png;base64,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" alt="Duncan Aviation" class="w-12 h-12 rounded-xl shadow-lg object-cover">
-                <div>
-                    <h1 class="text-xl font-black text-white">Denver Satellite</h1>
-                    <p class="text-slate-400 text-sm">Dashboard Access</p>
-                </div>
-            </div>
-            <div class="space-y-4">
-                <div>
-                    <label class="text-slate-300 text-sm mb-2 block">Enter Access Code</label>
-                    <input type="password" id="passwordInput" 
-                        class="w-full px-4 py-3 bg-slate-600 border border-slate-500 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:border-amber-500"
-                        placeholder="••••••••"
-                        onkeypress="if(event.key === 'Enter') checkPassword()">
-                </div>
-                <button onclick="checkPassword()" 
-                    class="w-full py-3 bg-gradient-to-r from-amber-500 to-orange-600 text-white font-bold rounded-xl hover:opacity-90 transition">
-                    Access Dashboard
-                </button>
-                <p id="errorMsg" class="text-red-400 text-sm text-center hidden">Incorrect access code</p>
-            </div>
+<body>
+    <!-- Login Screen -->
+    <div class="login-screen" id="loginScreen">
+        <div class="login-box">
+            <h1>🛩️ Denver Satellite</h1>
+            <p>Department 889 Performance Dashboard</p>
+            <input type="password" id="passwordInput" placeholder="Enter access code" onkeypress="if(event.key==='Enter')login()">
+            <button onclick="login()">Access Dashboard</button>
+            <p class="error-msg" id="errorMsg">Invalid access code</p>
         </div>
     </div>
-
-    <!-- DASHBOARD -->
-    <div id="dashboard" class="p-4 md:p-6">
-        <div class="max-w-6xl mx-auto">
-            <div class="flex justify-between items-center mb-6 flex-wrap gap-4">
-                <div class="flex items-center gap-3">
-                    <img src="data:image/png;base64,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" alt="Duncan Aviation" class="w-10 h-10 md:w-12 md:h-12 rounded-xl shadow-lg object-cover">
-                    <div>
-                        <h1 class="text-xl md:text-2xl font-black text-white">Denver Satellite</h1>
-                        <p class="text-slate-400 text-xs md:text-sm">Department 889 • Daily Dashboard</p>
-                    </div>
+    
+    <!-- Main Dashboard -->
+    <div class="dashboard" id="dashboard">
+        <div class="header">
+            <div class="header-left">
+                <img src="data:image/png;base64,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" class="logo" alt="Duncan Aviation">
+                <h1>Denver Satellite (889)</h1>
+            </div>
+            <div class="header-right">
+                <span class="status-indicator" id="statusIndicator">Ready</span>
+                <button class="header-btn btn-full" onclick="toggleFullscreen()">⛶ Full</button>
+                <button class="header-btn btn-rotate" id="rotateBtn" onclick="toggleRotate()">▶️ Auto</button>
+                <button class="header-btn btn-lock" onclick="logout()">🔒 Lock</button>
+            </div>
+        </div>
+        
+        <div class="tabs">
+            <div class="tab tab-goals active" data-tab="goals">🎯 Goals</div>
+            <div class="tab tab-actions" data-tab="actions">⚡ Actions</div>
+            <div class="tab tab-overview" data-tab="overview">📊 Overview</div>
+            <div class="tab tab-employees" data-tab="employees">👥 Employees</div>
+            <div class="tab tab-workorders" data-tab="workorders">📋 Work Orders</div>
+            <div class="tab tab-training" data-tab="training">📚 Training</div>
+            <div class="tab tab-quality" data-tab="quality">✅ Quality</div>
+            <div class="tab tab-rankings" data-tab="rankings">🏆 Rankings</div>
+        </div>
+        
+        <!-- GOALS TAB -->
+        <div class="content active" id="goals">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">2026 Performance Goals - Overall Progress</span>
+                    <span class="badge badge-amber">45% Complete</span>
                 </div>
-                <div class="flex items-center gap-4">
-                    <button onclick="toggleKiosk()" id="kioskBtn" class="px-3 py-2 rounded-lg text-xs font-semibold bg-emerald-600 text-white flex items-center gap-2">
-                        <span id="kioskIcon">⏸️</span>
-                        <span id="kioskText">Stop</span>
-                    </button>
-                    <button onclick="toggleFullscreen()" class="px-3 py-2 rounded-lg text-xs font-semibold bg-slate-700 text-slate-300 hover:bg-slate-600">⛶</button>
-                    <button onclick="logout()" class="px-3 py-2 rounded-lg text-xs font-semibold bg-slate-700 text-slate-300 hover:bg-slate-600">🔒</button>
-                    <div class="text-right hidden md:block">
-                        <p class="text-xs text-slate-500">Updated</p>
-                        <p class="text-sm font-bold text-white">01/22 AM</p>
+                
+                <div class="goal-card">
+                    <div class="goal-header">
+                        <span class="goal-title">#1 Financial Objectives (A/B Ratio + ELR)</span>
+                        <div class="goal-progress">
+                            <span class="goal-pct" style="color:#ef4444">28%</span>
+                            <span class="badge badge-red">At Risk</span>
+                        </div>
                     </div>
+                    <div class="progress-container">
+                        <div class="progress-bar"><div class="progress-fill progress-red" style="width:28%"></div></div>
+                    </div>
+                    <div>Current: 29.7% A/B | Target: 58.5% | Gap: -28.8 pts</div>
+                    <div class="goal-notes">⚠️ 20th of 21 satellites. Focus on billable hours and reducing shop time.</div>
+                </div>
+                
+                <div class="goal-card">
+                    <div class="goal-header">
+                        <span class="goal-title">#2 Net Promoter Score (NPS) - Customer Satisfaction</span>
+                        <div class="goal-progress">
+                            <span class="goal-pct" style="color:#f59e0b">0%</span>
+                            <span class="badge badge-amber">Pending</span>
+                        </div>
+                    </div>
+                    <div class="progress-container">
+                        <div class="progress-bar"><div class="progress-fill progress-amber" style="width:0%"></div></div>
+                    </div>
+                    <div>Current: 0 of 1 | Target: 1 survey/month, 12/year</div>
+                    <div class="goal-notes">📋 First NPS survey due end of January. Coordinate with customers on completed WOs.</div>
+                </div>
+                
+                <div class="goal-card">
+                    <div class="goal-header">
+                        <span class="goal-title">#3 Training Completion (Mandatory + Technical)</span>
+                        <div class="goal-progress">
+                            <span class="goal-pct" style="color:#10b981">100%</span>
+                            <span class="badge badge-green">On Track</span>
+                        </div>
+                    </div>
+                    <div class="progress-container">
+                        <div class="progress-bar"><div class="progress-fill progress-green" style="width:100%"></div></div>
+                    </div>
+                    <div>Mandatory: 14/14 compliant | Technical: 3/8 scheduled</div>
+                    <div class="goal-notes">✅ Team 100% compliant on mandatory. 3 techs have dates selected for technical training.</div>
+                </div>
+                
+                <div class="goal-card">
+                    <div class="goal-header">
+                        <span class="goal-title">#4 Flat-Rate System Evaluation</span>
+                        <div class="goal-progress">
+                            <span class="goal-pct" style="color:#f59e0b">15%</span>
+                            <span class="badge badge-amber">In Progress</span>
+                        </div>
+                    </div>
+                    <div class="progress-container">
+                        <div class="progress-bar"><div class="progress-fill progress-amber" style="width:15%"></div></div>
+                    </div>
+                    <div>Phase: Analysis | Next Meeting: March 9, 2026</div>
+                    <div class="goal-notes">📊 Jan 8 kickoff complete. 3-tier structure decided. Creating tier classification criteria.</div>
+                </div>
+                
+                <div class="goal-card">
+                    <div class="goal-header">
+                        <span class="goal-title">#5 Customer Communication & Response Times</span>
+                        <div class="goal-progress">
+                            <span class="goal-pct" style="color:#64748b">N/A</span>
+                            <span class="badge badge-gray">Not Started</span>
+                        </div>
+                    </div>
+                    <div class="progress-container">
+                        <div class="progress-bar"><div class="progress-fill progress-amber" style="width:0%"></div></div>
+                    </div>
+                    <div>Target: Same-day response, phone coverage during business hours</div>
+                    <div class="goal-notes">📞 Need to establish baseline metrics and tracking system.</div>
+                </div>
+                
+                <div class="goal-card">
+                    <div class="goal-header">
+                        <span class="goal-title">#6 Shop Expenses Within Budget</span>
+                        <div class="goal-progress">
+                            <span class="goal-pct" style="color:#64748b">0%</span>
+                            <span class="badge badge-gray">Awaiting Data</span>
+                        </div>
+                    </div>
+                    <div class="progress-container">
+                        <div class="progress-bar"><div class="progress-fill progress-amber" style="width:0%"></div></div>
+                    </div>
+                    <div>Current: Awaiting financial data | Target: ≤2.5% of revenue</div>
+                    <div class="goal-notes">📊 Expense data available after month-end financial reports.</div>
+                </div>
+                
+                <div class="goal-card">
+                    <div class="goal-header">
+                        <span class="goal-title">#7 FAA/Internal Audits - Zero Findings</span>
+                        <div class="goal-progress">
+                            <span class="goal-pct" style="color:#10b981">100%</span>
+                            <span class="badge badge-green">On Track</span>
+                        </div>
+                    </div>
+                    <div class="progress-container">
+                        <div class="progress-bar"><div class="progress-fill progress-green" style="width:100%"></div></div>
+                    </div>
+                    <div>2026 YTD: 0 findings | 2025: 16 findings (3/7 clean audits)</div>
+                    <div class="goal-notes">✅ No audits yet in 2026. Focus: Parts traceability, flam locker control, tool control.</div>
+                </div>
+                
+                <div class="goal-card">
+                    <div class="goal-header">
+                        <span class="goal-title">#8 Monthly A/B Budget Plan</span>
+                        <div class="goal-progress">
+                            <span class="goal-pct" style="color:#ef4444">51%</span>
+                            <span class="badge badge-red">At Risk</span>
+                        </div>
+                    </div>
+                    <div class="progress-container">
+                        <div class="progress-bar"><div class="progress-fill progress-red" style="width:51%"></div></div>
+                    </div>
+                    <div>Current: 29.7% | Target: 58.5% | Achievement: 51%</div>
+                    <div class="goal-notes">⚠️ Need to increase billable hours significantly to hit monthly target.</div>
+                </div>
+                
+                <div class="goal-card">
+                    <div class="goal-header">
+                        <span class="goal-title">#9 Dealer Programs Utilization</span>
+                        <div class="goal-progress">
+                            <span class="goal-pct" style="color:#10b981">80%</span>
+                            <span class="badge badge-green">On Track</span>
+                        </div>
+                    </div>
+                    <div class="progress-container">
+                        <div class="progress-bar"><div class="progress-fill progress-green" style="width:80%"></div></div>
+                    </div>
+                    <div>Active Programs: Using dealer tab | Est. Revenue: $1.7M</div>
+                    <div class="goal-notes">✅ Good utilization. Track success rate and customer feedback.</div>
+                </div>
+                
+                <div class="goal-card">
+                    <div class="goal-header">
+                        <span class="goal-title">#10 Vendor Disputes Communication</span>
+                        <div class="goal-progress">
+                            <span class="goal-pct" style="color:#10b981">100%</span>
+                            <span class="badge badge-green">On Track</span>
+                        </div>
+                    </div>
+                    <div class="progress-container">
+                        <div class="progress-bar"><div class="progress-fill progress-green" style="width:100%"></div></div>
+                    </div>
+                    <div>Target: Communicate to BZ within 30 days of dispute</div>
+                    <div class="goal-notes">✅ All disputes communicated within timeframe.</div>
+                </div>
+                
+                <div class="goal-card">
+                    <div class="goal-header">
+                        <span class="goal-title">#11 Risk Assessment</span>
+                        <div class="goal-progress">
+                            <span class="goal-pct" style="color:#64748b">N/A</span>
+                            <span class="badge badge-gray">Not Started</span>
+                        </div>
+                    </div>
+                    <div class="progress-container">
+                        <div class="progress-bar"><div class="progress-fill progress-amber" style="width:0%"></div></div>
+                    </div>
+                    <div>Target: Identify and document risk areas for Denver operations</div>
+                    <div class="goal-notes">📋 Need to complete risk assessment documentation.</div>
                 </div>
             </div>
-
-            <div id="kioskIndicator" class="bg-emerald-500/20 border border-emerald-500/50 rounded-xl p-3 mb-4 flex items-center justify-between">
-                <div class="flex items-center gap-2">
-                    <span class="kiosk-indicator text-emerald-400">●</span>
-                    <span class="text-emerald-400 text-sm font-semibold">Display Mode</span>
-                    <span class="text-emerald-400/60 text-xs ml-2">(tap to pause)</span>
+        </div>
+        
+        <!-- ACTIONS TAB -->
+        <div class="content" id="actions">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">☀️ Morning Checklist</span>
                 </div>
-                <div class="text-emerald-400 text-sm"><span id="scrollStatus">Scrolling...</span> Next in <span id="countdown">20</span>s</div>
+                <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">Review yesterday's Time Sold report</span></div>
+                <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">Check Anchor for WOs ready to bill</span></div>
+                <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">Assign techs to billable customer work first</span></div>
+                <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">Touch base with low performers</span></div>
             </div>
             
-            <div id="pausedIndicator" class="hidden paused-indicator rounded-xl p-3 mb-4 flex items-center justify-between">
-                <div class="flex items-center gap-2">
-                    <span class="text-white">⏸️</span>
-                    <span class="text-white text-sm font-semibold">PAUSED</span>
-                    <span class="text-white/80 text-xs ml-2">(tap to resume)</span>
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">🌙 End of Day Checklist</span>
                 </div>
-                <div class="text-white text-sm">Auto-resume in <span id="pauseCountdown">30</span>s</div>
+                <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">Pull daily reports (Time Sold, Billed, Anchor, Messages)</span></div>
+                <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">Upload to Claude for analysis</span></div>
+                <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">Bill any completed WOs (within 1 week target)</span></div>
+                <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">Plan tomorrow's assignments</span></div>
             </div>
-
-            <div class="flex gap-2 mb-6 flex-wrap">
-                <button onclick="openTab('goals')" data-tab="goals" class="tabBtn px-3 py-2 rounded-xl font-semibold text-xs bg-purple-600 text-white">🎯 Goals</button>
-                <button onclick="openTab('actions')" data-tab="actions" class="tabBtn px-3 py-2 rounded-xl font-semibold text-xs bg-slate-700 text-slate-300">⚡ Actions</button>
-                <button onclick="openTab('overview')" data-tab="overview" class="tabBtn px-3 py-2 rounded-xl font-semibold text-xs bg-slate-700 text-slate-300">Overview</button>
-                <button onclick="openTab('employees')" data-tab="employees" class="tabBtn px-3 py-2 rounded-xl font-semibold text-xs bg-slate-700 text-slate-300">Employees</button>
-                <button onclick="openTab('workorders')" data-tab="workorders" class="tabBtn px-3 py-2 rounded-xl font-semibold text-xs bg-slate-700 text-slate-300">Work Orders</button>
-                <button onclick="openTab('quotes')" data-tab="quotes" class="tabBtn px-3 py-2 rounded-xl font-semibold text-xs bg-slate-700 text-slate-300">📝 Quotes</button>
-                <button onclick="openTab('quality')" data-tab="quality" class="tabBtn px-3 py-2 rounded-xl font-semibold text-xs bg-slate-700 text-slate-300">Quality</button>
-                <button onclick="openTab('rankings')" data-tab="rankings" class="tabBtn px-3 py-2 rounded-xl font-semibold text-xs bg-slate-700 text-slate-300">Rankings</button>
+            
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">🚨 Critical Actions</span>
+                    <span class="badge badge-red">Urgent</span>
+                </div>
+                <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">Douglas Riera Guzman - 0 billable hours (assign to customer WO)</span><span class="action-priority priority-high">HIGH</span></div>
+                <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">Guillermo Tovar - 3% efficiency (needs billable work)</span><span class="action-priority priority-high">HIGH</span></div>
+                <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">CG4NA - 183 days old, needs billing or status update</span><span class="action-priority priority-high">HIGH</span></div>
+                <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">Reply to Brian Zitek Over 30 list with WO notes</span><span class="action-priority priority-med">MED</span></div>
             </div>
-
-            <!-- 2026 GOALS TAB -->
-            <div id="goals" class="tab active">
-                <div class="bg-gradient-to-r from-purple-600 to-indigo-600 rounded-2xl p-4 text-white mb-6">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="flex items-center gap-3">
-                            <span class="text-3xl">🎯</span>
-                            <div>
-                                <h2 class="text-xl font-black">2026 GOALS</h2>
-                                <p class="opacity-80 text-sm">11 Goals • Hit 100%</p>
-                            </div>
-                        </div>
-                        <div class="text-right">
-                            <p class="text-4xl font-black">45%</p>
-                            <p class="text-sm opacity-80">Overall</p>
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-4 gap-3">
-                        <div class="bg-white/20 rounded-xl p-2 text-center"><p class="text-xl font-black">3</p><p class="text-xs opacity-80">On Track</p></div>
-                        <div class="bg-white/20 rounded-xl p-2 text-center"><p class="text-xl font-black">5</p><p class="text-xs opacity-80">In Progress</p></div>
-                        <div class="bg-white/20 rounded-xl p-2 text-center"><p class="text-xl font-black">2</p><p class="text-xs opacity-80">At Risk</p></div>
-                        <div class="bg-white/20 rounded-xl p-2 text-center"><p class="text-xl font-black">1</p><p class="text-xs opacity-80">Pending</p></div>
-                    </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">📅 Weekly Goals</span>
                 </div>
-                <div class="space-y-2">
-                    <div class="bg-slate-700 rounded-xl p-3"><div class="flex items-center justify-between mb-2"><div class="flex items-center gap-2"><span class="w-7 h-7 bg-red-500 text-white rounded-lg flex items-center justify-center font-bold text-xs">1</span><div><h4 class="text-white font-bold text-sm">Financial</h4><p class="text-slate-400 text-xs">Budget targets</p></div></div><div class="text-right"><p class="text-lg font-black text-amber-400">14%</p></div></div><div class="h-2 bg-slate-600 rounded-full"><div class="h-2 bg-amber-500 rounded-full" style="width:14%"></div></div><p class="text-xs text-slate-400 mt-1">📝 A/B 29.7% vs 58.5% (↑ improved)</p></div>
-                    <div class="bg-slate-700 rounded-xl p-3"><div class="flex items-center justify-between mb-2"><div class="flex items-center gap-2"><span class="w-7 h-7 bg-amber-500 text-white rounded-lg flex items-center justify-center font-bold text-xs">2</span><div><h4 class="text-white font-bold text-sm">NPS</h4><p class="text-slate-400 text-xs">12 surveys/yr</p></div></div><div class="text-right"><p class="text-lg font-black text-amber-400">0%</p></div></div><div class="h-2 bg-slate-600 rounded-full"><div class="h-2 bg-amber-500 rounded-full" style="width:0%"></div></div><p class="text-xs text-slate-400 mt-1">📝 0/12 responses</p></div>
-                    <div class="bg-slate-700 rounded-xl p-3"><div class="flex items-center justify-between mb-2"><div class="flex items-center gap-2"><span class="w-7 h-7 bg-amber-500 text-white rounded-lg flex items-center justify-center font-bold text-xs">3</span><div><h4 class="text-white font-bold text-sm">Training</h4><p class="text-slate-400 text-xs">8 courses</p></div></div><div class="text-right"><p class="text-lg font-black text-amber-400">38%</p></div></div><div class="h-2 bg-slate-600 rounded-full"><div class="h-2 bg-amber-500 rounded-full" style="width:38%"></div></div><p class="text-xs text-slate-400 mt-1">📝 3/8 scheduled</p></div>
-                    <div class="bg-slate-700 rounded-xl p-3"><div class="flex items-center justify-between mb-2"><div class="flex items-center gap-2"><span class="w-7 h-7 bg-amber-500 text-white rounded-lg flex items-center justify-center font-bold text-xs">4</span><div><h4 class="text-white font-bold text-sm">Flat-Rate</h4><p class="text-slate-400 text-xs">3-tier system</p></div></div><div class="text-right"><p class="text-lg font-black text-amber-400">10%</p></div></div><div class="h-2 bg-slate-600 rounded-full"><div class="h-2 bg-amber-500 rounded-full" style="width:10%"></div></div><p class="text-xs text-slate-400 mt-1">📝 Review 3/9</p></div>
-                    <div class="bg-slate-700 rounded-xl p-3"><div class="flex items-center justify-between mb-2"><div class="flex items-center gap-2"><span class="w-7 h-7 bg-slate-500 text-white rounded-lg flex items-center justify-center font-bold text-xs">5</span><div><h4 class="text-white font-bold text-sm">Customer Exp</h4><p class="text-slate-400 text-xs">Availability</p></div></div><div class="text-right"><p class="text-lg font-black text-slate-400">TBD</p></div></div><div class="h-2 bg-slate-600 rounded-full"><div class="h-2 bg-slate-500 rounded-full" style="width:0%"></div></div></div>
-                    <div class="bg-slate-700 rounded-xl p-3"><div class="flex items-center justify-between mb-2"><div class="flex items-center gap-2"><span class="w-7 h-7 bg-emerald-500 text-white rounded-lg flex items-center justify-center font-bold text-xs">6</span><div><h4 class="text-white font-bold text-sm">Expenses</h4><p class="text-slate-400 text-xs">$1.17M budget</p></div></div><div class="text-right"><p class="text-lg font-black text-emerald-400">100%</p></div></div><div class="h-2 bg-slate-600 rounded-full"><div class="h-2 bg-emerald-500 rounded-full" style="width:100%"></div></div><p class="text-xs text-slate-400 mt-1">📝 On track</p></div>
-                    <div class="bg-slate-700 rounded-xl p-3"><div class="flex items-center justify-between mb-2"><div class="flex items-center gap-2"><span class="w-7 h-7 bg-amber-500 text-white rounded-lg flex items-center justify-center font-bold text-xs">7</span><div><h4 class="text-white font-bold text-sm">Audits</h4><p class="text-slate-400 text-xs">Zero findings</p></div></div><div class="text-right"><p class="text-lg font-black text-amber-400">0%</p></div></div><div class="h-2 bg-slate-600 rounded-full"><div class="h-2 bg-amber-500 rounded-full" style="width:0%"></div></div><p class="text-xs text-slate-400 mt-1">📝 2025: 50 issues</p></div>
-                    <div class="bg-slate-700 rounded-xl p-3"><div class="flex items-center justify-between mb-2"><div class="flex items-center gap-2"><span class="w-7 h-7 bg-red-500 text-white rounded-lg flex items-center justify-center font-bold text-xs">8</span><div><h4 class="text-white font-bold text-sm">Monthly Budget</h4><p class="text-slate-400 text-xs">Meet metrics</p></div></div><div class="text-right"><p class="text-lg font-black text-amber-400">14%</p></div></div><div class="h-2 bg-slate-600 rounded-full"><div class="h-2 bg-amber-500 rounded-full" style="width:14%"></div></div><p class="text-xs text-slate-400 mt-1">📝 29.7% A/B improving</p></div>
-                    <div class="bg-slate-700 rounded-xl p-3"><div class="flex items-center justify-between mb-2"><div class="flex items-center gap-2"><span class="w-7 h-7 bg-emerald-500 text-white rounded-lg flex items-center justify-center font-bold text-xs">9</span><div><h4 class="text-white font-bold text-sm">Dealer Programs</h4><p class="text-slate-400 text-xs">Renewals</p></div></div><div class="text-right"><p class="text-lg font-black text-emerald-400">94%</p></div></div><div class="h-2 bg-slate-600 rounded-full"><div class="h-2 bg-emerald-500 rounded-full" style="width:94%"></div></div><p class="text-xs text-slate-400 mt-1">📝 44/47 renewed</p></div>
-                    <div class="bg-slate-700 rounded-xl p-3"><div class="flex items-center justify-between mb-2"><div class="flex items-center gap-2"><span class="w-7 h-7 bg-emerald-500 text-white rounded-lg flex items-center justify-center font-bold text-xs">10</span><div><h4 class="text-white font-bold text-sm">Vendor Disputes</h4><p class="text-slate-400 text-xs">5 day notify</p></div></div><div class="text-right"><p class="text-lg font-black text-emerald-400">100%</p></div></div><div class="h-2 bg-slate-600 rounded-full"><div class="h-2 bg-emerald-500 rounded-full" style="width:100%"></div></div><p class="text-xs text-slate-400 mt-1">📝 1/1 on time</p></div>
-                    <div class="bg-slate-700 rounded-xl p-3"><div class="flex items-center justify-between mb-2"><div class="flex items-center gap-2"><span class="w-7 h-7 bg-slate-500 text-white rounded-lg flex items-center justify-center font-bold text-xs">11</span><div><h4 class="text-white font-bold text-sm">Risk Mgmt</h4><p class="text-slate-400 text-xs">Reduce risk</p></div></div><div class="text-right"><p class="text-lg font-black text-slate-400">TBD</p></div></div><div class="h-2 bg-slate-600 rounded-full"><div class="h-2 bg-slate-500 rounded-full" style="width:0%"></div></div></div>
-                </div>
+                <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">A/B Target: Get to 30%+ by Friday</span></div>
+                <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">Close 5+ WOs from 90+ day aging list</span></div>
+                <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">Move up to 18th rank (pass St. Louis & KC)</span></div>
             </div>
-
-            <!-- ACTIONS TAB -->
-            <div id="actions" class="tab">
-                <div class="bg-gradient-to-r from-amber-600 to-orange-600 rounded-2xl p-4 text-white mb-6">
-                    <div class="flex items-center gap-3 mb-4">
-                        <span class="text-2xl">📈</span>
-                        <div><h2 class="text-lg font-black">A/B IMPROVING</h2><p class="opacity-90 text-sm">29.7% • Juan loan helping (+10 pts)</p></div>
-                    </div>
-                    <div class="grid grid-cols-3 gap-3">
-                        <div class="bg-white/20 rounded-xl p-2 text-center"><p class="text-xl font-black">-28.8</p><p class="text-xs opacity-80">pts to target</p></div>
-                        <div class="bg-white/20 rounded-xl p-2 text-center"><p class="text-xl font-black">97</p><p class="text-xs opacity-80">Open WOs</p></div>
-                        <div class="bg-white/20 rounded-xl p-2 text-center"><p class="text-xl font-black">2</p><p class="text-xs opacity-80">@ 0% bill</p></div>
-                    </div>
+        </div>
+        
+        <!-- OVERVIEW TAB -->
+        <div class="content" id="overview">
+            <div class="alert-banner">
+                ⚠️ A/B RATIO: 29.7% vs 58.5% Target | Gap: -28.8 pts | Rank: 20th of 21
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">January 2026 Metrics</span>
+                    <span class="badge badge-blue">MTD</span>
                 </div>
-                <div class="bg-emerald-900/30 border border-emerald-500/50 rounded-2xl p-4 mb-6">
-                    <h3 class="text-base font-bold text-emerald-400 mb-3">✅ POSITIVE</h3>
-                    <div class="space-y-2">
-                        <div class="flex items-center gap-2 p-2 bg-emerald-500/20 rounded-xl"><span class="text-emerald-400">✓</span><div><span class="text-white font-semibold text-sm">Juan Medina - 100% billable (loaned)</span><p class="text-emerald-300 text-xs">154h on billable WO for another shop</p></div></div>
-                        <div class="flex items-center gap-2 p-2 bg-emerald-500/20 rounded-xl"><span class="text-emerald-400">✓</span><div><span class="text-white font-semibold text-sm">Sean Macoomb - 60% (above target)</span><p class="text-emerald-300 text-xs">85.6h billable - team leader</p></div></div>
+                <div class="card-grid">
+                    <div class="metric">
+                        <div class="metric-value">29.7%</div>
+                        <div class="metric-label">A/B Ratio</div>
+                        <div class="metric-sub">Target: 58.5%</div>
                     </div>
-                </div>
-                <div class="bg-red-900/30 border border-red-500/50 rounded-2xl p-4 mb-6">
-                    <h3 class="text-base font-bold text-red-400 mb-3">🚨 STILL CRITICAL</h3>
-                    <div class="space-y-2">
-                        <label class="checkbox-item flex items-start gap-2 p-2 bg-red-500/20 rounded-xl cursor-pointer"><input type="checkbox" class="w-4 h-4 rounded mt-1"><div><span class="text-white font-semibold text-sm">Douglas Riera - 0% billable</span><p class="text-red-300 text-xs">120h shop, 0h billable - REASSIGN NOW</p></div></label>
-                        <label class="checkbox-item flex items-start gap-2 p-2 bg-red-500/20 rounded-xl cursor-pointer"><input type="checkbox" class="w-4 h-4 rounded mt-1"><div><span class="text-white font-semibold text-sm">Guillermo Tovar - 3% billable</span><p class="text-red-300 text-xs">123.5h shop, 4h billable - needs work</p></div></label>
+                    <div class="metric">
+                        <div class="metric-value">454h</div>
+                        <div class="metric-label">Billable Hours</div>
+                        <div class="metric-sub">Including Juan (loaned)</div>
                     </div>
-                </div>
-                <div class="bg-slate-700 rounded-2xl p-4">
-                    <h3 class="text-base font-bold text-white mb-3">📊 A/B TREND (Revised)</h3>
-                    <div class="space-y-2 text-sm">
-                        <div class="flex justify-between text-white"><span>Jan 21 AM (old calc)</span><span class="text-red-400">24.2%</span></div>
-                        <div class="flex justify-between text-white"><span>Jan 21 PM (old calc)</span><span class="text-red-400">20.0%</span></div>
-                        <div class="flex justify-between text-white border-t border-slate-500 pt-2"><span>Jan 22 AM (Juan=100%)</span><span class="text-amber-400 font-bold">29.7%</span></div>
-                        <div class="flex justify-between text-slate-400 text-xs"><span>Juan's loan impact</span><span class="text-emerald-400">+10.0 pts</span></div>
+                    <div class="metric">
+                        <div class="metric-value">$35K</div>
+                        <div class="metric-label">Revenue MTD</div>
+                        <div class="metric-sub">5% of $694K goal</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">97</div>
+                        <div class="metric-label">Open WOs</div>
+                        <div class="metric-sub">11 over 90 days</div>
                     </div>
                 </div>
             </div>
-
-            <!-- OVERVIEW TAB -->
-            <div id="overview" class="tab">
-                <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
-                    <div class="bg-gradient-to-br from-amber-500 to-orange-600 rounded-2xl p-4 text-white"><p class="text-xs opacity-80">MTD Billable</p><p class="text-2xl font-black mt-1">454h</p><p class="text-xs opacity-80">29.7% of total</p></div>
-                    <div class="bg-slate-700 rounded-2xl p-4 text-white"><p class="text-xs text-slate-400">Shop Hours</p><p class="text-2xl font-black mt-1">1,073h</p><p class="text-xs text-slate-400">70% internal</p></div>
-                    <div class="bg-slate-700 rounded-2xl p-4 text-white"><p class="text-xs text-slate-400">Open WOs</p><p class="text-2xl font-black mt-1">97</p><p class="text-xs text-slate-400">11 over 90d</p></div>
-                    <div class="bg-slate-700 rounded-2xl p-4 text-white"><p class="text-xs text-slate-400">A/B Ratio</p><p class="text-2xl font-black mt-1 text-amber-400">29.7%</p><p class="text-xs text-emerald-400">↑ +10 pts (Juan)</p></div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">2025 Reference (Full Year)</span>
                 </div>
-                <div class="bg-gradient-to-r from-amber-600 to-orange-600 rounded-2xl p-4 text-white mb-6 flex items-center gap-4">
-                    <div class="text-3xl">📈</div>
-                    <div class="flex-1"><h3 class="font-bold">A/B IMPROVING</h3><p class="opacity-90 text-sm">29.7% vs 58.5% target</p></div>
-                    <div class="text-right"><p class="text-4xl font-black">-28.8</p><p class="text-sm opacity-80">pts to go</p></div>
-                </div>
-                <div class="grid grid-cols-3 gap-4">
-                    <div class="bg-slate-700 rounded-2xl p-4"><h3 class="text-sm font-bold text-white mb-3">📊 Hours</h3><div class="space-y-2"><div><div class="flex justify-between text-xs mb-1"><span class="text-slate-300">Billable</span><span class="text-amber-400">30%</span></div><div class="h-2 bg-slate-600 rounded-full"><div class="h-2 bg-amber-500 rounded-full" style="width:30%"></div></div></div><div><div class="flex justify-between text-xs mb-1"><span class="text-slate-300">Shop WO</span><span class="text-slate-400">70%</span></div><div class="h-2 bg-slate-600 rounded-full"><div class="h-2 bg-slate-500 rounded-full" style="width:70%"></div></div></div></div></div>
-                    <div class="bg-slate-700 rounded-2xl p-4"><h3 class="text-sm font-bold text-white mb-3">📋 WOs</h3><div class="grid grid-cols-2 gap-2"><div class="bg-slate-600 rounded-lg p-2 text-center"><p class="text-lg font-black text-white">97</p><p class="text-xs text-slate-400">Open</p></div><div class="bg-emerald-500/20 rounded-lg p-2 text-center"><p class="text-lg font-black text-emerald-400">16</p><p class="text-xs">Billed</p></div><div class="bg-amber-500/20 rounded-lg p-2 text-center"><p class="text-lg font-black text-amber-400">19</p><p class="text-xs">30-59d</p></div><div class="bg-red-500/20 rounded-lg p-2 text-center"><p class="text-lg font-black text-red-400">11</p><p class="text-xs">90+d</p></div></div></div>
-                    <div class="bg-slate-800 rounded-2xl p-4 border border-slate-600"><h3 class="text-sm font-bold text-white mb-3">📈 A/B Trend</h3><div class="space-y-1 text-xs"><div class="flex justify-between"><span class="text-slate-400">2020</span><span class="text-emerald-400">67.9%</span></div><div class="flex justify-between"><span class="text-slate-400">2021</span><span class="text-emerald-400">68.4%</span></div><div class="flex justify-between"><span class="text-slate-400">2022</span><span class="text-amber-400">51.1%</span></div><div class="flex justify-between"><span class="text-slate-400">2023</span><span class="text-amber-400">52.6%</span></div><div class="flex justify-between"><span class="text-slate-400">2024</span><span class="text-red-400">43.2%</span></div><div class="flex justify-between"><span class="text-slate-400">2025</span><span class="text-amber-400">47.6%</span></div><div class="flex justify-between border-t border-slate-600 pt-1 mt-1"><span class="text-slate-400">Jan 26</span><span class="text-amber-400 font-bold">29.7%↑</span></div></div></div>
-                </div>
-            </div>
-
-            <!-- EMPLOYEES TAB -->
-            <div id="employees" class="tab">
-                <div class="bg-slate-700 rounded-2xl p-4">
-                    <h3 class="text-base font-bold text-white mb-1">👥 Employee Performance (Jan 22 AM)</h3>
-                    <p class="text-xs text-slate-400 mb-3">Target: 58.5% • 2 employees above target</p>
-                    <div class="space-y-2">
-                        <div class="flex justify-between items-center p-2 bg-blue-500/20 rounded-xl"><div class="flex items-center gap-2"><span class="w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-xs">1</span><span class="text-white text-sm">Juan Medina <span class="text-blue-300 text-xs">(loaned)</span></span></div><div class="flex items-center gap-2"><span class="font-bold text-white text-sm">154.0h</span><span class="bg-blue-500 text-white px-2 py-1 rounded-full text-xs">100%✓</span></div></div>
-                        <div class="flex justify-between items-center p-2 bg-emerald-500/20 rounded-xl"><div class="flex items-center gap-2"><span class="w-6 h-6 bg-emerald-600 text-white rounded-full flex items-center justify-center font-bold text-xs">2</span><span class="text-white text-sm">Sean Macoomb</span></div><div class="flex items-center gap-2"><span class="font-bold text-white text-sm">85.6h</span><span class="bg-emerald-500 text-white px-2 py-1 rounded-full text-xs">60%✓</span></div></div>
-                        <div class="flex justify-between items-center p-2 bg-slate-600 rounded-xl"><div class="flex items-center gap-2"><span class="w-6 h-6 bg-slate-500 text-white rounded-full flex items-center justify-center font-bold text-xs">3</span><span class="text-white text-sm">Julia Langford</span></div><div class="flex items-center gap-2"><span class="font-bold text-white text-sm">57.5h</span><span class="bg-amber-500 text-white px-2 py-1 rounded-full text-xs">42%</span></div></div>
-                        <div class="flex justify-between items-center p-2 bg-slate-600 rounded-xl"><div class="flex items-center gap-2"><span class="w-6 h-6 bg-slate-500 text-white rounded-full flex items-center justify-center font-bold text-xs">4</span><span class="text-white text-sm">Michael Huber</span></div><div class="flex items-center gap-2"><span class="font-bold text-white text-sm">43.5h</span><span class="bg-amber-500 text-white px-2 py-1 rounded-full text-xs">36%</span></div></div>
-                        <div class="flex justify-between items-center p-2 bg-slate-600 rounded-xl"><div class="flex items-center gap-2"><span class="w-6 h-6 bg-slate-500 text-white rounded-full flex items-center justify-center font-bold text-xs">5</span><span class="text-white text-sm">Armando Triana</span></div><div class="flex items-center gap-2"><span class="font-bold text-white text-sm">31.0h</span><span class="bg-red-500 text-white px-2 py-1 rounded-full text-xs">24%</span></div></div>
-                        <div class="flex justify-between items-center p-2 bg-slate-600 rounded-xl"><div class="flex items-center gap-2"><span class="w-6 h-6 bg-slate-500 text-white rounded-full flex items-center justify-center font-bold text-xs">6</span><span class="text-white text-sm">Kenneth Smith</span></div><div class="flex items-center gap-2"><span class="font-bold text-white text-sm">22.0h</span><span class="bg-red-500 text-white px-2 py-1 rounded-full text-xs">16%</span></div></div>
-                        <div class="flex justify-between items-center p-2 bg-slate-600 rounded-xl"><div class="flex items-center gap-2"><span class="w-6 h-6 bg-slate-500 text-white rounded-full flex items-center justify-center font-bold text-xs">7</span><span class="text-white text-sm">Andrew Watson</span></div><div class="flex items-center gap-2"><span class="font-bold text-white text-sm">19.0h</span><span class="bg-red-500 text-white px-2 py-1 rounded-full text-xs">15%</span></div></div>
-                        <div class="flex justify-between items-center p-2 bg-slate-600 rounded-xl"><div class="flex items-center gap-2"><span class="w-6 h-6 bg-slate-500 text-white rounded-full flex items-center justify-center font-bold text-xs">8</span><span class="text-white text-sm">John Watson</span></div><div class="flex items-center gap-2"><span class="font-bold text-white text-sm">13.0h</span><span class="bg-red-500 text-white px-2 py-1 rounded-full text-xs">11%</span></div></div>
-                        <div class="flex justify-between items-center p-2 bg-slate-600 rounded-xl"><div class="flex items-center gap-2"><span class="w-6 h-6 bg-slate-500 text-white rounded-full flex items-center justify-center font-bold text-xs">9</span><span class="text-white text-sm">Kim Owen</span></div><div class="flex items-center gap-2"><span class="font-bold text-white text-sm">12.1h</span><span class="bg-red-500 text-white px-2 py-1 rounded-full text-xs">10%</span></div></div>
-                        <div class="flex justify-between items-center p-2 bg-slate-600 rounded-xl"><div class="flex items-center gap-2"><span class="w-6 h-6 bg-slate-500 text-white rounded-full flex items-center justify-center font-bold text-xs">10</span><span class="text-white text-sm">Jose Noris</span></div><div class="flex items-center gap-2"><span class="font-bold text-white text-sm">12.0h</span><span class="bg-red-500 text-white px-2 py-1 rounded-full text-xs">10%</span></div></div>
-                        <div class="flex justify-between items-center p-2 bg-red-500/20 rounded-xl"><div class="flex items-center gap-2"><span class="w-6 h-6 bg-red-600 text-white rounded-full flex items-center justify-center font-bold text-xs">11</span><span class="text-white text-sm">Guillermo Tovar</span></div><div class="flex items-center gap-2"><span class="font-bold text-white text-sm">4.0h</span><span class="bg-red-600 text-white px-2 py-1 rounded-full text-xs">3%⚠️</span></div></div>
-                        <div class="flex justify-between items-center p-2 bg-red-500/20 rounded-xl"><div class="flex items-center gap-2"><span class="w-6 h-6 bg-red-600 text-white rounded-full flex items-center justify-center font-bold text-xs">12</span><span class="text-white text-sm">Douglas Riera</span></div><div class="flex items-center gap-2"><span class="font-bold text-white text-sm">0.0h</span><span class="bg-red-600 text-white px-2 py-1 rounded-full text-xs">0%⚠️</span></div></div>
+                <div class="card-grid">
+                    <div class="metric">
+                        <div class="metric-value">47.6%</div>
+                        <div class="metric-label">A/B Ratio</div>
+                        <div class="metric-sub">vs 43.2% in 2024</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">$8.1M</div>
+                        <div class="metric-label">Revenue</div>
+                        <div class="metric-sub">+17% vs 2024</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">$1.01M</div>
+                        <div class="metric-label">Net Income</div>
+                        <div class="metric-sub">+91% vs 2024</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">106%</div>
+                        <div class="metric-label">Budget Achievement</div>
+                        <div class="metric-sub">Exceeded NI target</div>
                     </div>
                 </div>
             </div>
-
-            <!-- WORK ORDERS TAB -->
-            <div id="workorders" class="tab">
-                <div class="bg-red-900/30 border border-red-500/50 rounded-2xl p-4 mb-6">
-                    <h3 class="text-base font-bold text-red-400 mb-3">🚨 Critical WOs (90+ days) - 11 Total</h3>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-xs">
-                            <thead><tr class="text-left text-slate-400"><th class="pb-2">WO#</th><th class="pb-2">Days</th><th class="pb-2">Status</th></tr></thead>
-                            <tbody class="text-white">
-                                <tr class="border-t border-red-500/30 bg-yellow-500/10"><td class="py-1 font-mono">DFPJA</td><td class="text-red-400 font-bold">238</td><td>Tentative</td></tr>
-                                <tr class="border-t border-red-500/30"><td class="py-1 font-mono">CG4NA</td><td class="text-red-400 font-bold">183</td><td>RTS Complete</td></tr>
-                                <tr class="border-t border-red-500/30"><td class="py-1 font-mono">CG4NB</td><td class="text-red-400 font-bold">182</td><td>Satellite</td></tr>
-                                <tr class="border-t border-red-500/30"><td class="py-1 font-mono">CG4NC</td><td class="text-red-400 font-bold">176</td><td>BillHold</td></tr>
-                                <tr class="border-t border-red-500/30"><td class="py-1 font-mono">DLBTA</td><td class="text-red-400 font-bold">157</td><td>Work Recv</td></tr>
-                                <tr class="border-t border-red-500/30"><td class="py-1 font-mono">CL4CB</td><td class="text-red-400 font-bold">133</td><td>Work Recv</td></tr>
-                                <tr class="border-t border-red-500/30"><td class="py-1 font-mono">DN1KA</td><td class="text-red-400 font-bold">126</td><td>Work Recv</td></tr>
-                                <tr class="border-t border-red-500/30"><td class="py-1 font-mono">DN1KB</td><td class="text-red-400 font-bold">123</td><td>Shipped</td></tr>
-                                <tr class="border-t border-red-500/30"><td class="py-1 font-mono">DNQXA</td><td class="text-red-400 font-bold">118</td><td>Work Recv</td></tr>
-                                <tr class="border-t border-red-500/30"><td class="py-1 font-mono">CMJHA</td><td class="text-red-400 font-bold">113</td><td>Part Ord</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
+        </div>
+        
+        <!-- EMPLOYEES TAB -->
+        <div class="content" id="employees">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Employee Performance - A/B Efficiency</span>
+                    <span class="badge badge-amber">Target: 58.5%</span>
                 </div>
-                <div class="bg-slate-700 rounded-2xl p-4">
-                    <h3 class="text-base font-bold text-white mb-3">⏰ Aging (97 Open WOs)</h3>
-                    <div class="space-y-3">
-                        <div><div class="flex justify-between text-sm mb-1"><span class="text-slate-300">Under 30d</span><span class="text-emerald-400">60 (62%)</span></div><div class="h-2 bg-slate-600 rounded-full"><div class="h-2 bg-emerald-500 rounded-full" style="width:62%"></div></div></div>
-                        <div><div class="flex justify-between text-sm mb-1"><span class="text-slate-300">30-59d</span><span class="text-amber-400">19 (20%)</span></div><div class="h-2 bg-slate-600 rounded-full"><div class="h-2 bg-amber-500 rounded-full" style="width:20%"></div></div></div>
-                        <div><div class="flex justify-between text-sm mb-1"><span class="text-slate-300">60-89d</span><span class="text-orange-400">7 (7%)</span></div><div class="h-2 bg-slate-600 rounded-full"><div class="h-2 bg-orange-500 rounded-full" style="width:7%"></div></div></div>
-                        <div><div class="flex justify-between text-sm mb-1"><span class="text-slate-300">90+d</span><span class="text-red-400">11 (11%)</span></div><div class="h-2 bg-slate-600 rounded-full"><div class="h-2 bg-red-500 rounded-full" style="width:11%"></div></div></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- QUOTES TAB -->
-            <div id="quotes" class="tab">
-                <div class="bg-gradient-to-r from-orange-600 to-red-600 rounded-2xl p-4 text-white mb-6">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="flex items-center gap-3">
-                            <span class="text-3xl">📝</span>
-                            <div>
-                                <h2 class="text-xl font-black">OPEN QUOTES</h2>
-                                <p class="opacity-80 text-sm">Target: 14 days max</p>
-                            </div>
-                        </div>
-                        <div class="text-right">
-                            <p class="text-4xl font-black">17%</p>
-                            <p class="text-sm opacity-80">Compliance</p>
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-3 gap-3">
-                        <div class="bg-white/20 rounded-xl p-2 text-center"><p class="text-2xl font-black">12</p><p class="text-xs opacity-80">Total</p></div>
-                        <div class="bg-white/20 rounded-xl p-2 text-center"><p class="text-2xl font-black text-red-200">10</p><p class="text-xs opacity-80">Overdue</p></div>
-                        <div class="bg-white/20 rounded-xl p-2 text-center"><p class="text-2xl font-black">2</p><p class="text-xs opacity-80">On Track</p></div>
-                    </div>
-                </div>
-                <div class="bg-red-900/30 border border-red-500/50 rounded-2xl p-4 mb-6">
-                    <h3 class="text-base font-bold text-red-400 mb-3">🚨 OVERDUE (>14 days)</h3>
-                    <table class="w-full text-xs">
-                        <thead><tr class="text-left text-slate-400"><th class="pb-2">Customer</th><th class="pb-2">Reg#</th><th class="pb-2">Days</th></tr></thead>
-                        <tbody class="text-white">
-                            <tr class="border-t border-red-500/30"><td class="py-1">Falcon Field</td><td class="font-mono">N969AF</td><td class="text-red-400 font-bold">294</td></tr>
-                            <tr class="border-t border-red-500/30"><td class="py-1">757BD LLC</td><td class="font-mono">N7BD</td><td class="text-red-400 font-bold">244</td></tr>
-                            <tr class="border-t border-red-500/30"><td class="py-1">Air Methods</td><td class="font-mono">N781HC</td><td class="text-red-400 font-bold">156</td></tr>
-                            <tr class="border-t border-red-500/30"><td class="py-1">Business Aviators</td><td class="font-mono">N1870E</td><td class="text-red-400 font-bold">135</td></tr>
-                            <tr class="border-t border-red-500/30"><td class="py-1">GD International</td><td class="font-mono">N199GD</td><td class="text-red-400 font-bold">127</td></tr>
-                            <tr class="border-t border-red-500/30"><td class="py-1">Steiner Aviation</td><td class="font-mono">N70RL</td><td class="text-red-400 font-bold">113</td></tr>
-                            <tr class="border-t border-red-500/30"><td class="py-1">Int'l Jet</td><td class="font-mono">N56HS</td><td class="text-red-400 font-bold">104</td></tr>
-                            <tr class="border-t border-red-500/30"><td class="py-1">Marietta Silos</td><td class="font-mono">N193PP</td><td class="text-red-400 font-bold">85</td></tr>
-                            <tr class="border-t border-red-500/30"><td class="py-1">Peregrine</td><td class="font-mono">-</td><td class="text-red-400 font-bold">37</td></tr>
-                            <tr class="border-t border-red-500/30"><td class="py-1">INAB, LLC</td><td class="font-mono">N551TH</td><td class="text-red-400 font-bold">31</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="bg-emerald-900/30 border border-emerald-500/50 rounded-2xl p-4">
-                    <h3 class="text-base font-bold text-emerald-400 mb-3">✅ ON TRACK (≤14 days)</h3>
-                    <table class="w-full text-xs">
-                        <tbody class="text-white">
-                            <tr class="border-t border-emerald-500/30"><td class="py-1">Silver Dollar</td><td class="font-mono">N707EL</td><td class="text-emerald-400 font-bold">13</td></tr>
-                            <tr class="border-t border-emerald-500/30"><td class="py-1">KW Flight</td><td class="font-mono">N729KF</td><td class="text-emerald-400 font-bold">7</td></tr>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr><th>Rank</th><th>Employee</th><th>Billable</th><th>Total</th><th>A/B %</th><th>Status</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr style="background:rgba(16,185,129,0.2)"><td>🔵</td><td>Juan Medina (Loaned Out)</td><td>154.0h</td><td>154.0h</td><td>100%</td><td><span class="badge badge-blue">Loaned - Billable</span></td></tr>
+                            <tr style="background:rgba(16,185,129,0.2)"><td>1</td><td>Sean Macoomb</td><td>85.6h</td><td>123.6h</td><td>69%</td><td><span class="badge badge-green">Above Target</span></td></tr>
+                            <tr><td>2</td><td>Julia Langford</td><td>57.5h</td><td>121.0h</td><td>48%</td><td><span class="badge badge-amber">Below Target</span></td></tr>
+                            <tr><td>3</td><td>Michael Huber</td><td>43.5h</td><td>108.0h</td><td>40%</td><td><span class="badge badge-amber">Below Target</span></td></tr>
+                            <tr><td>4</td><td>Kim Owen</td><td>37.3h</td><td>115.0h</td><td>32%</td><td><span class="badge badge-amber">Below Target</span></td></tr>
+                            <tr><td>5</td><td>Armando Triana-Cruz</td><td>31.5h</td><td>112.0h</td><td>28%</td><td><span class="badge badge-amber">Below Target</span></td></tr>
+                            <tr><td>6</td><td>Ken Smith</td><td>22.0h</td><td>127.5h</td><td>17%</td><td><span class="badge badge-red">Critical</span></td></tr>
+                            <tr><td>7</td><td>Andrew Watson</td><td>21.0h</td><td>112.5h</td><td>19%</td><td><span class="badge badge-red">Critical</span></td></tr>
+                            <tr><td>8</td><td>John Watson</td><td>12.0h</td><td>112.0h</td><td>11%</td><td><span class="badge badge-red">Critical</span></td></tr>
+                            <tr><td>9</td><td>Jose Noris</td><td>11.0h</td><td>114.0h</td><td>10%</td><td><span class="badge badge-red">Critical</span></td></tr>
+                            <tr style="background:rgba(239,68,68,0.2)"><td>10</td><td>Guillermo Tovar</td><td>4.0h</td><td>123.5h</td><td>3%</td><td><span class="badge badge-red">Critical</span></td></tr>
+                            <tr style="background:rgba(239,68,68,0.2)"><td>11</td><td>Douglas Riera Guzman</td><td>0.0h</td><td>120.0h</td><td>0%</td><td><span class="badge badge-red">Zero Billable</span></td></tr>
                         </tbody>
                     </table>
                 </div>
             </div>
-
-            <!-- QUALITY TAB -->
-            <div id="quality" class="tab">
-                <div class="grid grid-cols-2 gap-4 mb-6">
-                    <div class="bg-slate-700 rounded-2xl p-4">
-                        <h3 class="text-sm font-bold text-white mb-3">🔍 QI Audits (2025)</h3>
-                        <div class="grid grid-cols-2 gap-2 mb-3">
-                            <div class="bg-slate-600 rounded-lg p-2 text-center"><p class="text-xl font-black text-red-400">16</p><p class="text-xs text-slate-400">Findings</p></div>
-                            <div class="bg-slate-600 rounded-lg p-2 text-center"><p class="text-xl font-black text-emerald-400">43%</p><p class="text-xs text-slate-400">Clean (3/7)</p></div>
-                        </div>
-                    </div>
-                    <div class="bg-slate-700 rounded-2xl p-4">
-                        <h3 class="text-sm font-bold text-white mb-3">📋 Tech Discrepancies</h3>
-                        <div class="grid grid-cols-2 gap-2 mb-3">
-                            <div class="bg-slate-600 rounded-lg p-2 text-center"><p class="text-xl font-black text-red-400">34</p><p class="text-xs text-slate-400">Issues</p></div>
-                            <div class="bg-slate-600 rounded-lg p-2 text-center"><p class="text-xl font-black text-emerald-400">50%</p><p class="text-xs text-slate-400">Clean (6/12)</p></div>
-                        </div>
-                    </div>
+        </div>
+        
+        <!-- WORK ORDERS TAB -->
+        <div class="content" id="workorders">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Work Order Aging Summary</span>
                 </div>
-                <div class="bg-gradient-to-r from-purple-900 to-indigo-900 rounded-2xl p-4">
-                    <h3 class="text-base font-bold text-white mb-3">🎯 GOAL #7: Zero Findings</h3>
-                    <div class="grid grid-cols-3 gap-3">
-                        <div class="bg-white/10 rounded-xl p-3 text-center"><p class="text-purple-300 text-xs">2025</p><p class="text-2xl font-black text-white">50</p></div>
-                        <div class="bg-white/10 rounded-xl p-3 text-center"><p class="text-purple-300 text-xs">Target</p><p class="text-2xl font-black text-emerald-400">0</p></div>
-                        <div class="bg-white/10 rounded-xl p-3 text-center"><p class="text-purple-300 text-xs">2026 YTD</p><p class="text-2xl font-black text-white">0</p></div>
+                <div class="card-grid">
+                    <div class="metric">
+                        <div class="metric-value">97</div>
+                        <div class="metric-label">Total Open WOs</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" style="color:#10b981">56</div>
+                        <div class="metric-label">Under 30 Days</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" style="color:#f59e0b">19</div>
+                        <div class="metric-label">30-59 Days</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" style="color:#ef4444">11</div>
+                        <div class="metric-label">90+ Days ⚠️</div>
                     </div>
                 </div>
             </div>
-
-            <!-- RANKINGS TAB -->
-            <div id="rankings" class="tab">
-                <div class="bg-slate-700 rounded-2xl p-4 mb-6">
-                    <div class="flex justify-between items-center mb-3"><h3 class="text-base font-bold text-white">🏆 Satellite Rankings</h3><div class="text-right"><p class="text-xs text-slate-400">Network Avg</p><p class="text-lg font-black text-amber-400">45.3%</p></div></div>
-                    <table class="w-full text-xs">
-                        <thead><tr class="text-left text-slate-400 border-b border-slate-600"><th class="pb-1">#</th><th class="pb-1">Shop</th><th class="pb-1 text-right">A/B</th></tr></thead>
-                        <tbody class="text-white">
-                            <tr class="border-t border-slate-600"><td>1</td><td>Scottsdale</td><td class="text-right text-emerald-400 font-bold">86.2%</td></tr>
-                            <tr class="border-t border-slate-600"><td>2</td><td>Seattle</td><td class="text-right text-emerald-400 font-bold">75.9%</td></tr>
-                            <tr class="border-t border-slate-600"><td>3</td><td>Portland</td><td class="text-right text-emerald-400 font-bold">75.1%</td></tr>
-                            <tr class="border-t border-slate-600 text-slate-500"><td colspan="3">... 4-18 ...</td></tr>
-                            <tr class="border-t border-slate-600"><td>19</td><td>Kansas City</td><td class="text-right text-red-400">28.1%</td></tr>
-                            <tr class="border-t border-slate-600 bg-amber-500/20"><td class="font-bold">20</td><td class="font-bold">Denver</td><td class="text-right text-amber-400 font-bold">29.7%↑</td></tr>
-                            <tr class="border-t border-slate-600"><td>21</td><td>Houston</td><td class="text-right text-red-400">13.5%</td></tr>
+            
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Critical WOs (90+ Days)</span>
+                    <span class="badge badge-red">Action Required</span>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr><th>WO#</th><th>Days</th><th>Customer</th><th>Notes</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>DFPJA</td><td>237</td><td>Duncan Internal</td><td>PC-12 Archangel STC project</td></tr>
+                            <tr><td>CG4NA</td><td>183</td><td>Kauffman Land</td><td>Ready to bill in January</td></tr>
+                            <tr><td>CG4NB</td><td>182</td><td>Kauffman Land</td><td>Ready to bill in January</td></tr>
+                            <tr><td>CG4NC</td><td>181</td><td>Kauffman Land</td><td>Ready to bill in January</td></tr>
+                            <tr><td>DLBTA</td><td>156</td><td>Denver Internal</td><td>Internal project</td></tr>
+                            <tr><td>CL4CB</td><td>132</td><td>Business Aviators</td><td>Status needed</td></tr>
+                            <tr><td>DN1KA</td><td>125</td><td>Int'l Jet Aviation</td><td>Status needed</td></tr>
+                            <tr><td>DN1KB</td><td>122</td><td>Int'l Jet Aviation</td><td>Status needed</td></tr>
+                            <tr><td>CMJHA</td><td>91</td><td>Customer</td><td>Honeywell delay - free install setup</td></tr>
                         </tbody>
                     </table>
                 </div>
-                <div class="bg-gradient-to-r from-amber-600 to-orange-600 rounded-2xl p-4 text-white">
-                    <h3 class="font-bold text-sm mb-3">🎯 Path Up</h3>
-                    <div class="grid grid-cols-3 gap-2">
-                        <div class="bg-white/20 rounded-xl p-2 text-center"><p class="text-xs opacity-80">Houston</p><p class="text-lg font-black">Done✓</p></div>
-                        <div class="bg-white/20 rounded-xl p-2 text-center"><p class="text-xs opacity-80">KC</p><p class="text-lg font-black">28.2%</p></div>
-                        <div class="bg-white/20 rounded-xl p-2 text-center"><p class="text-xs opacity-80">Gap</p><p class="text-lg font-black">-1.6 pts</p></div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Brian Zitek Over 30 List - Your Response Needed</span>
+                    <span class="badge badge-amber">4 WOs</span>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr><th>WO#</th><th>Shop</th><th>Days</th><th>Cost</th><th>Status</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr style="background:rgba(239,68,68,0.1)"><td>CG4NA</td><td>SDN</td><td>183</td><td>$2,486</td><td>RTS inspection complete - needs notes</td></tr>
+                            <tr><td>DSW4A</td><td>SDN</td><td>44</td><td>$52,763</td><td>Work Received - needs notes</td></tr>
+                            <tr><td>DTBLA</td><td>SDV</td><td>36</td><td>$1,327</td><td>Work Received - needs notes</td></tr>
+                            <tr><td>CT8VA</td><td>SDN</td><td>35</td><td>$1,103</td><td>RTS complete - needs notes</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- TRAINING TAB -->
+        <div class="content" id="training">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">2026 Approved Training Budget</span>
+                    <span class="badge badge-green">PDT Approved</span>
+                </div>
+                <div class="card-grid">
+                    <div class="metric">
+                        <div class="metric-value">8</div>
+                        <div class="metric-label">Techs Approved</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">3</div>
+                        <div class="metric-label">Scheduled</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">0</div>
+                        <div class="metric-label">Completed</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">14/14</div>
+                        <div class="metric-label">Mandatory Compliant</div>
                     </div>
                 </div>
             </div>
-
-            <div class="mt-6 pt-4 border-t border-slate-700 flex justify-between text-xs text-slate-500">
-                <p>Duncan Aviation • Denver 889</p>
-                <p>Auto-refresh: 10min | 01/22/26 AM</p>
+            
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Technical Training Schedule (from Cassie/PDT)</span>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr><th>Employee</th><th>Course</th><th>Location</th><th>Dates</th><th>Status</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Armando Triana-Cruz</td><td>Honeywell Primus EPIC Line Maint</td><td>Dallas, TX</td><td>Apr 27 - May 1</td><td><span class="badge badge-green">Scheduled</span></td></tr>
+                            <tr><td>Michael Hannas</td><td>Collins Pro Line 21 Challenger</td><td>TBD</td><td>TBD</td><td><span class="badge badge-gray">Medical Leave</span></td></tr>
+                            <tr><td>Michael Huber</td><td>Virtual Garmin G3000/G5000</td><td>Virtual</td><td>Jan 28-29</td><td><span class="badge badge-green">Scheduled</span></td></tr>
+                            <tr><td>Julia Langford</td><td>Virtual Garmin G3000/G5000</td><td>Virtual</td><td>Pending</td><td><span class="badge badge-amber">Select Dates</span></td></tr>
+                            <tr><td>Jose Noris</td><td>Virtual Garmin G1000 NXi</td><td>Virtual</td><td>Feb 26-27</td><td><span class="badge badge-green">Scheduled</span></td></tr>
+                            <tr><td>Ken Smith</td><td>Virtual Gogo Dealer Training</td><td>Virtual</td><td>TBD</td><td><span class="badge badge-amber">Dates TBD</span></td></tr>
+                            <tr><td>John Watson</td><td>aeroIT Certification</td><td>TBD</td><td>TBD</td><td><span class="badge badge-amber">Dates TBD</span></td></tr>
+                            <tr><td>Juan Medina</td><td>Composite Repair</td><td>Lincoln, NE</td><td>TBD</td><td><span class="badge badge-amber">Dates TBD</span></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- QUALITY TAB -->
+        <div class="content" id="quality">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Goal #7: Quality & Audit Performance</span>
+                    <span class="badge badge-green">2026 YTD: 0 Findings</span>
+                </div>
+                <div class="card-grid">
+                    <div class="metric">
+                        <div class="metric-value">43%</div>
+                        <div class="metric-label">Clean Audits (3/7)</div>
+                        <div class="metric-sub">2025 QI Audits</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">50%</div>
+                        <div class="metric-label">Clean Months (6/12)</div>
+                        <div class="metric-sub">2025 Tech Discrepancies</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">16</div>
+                        <div class="metric-label">Audit Findings</div>
+                        <div class="metric-sub">2025 Total</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">34</div>
+                        <div class="metric-label">Tech Discrepancies</div>
+                        <div class="metric-sub">2025 Total</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Recurring Issues to Address</span>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr><th>Issue</th><th>Occurrences</th><th>Action</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Parts Traceability</td><td>5</td><td>Train on label/paperwork requirements</td></tr>
+                            <tr><td>Flammable Locker Control</td><td>3</td><td>Weekly flam locker inspection</td></tr>
+                            <tr><td>Tool Control</td><td>2</td><td>Audit before QI visits</td></tr>
+                            <tr><td>RTS/Paperwork</td><td>12</td><td>Tech training on documentation</td></tr>
+                            <tr><td>Work Authorization</td><td>11</td><td>Verify signatures before work</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Top Offenders (2025 Tech Discrepancies)</span>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr><th>Tech</th><th>Count</th><th>Focus Area</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Ken</td><td>7</td><td>Documentation</td></tr>
+                            <tr><td>Cruza</td><td>6</td><td>Work Auth</td></tr>
+                            <tr><td>Smikz</td><td>6</td><td>RTS</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- RANKINGS TAB -->
+        <div class="content" id="rankings">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">🏆 Duncan Aviation Satellite Network - A/B Ratio Rankings</span>
+                    <span class="badge badge-blue">Week of Jan 16, 2026</span>
+                </div>
+                <p style="color:#94a3b8;margin-bottom:15px;font-size:0.9em;">
+                    <strong>A/B Ratio</strong> = Actual Billable Hours ÷ Bought (Paid) Hours | Measures labor efficiency
+                </p>
+                <div style="background:rgba(0,0,0,0.2);padding:10px;border-radius:8px;margin-bottom:15px;">
+                    <strong>Network Average:</strong> 45.3% | <strong>Budget Target:</strong> 58.7%
+                </div>
+                
+                <div class="rank-item"><div class="rank-num">1</div><div class="rank-shop">Scottsdale</div><div class="rank-value" style="color:#10b981">86.2%</div></div>
+                <div class="rank-item"><div class="rank-num">2</div><div class="rank-shop">Seattle</div><div class="rank-value" style="color:#10b981">75.9%</div></div>
+                <div class="rank-item"><div class="rank-num">3</div><div class="rank-shop">Portland</div><div class="rank-value" style="color:#10b981">75.1%</div></div>
+                <div class="rank-item"><div class="rank-num">4</div><div class="rank-shop">Sacramento</div><div class="rank-value" style="color:#10b981">71.3%</div></div>
+                <div class="rank-item"><div class="rank-num">5</div><div class="rank-shop">Ft. Lauderdale</div><div class="rank-value" style="color:#10b981">66.5%</div></div>
+                <div class="rank-item"><div class="rank-num">6</div><div class="rank-shop">Oxford</div><div class="rank-value" style="color:#10b981">65.1%</div></div>
+                <div class="rank-item"><div class="rank-num">7</div><div class="rank-shop">St. Paul</div><div class="rank-value" style="color:#10b981">64.7%</div></div>
+                <div class="rank-item"><div class="rank-num">8</div><div class="rank-shop">Las Vegas</div><div class="rank-value" style="color:#10b981">64.5%</div></div>
+                <div class="rank-item"><div class="rank-num">9</div><div class="rank-shop">Long Island</div><div class="rank-value" style="color:#10b981">62.8%</div></div>
+                <div class="rank-item"><div class="rank-num">10</div><div class="rank-shop">Dallas</div><div class="rank-value" style="color:#10b981">62.3%</div></div>
+                <div class="rank-item"><div class="rank-num">11</div><div class="rank-shop">Boston</div><div class="rank-value" style="color:#10b981">61.2%</div></div>
+                <div class="rank-item"><div class="rank-num">12</div><div class="rank-shop">Manassas</div><div class="rank-value" style="color:#f59e0b">56.1%</div></div>
+                <div class="rank-item"><div class="rank-num">13</div><div class="rank-shop">Nashville</div><div class="rank-value" style="color:#f59e0b">55.3%</div></div>
+                <div class="rank-item"><div class="rank-num">14</div><div class="rank-shop">Atlanta</div><div class="rank-value" style="color:#f59e0b">47.9%</div></div>
+                <div class="rank-item"><div class="rank-num">15</div><div class="rank-shop">Van Nuys</div><div class="rank-value" style="color:#f59e0b">47.6%</div></div>
+                <div class="rank-item"><div class="rank-num">16</div><div class="rank-shop">Teterboro</div><div class="rank-value" style="color:#f59e0b">46.1%</div></div>
+                <div class="rank-item"><div class="rank-num">17</div><div class="rank-shop">Austin</div><div class="rank-value" style="color:#ef4444">33.5%</div></div>
+                <div class="rank-item"><div class="rank-num">18</div><div class="rank-shop">Kansas City</div><div class="rank-value" style="color:#ef4444">28.1%</div></div>
+                <div class="rank-item"><div class="rank-num">19</div><div class="rank-shop">St. Louis</div><div class="rank-value" style="color:#ef4444">21.2%</div></div>
+                <div class="rank-item denver"><div class="rank-num" style="background:#f59e0b;color:#000">20</div><div class="rank-shop"><strong>DENVER</strong></div><div class="rank-value" style="color:#ef4444">16.5%</div></div>
+                <div class="rank-item"><div class="rank-num">21</div><div class="rank-shop">Houston</div><div class="rank-value" style="color:#ef4444">13.5%</div></div>
             </div>
         </div>
     </div>
-
+    
     <script>
-        const ACCESS_CODE = 'denver889';
-        function checkPassword() { var input = document.getElementById('passwordInput').value; if (input === ACCESS_CODE) { document.body.classList.add('authenticated'); localStorage.setItem('denver_auth', 'true'); document.getElementById('errorMsg').classList.add('hidden'); setTimeout(() => { if (!kioskMode) toggleKiosk(); tryFullscreen(); }, 500); } else { document.getElementById('errorMsg').classList.remove('hidden'); document.getElementById('passwordInput').value = ''; } }
-        function logout() { document.body.classList.remove('authenticated'); localStorage.removeItem('denver_auth'); document.getElementById('passwordInput').value = ''; }
-        if (localStorage.getItem('denver_auth') === 'true') { document.body.classList.add('authenticated'); setTimeout(() => { if (!kioskMode) toggleKiosk(); tryFullscreen(); }, 1000); }
-        function tryFullscreen() { if (!document.fullscreenElement && document.documentElement.requestFullscreen) { document.documentElement.requestFullscreen().catch(e => {}); } }
-        function toggleFullscreen() { if (!document.fullscreenElement) { document.documentElement.requestFullscreen().catch(e => {}); } else { document.exitFullscreen(); } }
-
-        let kioskMode = false, animationId = null, countdownInterval = null, countdown = 20;
-        let isPaused = false, pauseCountdown = 30, pauseCountdownInterval = null;
-        const tabs = ['goals', 'actions', 'overview', 'employees', 'workorders', 'quotes', 'quality', 'rankings'];
-        let currentTabIndex = 0, scrollPosition = 0, scrollDirection = 1, maxScroll = 0, lastTime = 0;
-
-        function openTab(tabName) {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.tabBtn').forEach(b => { b.style.backgroundColor = '#334155'; b.style.color = '#cbd5e1'; });
-            document.getElementById(tabName).classList.add('active');
-            var btn = document.querySelector('[data-tab="' + tabName + '"]');
-            if (btn) { var colors = { goals: '#9333ea', actions: '#ef4444', quotes: '#ea580c' }; btn.style.backgroundColor = colors[tabName] || '#f59e0b'; btn.style.color = 'white'; }
-            currentTabIndex = tabs.indexOf(tabName);
-            window.scrollTo(0, 0); scrollPosition = 0; scrollDirection = 1;
-            if (kioskMode && !isPaused) { countdown = 20; setTimeout(() => { maxScroll = document.documentElement.scrollHeight - window.innerHeight; }, 100); }
-        }
-
-        function smoothScrollLoop(t) {
-            if (!kioskMode || isPaused) return;
-            if (!lastTime) lastTime = t;
-            var dt = t - lastTime; lastTime = t;
-            var step = (maxScroll / 9000) * dt;
-            scrollPosition += step * scrollDirection;
-            if (scrollPosition >= maxScroll) { scrollPosition = maxScroll; scrollDirection = -1; }
-            else if (scrollPosition <= 0) { scrollPosition = 0; scrollDirection = 1; }
-            window.scrollTo(0, scrollPosition);
-            document.getElementById('scrollStatus').textContent = 'Scroll ' + (maxScroll > 0 ? Math.round((scrollPosition / maxScroll) * 100) : 0) + '%';
-            animationId = requestAnimationFrame(smoothScrollLoop);
-        }
-
-        function pauseScrolling() {
-            if (!kioskMode) return;
-            isPaused = true;
-            if (animationId) cancelAnimationFrame(animationId);
-            if (countdownInterval) clearInterval(countdownInterval);
-            document.getElementById('kioskIndicator').classList.add('hidden');
-            document.getElementById('pausedIndicator').classList.remove('hidden');
-            pauseCountdown = 30;
-            document.getElementById('pauseCountdown').textContent = pauseCountdown;
-            if (pauseCountdownInterval) clearInterval(pauseCountdownInterval);
-            pauseCountdownInterval = setInterval(() => { pauseCountdown--; document.getElementById('pauseCountdown').textContent = pauseCountdown; if (pauseCountdown <= 0) { resumeScrolling(); } }, 1000);
-        }
-
-        function resumeScrolling() {
-            if (!kioskMode) return;
-            isPaused = false;
-            if (pauseCountdownInterval) clearInterval(pauseCountdownInterval);
-            document.getElementById('pausedIndicator').classList.add('hidden');
-            document.getElementById('kioskIndicator').classList.remove('hidden');
-            lastTime = 0;
-            maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-            animationId = requestAnimationFrame(smoothScrollLoop);
-            countdown = 20;
-            countdownInterval = setInterval(() => { if (!isPaused) { countdown--; document.getElementById('countdown').textContent = countdown; if (countdown <= 0) { currentTabIndex = (currentTabIndex + 1) % tabs.length; openTab(tabs[currentTabIndex]); } } }, 1000);
-        }
-
-        document.addEventListener('click', (e) => {
-            if (e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT' || e.target.closest('button')) return;
-            if (!kioskMode) return;
-            if (isPaused) { resumeScrolling(); } else { pauseScrolling(); }
-        });
-
-        function toggleKiosk() {
-            kioskMode = !kioskMode;
-            var btn = document.getElementById('kioskBtn'), icon = document.getElementById('kioskIcon'), text = document.getElementById('kioskText');
-            var kioskInd = document.getElementById('kioskIndicator'), pausedInd = document.getElementById('pausedIndicator');
-            if (kioskMode) {
-                btn.classList.remove('bg-slate-700', 'text-slate-300'); btn.classList.add('bg-emerald-600', 'text-white');
-                icon.textContent = '⏸️'; text.textContent = 'Stop';
-                kioskInd.classList.remove('hidden'); pausedInd.classList.add('hidden');
-                isPaused = false; countdown = 20; scrollPosition = 0; scrollDirection = 1; lastTime = 0;
-                maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-                animationId = requestAnimationFrame(smoothScrollLoop);
-                countdownInterval = setInterval(() => { if (!isPaused) { countdown--; document.getElementById('countdown').textContent = countdown; if (countdown <= 0) { currentTabIndex = (currentTabIndex + 1) % tabs.length; openTab(tabs[currentTabIndex]); } } }, 1000);
+        const PASSWORD = 'denver889';
+        let isRotating = false;
+        let isPaused = false;
+        let rotateInterval;
+        let scrollInterval;
+        let pauseTimeout;
+        let currentTab = 0;
+        const tabs = ['goals', 'actions', 'overview', 'employees', 'workorders', 'training', 'quality', 'rankings'];
+        
+        // Auto-refresh every 10 minutes
+        setTimeout(() => location.reload(), 600000);
+        
+        function login() {
+            const pwd = document.getElementById('passwordInput').value;
+            if (pwd === PASSWORD) {
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'block';
+                localStorage.setItem('denver_auth', 'true');
+                tryFullscreen();
+                startAutoRotate();
             } else {
-                btn.classList.remove('bg-emerald-600', 'text-white'); btn.classList.add('bg-slate-700', 'text-slate-300');
-                icon.textContent = '▶️'; text.textContent = 'Auto';
-                kioskInd.classList.add('hidden'); pausedInd.classList.add('hidden');
-                isPaused = false;
-                if (animationId) cancelAnimationFrame(animationId); if (countdownInterval) clearInterval(countdownInterval); if (pauseCountdownInterval) clearInterval(pauseCountdownInterval);
-                lastTime = 0;
+                document.getElementById('errorMsg').style.display = 'block';
             }
         }
-        (async () => { try { if ('wakeLock' in navigator) await navigator.wakeLock.request('screen'); } catch(e) {} })();
+        
+        function logout() {
+            localStorage.removeItem('denver_auth');
+            document.getElementById('dashboard').style.display = 'none';
+            document.getElementById('loginScreen').style.display = 'flex';
+            document.getElementById('passwordInput').value = '';
+            stopAutoRotate();
+        }
+        
+        function tryFullscreen() {
+            const elem = document.documentElement;
+            if (elem.requestFullscreen) elem.requestFullscreen().catch(()=>{});
+            else if (elem.webkitRequestFullscreen) elem.webkitRequestFullscreen();
+        }
+        
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) tryFullscreen();
+            else if (document.exitFullscreen) document.exitFullscreen();
+        }
+        
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+            document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+        
+        function startAutoRotate() {
+            isRotating = true;
+            isPaused = false;
+            document.getElementById('rotateBtn').textContent = '⏸️ Stop';
+            document.getElementById('rotateBtn').style.background = '#ef4444';
+            updateStatus();
+            startSmoothScroll();
+        }
+        
+        function stopAutoRotate() {
+            isRotating = false;
+            isPaused = false;
+            clearInterval(scrollInterval);
+            clearTimeout(pauseTimeout);
+            document.getElementById('rotateBtn').textContent = '▶️ Auto';
+            document.getElementById('rotateBtn').style.background = '#10b981';
+            document.getElementById('statusIndicator').textContent = 'Ready';
+            document.getElementById('statusIndicator').className = 'status-indicator';
+        }
+        
+        function toggleRotate() {
+            if (isRotating) stopAutoRotate();
+            else startAutoRotate();
+        }
+        
+        function updateStatus() {
+            const indicator = document.getElementById('statusIndicator');
+            if (isPaused) {
+                indicator.textContent = 'PAUSED - Tap to resume';
+                indicator.className = 'status-indicator status-paused';
+            } else if (isRotating) {
+                indicator.textContent = 'Display Mode';
+                indicator.className = 'status-indicator status-active';
+            }
+        }
+        
+        function startSmoothScroll() {
+            let scrollPos = 0;
+            let scrollDir = 1;
+            let tabTime = 0;
+            const tabDuration = 20000; // 20 sec per tab
+            const scrollSpeed = 2;
+            
+            clearInterval(scrollInterval);
+            scrollInterval = setInterval(() => {
+                if (isPaused) return;
+                
+                tabTime += 50;
+                
+                // Smooth scroll
+                const content = document.getElementById(tabs[currentTab]);
+                const maxScroll = content.scrollHeight - window.innerHeight + 200;
+                
+                if (maxScroll > 0) {
+                    scrollPos += scrollDir * scrollSpeed;
+                    if (scrollPos >= maxScroll) { scrollPos = maxScroll; scrollDir = -1; }
+                    if (scrollPos <= 0) { scrollPos = 0; scrollDir = 1; }
+                    window.scrollTo({top: scrollPos});
+                }
+                
+                // Switch tab after duration
+                if (tabTime >= tabDuration) {
+                    tabTime = 0;
+                    scrollPos = 0;
+                    scrollDir = 1;
+                    currentTab = (currentTab + 1) % tabs.length;
+                    switchTab(tabs[currentTab]);
+                }
+            }, 50);
+        }
+        
+        function pauseScroll() {
+            if (!isRotating) return;
+            isPaused = true;
+            updateStatus();
+            clearTimeout(pauseTimeout);
+            pauseTimeout = setTimeout(() => {
+                isPaused = false;
+                updateStatus();
+            }, 30000);
+        }
+        
+        function resumeScroll() {
+            isPaused = false;
+            clearTimeout(pauseTimeout);
+            updateStatus();
+        }
+        
+        // Tab click handlers
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabId = tab.dataset.tab;
+                currentTab = tabs.indexOf(tabId);
+                switchTab(tabId);
+            });
+        });
+        
+        // Tap to pause/resume
+        document.addEventListener('click', (e) => {
+            if (!isRotating) return;
+            if (e.target.closest('.header') || e.target.closest('.tabs')) return;
+            if (isPaused) resumeScroll();
+            else pauseScroll();
+        });
+        
+        // Check saved auth
+        if (localStorage.getItem('denver_auth') === 'true') {
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'block';
+            startAutoRotate();
+        }
     </script>
 </body>
 </html>
