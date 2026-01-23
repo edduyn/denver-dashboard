@@ -370,10 +370,10 @@
                     <span class="card-title">🚨 Critical Actions</span>
                     <span class="badge badge-red">Urgent</span>
                 </div>
+                <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">REVIEW: Guillermo Tovar - 90-Day due Feb 8 (16 days)</span><span class="action-priority priority-high">HIGH</span></div>
                 <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">QUOTE: GD International N199GD - Not Sent (Avionics)</span><span class="action-priority priority-high">HIGH</span></div>
                 <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">QUOTE: Steiner Aviation N70RL - Not Sent (Avionics)</span><span class="action-priority priority-high">HIGH</span></div>
                 <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">QUOTE: KW Flight LLC N729KF - Not Sent (GoGo C1)</span><span class="action-priority priority-high">HIGH</span></div>
-                <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">Douglas Riera Guzman - improved to 8h billable (keep momentum)</span><span class="action-priority priority-med">MED</span></div>
                 <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">CG4NA - 183 days old, needs billing or status update</span><span class="action-priority priority-med">MED</span></div>
                 <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">Reply to Brian Zitek Over 30 list with WO notes</span><span class="action-priority priority-med">MED</span></div>
             </div>
@@ -559,6 +559,52 @@
         
         <!-- WORK ORDERS TAB -->
         <div class="content" id="workorders">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">🛩️ Install Schedule (SDV Team)</span>
+                    <span class="badge badge-green">Confirmed</span>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr><th>Aircraft</th><th>Customer</th><th>Work</th><th>Start</th><th>End</th><th>Hrs/Day</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr style="background:rgba(16,185,129,0.2)"><td>N303JJ</td><td>Primus Capital</td><td>LEAR 60 Avionics</td><td>Feb 17</td><td>~Mar 5</td><td>33.3</td></tr>
+                            <tr style="background:rgba(16,185,129,0.2)"><td>Schd:85877</td><td>—</td><td>L3 Install</td><td>Feb 17</td><td>~Mar 6</td><td>33.3</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="goal-notes">📊 Capacity: 69-70% during install period | Billable hours → good for A/B</div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">📋 Performance Reviews</span>
+                    <span class="badge badge-amber">1 Due Soon</span>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr><th>Employee</th><th>Due Date</th><th>Type</th><th>Status</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr style="background:rgba(16,185,129,0.2)"><td>Kim Owen</td><td>Dec 1, 2025</td><td>Yearly</td><td style="color:#10b981">✅ Completed</td></tr>
+                            <tr style="background:rgba(16,185,129,0.2)"><td>Juan Medina</td><td>Dec 3, 2025</td><td>MidYear</td><td style="color:#10b981">✅ Completed</td></tr>
+                            <tr style="background:rgba(16,185,129,0.2)"><td>Edduyn Pita (you)</td><td>Dec 19, 2025</td><td>Yearly</td><td style="color:#10b981">✅ Completed</td></tr>
+                            <tr style="background:rgba(16,185,129,0.2)"><td>Andrew Watson</td><td>Feb 4, 2026</td><td>MidYear</td><td style="color:#10b981">✅ Completed</td></tr>
+                            <tr style="background:rgba(245,158,11,0.2)"><td>Guillermo Tovar</td><td>Feb 8, 2026</td><td>90-Day</td><td style="color:#f59e0b">🔴 16 days</td></tr>
+                            <tr><td>Jose Noris</td><td>Mar 10, 2026</td><td>Yearly</td><td style="color:#3b82f6">🟡 46 days</td></tr>
+                            <tr><td>Guillermo Tovar</td><td>May 10, 2026</td><td>MidYear</td><td>107 days</td></tr>
+                            <tr><td>Juan Medina</td><td>Jun 3, 2026</td><td>Yearly</td><td>131 days</td></tr>
+                            <tr><td>Armando Triana-Cruz</td><td>Jun 10, 2026</td><td>Yearly</td><td>138 days</td></tr>
+                            <tr><td>Michael Hannas</td><td>Jul 15, 2026</td><td>Yearly</td><td>173 days</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="goal-notes">📋 14 direct reports | 4 completed YTD ✅ | Next: Guillermo 90-day (Feb 8)</div>
+            </div>
+            
             <div class="card">
                 <div class="card-header">
                     <span class="card-title">Work Order Aging Summary</span>
@@ -836,7 +882,7 @@
                             <tr><td>International Jet Aviation</td><td>N56HS</td><td>On Agreement</td><td>Avionics</td></tr>
                             <tr><td>Stevens Aerospace</td><td>N4QL</td><td>On Agreement</td><td>Artex ELT-1000</td></tr>
                             <tr><td>MIMG Transportation</td><td>N950KM</td><td>On Agreement</td><td>Standby Battery</td></tr>
-                            <tr style="background:rgba(16,185,129,0.2)"><td>Primus Capital</td><td>N303JJ</td><td>Scheduling</td><td>Avionics</td></tr>
+                            <tr style="background:rgba(16,185,129,0.2)"><td>Primus Capital</td><td>N303JJ</td><td style="color:#10b981">Scheduled</td><td>LEAR 60 / L3 Install</td></tr>
                             <tr><td>Executive Jet Mgmt</td><td>N617JH</td><td>Critique/Follow-up</td><td>Paint/Avionics/AF</td></tr>
                             <tr style="background:rgba(239,68,68,0.2)"><td>GD International</td><td>N199GD</td><td>Not Sent</td><td>Avionics</td></tr>
                             <tr style="background:rgba(239,68,68,0.2)"><td>Steiner Aviation</td><td>N70RL</td><td>Not Sent</td><td>Avionics</td></tr>
@@ -844,7 +890,7 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="goal-notes">🔴 3 quotes "Not Sent" need immediate action | 🟡 3 "Sent & Pending" awaiting response | 🟢 1 in "Scheduling"</div>
+                <div class="goal-notes">🔴 3 quotes "Not Sent" need immediate action | 🟡 3 "Sent & Pending" awaiting response | 🟢 1 "Scheduled" (N303JJ Feb 17)</div>
             </div>
             
             <div class="card">
