@@ -50,6 +50,7 @@
         .tab-quality { border-left: 3px solid #06b6d4; }
         .tab-rankings { border-left: 3px solid #eab308; }
         .tab-training { border-left: 3px solid #a855f7; }
+        .tab-sales { border-left: 3px solid #ec4899; }
         .tab-historical { border-left: 3px solid #14b8a6; }
         
         /* Content */
@@ -163,6 +164,7 @@
             <div class="tab tab-training" data-tab="training">📚 Training</div>
             <div class="tab tab-quality" data-tab="quality">✅ Quality</div>
             <div class="tab tab-rankings" data-tab="rankings">🏆 Rankings</div>
+            <div class="tab tab-sales" data-tab="sales">💼 Sales Pipeline</div>
             <div class="tab tab-historical" data-tab="historical">📈 6-Year History</div>
         </div>
         
@@ -368,9 +370,11 @@
                     <span class="card-title">🚨 Critical Actions</span>
                     <span class="badge badge-red">Urgent</span>
                 </div>
-                <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">Douglas Riera Guzman - improved to 8h billable (keep momentum)</span><span class="action-priority priority-high">HIGH</span></div>
-                <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">Guillermo Tovar - improved to 36% (good progress!)</span><span class="action-priority priority-high">HIGH</span></div>
-                <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">CG4NA - 183 days old, needs billing or status update</span><span class="action-priority priority-high">HIGH</span></div>
+                <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">QUOTE: GD International N199GD - Not Sent (Avionics)</span><span class="action-priority priority-high">HIGH</span></div>
+                <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">QUOTE: Steiner Aviation N70RL - Not Sent (Avionics)</span><span class="action-priority priority-high">HIGH</span></div>
+                <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">QUOTE: KW Flight LLC N729KF - Not Sent (GoGo C1)</span><span class="action-priority priority-high">HIGH</span></div>
+                <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">Douglas Riera Guzman - improved to 8h billable (keep momentum)</span><span class="action-priority priority-med">MED</span></div>
+                <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">CG4NA - 183 days old, needs billing or status update</span><span class="action-priority priority-med">MED</span></div>
                 <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">Reply to Brian Zitek Over 30 list with WO notes</span><span class="action-priority priority-med">MED</span></div>
             </div>
             
@@ -784,6 +788,160 @@
             </div>
         </div>
         
+        <!-- SALES PIPELINE TAB -->
+        <div class="content" id="sales">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">💼 Sales Pipeline Overview</span>
+                    <span class="badge badge-blue">All-Time</span>
+                </div>
+                <div class="card-grid">
+                    <div class="metric">
+                        <div class="metric-value">605</div>
+                        <div class="metric-label">Total Quotes</div>
+                        <div class="metric-sub">Since 2008</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">166</div>
+                        <div class="metric-label">Won</div>
+                        <div class="metric-sub">27.4% close rate</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" style="color:#10b981">93.3%</div>
+                        <div class="metric-label">Win Rate</div>
+                        <div class="metric-sub">vs Lost Business</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" style="color:#f59e0b">11</div>
+                        <div class="metric-label">Active Quotes</div>
+                        <div class="metric-sub">In progress</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">🔥 Active Quotes (11)</span>
+                    <span class="badge badge-amber">Action Needed</span>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr><th>Customer</th><th>Tail#</th><th>Status</th><th>Work Area</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr style="background:rgba(245,158,11,0.2)"><td>Silver Dollar Aviation</td><td>N707EL</td><td>Sent & Pending</td><td>Garmin Suite</td></tr>
+                            <tr style="background:rgba(245,158,11,0.2)"><td>INAB, LLC</td><td>N551TH</td><td>Sent & Pending</td><td>Avionics</td></tr>
+                            <tr style="background:rgba(245,158,11,0.2)"><td>Peregrine</td><td>—</td><td>Sent & Pending</td><td>Airframe</td></tr>
+                            <tr><td>International Jet Aviation</td><td>N56HS</td><td>On Agreement</td><td>Avionics</td></tr>
+                            <tr><td>Stevens Aerospace</td><td>N4QL</td><td>On Agreement</td><td>Artex ELT-1000</td></tr>
+                            <tr><td>MIMG Transportation</td><td>N950KM</td><td>On Agreement</td><td>Standby Battery</td></tr>
+                            <tr style="background:rgba(16,185,129,0.2)"><td>Primus Capital</td><td>N303JJ</td><td>Scheduling</td><td>Avionics</td></tr>
+                            <tr><td>Executive Jet Mgmt</td><td>N617JH</td><td>Critique/Follow-up</td><td>Paint/Avionics/AF</td></tr>
+                            <tr style="background:rgba(239,68,68,0.2)"><td>GD International</td><td>N199GD</td><td>Not Sent</td><td>Avionics</td></tr>
+                            <tr style="background:rgba(239,68,68,0.2)"><td>Steiner Aviation</td><td>N70RL</td><td>Not Sent</td><td>Avionics</td></tr>
+                            <tr style="background:rgba(239,68,68,0.2)"><td>KW Flight LLC</td><td>N729KF</td><td>Not Sent</td><td>GoGo C1</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="goal-notes">🔴 3 quotes "Not Sent" need immediate action | 🟡 3 "Sent & Pending" awaiting response | 🟢 1 in "Scheduling"</div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">📅 2025 Performance</span>
+                    <span class="badge badge-green">Strong</span>
+                </div>
+                <div class="card-grid">
+                    <div class="metric">
+                        <div class="metric-value">37</div>
+                        <div class="metric-label">Total Quotes</div>
+                        <div class="metric-sub">2025</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" style="color:#10b981">17</div>
+                        <div class="metric-label">Won</div>
+                        <div class="metric-sub">46% close rate</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">14</div>
+                        <div class="metric-label">Declined</div>
+                        <div class="metric-sub">Customer chose not to proceed</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" style="color:#f59e0b">6</div>
+                        <div class="metric-label">In Progress</div>
+                        <div class="metric-sub">Still active</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">📅 2026 YTD</span>
+                    <span class="badge badge-blue">4 Quotes</span>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr><th>Customer</th><th>Tail#</th><th>Status</th><th>Workscope</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Silver Dollar Aviation</td><td>N707EL</td><td>Sent & Pending</td><td>Garmin Suite</td></tr>
+                            <tr><td>KW Flight LLC</td><td>N729KF</td><td>Not Sent</td><td>GoGo C1</td></tr>
+                            <tr><td>Stevens Aerospace</td><td>N4QL</td><td>On Agreement</td><td>Artex ELT-1000</td></tr>
+                            <tr><td>MIMG Transportation</td><td>N950KM</td><td>On Agreement</td><td>Standby Battery</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">📊 Yearly Trend</span>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr><th>Year</th><th>Total</th><th>Won</th><th>Declined</th><th>Lost</th><th>Win Rate</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>2020</td><td>24</td><td>10</td><td>11</td><td>2</td><td>83%</td></tr>
+                            <tr><td>2021</td><td>42</td><td>2</td><td>31</td><td>0</td><td>100%</td></tr>
+                            <tr><td>2022</td><td>75</td><td style="color:#10b981">35</td><td>37</td><td>0</td><td>100%</td></tr>
+                            <tr><td>2023</td><td>48</td><td style="color:#10b981">31</td><td>16</td><td>0</td><td>100%</td></tr>
+                            <tr><td>2024</td><td>33</td><td>11</td><td>21</td><td>0</td><td>100%</td></tr>
+                            <tr style="background:rgba(245,158,11,0.2)"><td><strong>2025</strong></td><td>37</td><td style="color:#10b981">17</td><td>14</td><td>0</td><td style="color:#10b981"><strong>100%</strong></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="goal-notes">💡 Zero lost business since 2021 — exceptional win rate when customers proceed.</div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">🎯 Win Rate by Work Area</span>
+                </div>
+                <div class="card-grid">
+                    <div class="metric">
+                        <div class="metric-value">91%</div>
+                        <div class="metric-label">Avionics</div>
+                        <div class="metric-sub">90/429 quotes</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">97%</div>
+                        <div class="metric-label">Airframe</div>
+                        <div class="metric-sub">68/93 quotes</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">83%</div>
+                        <div class="metric-label">AF + Avionics</div>
+                        <div class="metric-sub">5/18 quotes</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
         <!-- HISTORICAL TAB -->
         <div class="content" id="historical">
             <div class="card">
@@ -907,7 +1065,7 @@
         let scrollInterval;
         let pauseTimeout;
         let currentTab = 0;
-        const tabs = ['goals', 'actions', 'overview', 'employees', 'workorders', 'training', 'quality', 'rankings', 'historical'];
+        const tabs = ['goals', 'actions', 'overview', 'employees', 'workorders', 'training', 'quality', 'rankings', 'sales', 'historical'];
         
         // Auto-refresh every 10 minutes
         setTimeout(() => location.reload(), 600000);
