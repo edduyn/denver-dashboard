@@ -189,19 +189,19 @@
                     <div class="goal-notes">⚠️ 20th of 21 satellites. Focus on billable hours and reducing shop time.</div>
                 </div>
                 
-                <div class="goal-card">
+                <div class="goal-card" style="border:2px solid #a855f7;">
                     <div class="goal-header">
                         <span class="goal-title">#2 Net Promoter Score (NPS) - Customer Satisfaction</span>
                         <div class="goal-progress">
-                            <span class="goal-pct" style="color:#f59e0b">0%</span>
-                            <span class="badge badge-amber">Pending</span>
+                            <span class="goal-pct" style="color:#ef4444">0%</span>
+                            <span class="badge badge-red">Action Needed!</span>
                         </div>
                     </div>
                     <div class="progress-container">
-                        <div class="progress-bar"><div class="progress-fill progress-amber" style="width:0%"></div></div>
+                        <div class="progress-bar"><div class="progress-fill progress-red" style="width:0%"></div></div>
                     </div>
                     <div>Current: 0 of 1 | Target: 1 survey/month, 12/year</div>
-                    <div class="goal-notes">📋 First NPS survey due end of January. Coordinate with customers on completed WOs.</div>
+                    <div class="goal-notes">🚨 <strong>Send Peregrine (DTBLA) survey this week!</strong> See Actions tab for candidates.</div>
                 </div>
                 
                 <div class="goal-card">
@@ -368,6 +368,7 @@
                     <span class="card-title">🚨 Critical Actions</span>
                     <span class="badge badge-red">Urgent</span>
                 </div>
+                <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">⭐ NPS Survey - Send to Peregrine (DTBLA) - January goal!</span><span class="action-priority priority-high">HIGH</span></div>
                 <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">Douglas Riera Guzman - improved to 8h billable (keep momentum)</span><span class="action-priority priority-high">HIGH</span></div>
                 <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">Guillermo Tovar S. - improved to 36% (good progress!)</span><span class="action-priority priority-high">HIGH</span></div>
                 <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">CG4NA - 187 days old, vendor dispute (Kauffman)</span><span class="action-priority priority-high">HIGH</span></div>
@@ -383,6 +384,64 @@
                 <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">A/B Target: Get to 30%+ by Friday</span></div>
                 <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">Close 5+ WOs from 90+ day aging list</span></div>
                 <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">Move up to 18th rank (pass St. Louis & KC)</span></div>
+            </div>
+            
+            <!-- NPS SURVEY CANDIDATES -->
+            <div class="card" style="border:2px solid #a855f7;">
+                <div class="card-header">
+                    <span class="card-title">⭐ NPS Survey - Goal #2</span>
+                    <span class="badge badge-red">Jan: 0/1 ⚠️</span>
+                </div>
+                <div style="background:#581c87;padding:12px;border-radius:8px;margin-bottom:15px;">
+                    <strong style="color:#e9d5ff;">📧 ACTION REQUIRED:</strong>
+                    <span style="color:#f3e8ff;">Send at least 1 NPS survey this week to meet January goal!</span>
+                </div>
+                
+                <div style="color:#c4b5fd;font-size:0.9em;margin-bottom:10px;">📋 January Candidates (from Billed WOs):</div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr><th>WO#</th><th>Customer</th><th>CustNum</th><th>$</th><th>Status</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr style="background:rgba(168,85,247,0.2)">
+                                <td><strong>DTBLA</strong></td>
+                                <td>Peregrine</td>
+                                <td>144668</td>
+                                <td>$6,600</td>
+                                <td><span class="badge" style="background:#a855f7;">⭐ BEST</span></td>
+                            </tr>
+                            <tr style="color:#94a3b8;">
+                                <td>CQD8B</td>
+                                <td>Pilot Service Provider</td>
+                                <td>135888</td>
+                                <td>$0</td>
+                                <td><span class="badge badge-gray">Skip - Core</span></td>
+                            </tr>
+                            <tr style="color:#94a3b8;">
+                                <td>CQCAB</td>
+                                <td>Pilot Service Provider</td>
+                                <td>135888</td>
+                                <td>$0</td>
+                                <td><span class="badge badge-gray">Skip - Core</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div style="background:#1e293b;padding:12px;border-radius:8px;margin-top:15px;">
+                    <strong style="color:#a855f7;">📝 Process:</strong>
+                    <div style="color:#e2e8f0;font-size:0.85em;margin-top:8px;">
+                        1. Look up Peregrine contact email in AS400<br>
+                        2. Send survey email (template in MD file)<br>
+                        3. Tell Claude: "Add email for CustNum 144668: [email]"<br>
+                        4. Log in MD file when response received
+                    </div>
+                </div>
+                
+                <div style="margin-top:15px;text-align:center;">
+                    <a href="https://form.jotform.com/231574976012155" target="_blank" style="background:#a855f7;color:white;padding:10px 20px;border-radius:6px;text-decoration:none;font-weight:bold;">📋 Open Survey Form</a>
+                </div>
             </div>
         </div>
         
