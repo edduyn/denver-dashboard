@@ -518,9 +518,9 @@
                         <div class="metric-label">WOs with Labor</div>
                     </div>
                     <div class="metric">
-                        <div class="metric-value" style="color:#10b981">$59,424</div>
+                        <div class="metric-value" style="color:#10b981">$50,808</div>
                         <div class="metric-label">Total WIP Value</div>
-                        <div class="metric-sub">💰 In the pipeline</div>
+                        <div class="metric-sub">💰 @ $145/hr</div>
                     </div>
                     <div class="metric">
                         <div class="metric-value" style="color:#f59e0b">350h</div>
@@ -532,23 +532,23 @@
             <!-- WIP BY SHOP -->
             <div class="card">
                 <div class="card-header">
-                    <span class="card-title">💰 WIP by Shop (Labor in Open WOs)</span>
+                    <span class="card-title">💰 WIP by Shop (@ $145 WIP Rate)</span>
                 </div>
                 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-bottom:15px;">
                     <div style="background:linear-gradient(135deg,#1e40af,#3b82f6);padding:15px;border-radius:10px;text-align:center;">
                         <div style="font-size:0.8em;color:#bfdbfe;">SDN (Line)</div>
-                        <div style="font-size:1.8em;font-weight:bold;">$26,901</div>
-                        <div style="font-size:0.8em;color:#93c5fd;">123.4h × $218</div>
+                        <div style="font-size:1.8em;font-weight:bold;">$17,893</div>
+                        <div style="font-size:0.8em;color:#93c5fd;">123.4h × $145</div>
                     </div>
                     <div style="background:linear-gradient(135deg,#047857,#10b981);padding:15px;border-radius:10px;text-align:center;">
-                        <div style="font-size:0.8em;color:#a7f3d0;">SDV (Install)</div>
-                        <div style="font-size:1.8em;font-weight:bold;">$20,995</div>
-                        <div style="font-size:0.8em;color:#6ee7b7;">161.5h × $130</div>
+                        <div style="font-size:0.8em;color:#a7f3d0;">SDV (Install) ⚠️</div>
+                        <div style="font-size:1.8em;font-weight:bold;">$12,542</div>
+                        <div style="font-size:0.8em;color:#6ee7b7;">86.5h × variable</div>
                     </div>
                     <div style="background:linear-gradient(135deg,#c2410c,#f97316);padding:15px;border-radius:10px;text-align:center;">
                         <div style="font-size:0.8em;color:#fed7aa;">SDR (Recip)</div>
-                        <div style="font-size:1.8em;font-weight:bold;">$11,528</div>
-                        <div style="font-size:0.8em;color:#fdba74;">65.5h × $176</div>
+                        <div style="font-size:1.8em;font-weight:bold;">$9,498</div>
+                        <div style="font-size:0.8em;color:#fdba74;">65.5h × $145</div>
                     </div>
                 </div>
             </div>
@@ -556,42 +556,35 @@
             <!-- TOP WIP WOs -->
             <div class="card">
                 <div class="card-header">
-                    <span class="card-title">📋 Open WOs with WIP (Top 15 by Value)</span>
+                    <span class="card-title">📋 Open WOs with WIP (Top 10 by Value)</span>
                     <span class="badge badge-green">Bill these → Get revenue</span>
                 </div>
                 <div class="table-container">
                     <table>
                         <thead>
-                            <tr><th>WO#</th><th>Shop</th><th>Customer</th><th>Hours</th><th>Rate</th><th style="color:#10b981">WIP $</th></tr>
+                            <tr><th>WO#</th><th>Shop</th><th>Customer</th><th>Hours</th><th style="color:#10b981">WIP $ (@$145)</th></tr>
                         </thead>
                         <tbody>
-                            <tr><td>DB1UA</td><td>SDV</td><td>Hogs Head Air 1 LLC</td><td>75.0h</td><td>$130</td><td style="color:#10b981;font-weight:bold">$9,750</td></tr>
-                            <tr><td>CU1EA</td><td>SDN</td><td>42K Re Management LLC</td><td>35.5h</td><td>$218</td><td style="color:#10b981;font-weight:bold">$7,739</td></tr>
-                            <tr><td>CU16A</td><td>SDN</td><td>Flying Orchard LLC</td><td>30.5h</td><td>$218</td><td style="color:#10b981;font-weight:bold">$6,649</td></tr>
-                            <tr><td>CTQMA</td><td>SDR</td><td>Robert P Husted</td><td>33.5h</td><td>$176</td><td style="color:#10b981;font-weight:bold">$5,896</td></tr>
-                            <tr><td>CUPFA</td><td>SDN</td><td>Flying Orchard LLC</td><td>15.9h</td><td>$218</td><td style="color:#10b981;font-weight:bold">$3,466</td></tr>
-                            <tr><td>DUL0A</td><td>SDV</td><td>Denver Internal</td><td>24.5h</td><td>$130</td><td style="color:#10b981;font-weight:bold">$3,185</td></tr>
-                            <tr><td>CU0VA</td><td>SDR</td><td>The Club at Centennial</td><td>17.5h</td><td>$176</td><td style="color:#10b981;font-weight:bold">$3,080</td></tr>
-                            <tr><td>CUS4A</td><td>SDV</td><td>Flying Orchard LLC</td><td>21.0h</td><td>$130</td><td style="color:#10b981;font-weight:bold">$2,730</td></tr>
-                            <tr><td>CU92A</td><td>SDN</td><td>Robbins Aviation</td><td>11.0h</td><td>$218</td><td style="color:#10b981;font-weight:bold">$2,398</td></tr>
-                            <tr><td>CUL2A</td><td>SDR</td><td>Peregrine</td><td>12.5h</td><td>$176</td><td style="color:#10b981;font-weight:bold">$2,200</td></tr>
-                            <tr><td>DUXCA</td><td>SDV</td><td>Denver Internal</td><td>16.5h</td><td>$130</td><td style="color:#10b981;font-weight:bold">$2,145</td></tr>
-                            <tr><td>DUXFA</td><td>SDV</td><td>Denver Internal</td><td>16.0h</td><td>$130</td><td style="color:#10b981;font-weight:bold">$2,080</td></tr>
-                            <tr><td>CV5EA</td><td>SDN</td><td>Precision Aircraft</td><td>4.5h</td><td>$218</td><td style="color:#10b981;font-weight:bold">$981</td></tr>
-                            <tr><td>CV78A</td><td>SDV</td><td>Primus Capital</td><td>7.0h</td><td>$130</td><td style="color:#10b981;font-weight:bold">$910</td></tr>
-                            <tr><td colspan="3"><em>+ 15 more WOs...</em></td><td>43.4h</td><td>-</td><td style="color:#10b981;font-weight:bold">$8,215</td></tr>
+                            <tr><td>DB1UA</td><td>SDV</td><td>Hogs Head Air 1 LLC</td><td>75.0h</td><td style="color:#10b981;font-weight:bold">$10,875</td></tr>
+                            <tr><td>CU1EA</td><td>SDN</td><td>42K Re Management LLC</td><td>35.5h</td><td style="color:#10b981;font-weight:bold">$5,148</td></tr>
+                            <tr><td>CTQMA</td><td>SDR</td><td>Robert P Husted</td><td>33.5h</td><td style="color:#10b981;font-weight:bold">$4,858</td></tr>
+                            <tr><td>CU16A</td><td>SDN</td><td>Flying Orchard LLC</td><td>30.5h</td><td style="color:#10b981;font-weight:bold">$4,422</td></tr>
+                            <tr><td>DUL0A</td><td>SDV</td><td>Denver Internal</td><td>24.5h</td><td style="color:#10b981;font-weight:bold">$3,552</td></tr>
+                            <tr><td>CUS4A</td><td>SDV</td><td>Flying Orchard LLC</td><td>21.0h</td><td style="color:#10b981;font-weight:bold">$3,045</td></tr>
+                            <tr><td>CU0VA</td><td>SDR</td><td>The Club at Centennial</td><td>17.5h</td><td style="color:#10b981;font-weight:bold">$2,538</td></tr>
+                            <tr><td>DUXCA</td><td>SDV</td><td>Denver Internal</td><td>16.5h</td><td style="color:#10b981;font-weight:bold">$2,392</td></tr>
+                            <tr><td>DUXFA</td><td>SDV</td><td>Denver Internal</td><td>16.0h</td><td style="color:#10b981;font-weight:bold">$2,320</td></tr>
+                            <tr><td>CUPFA</td><td>SDN</td><td>Flying Orchard LLC</td><td>15.9h</td><td style="color:#10b981;font-weight:bold">$2,306</td></tr>
                             <tr style="background:rgba(16,185,129,0.2);font-weight:bold;font-size:1.1em;">
-                                <td colspan="3">TOTAL WIP IN OPEN WOs</td>
+                                <td colspan="3">TOTAL WIP (29 WOs)</td>
                                 <td>350.4h</td>
-                                <td>-</td>
-                                <td style="color:#10b981">$59,424</td>
+                                <td style="color:#10b981">$50,808</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-                <div style="background:#0f172a;padding:12px;border-radius:8px;margin-top:15px;border-left:4px solid #10b981;">
-                    <strong style="color:#10b981;">💡 What this means:</strong> 
-                    <span style="color:#e2e8f0;">You have $59,424 worth of labor in open WOs. When you bill these, it becomes revenue.</span>
+                <div style="background:#fef3c7;padding:10px;border-radius:6px;margin-top:10px;font-size:0.85em;color:#92400e;">
+                    ⚠️ <strong>WIP Rate ($145) ≠ ELR Rate.</strong> SDV is variable per job. Excludes shop WO (DT39A).
                 </div>
             </div>
             
@@ -747,16 +740,16 @@
                 
                 <div style="text-align:center;padding:30px;background:linear-gradient(135deg,#064e3b,#065f46);border-radius:12px;margin-bottom:20px;">
                     <div style="color:#6ee7b7;font-size:1em;margin-bottom:5px;">TOTAL WIP IN OPEN WORK ORDERS</div>
-                    <div style="font-size:3.5em;font-weight:bold;color:#10b981;">$59,424</div>
-                    <div style="color:#a7f3d0;font-size:1.1em;margin-top:10px;">350.4 hours × ELR rates = 💰 ready to bill</div>
+                    <div style="font-size:3.5em;font-weight:bold;color:#10b981;">$50,808</div>
+                    <div style="color:#a7f3d0;font-size:1.1em;margin-top:10px;">350.4 hours × $145 WIP rate = 💰 ready to bill</div>
                 </div>
                 
                 <div style="background:#0f172a;padding:15px;border-radius:8px;border-left:4px solid #10b981;">
                     <div style="font-size:1.1em;font-weight:bold;color:#10b981;margin-bottom:8px;">💡 What is WIP?</div>
                     <div style="color:#e2e8f0;line-height:1.6;">
-                        <strong>WIP = Labor hours your team has worked on OPEN work orders.</strong><br>
-                        This is work DONE but not billed yet. When you bill these WOs, this becomes revenue.<br>
-                        Think of it as <strong>money sitting in your pocket waiting to deposit</strong>.
+                        <strong>WIP = Hours on open WOs × WIP Rate ($145)</strong><br>
+                        WIP spreads potential gains across months the WO is open.<br>
+                        <strong>Note:</strong> WIP Rate ≠ ELR Rate. SDV is variable per job.
                     </div>
                 </div>
             </div>
@@ -765,66 +758,63 @@
             <div class="card">
                 <div class="card-header">
                     <span class="card-title">WIP by Shop</span>
-                    <span class="badge badge-blue">29 WOs with labor</span>
+                    <span class="badge badge-blue">WIP Rate: $145/hr</span>
                 </div>
                 
                 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-bottom:15px;">
                     <div style="background:linear-gradient(135deg,#1e40af,#3b82f6);padding:20px;border-radius:12px;text-align:center;">
                         <div style="font-size:0.85em;color:#bfdbfe;">SDN (Line Avionics)</div>
-                        <div style="font-size:2em;font-weight:bold;color:white;">$26,901</div>
-                        <div style="font-size:0.85em;color:#93c5fd;">123.4h × $218/hr</div>
-                        <div style="font-size:0.8em;color:#bfdbfe;margin-top:5px;">18 WOs</div>
+                        <div style="font-size:2em;font-weight:bold;color:white;">$17,893</div>
+                        <div style="font-size:0.85em;color:#93c5fd;">123.4h × $145</div>
                     </div>
                     <div style="background:linear-gradient(135deg,#047857,#10b981);padding:20px;border-radius:12px;text-align:center;">
-                        <div style="font-size:0.85em;color:#a7f3d0;">SDV (Install)</div>
-                        <div style="font-size:2em;font-weight:bold;color:white;">$20,995</div>
-                        <div style="font-size:0.85em;color:#6ee7b7;">161.5h × $130/hr</div>
-                        <div style="font-size:0.8em;color:#a7f3d0;margin-top:5px;">7 WOs</div>
+                        <div style="font-size:0.85em;color:#a7f3d0;">SDV (Install) ⚠️</div>
+                        <div style="font-size:2em;font-weight:bold;color:white;">$12,542</div>
+                        <div style="font-size:0.85em;color:#6ee7b7;">86.5h × variable</div>
                     </div>
                     <div style="background:linear-gradient(135deg,#c2410c,#f97316);padding:20px;border-radius:12px;text-align:center;">
                         <div style="font-size:0.85em;color:#fed7aa;">SDR (Recip)</div>
-                        <div style="font-size:2em;font-weight:bold;color:white;">$11,528</div>
-                        <div style="font-size:0.85em;color:#fdba74;">65.5h × $176/hr</div>
-                        <div style="font-size:0.8em;color:#fed7aa;margin-top:5px;">4 WOs</div>
+                        <div style="font-size:2em;font-weight:bold;color:white;">$9,498</div>
+                        <div style="font-size:0.85em;color:#fdba74;">65.5h × $145</div>
                     </div>
+                </div>
+                <div style="background:#fef3c7;padding:10px;border-radius:6px;font-size:0.85em;color:#92400e;">
+                    ⚠️ <strong>SDV WIP rate is variable</strong> - set by manager per job. Showing $145 as placeholder.
                 </div>
             </div>
             
             <!-- TOP WIP WOs -->
             <div class="card">
                 <div class="card-header">
-                    <span class="card-title">📋 Top 15 WOs by WIP Value</span>
+                    <span class="card-title">📋 Top 10 WOs by WIP Value</span>
                     <span class="badge badge-green">Bill these → Get revenue</span>
                 </div>
                 <div class="table-container">
                     <table>
                         <thead>
-                            <tr><th>WO#</th><th>Shop</th><th>Customer</th><th>Hours</th><th>Rate</th><th style="color:#10b981">WIP $</th></tr>
+                            <tr><th>WO#</th><th>Shop</th><th>Customer</th><th>Hours</th><th style="color:#10b981">WIP $ (@$145)</th></tr>
                         </thead>
                         <tbody>
-                            <tr><td>DB1UA</td><td>SDV</td><td>Hogs Head Air 1 LLC</td><td>75.0h</td><td>$130</td><td style="color:#10b981;font-weight:bold">$9,750</td></tr>
-                            <tr><td>CU1EA</td><td>SDN</td><td>42K Re Management LLC</td><td>35.5h</td><td>$218</td><td style="color:#10b981;font-weight:bold">$7,739</td></tr>
-                            <tr><td>CU16A</td><td>SDN</td><td>Flying Orchard LLC</td><td>30.5h</td><td>$218</td><td style="color:#10b981;font-weight:bold">$6,649</td></tr>
-                            <tr><td>CTQMA</td><td>SDR</td><td>Robert P Husted</td><td>33.5h</td><td>$176</td><td style="color:#10b981;font-weight:bold">$5,896</td></tr>
-                            <tr><td>CUPFA</td><td>SDN</td><td>Flying Orchard LLC</td><td>15.9h</td><td>$218</td><td style="color:#10b981;font-weight:bold">$3,466</td></tr>
-                            <tr><td>DUL0A</td><td>SDV</td><td>Denver Internal</td><td>24.5h</td><td>$130</td><td style="color:#10b981;font-weight:bold">$3,185</td></tr>
-                            <tr><td>CU0VA</td><td>SDR</td><td>The Club at Centennial</td><td>17.5h</td><td>$176</td><td style="color:#10b981;font-weight:bold">$3,080</td></tr>
-                            <tr><td>CUS4A</td><td>SDV</td><td>Flying Orchard LLC</td><td>21.0h</td><td>$130</td><td style="color:#10b981;font-weight:bold">$2,730</td></tr>
-                            <tr><td>CU92A</td><td>SDN</td><td>Robbins Aviation</td><td>11.0h</td><td>$218</td><td style="color:#10b981;font-weight:bold">$2,398</td></tr>
-                            <tr><td>CUL2A</td><td>SDR</td><td>Peregrine</td><td>12.5h</td><td>$176</td><td style="color:#10b981;font-weight:bold">$2,200</td></tr>
-                            <tr><td>DUXCA</td><td>SDV</td><td>Denver Internal</td><td>16.5h</td><td>$130</td><td style="color:#10b981;font-weight:bold">$2,145</td></tr>
-                            <tr><td>DUXFA</td><td>SDV</td><td>Denver Internal</td><td>16.0h</td><td>$130</td><td style="color:#10b981;font-weight:bold">$2,080</td></tr>
-                            <tr><td>CV5EA</td><td>SDN</td><td>Precision Aircraft</td><td>4.5h</td><td>$218</td><td style="color:#10b981;font-weight:bold">$981</td></tr>
-                            <tr><td>CV78A</td><td>SDV</td><td>Primus Capital</td><td>7.0h</td><td>$130</td><td style="color:#10b981;font-weight:bold">$910</td></tr>
-                            <tr><td colspan="3"><em>+ 15 more WOs with smaller WIP...</em></td><td>43.4h</td><td>-</td><td style="color:#10b981;font-weight:bold">$8,215</td></tr>
+                            <tr><td>DB1UA</td><td>SDV</td><td>Hogs Head Air 1 LLC</td><td>75.0h</td><td style="color:#10b981;font-weight:bold">$10,875</td></tr>
+                            <tr><td>CU1EA</td><td>SDN</td><td>42K Re Management LLC</td><td>35.5h</td><td style="color:#10b981;font-weight:bold">$5,148</td></tr>
+                            <tr><td>CTQMA</td><td>SDR</td><td>Robert P Husted</td><td>33.5h</td><td style="color:#10b981;font-weight:bold">$4,858</td></tr>
+                            <tr><td>CU16A</td><td>SDN</td><td>Flying Orchard LLC</td><td>30.5h</td><td style="color:#10b981;font-weight:bold">$4,422</td></tr>
+                            <tr><td>DUL0A</td><td>SDV</td><td>Denver Internal</td><td>24.5h</td><td style="color:#10b981;font-weight:bold">$3,552</td></tr>
+                            <tr><td>CUS4A</td><td>SDV</td><td>Flying Orchard LLC</td><td>21.0h</td><td style="color:#10b981;font-weight:bold">$3,045</td></tr>
+                            <tr><td>CU0VA</td><td>SDR</td><td>The Club at Centennial</td><td>17.5h</td><td style="color:#10b981;font-weight:bold">$2,538</td></tr>
+                            <tr><td>DUXCA</td><td>SDV</td><td>Denver Internal</td><td>16.5h</td><td style="color:#10b981;font-weight:bold">$2,392</td></tr>
+                            <tr><td>DUXFA</td><td>SDV</td><td>Denver Internal</td><td>16.0h</td><td style="color:#10b981;font-weight:bold">$2,320</td></tr>
+                            <tr><td>CUPFA</td><td>SDN</td><td>Flying Orchard LLC</td><td>15.9h</td><td style="color:#10b981;font-weight:bold">$2,306</td></tr>
                             <tr style="background:rgba(16,185,129,0.25);font-weight:bold;font-size:1.1em;">
-                                <td colspan="3">TOTAL WIP</td>
+                                <td colspan="3">TOTAL WIP (29 WOs)</td>
                                 <td>350.4h</td>
-                                <td>-</td>
-                                <td style="color:#10b981;font-size:1.2em;">$59,424</td>
+                                <td style="color:#10b981;font-size:1.2em;">$50,808</td>
                             </tr>
                         </tbody>
                     </table>
+                </div>
+                <div style="background:#fef3c7;padding:10px;border-radius:6px;margin-top:10px;font-size:0.85em;color:#92400e;">
+                    ⚠️ <strong>Note:</strong> SDV WIP rate is variable per job. Showing $145 as placeholder. WIP rate may change mid-year.
                 </div>
             </div>
             
@@ -861,33 +851,30 @@
                 <div style="font-family:monospace;background:#0f172a;padding:20px;border-radius:8px;font-size:1em;line-height:1.8;">
                     <div style="color:#94a3b8;">WIP Calculation:</div>
                     <div style="margin-left:20px;">
-                        <span style="color:#60a5fa;">Hours worked on open WO</span> × <span style="color:#f59e0b;">Shop ELR rate</span> = <span style="color:#10b981;">WIP Value</span>
+                        <span style="color:#60a5fa;">Hours on open WO</span> × <span style="color:#f59e0b;">$145 WIP rate</span> = <span style="color:#10b981;">WIP Value</span>
                     </div>
                     <div style="margin-top:15px;color:#94a3b8;">Example:</div>
                     <div style="margin-left:20px;">
-                        <span style="color:#60a5fa;">35.5 hours</span> × <span style="color:#f59e0b;">$218 (SDN rate)</span> = <span style="color:#10b981;">$7,739 WIP</span>
+                        <span style="color:#60a5fa;">35.5 hours</span> × <span style="color:#f59e0b;">$145</span> = <span style="color:#10b981;">$5,148 WIP</span>
                     </div>
                     <div style="margin-top:15px;border-top:1px solid #334155;padding-top:15px;">
                         <span style="color:#94a3b8;">When WO bills → </span><span style="color:#10b981;">WIP becomes Revenue ✓</span>
                     </div>
                 </div>
-                <div style="margin-top:15px;display:grid;grid-template-columns:repeat(4,1fr);gap:10px;text-align:center;">
-                    <div style="background:#1e293b;padding:10px;border-radius:6px;">
-                        <div style="color:#3b82f6;font-weight:bold;">SDN</div>
-                        <div style="color:#94a3b8;font-size:0.9em;">$218/hr</div>
+                <div style="margin-top:15px;display:grid;grid-template-columns:repeat(2,1fr);gap:10px;text-align:center;">
+                    <div style="background:#1e293b;padding:12px;border-radius:6px;">
+                        <div style="color:#f59e0b;font-weight:bold;">2026 WIP Rate</div>
+                        <div style="color:white;font-size:1.3em;">$145/hr</div>
+                        <div style="color:#94a3b8;font-size:0.8em;">SDN, SDR, SHC</div>
                     </div>
-                    <div style="background:#1e293b;padding:10px;border-radius:6px;">
-                        <div style="color:#10b981;font-weight:bold;">SDV</div>
-                        <div style="color:#94a3b8;font-size:0.9em;">$130/hr</div>
+                    <div style="background:#1e293b;padding:12px;border-radius:6px;">
+                        <div style="color:#f59e0b;font-weight:bold;">SDV WIP Rate</div>
+                        <div style="color:white;font-size:1.3em;">Variable ⚠️</div>
+                        <div style="color:#94a3b8;font-size:0.8em;">Set by manager per job</div>
                     </div>
-                    <div style="background:#1e293b;padding:10px;border-radius:6px;">
-                        <div style="color:#f97316;font-weight:bold;">SDR</div>
-                        <div style="color:#94a3b8;font-size:0.9em;">$176/hr</div>
-                    </div>
-                    <div style="background:#1e293b;padding:10px;border-radius:6px;">
-                        <div style="color:#a855f7;font-weight:bold;">SHC</div>
-                        <div style="color:#94a3b8;font-size:0.9em;">$218/hr</div>
-                    </div>
+                </div>
+                <div style="margin-top:15px;background:#fef3c7;padding:10px;border-radius:6px;font-size:0.85em;color:#92400e;">
+                    <strong>Remember:</strong> WIP Rate ($145) ≠ ELR Rate (billing). WIP spreads gains across months WO is open. Rate may change mid-year. Exclude shop WO (DT39A).
                 </div>
             </div>
         </div>
