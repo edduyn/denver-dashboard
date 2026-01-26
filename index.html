@@ -624,6 +624,58 @@
                 </div>
             </div>
             
+            <!-- SCHEDULED INSTALLS -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">📅 Scheduled Installs (SDV)</span>
+                    <span class="badge badge-blue">Feb-Mar 2026</span>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr><th>Aircraft</th><th>Customer</th><th>Start</th><th>End</th><th>Daily Hours</th><th>Status</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr style="background:rgba(59,130,246,0.15)">
+                                <td><strong>N303JJ</strong></td>
+                                <td>LEAR 60</td>
+                                <td>Feb 17</td>
+                                <td>Mar 6</td>
+                                <td>33.3h/day</td>
+                                <td><span class="badge badge-blue">Scheduled</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div style="margin-top:15px;">
+                    <div style="font-size:0.9em;color:#94a3b8;margin-bottom:10px;">📊 SDV Capacity Utilization:</div>
+                    <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:5px;text-align:center;font-size:0.75em;">
+                        <div style="background:#fbbf24;color:#000;padding:8px 4px;border-radius:4px;">Feb 17<br><strong>70%</strong></div>
+                        <div style="background:#fbbf24;color:#000;padding:8px 4px;border-radius:4px;">Feb 18<br><strong>69%</strong></div>
+                        <div style="background:#fbbf24;color:#000;padding:8px 4px;border-radius:4px;">Feb 19<br><strong>69%</strong></div>
+                        <div style="background:#fbbf24;color:#000;padding:8px 4px;border-radius:4px;">Feb 20<br><strong>69%</strong></div>
+                        <div style="background:#475569;color:#fff;padding:8px 4px;border-radius:4px;">Feb 21<br>Weekend</div>
+                        <div style="background:#475569;color:#fff;padding:8px 4px;border-radius:4px;">Feb 22<br>Weekend</div>
+                        <div style="background:#fbbf24;color:#000;padding:8px 4px;border-radius:4px;">Feb 23<br><strong>69%</strong></div>
+                    </div>
+                    <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:5px;text-align:center;font-size:0.75em;margin-top:5px;">
+                        <div style="background:#fbbf24;color:#000;padding:8px 4px;border-radius:4px;">Feb 24<br><strong>69%</strong></div>
+                        <div style="background:#fbbf24;color:#000;padding:8px 4px;border-radius:4px;">Feb 25<br><strong>69%</strong></div>
+                        <div style="background:#fbbf24;color:#000;padding:8px 4px;border-radius:4px;">Feb 26<br><strong>69%</strong></div>
+                        <div style="background:#fbbf24;color:#000;padding:8px 4px;border-radius:4px;">Feb 27<br><strong>69%</strong></div>
+                        <div style="background:#fbbf24;color:#000;padding:8px 4px;border-radius:4px;">Feb 28<br><strong>69%</strong></div>
+                        <div style="background:#475569;color:#fff;padding:8px 4px;border-radius:4px;">Mar 1<br>Weekend</div>
+                        <div style="background:#fbbf24;color:#000;padding:8px 4px;border-radius:4px;">Mar 2<br><strong>69%</strong></div>
+                    </div>
+                    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:5px;text-align:center;font-size:0.75em;margin-top:5px;max-width:57%;">
+                        <div style="background:#fbbf24;color:#000;padding:8px 4px;border-radius:4px;">Mar 3<br><strong>69%</strong></div>
+                        <div style="background:#fbbf24;color:#000;padding:8px 4px;border-radius:4px;">Mar 4<br><strong>69%</strong></div>
+                        <div style="background:#fbbf24;color:#000;padding:8px 4px;border-radius:4px;">Mar 5<br><strong>69%</strong></div>
+                        <div style="background:#fbbf24;color:#000;padding:8px 4px;border-radius:4px;">Mar 6<br><strong>69%</strong></div>
+                    </div>
+                </div>
+            </div>
+            
             <!-- CRITICAL / AGING WOs -->
             <div class="card">
                 <div class="card-header">
@@ -1156,7 +1208,7 @@
             let scrollPos = 0;
             let scrollDir = 1;
             let tabTime = 0;
-            const tabDuration = 20000; // 20 sec per tab
+            const tabDuration = 23000; // 23 sec per tab (15% slower)
             const scrollSpeed = 2;
             
             clearInterval(scrollInterval);
@@ -1195,7 +1247,7 @@
             pauseTimeout = setTimeout(() => {
                 isPaused = false;
                 updateStatus();
-            }, 30000);
+            }, 34500); // 34.5 sec (15% slower)
         }
         
         function resumeScroll() {
