@@ -368,7 +368,7 @@
                     <span class="card-title">🚨 Critical Actions</span>
                     <span class="badge badge-red">Urgent</span>
                 </div>
-                <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">⭐ NPS Survey - Email Peregrine (ths@masd.metrea.aero) - READY!</span><span class="action-priority priority-high">HIGH</span></div>
+                <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">⭐ NPS Survey - Email Peregrine ([see MD file]) - READY!</span><span class="action-priority priority-high">HIGH</span></div>
                 <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">Douglas Riera Guzman - improved to 8h billable (keep momentum)</span><span class="action-priority priority-high">HIGH</span></div>
                 <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">Guillermo Tovar S. - improved to 36% (good progress!)</span><span class="action-priority priority-high">HIGH</span></div>
                 <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">CG4NA - 187 days old, vendor dispute (Kauffman)</span><span class="action-priority priority-high">HIGH</span></div>
@@ -411,7 +411,7 @@
                     </div>
                     <div style="margin-top:10px;background:rgba(0,0,0,0.3);padding:10px;border-radius:6px;">
                         <div style="color:#c4b5fd;font-size:0.8em;">📧 Email</div>
-                        <div style="color:#fbbf24;font-weight:bold;font-size:1.1em;">ths@masd.metrea.aero</div>
+                        <div style="color:#fbbf24;font-weight:bold;font-size:1.1em;">[see MD file]</div>
                     </div>
                 </div>
                 
@@ -425,19 +425,19 @@
                             <tr style="background:rgba(16,185,129,0.2)">
                                 <td>144668</td>
                                 <td>Peregrine</td>
-                                <td style="color:#fbbf24">ths@masd.metrea.aero</td>
+                                <td style="color:#fbbf24">[see MD file]</td>
                                 <td><span class="badge badge-green">✅ Ready</span></td>
                             </tr>
                             <tr>
                                 <td>109004</td>
                                 <td>International Jet</td>
-                                <td>heike@internationaljet.com</td>
+                                <td>[see MD file]</td>
                                 <td><span class="badge badge-blue">8 open WOs</span></td>
                             </tr>
                             <tr>
                                 <td>125945</td>
                                 <td>Bode Aviation</td>
-                                <td>michelle.amezcua@flybode.com</td>
+                                <td>[see MD file]</td>
                                 <td><span class="badge badge-gray">On file</span></td>
                             </tr>
                         </tbody>
@@ -452,8 +452,8 @@
                     <div style="color:#60a5fa;font-weight:bold;margin-bottom:10px;">📧 Copy for Outlook Web:</div>
                     <div style="margin-bottom:8px;">
                         <span style="color:#94a3b8;font-size:0.85em;">To:</span>
-                        <span style="color:#fbbf24;font-family:monospace;" id="emailTo">ths@masd.metrea.aero</span>
-                        <button onclick="navigator.clipboard.writeText('ths@masd.metrea.aero');this.innerText='✓ Copied!';setTimeout(()=>this.innerText='Copy',1500);" style="background:#475569;color:white;border:none;padding:2px 8px;border-radius:4px;font-size:0.75em;cursor:pointer;margin-left:5px;">Copy</button>
+                        <span style="color:#fbbf24;font-family:monospace;" id="npsEmail">Loading...</span>
+                        <button id="copyEmailBtn" style="background:#475569;color:white;border:none;padding:2px 8px;border-radius:4px;font-size:0.75em;cursor:pointer;margin-left:5px;">Copy</button>
                     </div>
                     <div style="margin-bottom:8px;">
                         <span style="color:#94a3b8;font-size:0.85em;">Subject:</span>
@@ -1318,25 +1318,76 @@ Duncan Aviation</div>
                 
                 // Smooth scroll
                 const content = document.getElementById(tabs[currentTab]);
-                const maxScroll = content.scrollHeight - window.innerHeight + 200;
+                               const maxScroll = content.scrollHeight - window.innerHeight + 200;
                 
-                if (maxScroll > 0) {
+                if (content) {
                     scrollPos += scrollDir * scrollSpeed;
                     if (scrollPos >= maxScroll) { scrollPos = maxScroll; scrollDir = -1; }
                     if (scrollPos <= 0) { scrollPos = 0; scrollDir = 1; }
                     window.scrollTo({top: scrollPos});
                 }
                 
-                // Switch tab after duration
+                // Change tabs
                 if (tabTime >= tabDuration) {
                     tabTime = 0;
                     scrollPos = 0;
                     scrollDir = 1;
                     currentTab = (currentTab + 1) % tabs.length;
-                    switchTab(tabs[currentTab]);
+                    showTab(tabs[currentTab]);
                 }
             }, 50);
         }
         
         function pauseScroll() {
-            if (!isRotating
+            if (!isRotating) return;
+            isPaused = true;
+            updateStatus();
+            clearTimeout(pauseTimeout);
+            pauseTimeout = setTimeout(() => {
+                isPaused = false;
+                updateStatus();
+            }, 34500);
+        }
+        
+        function resumeScroll() {
+            isPaused = false;
+            clearTimeout(pauseTimeout);
+            updateStatus();
+        }
+        
+        // Tab click handlers
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabId = tab.dataset.tab;
+                showTab(tabId);
+                if (isRotating) {
+                    currentTab = tabs.indexOf(tabId);
+                    pauseScroll();
+                }
+            });
+        });
+        
+        // Pause on interaction
+        document.addEventListener('click', pauseScroll);
+        document.addEventListener('touchstart', pauseScroll);
+        document.addEventListener('scroll', pauseScroll);
+        
+        // Check for saved auth
+        if (localStorage.getItem('denver_auth') === 'true') {
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'block';
+            startAutoRotate();
+        }
+        
+        // NPS Email injection (prevents Cloudflare encoding)
+        const npsEmailParts = ['ths', 'masd.metrea.aero'];
+        const npsEmail = npsEmailParts.join('@');
+        document.getElementById('npsEmail').textContent = npsEmail;
+        document.getElementById('copyEmailBtn').onclick = function() {
+            navigator.clipboard.writeText(npsEmail);
+            this.innerText = '✓ Copied!';
+            setTimeout(() => this.innerText = 'Copy', 1500);
+        };
+    </script>
+</body>
+</html>
