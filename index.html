@@ -1239,6 +1239,7 @@ Duncan Aviation</div>
                 document.getElementById('loginScreen').style.display = 'none';
                 document.getElementById('dashboard').style.display = 'block';
                 localStorage.setItem('denver_auth', 'true');
+                showTab(tabs[0]); // Show first tab
                 tryFullscreen();
                 startAutoRotate();
             } else {
@@ -1327,9 +1328,8 @@ Duncan Aviation</div>
                 
                 // Smooth scroll
                 const content = document.getElementById(tabs[currentTab]);
-                               const maxScroll = content.scrollHeight - window.innerHeight + 200;
-                
                 if (content) {
+                    const maxScroll = content.scrollHeight - window.innerHeight + 200;
                     scrollPos += scrollDir * scrollSpeed;
                     if (scrollPos >= maxScroll) { scrollPos = maxScroll; scrollDir = -1; }
                     if (scrollPos <= 0) { scrollPos = 0; scrollDir = 1; }
@@ -1379,12 +1379,12 @@ Duncan Aviation</div>
         // Pause on interaction
         document.addEventListener('click', pauseScroll);
         document.addEventListener('touchstart', pauseScroll);
-        document.addEventListener('scroll', pauseScroll);
         
         // Check for saved auth
         if (localStorage.getItem('denver_auth') === 'true') {
             document.getElementById('loginScreen').style.display = 'none';
             document.getElementById('dashboard').style.display = 'block';
+            showTab(tabs[0]); // Show first tab
             startAutoRotate();
         }
         
