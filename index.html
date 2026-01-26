@@ -1273,6 +1273,9 @@ Duncan Aviation</div>
             window.scrollTo({top: 0, behavior: 'smooth'});
         }
         
+        // Alias for compatibility
+        const showTab = switchTab;
+        
         function startAutoRotate() {
             isRotating = true;
             isPaused = false;
@@ -1388,12 +1391,16 @@ Duncan Aviation</div>
         // NPS Email injection (prevents Cloudflare encoding)
         const npsEmailParts = ['ths', 'masd.metrea.aero'];
         const npsEmail = npsEmailParts.join('@');
-        document.getElementById('npsEmail').textContent = npsEmail;
-        document.getElementById('copyEmailBtn').onclick = function() {
-            navigator.clipboard.writeText(npsEmail);
-            this.innerText = '✓ Copied!';
-            setTimeout(() => this.innerText = 'Copy', 1500);
-        };
+        const npsEmailEl = document.getElementById('npsEmail');
+        const copyEmailBtnEl = document.getElementById('copyEmailBtn');
+        if (npsEmailEl) npsEmailEl.textContent = npsEmail;
+        if (copyEmailBtnEl) {
+            copyEmailBtnEl.onclick = function() {
+                navigator.clipboard.writeText(npsEmail);
+                this.innerText = '✓ Copied!';
+                setTimeout(() => this.innerText = 'Copy', 1500);
+            };
+        }
     </script>
 </body>
 </html>
