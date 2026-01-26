@@ -734,22 +734,51 @@
             <!-- THE BIG NUMBER -->
             <div class="card">
                 <div class="card-header">
-                    <span class="card-title">💰 My WIP Right Now</span>
-                    <span class="badge badge-green">Money in the Pipeline</span>
+                    <span class="card-title">💰 Estimated WIP (Real-Time)</span>
+                    <span class="badge badge-amber">Unofficial - For Management Use</span>
                 </div>
                 
                 <div style="text-align:center;padding:30px;background:linear-gradient(135deg,#064e3b,#065f46);border-radius:12px;margin-bottom:20px;">
-                    <div style="color:#6ee7b7;font-size:1em;margin-bottom:5px;">TOTAL WIP IN OPEN WORK ORDERS</div>
+                    <div style="color:#6ee7b7;font-size:1em;margin-bottom:5px;">ESTIMATED WIP IN OPEN WORK ORDERS</div>
                     <div style="font-size:3.5em;font-weight:bold;color:#10b981;">$50,808</div>
                     <div style="color:#a7f3d0;font-size:1.1em;margin-top:10px;">350.4 hours × $145 WIP rate = 💰 ready to bill</div>
                 </div>
                 
-                <div style="background:#0f172a;padding:15px;border-radius:8px;border-left:4px solid #10b981;">
-                    <div style="font-size:1.1em;font-weight:bold;color:#10b981;margin-bottom:8px;">💡 What is WIP?</div>
+                <div style="background:#0f172a;padding:15px;border-radius:8px;border-left:4px solid #f59e0b;">
+                    <div style="font-size:1.1em;font-weight:bold;color:#f59e0b;margin-bottom:8px;">⚠️ Estimated vs Official WIP</div>
                     <div style="color:#e2e8f0;line-height:1.6;">
-                        <strong>WIP = Hours on open WOs × WIP Rate ($145)</strong><br>
-                        WIP spreads potential gains across months the WO is open.<br>
-                        <strong>Note:</strong> WIP Rate ≠ ELR Rate. SDV is variable per job.
+                        <strong>This is a REAL-TIME ESTIMATE</strong> based on hours × $145 rate.<br>
+                        <strong>Official WIP</strong> comes from accounting via monthly journal entries (AS400 account 0889.35015).<br>
+                        Use this estimate for daily/weekly management decisions. Official numbers available ~2nd week of next month.
+                    </div>
+                </div>
+            </div>
+            
+            <!-- MONTHLY VARIANCE CHECK -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">📊 Monthly WIP Variance Check</span>
+                    <span class="badge badge-blue">Catch Manual Entry Errors</span>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr><th>Month</th><th>My Estimate</th><th>Official (AS400)</th><th>Variance</th><th>Status</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Dec 2025</td><td>-</td><td>-$16,870</td><td>-</td><td><span class="badge badge-green">Baseline</span></td></tr>
+                            <tr><td>Jan 2026</td><td>$50,808</td><td><em>Pending (Feb)</em></td><td>-</td><td><span class="badge badge-amber">Awaiting</span></td></tr>
+                            <tr><td>Feb 2026</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div style="background:#1e293b;padding:12px;border-radius:8px;margin-top:15px;">
+                    <strong style="color:#60a5fa;">📋 Monthly Check Process:</strong>
+                    <div style="color:#e2e8f0;font-size:0.9em;margin-top:8px;">
+                        1. Pull AS400 account 0889.35015 after month-end close (~2nd week)<br>
+                        2. Compare to my estimate from end of that month<br>
+                        3. Variance &gt;10% = investigate for typos or missed WOs<br>
+                        4. Update this table to track accuracy over time
                     </div>
                 </div>
             </div>
