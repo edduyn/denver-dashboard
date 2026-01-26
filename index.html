@@ -505,67 +505,111 @@
         <div class="content" id="workorders">
             <div class="card">
                 <div class="card-header">
-                    <span class="card-title">Work Order Aging Summary</span>
+                    <span class="card-title">Work Order Summary</span>
+                    <span class="badge badge-blue">72 Open WOs</span>
                 </div>
                 <div class="card-grid">
                     <div class="metric">
-                        <div class="metric-value">90</div>
+                        <div class="metric-value">72</div>
                         <div class="metric-label">Total Open WOs</div>
                     </div>
                     <div class="metric">
-                        <div class="metric-value" style="color:#10b981">54</div>
-                        <div class="metric-label">Under 30 Days</div>
+                        <div class="metric-value">29</div>
+                        <div class="metric-label">WOs with Labor</div>
                     </div>
                     <div class="metric">
-                        <div class="metric-value" style="color:#f59e0b">3</div>
-                        <div class="metric-label">Over 30 Days</div>
+                        <div class="metric-value" style="color:#10b981">$59,424</div>
+                        <div class="metric-label">Total WIP Value</div>
+                        <div class="metric-sub">💰 In the pipeline</div>
                     </div>
                     <div class="metric">
-                        <div class="metric-value" style="color:#ef4444">3</div>
-                        <div class="metric-label">AOG ⚠️</div>
+                        <div class="metric-value" style="color:#f59e0b">350h</div>
+                        <div class="metric-label">Unbilled Hours</div>
                     </div>
                 </div>
             </div>
             
+            <!-- WIP BY SHOP -->
             <div class="card">
                 <div class="card-header">
-                    <span class="card-title">Critical WOs (90+ Days)</span>
-                    <span class="badge badge-red">Action Required</span>
+                    <span class="card-title">💰 WIP by Shop (Labor in Open WOs)</span>
+                </div>
+                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-bottom:15px;">
+                    <div style="background:linear-gradient(135deg,#1e40af,#3b82f6);padding:15px;border-radius:10px;text-align:center;">
+                        <div style="font-size:0.8em;color:#bfdbfe;">SDN (Line)</div>
+                        <div style="font-size:1.8em;font-weight:bold;">$26,901</div>
+                        <div style="font-size:0.8em;color:#93c5fd;">123.4h × $218</div>
+                    </div>
+                    <div style="background:linear-gradient(135deg,#047857,#10b981);padding:15px;border-radius:10px;text-align:center;">
+                        <div style="font-size:0.8em;color:#a7f3d0;">SDV (Install)</div>
+                        <div style="font-size:1.8em;font-weight:bold;">$20,995</div>
+                        <div style="font-size:0.8em;color:#6ee7b7;">161.5h × $130</div>
+                    </div>
+                    <div style="background:linear-gradient(135deg,#c2410c,#f97316);padding:15px;border-radius:10px;text-align:center;">
+                        <div style="font-size:0.8em;color:#fed7aa;">SDR (Recip)</div>
+                        <div style="font-size:1.8em;font-weight:bold;">$11,528</div>
+                        <div style="font-size:0.8em;color:#fdba74;">65.5h × $176</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- TOP WIP WOs -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">📋 Open WOs with WIP (Top 15 by Value)</span>
+                    <span class="badge badge-green">Bill these → Get revenue</span>
                 </div>
                 <div class="table-container">
                     <table>
                         <thead>
-                            <tr><th>WO#</th><th>Days</th><th>Customer</th><th>Notes</th></tr>
+                            <tr><th>WO#</th><th>Shop</th><th>Customer</th><th>Hours</th><th>Rate</th><th style="color:#10b981">WIP $</th></tr>
                         </thead>
                         <tbody>
-                            <tr><td>DFPJA</td><td>237</td><td>Duncan Internal</td><td>PC-12 Archangel STC project</td></tr>
-                            <tr><td>CG4NA</td><td>183</td><td>Kauffman Land</td><td>Ready to bill in January</td></tr>
-                            <tr><td>CG4NB</td><td>182</td><td>Kauffman Land</td><td>Ready to bill in January</td></tr>
-                            <tr><td>CG4NC</td><td>181</td><td>Kauffman Land</td><td>Ready to bill in January</td></tr>
-                            <tr><td>DLBTA</td><td>156</td><td>Denver Internal</td><td>Internal project</td></tr>
-                            <tr><td>CL4CB</td><td>132</td><td>Business Aviators</td><td>Status needed</td></tr>
-                            <tr><td>DN1KA</td><td>125</td><td>Int'l Jet Aviation</td><td>Status needed</td></tr>
-                            <tr><td>DN1KB</td><td>122</td><td>Int'l Jet Aviation</td><td>Status needed</td></tr>
-                            <tr><td>CMJHA</td><td>91</td><td>Customer</td><td>Honeywell delay - free install setup</td></tr>
+                            <tr><td>DB1UA</td><td>SDV</td><td>Hogs Head Air 1 LLC</td><td>75.0h</td><td>$130</td><td style="color:#10b981;font-weight:bold">$9,750</td></tr>
+                            <tr><td>CU1EA</td><td>SDN</td><td>42K Re Management LLC</td><td>35.5h</td><td>$218</td><td style="color:#10b981;font-weight:bold">$7,739</td></tr>
+                            <tr><td>CU16A</td><td>SDN</td><td>Flying Orchard LLC</td><td>30.5h</td><td>$218</td><td style="color:#10b981;font-weight:bold">$6,649</td></tr>
+                            <tr><td>CTQMA</td><td>SDR</td><td>Robert P Husted</td><td>33.5h</td><td>$176</td><td style="color:#10b981;font-weight:bold">$5,896</td></tr>
+                            <tr><td>CUPFA</td><td>SDN</td><td>Flying Orchard LLC</td><td>15.9h</td><td>$218</td><td style="color:#10b981;font-weight:bold">$3,466</td></tr>
+                            <tr><td>DUL0A</td><td>SDV</td><td>Denver Internal</td><td>24.5h</td><td>$130</td><td style="color:#10b981;font-weight:bold">$3,185</td></tr>
+                            <tr><td>CU0VA</td><td>SDR</td><td>The Club at Centennial</td><td>17.5h</td><td>$176</td><td style="color:#10b981;font-weight:bold">$3,080</td></tr>
+                            <tr><td>CUS4A</td><td>SDV</td><td>Flying Orchard LLC</td><td>21.0h</td><td>$130</td><td style="color:#10b981;font-weight:bold">$2,730</td></tr>
+                            <tr><td>CU92A</td><td>SDN</td><td>Robbins Aviation</td><td>11.0h</td><td>$218</td><td style="color:#10b981;font-weight:bold">$2,398</td></tr>
+                            <tr><td>CUL2A</td><td>SDR</td><td>Peregrine</td><td>12.5h</td><td>$176</td><td style="color:#10b981;font-weight:bold">$2,200</td></tr>
+                            <tr><td>DUXCA</td><td>SDV</td><td>Denver Internal</td><td>16.5h</td><td>$130</td><td style="color:#10b981;font-weight:bold">$2,145</td></tr>
+                            <tr><td>DUXFA</td><td>SDV</td><td>Denver Internal</td><td>16.0h</td><td>$130</td><td style="color:#10b981;font-weight:bold">$2,080</td></tr>
+                            <tr><td>CV5EA</td><td>SDN</td><td>Precision Aircraft</td><td>4.5h</td><td>$218</td><td style="color:#10b981;font-weight:bold">$981</td></tr>
+                            <tr><td>CV78A</td><td>SDV</td><td>Primus Capital</td><td>7.0h</td><td>$130</td><td style="color:#10b981;font-weight:bold">$910</td></tr>
+                            <tr><td colspan="3"><em>+ 15 more WOs...</em></td><td>43.4h</td><td>-</td><td style="color:#10b981;font-weight:bold">$8,215</td></tr>
+                            <tr style="background:rgba(16,185,129,0.2);font-weight:bold;font-size:1.1em;">
+                                <td colspan="3">TOTAL WIP IN OPEN WOs</td>
+                                <td>350.4h</td>
+                                <td>-</td>
+                                <td style="color:#10b981">$59,424</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
+                <div style="background:#0f172a;padding:12px;border-radius:8px;margin-top:15px;border-left:4px solid #10b981;">
+                    <strong style="color:#10b981;">💡 What this means:</strong> 
+                    <span style="color:#e2e8f0;">You have $59,424 worth of labor in open WOs. When you bill these, it becomes revenue.</span>
+                </div>
             </div>
             
+            <!-- CRITICAL / AGING WOs -->
             <div class="card">
                 <div class="card-header">
-                    <span class="card-title">Brian Zitek Over 30 List - Response Submitted ✅</span>
-                    <span class="badge badge-green">3 WOs</span>
+                    <span class="card-title">⚠️ Over 30 Days (BZ List)</span>
+                    <span class="badge badge-amber">3 WOs</span>
                 </div>
                 <div class="table-container">
                     <table>
                         <thead>
-                            <tr><th>WO#</th><th>Shop</th><th>Days</th><th>Cost</th><th>Status</th><th>Response</th></tr>
+                            <tr><th>WO#</th><th>Shop</th><th>Days</th><th>WIP $</th><th>Status</th><th>Action Needed</th></tr>
                         </thead>
                         <tbody>
-                            <tr style="background:rgba(16,185,129,0.2)"><td>DTBLA</td><td>SDV</td><td>40</td><td>$6,600</td><td><span class="badge badge-green">BILLED</span></td><td>Billed 01/26/26</td></tr>
-                            <tr style="background:rgba(245,158,11,0.1)"><td>DSW4A</td><td>SDN</td><td>48</td><td>$52,763</td><td><span class="badge badge-amber">PENDING</span></td><td>Will Bill By EOM</td></tr>
-                            <tr style="background:rgba(239,68,68,0.1)"><td>CG4NA</td><td>SDN</td><td>187</td><td>$2,486</td><td><span class="badge badge-red">DISPUTE</span></td><td>Kauffman owner in ICU 42d</td></tr>
+                            <tr style="background:rgba(16,185,129,0.2)"><td>DTBLA</td><td>SDV</td><td>40</td><td>$6,600</td><td><span class="badge badge-green">✅ BILLED</span></td><td>Done! Billed 01/26</td></tr>
+                            <tr style="background:rgba(245,158,11,0.15)"><td>DSW4A</td><td>SDN</td><td>48</td><td style="font-weight:bold;color:#f59e0b;">$52,763</td><td><span class="badge badge-amber">⏳ PENDING</span></td><td>Bill by EOM!</td></tr>
+                            <tr style="background:rgba(239,68,68,0.15)"><td>CG4NA</td><td>SDN</td><td>187</td><td>$2,486</td><td><span class="badge badge-red">🔴 DISPUTE</span></td><td>Kauffman in ICU - Credit notified</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -695,98 +739,155 @@
         
         <!-- WIP TAB -->
         <div class="content" id="wip">
+            <!-- THE BIG NUMBER -->
             <div class="card">
                 <div class="card-header">
-                    <span class="card-title">💰 Work In Progress (WIP) Tracking</span>
-                    <span class="badge badge-green">WIP Rate: $145/hr</span>
+                    <span class="card-title">💰 My WIP Right Now</span>
+                    <span class="badge badge-green">Money in the Pipeline</span>
                 </div>
-                <p style="color:#94a3b8;margin-bottom:15px;font-size:0.9em;">
-                    <strong>WIP Formula:</strong> Unbilled Labor Hours × $145 = Estimated WIP Value<br>
-                    Revenue recognized when WO is billed. Monthly WIP review on last Friday.
-                </p>
-                <div class="card-grid">
-                    <div class="metric">
-                        <div class="metric-value">$75.5K</div>
-                        <div class="metric-label">Current WIP</div>
-                        <div class="metric-sub">521h × $145</div>
-                    </div>
-                    <div class="metric">
-                        <div class="metric-value">$101K</div>
-                        <div class="metric-label">Billed MTD</div>
-                        <div class="metric-sub">Jan 2026</div>
-                    </div>
-                    <div class="metric">
-                        <div class="metric-value">$694K</div>
-                        <div class="metric-label">Budget Target</div>
-                        <div class="metric-sub">January</div>
-                    </div>
-                    <div class="metric">
-                        <div class="metric-value">15%</div>
-                        <div class="metric-label">% of Budget</div>
-                        <div class="metric-sub">5 days remaining</div>
+                
+                <div style="text-align:center;padding:30px;background:linear-gradient(135deg,#064e3b,#065f46);border-radius:12px;margin-bottom:20px;">
+                    <div style="color:#6ee7b7;font-size:1em;margin-bottom:5px;">TOTAL WIP IN OPEN WORK ORDERS</div>
+                    <div style="font-size:3.5em;font-weight:bold;color:#10b981;">$59,424</div>
+                    <div style="color:#a7f3d0;font-size:1.1em;margin-top:10px;">350.4 hours × ELR rates = 💰 ready to bill</div>
+                </div>
+                
+                <div style="background:#0f172a;padding:15px;border-radius:8px;border-left:4px solid #10b981;">
+                    <div style="font-size:1.1em;font-weight:bold;color:#10b981;margin-bottom:8px;">💡 What is WIP?</div>
+                    <div style="color:#e2e8f0;line-height:1.6;">
+                        <strong>WIP = Labor hours your team has worked on OPEN work orders.</strong><br>
+                        This is work DONE but not billed yet. When you bill these WOs, this becomes revenue.<br>
+                        Think of it as <strong>money sitting in your pocket waiting to deposit</strong>.
                     </div>
                 </div>
             </div>
             
+            <!-- WIP BY SHOP -->
             <div class="card">
                 <div class="card-header">
                     <span class="card-title">WIP by Shop</span>
+                    <span class="badge badge-blue">29 WOs with labor</span>
+                </div>
+                
+                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-bottom:15px;">
+                    <div style="background:linear-gradient(135deg,#1e40af,#3b82f6);padding:20px;border-radius:12px;text-align:center;">
+                        <div style="font-size:0.85em;color:#bfdbfe;">SDN (Line Avionics)</div>
+                        <div style="font-size:2em;font-weight:bold;color:white;">$26,901</div>
+                        <div style="font-size:0.85em;color:#93c5fd;">123.4h × $218/hr</div>
+                        <div style="font-size:0.8em;color:#bfdbfe;margin-top:5px;">18 WOs</div>
+                    </div>
+                    <div style="background:linear-gradient(135deg,#047857,#10b981);padding:20px;border-radius:12px;text-align:center;">
+                        <div style="font-size:0.85em;color:#a7f3d0;">SDV (Install)</div>
+                        <div style="font-size:2em;font-weight:bold;color:white;">$20,995</div>
+                        <div style="font-size:0.85em;color:#6ee7b7;">161.5h × $130/hr</div>
+                        <div style="font-size:0.8em;color:#a7f3d0;margin-top:5px;">7 WOs</div>
+                    </div>
+                    <div style="background:linear-gradient(135deg,#c2410c,#f97316);padding:20px;border-radius:12px;text-align:center;">
+                        <div style="font-size:0.85em;color:#fed7aa;">SDR (Recip)</div>
+                        <div style="font-size:2em;font-weight:bold;color:white;">$11,528</div>
+                        <div style="font-size:0.85em;color:#fdba74;">65.5h × $176/hr</div>
+                        <div style="font-size:0.8em;color:#fed7aa;margin-top:5px;">4 WOs</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- TOP WIP WOs -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">📋 Top 15 WOs by WIP Value</span>
+                    <span class="badge badge-green">Bill these → Get revenue</span>
                 </div>
                 <div class="table-container">
                     <table>
                         <thead>
-                            <tr><th>Shop</th><th>Unbilled Hrs</th><th>WIP Rate</th><th>Est. WIP Value</th><th>% of Total</th></tr>
+                            <tr><th>WO#</th><th>Shop</th><th>Customer</th><th>Hours</th><th>Rate</th><th style="color:#10b981">WIP $</th></tr>
                         </thead>
                         <tbody>
-                            <tr><td>SDN (Line)</td><td>199.6h</td><td>$218</td><td>$43,513</td><td>38%</td></tr>
-                            <tr><td>SDV (Install)</td><td>179.0h</td><td>$130</td><td>$23,270</td><td>20%</td></tr>
-                            <tr><td>SDR (Recip)</td><td>132.0h</td><td>$176</td><td>$23,232</td><td>20%</td></tr>
-                            <tr><td>SHC (High Country)</td><td>10.0h</td><td>$218</td><td>$2,180</td><td>2%</td></tr>
-                            <tr style="background:rgba(99,102,241,0.2);font-weight:bold"><td>TOTAL</td><td>521h</td><td>$145 avg</td><td>$92,195</td><td>100%</td></tr>
+                            <tr><td>DB1UA</td><td>SDV</td><td>Hogs Head Air 1 LLC</td><td>75.0h</td><td>$130</td><td style="color:#10b981;font-weight:bold">$9,750</td></tr>
+                            <tr><td>CU1EA</td><td>SDN</td><td>42K Re Management LLC</td><td>35.5h</td><td>$218</td><td style="color:#10b981;font-weight:bold">$7,739</td></tr>
+                            <tr><td>CU16A</td><td>SDN</td><td>Flying Orchard LLC</td><td>30.5h</td><td>$218</td><td style="color:#10b981;font-weight:bold">$6,649</td></tr>
+                            <tr><td>CTQMA</td><td>SDR</td><td>Robert P Husted</td><td>33.5h</td><td>$176</td><td style="color:#10b981;font-weight:bold">$5,896</td></tr>
+                            <tr><td>CUPFA</td><td>SDN</td><td>Flying Orchard LLC</td><td>15.9h</td><td>$218</td><td style="color:#10b981;font-weight:bold">$3,466</td></tr>
+                            <tr><td>DUL0A</td><td>SDV</td><td>Denver Internal</td><td>24.5h</td><td>$130</td><td style="color:#10b981;font-weight:bold">$3,185</td></tr>
+                            <tr><td>CU0VA</td><td>SDR</td><td>The Club at Centennial</td><td>17.5h</td><td>$176</td><td style="color:#10b981;font-weight:bold">$3,080</td></tr>
+                            <tr><td>CUS4A</td><td>SDV</td><td>Flying Orchard LLC</td><td>21.0h</td><td>$130</td><td style="color:#10b981;font-weight:bold">$2,730</td></tr>
+                            <tr><td>CU92A</td><td>SDN</td><td>Robbins Aviation</td><td>11.0h</td><td>$218</td><td style="color:#10b981;font-weight:bold">$2,398</td></tr>
+                            <tr><td>CUL2A</td><td>SDR</td><td>Peregrine</td><td>12.5h</td><td>$176</td><td style="color:#10b981;font-weight:bold">$2,200</td></tr>
+                            <tr><td>DUXCA</td><td>SDV</td><td>Denver Internal</td><td>16.5h</td><td>$130</td><td style="color:#10b981;font-weight:bold">$2,145</td></tr>
+                            <tr><td>DUXFA</td><td>SDV</td><td>Denver Internal</td><td>16.0h</td><td>$130</td><td style="color:#10b981;font-weight:bold">$2,080</td></tr>
+                            <tr><td>CV5EA</td><td>SDN</td><td>Precision Aircraft</td><td>4.5h</td><td>$218</td><td style="color:#10b981;font-weight:bold">$981</td></tr>
+                            <tr><td>CV78A</td><td>SDV</td><td>Primus Capital</td><td>7.0h</td><td>$130</td><td style="color:#10b981;font-weight:bold">$910</td></tr>
+                            <tr><td colspan="3"><em>+ 15 more WOs with smaller WIP...</em></td><td>43.4h</td><td>-</td><td style="color:#10b981;font-weight:bold">$8,215</td></tr>
+                            <tr style="background:rgba(16,185,129,0.25);font-weight:bold;font-size:1.1em;">
+                                <td colspan="3">TOTAL WIP</td>
+                                <td>350.4h</td>
+                                <td>-</td>
+                                <td style="color:#10b981;font-size:1.2em;">$59,424</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
             
+            <!-- SIMPLE ACTION BOX -->
             <div class="card">
                 <div class="card-header">
-                    <span class="card-title">WIP Aging (Over 30 Days)</span>
-                    <span class="badge badge-amber">3 WOs</span>
+                    <span class="card-title">⚡ Quick Actions</span>
                 </div>
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr><th>WO</th><th>Shop</th><th>Days</th><th>WIP Value</th><th>Status</th><th>Notes</th></tr>
-                        </thead>
-                        <tbody>
-                            <tr style="background:rgba(16,185,129,0.2)"><td>DTBLA</td><td>SDV</td><td>40</td><td>$6,600</td><td><span class="badge badge-green">BILLED</span></td><td>Billed 01/26/26</td></tr>
-                            <tr><td>DSW4A</td><td>SDN</td><td>48</td><td>$52,763</td><td><span class="badge badge-amber">PENDING</span></td><td>Will Bill EOM</td></tr>
-                            <tr style="background:rgba(239,68,68,0.2)"><td>CG4NA</td><td>SDN</td><td>187</td><td>$2,486</td><td><span class="badge badge-red">DISPUTE</span></td><td>Kauffman ICU - Credit notified</td></tr>
-                        </tbody>
-                    </table>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:15px;">
+                    <div style="background:rgba(16,185,129,0.15);padding:15px;border-radius:8px;border:1px solid #10b981;">
+                        <div style="font-weight:bold;color:#10b981;margin-bottom:8px;">✅ To Increase Revenue:</div>
+                        <div style="color:#e2e8f0;font-size:0.9em;">
+                            1. Review open WOs with high WIP<br>
+                            2. Bill completed work → WIP becomes revenue<br>
+                            3. Push WOs stuck in "Part Ord" or "Tentative"
+                        </div>
+                    </div>
+                    <div style="background:rgba(239,68,68,0.15);padding:15px;border-radius:8px;border:1px solid #ef4444;">
+                        <div style="font-weight:bold;color:#ef4444;margin-bottom:8px;">⚠️ Watch Out For:</div>
+                        <div style="color:#e2e8f0;font-size:0.9em;">
+                            1. WOs over 30 days (notify BZ)<br>
+                            2. Jobs running more hours than quoted<br>
+                            3. Disputed/problem WOs eating labor
+                        </div>
+                    </div>
                 </div>
             </div>
             
+            <!-- HOW WIP WORKS -->
             <div class="card">
                 <div class="card-header">
-                    <span class="card-title">Monthly Revenue Recognition</span>
+                    <span class="card-title">📝 How WIP Works</span>
                 </div>
-                <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;text-align:center;">
-                    <div style="background:rgba(16,185,129,0.2);padding:10px;border-radius:8px;">
-                        <div style="font-size:1.5em;font-weight:bold;">$694K</div>
-                        <div style="color:#94a3b8;font-size:0.8em;">Jan Budget</div>
+                <div style="font-family:monospace;background:#0f172a;padding:20px;border-radius:8px;font-size:1em;line-height:1.8;">
+                    <div style="color:#94a3b8;">WIP Calculation:</div>
+                    <div style="margin-left:20px;">
+                        <span style="color:#60a5fa;">Hours worked on open WO</span> × <span style="color:#f59e0b;">Shop ELR rate</span> = <span style="color:#10b981;">WIP Value</span>
                     </div>
-                    <div style="background:rgba(99,102,241,0.2);padding:10px;border-radius:8px;">
-                        <div style="font-size:1.5em;font-weight:bold;">$662K</div>
-                        <div style="color:#94a3b8;font-size:0.8em;">Feb Budget</div>
+                    <div style="margin-top:15px;color:#94a3b8;">Example:</div>
+                    <div style="margin-left:20px;">
+                        <span style="color:#60a5fa;">35.5 hours</span> × <span style="color:#f59e0b;">$218 (SDN rate)</span> = <span style="color:#10b981;">$7,739 WIP</span>
                     </div>
-                    <div style="background:rgba(99,102,241,0.2);padding:10px;border-radius:8px;">
-                        <div style="font-size:1.5em;font-weight:bold;">$730K</div>
-                        <div style="color:#94a3b8;font-size:0.8em;">Mar Budget</div>
+                    <div style="margin-top:15px;border-top:1px solid #334155;padding-top:15px;">
+                        <span style="color:#94a3b8;">When WO bills → </span><span style="color:#10b981;">WIP becomes Revenue ✓</span>
                     </div>
-                    <div style="background:rgba(245,158,11,0.2);padding:10px;border-radius:8px;">
-                        <div style="font-size:1.5em;font-weight:bold;">$8.43M</div>
-                        <div style="color:#94a3b8;font-size:0.8em;">2026 Total</div>
+                </div>
+                <div style="margin-top:15px;display:grid;grid-template-columns:repeat(4,1fr);gap:10px;text-align:center;">
+                    <div style="background:#1e293b;padding:10px;border-radius:6px;">
+                        <div style="color:#3b82f6;font-weight:bold;">SDN</div>
+                        <div style="color:#94a3b8;font-size:0.9em;">$218/hr</div>
+                    </div>
+                    <div style="background:#1e293b;padding:10px;border-radius:6px;">
+                        <div style="color:#10b981;font-weight:bold;">SDV</div>
+                        <div style="color:#94a3b8;font-size:0.9em;">$130/hr</div>
+                    </div>
+                    <div style="background:#1e293b;padding:10px;border-radius:6px;">
+                        <div style="color:#f97316;font-weight:bold;">SDR</div>
+                        <div style="color:#94a3b8;font-size:0.9em;">$176/hr</div>
+                    </div>
+                    <div style="background:#1e293b;padding:10px;border-radius:6px;">
+                        <div style="color:#a855f7;font-weight:bold;">SHC</div>
+                        <div style="color:#94a3b8;font-size:0.9em;">$218/hr</div>
                     </div>
                 </div>
             </div>
