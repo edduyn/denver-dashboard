@@ -49,6 +49,7 @@
         .tab-quotes { border-left: 3px solid #ec4899; }
         .tab-quality { border-left: 3px solid #06b6d4; }
         .tab-rankings { border-left: 3px solid #eab308; }
+        .tab-wip { border-left: 3px solid #22c55e; }
         .tab-training { border-left: 3px solid #a855f7; }
         
         /* Content */
@@ -161,6 +162,7 @@
             <div class="tab tab-workorders" data-tab="workorders">📋 Work Orders</div>
             <div class="tab tab-training" data-tab="training">📚 Training</div>
             <div class="tab tab-quality" data-tab="quality">✅ Quality</div>
+            <div class="tab tab-wip" data-tab="wip">💰 WIP</div>
             <div class="tab tab-rankings" data-tab="rankings">🏆 Rankings</div>
         </div>
         
@@ -691,6 +693,105 @@
             </div>
         </div>
         
+        <!-- WIP TAB -->
+        <div class="content" id="wip">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">💰 Work In Progress (WIP) Tracking</span>
+                    <span class="badge badge-green">WIP Rate: $145/hr</span>
+                </div>
+                <p style="color:#94a3b8;margin-bottom:15px;font-size:0.9em;">
+                    <strong>WIP Formula:</strong> Unbilled Labor Hours × $145 = Estimated WIP Value<br>
+                    Revenue recognized when WO is billed. Monthly WIP review on last Friday.
+                </p>
+                <div class="card-grid">
+                    <div class="metric">
+                        <div class="metric-value">$75.5K</div>
+                        <div class="metric-label">Current WIP</div>
+                        <div class="metric-sub">521h × $145</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">$101K</div>
+                        <div class="metric-label">Billed MTD</div>
+                        <div class="metric-sub">Jan 2026</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">$694K</div>
+                        <div class="metric-label">Budget Target</div>
+                        <div class="metric-sub">January</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">15%</div>
+                        <div class="metric-label">% of Budget</div>
+                        <div class="metric-sub">5 days remaining</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">WIP by Shop</span>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr><th>Shop</th><th>Unbilled Hrs</th><th>WIP Rate</th><th>Est. WIP Value</th><th>% of Total</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>SDN (Line)</td><td>199.6h</td><td>$218</td><td>$43,513</td><td>38%</td></tr>
+                            <tr><td>SDV (Install)</td><td>179.0h</td><td>$130</td><td>$23,270</td><td>20%</td></tr>
+                            <tr><td>SDR (Recip)</td><td>132.0h</td><td>$176</td><td>$23,232</td><td>20%</td></tr>
+                            <tr><td>SHC (High Country)</td><td>10.0h</td><td>$218</td><td>$2,180</td><td>2%</td></tr>
+                            <tr style="background:rgba(99,102,241,0.2);font-weight:bold"><td>TOTAL</td><td>521h</td><td>$145 avg</td><td>$92,195</td><td>100%</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">WIP Aging (Over 30 Days)</span>
+                    <span class="badge badge-amber">3 WOs</span>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr><th>WO</th><th>Shop</th><th>Days</th><th>WIP Value</th><th>Status</th><th>Notes</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr style="background:rgba(16,185,129,0.2)"><td>DTBLA</td><td>SDV</td><td>40</td><td>$6,600</td><td><span class="badge badge-green">BILLED</span></td><td>Billed 01/26/26</td></tr>
+                            <tr><td>DSW4A</td><td>SDN</td><td>48</td><td>$52,763</td><td><span class="badge badge-amber">PENDING</span></td><td>Will Bill EOM</td></tr>
+                            <tr style="background:rgba(239,68,68,0.2)"><td>CG4NA</td><td>SDN</td><td>187</td><td>$2,486</td><td><span class="badge badge-red">DISPUTE</span></td><td>Kauffman ICU - Credit notified</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Monthly Revenue Recognition</span>
+                </div>
+                <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;text-align:center;">
+                    <div style="background:rgba(16,185,129,0.2);padding:10px;border-radius:8px;">
+                        <div style="font-size:1.5em;font-weight:bold;">$694K</div>
+                        <div style="color:#94a3b8;font-size:0.8em;">Jan Budget</div>
+                    </div>
+                    <div style="background:rgba(99,102,241,0.2);padding:10px;border-radius:8px;">
+                        <div style="font-size:1.5em;font-weight:bold;">$662K</div>
+                        <div style="color:#94a3b8;font-size:0.8em;">Feb Budget</div>
+                    </div>
+                    <div style="background:rgba(99,102,241,0.2);padding:10px;border-radius:8px;">
+                        <div style="font-size:1.5em;font-weight:bold;">$730K</div>
+                        <div style="color:#94a3b8;font-size:0.8em;">Mar Budget</div>
+                    </div>
+                    <div style="background:rgba(245,158,11,0.2);padding:10px;border-radius:8px;">
+                        <div style="font-size:1.5em;font-weight:bold;">$8.43M</div>
+                        <div style="color:#94a3b8;font-size:0.8em;">2026 Total</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
         <!-- RANKINGS TAB -->
         <div class="content" id="rankings">
             <div class="card">
@@ -738,7 +839,7 @@
         let scrollInterval;
         let pauseTimeout;
         let currentTab = 0;
-        const tabs = ['goals', 'actions', 'overview', 'employees', 'workorders', 'training', 'quality', 'rankings'];
+        const tabs = ['goals', 'actions', 'overview', 'employees', 'workorders', 'training', 'quality', 'wip', 'rankings'];
         
         // Auto-refresh every 10 minutes
         setTimeout(() => location.reload(), 600000);
