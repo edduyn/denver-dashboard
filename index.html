@@ -444,9 +444,43 @@
                     </table>
                 </div>
                 
-                <div style="margin-top:15px;display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-                    <a href="https://form.jotform.com/231574976012155" target="_blank" style="background:#a855f7;color:white;padding:12px;border-radius:6px;text-decoration:none;font-weight:bold;text-align:center;">📋 Survey Link</a>
-                    <a href="mailto:ths@masd.metrea.aero?subject=Quick%20Feedback%20Request%20-%20DTBLA%20Service%20at%20Duncan%20Aviation%20Denver&body=Hi%2C%0A%0AThank%20you%20for%20choosing%20Duncan%20Aviation%20Denver%20for%20your%20recent%20service%20on%20WO%23%20DTBLA.%0A%0AHelp%20us%20make%20improvements%20by%20filling%20out%20a%20quick%208-question%20survey%3A%0A%0Ahttps%3A%2F%2Fform.jotform.com%2F231574976012155%0A%0AInclude%20your%20phone%20number%20in%20the%20comments%20to%20be%20added%20to%20the%20monthly%20prize%20raffle.%0A%0ABest%20Regards%2C%0AEdduyn%20Pita%0ADenver%20Satellite%20Shop%0ADuncan%20Aviation" style="background:#10b981;color:white;padding:12px;border-radius:6px;text-decoration:none;font-weight:bold;text-align:center;">📧 Send Email</a>
+                <div style="margin-top:15px;">
+                    <a href="https://form.jotform.com/231574976012155" target="_blank" style="display:block;background:#a855f7;color:white;padding:12px;border-radius:6px;text-decoration:none;font-weight:bold;text-align:center;margin-bottom:10px;">📋 Open Survey Form</a>
+                </div>
+                
+                <div style="background:#1e293b;padding:15px;border-radius:8px;margin-top:10px;">
+                    <div style="color:#60a5fa;font-weight:bold;margin-bottom:10px;">📧 Copy for Outlook Web:</div>
+                    <div style="margin-bottom:8px;">
+                        <span style="color:#94a3b8;font-size:0.85em;">To:</span>
+                        <span style="color:#fbbf24;font-family:monospace;" id="emailTo">ths@masd.metrea.aero</span>
+                        <button onclick="navigator.clipboard.writeText('ths@masd.metrea.aero');this.innerText='✓ Copied!';setTimeout(()=>this.innerText='Copy',1500);" style="background:#475569;color:white;border:none;padding:2px 8px;border-radius:4px;font-size:0.75em;cursor:pointer;margin-left:5px;">Copy</button>
+                    </div>
+                    <div style="margin-bottom:8px;">
+                        <span style="color:#94a3b8;font-size:0.85em;">Subject:</span>
+                        <span style="color:#e2e8f0;font-size:0.9em;">Quick Feedback Request - DTBLA Service at Duncan Aviation Denver</span>
+                        <button onclick="navigator.clipboard.writeText('Quick Feedback Request - DTBLA Service at Duncan Aviation Denver');this.innerText='✓ Copied!';setTimeout(()=>this.innerText='Copy',1500);" style="background:#475569;color:white;border:none;padding:2px 8px;border-radius:4px;font-size:0.75em;cursor:pointer;margin-left:5px;">Copy</button>
+                    </div>
+                </div>
+                
+                <div style="background:#0f172a;padding:15px;border-radius:8px;margin-top:10px;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                        <span style="color:#60a5fa;font-weight:bold;">📝 Email Body:</span>
+                        <button onclick="navigator.clipboard.writeText(document.getElementById('emailBodyText').innerText);this.innerText='✓ Copied!';setTimeout(()=>this.innerText='Copy All',1500);" style="background:#10b981;color:white;border:none;padding:5px 12px;border-radius:4px;font-size:0.85em;cursor:pointer;font-weight:bold;">Copy All</button>
+                    </div>
+                    <div id="emailBodyText" style="color:#e2e8f0;font-size:0.85em;line-height:1.6;white-space:pre-wrap;background:#1e293b;padding:10px;border-radius:6px;">Hi,
+
+Thank you for choosing Duncan Aviation Denver for your recent service on WO# DTBLA.
+
+Help us make improvements to our service by filling out a quick 8-question survey for the Denver Satellite Shop.
+
+https://form.jotform.com/231574976012155
+
+Include your phone number in the comments to be added to the monthly prize raffle.
+
+Best Regards,
+Edduyn Pita
+Denver Satellite Shop
+Duncan Aviation</div>
                 </div>
             </div>
         </div>
@@ -1305,45 +1339,4 @@
         }
         
         function pauseScroll() {
-            if (!isRotating) return;
-            isPaused = true;
-            updateStatus();
-            clearTimeout(pauseTimeout);
-            pauseTimeout = setTimeout(() => {
-                isPaused = false;
-                updateStatus();
-            }, 34500); // 34.5 sec (15% slower)
-        }
-        
-        function resumeScroll() {
-            isPaused = false;
-            clearTimeout(pauseTimeout);
-            updateStatus();
-        }
-        
-        // Tab click handlers
-        document.querySelectorAll('.tab').forEach(tab => {
-            tab.addEventListener('click', () => {
-                const tabId = tab.dataset.tab;
-                currentTab = tabs.indexOf(tabId);
-                switchTab(tabId);
-            });
-        });
-        
-        // Tap to pause/resume
-        document.addEventListener('click', (e) => {
-            if (!isRotating) return;
-            if (e.target.closest('.header') || e.target.closest('.tabs')) return;
-            if (isPaused) resumeScroll();
-            else pauseScroll();
-        });
-        
-        // Check saved auth
-        if (localStorage.getItem('denver_auth') === 'true') {
-            document.getElementById('loginScreen').style.display = 'none';
-            document.getElementById('dashboard').style.display = 'block';
-            startAutoRotate();
-        }
-    </script>
-</body>
-</html>
+            if (!isRotating
