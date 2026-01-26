@@ -208,15 +208,15 @@
                     <div class="goal-header">
                         <span class="goal-title">#3 Training Completion (Mandatory + Technical)</span>
                         <div class="goal-progress">
-                            <span class="goal-pct" style="color:#10b981">100%</span>
-                            <span class="badge badge-green">On Track</span>
+                            <span class="goal-pct" style="color:#f59e0b">69%</span>
+                            <span class="badge badge-amber">In Progress</span>
                         </div>
                     </div>
                     <div class="progress-container">
-                        <div class="progress-bar"><div class="progress-fill progress-green" style="width:100%"></div></div>
+                        <div class="progress-bar"><div class="progress-fill progress-amber" style="width:69%"></div></div>
                     </div>
-                    <div>Mandatory: 14/14 compliant | Technical: 3/8 scheduled</div>
-                    <div class="goal-notes">✅ Team 100% compliant on mandatory. 3 techs have dates selected for technical training.</div>
+                    <div>Mandatory: 14/14 compliant (100%) | Technical: 3/8 scheduled (38%)</div>
+                    <div class="goal-notes">✅ Mandatory complete. ⚠️ 5 techs still need technical training dates scheduled.</div>
                 </div>
                 
                 <div class="goal-card">
@@ -656,25 +656,29 @@
         <div class="content" id="training">
             <div class="card">
                 <div class="card-header">
-                    <span class="card-title">2026 Approved Training Budget</span>
-                    <span class="badge badge-green">PDT Approved</span>
+                    <span class="card-title">2026 Training Status</span>
+                    <span class="badge badge-amber">69% Complete</span>
                 </div>
                 <div class="card-grid">
                     <div class="metric">
-                        <div class="metric-value">8</div>
-                        <div class="metric-label">Techs Approved</div>
+                        <div class="metric-value" style="color:#10b981">14/14</div>
+                        <div class="metric-label">Mandatory</div>
+                        <div class="metric-sub">100% Compliant ✅</div>
                     </div>
                     <div class="metric">
-                        <div class="metric-value">3</div>
-                        <div class="metric-label">Scheduled</div>
+                        <div class="metric-value" style="color:#f59e0b">3/8</div>
+                        <div class="metric-label">Technical Scheduled</div>
+                        <div class="metric-sub">38% - Need 5 more</div>
                     </div>
                     <div class="metric">
                         <div class="metric-value">0</div>
-                        <div class="metric-label">Completed</div>
+                        <div class="metric-label">Completed YTD</div>
+                        <div class="metric-sub">First: Jan 28-29</div>
                     </div>
                     <div class="metric">
-                        <div class="metric-value">14/14</div>
-                        <div class="metric-label">Mandatory Compliant</div>
+                        <div class="metric-value" style="color:#ef4444">5</div>
+                        <div class="metric-label">Need Dates</div>
+                        <div class="metric-sub">Action Required</div>
                     </div>
                 </div>
             </div>
@@ -682,6 +686,7 @@
             <div class="card">
                 <div class="card-header">
                     <span class="card-title">Technical Training Schedule (from Cassie/PDT)</span>
+                    <span class="badge badge-amber">5 Need Dates</span>
                 </div>
                 <div class="table-container">
                     <table>
@@ -689,16 +694,19 @@
                             <tr><th>Employee</th><th>Course</th><th>Location</th><th>Dates</th><th>Status</th></tr>
                         </thead>
                         <tbody>
-                            <tr><td>Armando Triana-Cruz</td><td>Honeywell Primus EPIC Line Maint</td><td>Dallas, TX</td><td>Apr 27 - May 1</td><td><span class="badge badge-green">Scheduled</span></td></tr>
-                            <tr><td>Michael Hannas</td><td>Collins Pro Line 21 Challenger</td><td>TBD</td><td>TBD</td><td><span class="badge badge-gray">Medical Leave</span></td></tr>
-                            <tr><td>Michael Huber</td><td>Virtual Garmin G3000/G5000</td><td>Virtual</td><td>Jan 28-29</td><td><span class="badge badge-green">Scheduled</span></td></tr>
-                            <tr><td>Julia Langford</td><td>Virtual Garmin G3000/G5000</td><td>Virtual</td><td>Pending</td><td><span class="badge badge-amber">Select Dates</span></td></tr>
-                            <tr><td>Jose Noris</td><td>Virtual Garmin G1000 NXi</td><td>Virtual</td><td>Feb 26-27</td><td><span class="badge badge-green">Scheduled</span></td></tr>
-                            <tr><td>Ken Smith</td><td>Virtual Gogo Dealer Training</td><td>Virtual</td><td>TBD</td><td><span class="badge badge-amber">Dates TBD</span></td></tr>
-                            <tr><td>John Watson</td><td>aeroIT Certification</td><td>TBD</td><td>TBD</td><td><span class="badge badge-amber">Dates TBD</span></td></tr>
-                            <tr><td>Juan Medina</td><td>Composite Repair</td><td>Lincoln, NE</td><td>TBD</td><td><span class="badge badge-amber">Dates TBD</span></td></tr>
+                            <tr style="background:rgba(16,185,129,0.15)"><td>Armando Triana-Cruz</td><td>Honeywell Primus EPIC Line Maint</td><td>Dallas, TX</td><td>Apr 27 - May 1</td><td><span class="badge badge-green">✅ Scheduled</span></td></tr>
+                            <tr style="background:rgba(16,185,129,0.15)"><td>Michael Huber</td><td>Virtual Garmin G3000/G5000</td><td>Virtual</td><td>Jan 28-29</td><td><span class="badge badge-green">✅ Scheduled</span></td></tr>
+                            <tr style="background:rgba(16,185,129,0.15)"><td>Jose Noris</td><td>Virtual Garmin G1000 NXi</td><td>Virtual</td><td>Feb 26-27</td><td><span class="badge badge-green">✅ Scheduled</span></td></tr>
+                            <tr style="background:rgba(107,114,128,0.15)"><td>Michael Hannas</td><td>Collins Pro Line 21 Challenger</td><td>TBD</td><td>TBD</td><td><span class="badge badge-gray">⏸️ Medical Leave</span></td></tr>
+                            <tr style="background:rgba(245,158,11,0.15)"><td>Julia Langford</td><td>Virtual Garmin G3000/G5000</td><td>Virtual</td><td>Pending</td><td><span class="badge badge-amber">⚠️ Select Dates</span></td></tr>
+                            <tr style="background:rgba(245,158,11,0.15)"><td>Ken Smith</td><td>Virtual Gogo Dealer Training</td><td>Virtual</td><td>TBD</td><td><span class="badge badge-amber">⚠️ Dates TBD</span></td></tr>
+                            <tr style="background:rgba(245,158,11,0.15)"><td>John Watson</td><td>aeroIT Certification</td><td>TBD</td><td>TBD</td><td><span class="badge badge-amber">⚠️ Dates TBD</span></td></tr>
+                            <tr style="background:rgba(245,158,11,0.15)"><td>Juan Medina</td><td>Composite Repair</td><td>Lincoln, NE</td><td>TBD</td><td><span class="badge badge-amber">⚠️ Dates TBD</span></td></tr>
                         </tbody>
                     </table>
+                </div>
+                <div style="background:#451a03;padding:10px;border-radius:6px;margin-top:10px;font-size:0.9em;color:#fef3c7;">
+                    <strong>⚠️ Action Required:</strong> Contact Cassie/PDT to schedule dates for Julia, Ken, John, and Juan. (Michael Hannas on hold due to medical leave.)
                 </div>
             </div>
         </div>
