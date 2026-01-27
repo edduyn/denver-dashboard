@@ -277,19 +277,19 @@
                     <div class="goal-notes">📊 Expense data available after month-end financial reports.</div>
                 </div>
                 
-                <div class="goal-card">
+                <div class="goal-card" style="border:2px solid #ef4444;">
                     <div class="goal-header">
                         <span class="goal-title">#7 FAA/Internal Audits - Zero Findings</span>
                         <div class="goal-progress">
-                            <span class="goal-pct" style="color:#94a3b8">N/A</span>
-                            <span class="badge badge-gray">No Audits Yet</span>
+                            <span class="goal-pct" style="color:#ef4444">5</span>
+                            <span class="badge badge-red">5 Findings</span>
                         </div>
                     </div>
                     <div class="progress-container">
-                        <div class="progress-bar"><div class="progress-fill" style="width:0%;background:#475569"></div></div>
+                        <div class="progress-bar"><div class="progress-fill" style="width:100%;background:#ef4444"></div></div>
                     </div>
-                    <div>2026 YTD: No audits yet | 2025 Reference: 16 findings (3/7 clean audits)</div>
-                    <div class="goal-notes">⏳ Waiting for first 2026 audit. Focus areas: Parts traceability, flam locker control, tool control.</div>
+                    <div>2026 YTD: 1 audit (Jan 21) | <span style="color:#ef4444;font-weight:bold;">5 findings (1 repeat)</span></div>
+                    <div class="goal-notes">⚠️ Jan audit: Flame locker (REPEAT), parts tagging (CTQMA, CU0VA), work area. See Quality tab for corrective actions.</div>
                 </div>
                 
                 <div class="goal-card" style="border:2px solid #f59e0b;">
@@ -1004,13 +1004,165 @@
         
         <!-- QUALITY TAB -->
         <div class="content" id="quality">
+            <!-- JANUARY 2026 AUDIT RESULTS -->
+            <div class="card" style="border:2px solid #ef4444;">
+                <div class="card-header">
+                    <span class="card-title">🔴 January 2026 AFL Audit Results</span>
+                    <span class="badge badge-red">5 Findings</span>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:15px;margin-bottom:15px;">
+                    <div style="background:#1e293b;padding:12px;border-radius:8px;text-align:center;">
+                        <div style="color:#94a3b8;font-size:0.85em;">Audit Date</div>
+                        <div style="color:#60a5fa;font-size:1.3em;font-weight:bold;">Jan 21, 2026</div>
+                    </div>
+                    <div style="background:#1e293b;padding:12px;border-radius:8px;text-align:center;">
+                        <div style="color:#94a3b8;font-size:0.85em;">Auditor</div>
+                        <div style="color:#e2e8f0;font-size:1.1em;font-weight:bold;">Chris Demarest</div>
+                    </div>
+                    <div style="background:rgba(239,68,68,0.2);padding:12px;border-radius:8px;text-align:center;border:1px solid #ef4444;">
+                        <div style="color:#fca5a5;font-size:0.85em;">Findings</div>
+                        <div style="color:#ef4444;font-size:1.8em;font-weight:bold;">5</div>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr><th>Item</th><th>Issue</th><th>WO#</th><th>Details</th><th>Status</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr style="background:rgba(251,191,36,0.2);">
+                                <td style="color:#fbbf24;font-weight:bold;">1.1 + 1.10</td>
+                                <td>Flame Locker Checklist</td>
+                                <td>-</td>
+                                <td>In/Out checklist incomplete - <span style="color:#fbbf24;font-weight:bold;">⚠️ REPEAT from Dec 2025</span></td>
+                                <td><span class="badge badge-red">Open</span></td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight:bold;">2.9</td>
+                                <td>Parts Segregation</td>
+                                <td style="color:#60a5fa;">CTQMA</td>
+                                <td>Unserviceable hoses mixed with serviceable parts, not tagged</td>
+                                <td><span class="badge badge-red">Open</span></td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight:bold;">1.3</td>
+                                <td>Parts Storage</td>
+                                <td style="color:#60a5fa;">CTQMA</td>
+                                <td>Vendor parts in blue bin piled up, not documented in WO</td>
+                                <td><span class="badge badge-red">Open</span></td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight:bold;">1.4</td>
+                                <td>Work Area Cleanliness</td>
+                                <td>-</td>
+                                <td>Heat shrink scraps left on work table</td>
+                                <td><span class="badge badge-red">Open</span></td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight:bold;">1.3</td>
+                                <td>Parts Tagging</td>
+                                <td style="color:#60a5fa;">CU0VA</td>
+                                <td>Panels in unmarked cart, not tagged, not in AS400 removal tab</td>
+                                <td><span class="badge badge-red">Open</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div style="background:rgba(251,191,36,0.15);padding:10px;border-radius:6px;margin-top:10px;border:1px solid #fbbf24;">
+                    <strong style="color:#fbbf24;">⚠️ REPEAT FINDING:</strong> <span style="color:#fef3c7;">Flame locker In/Out checklist was cited in Dec 2025 audit. Work was started but abandoned. This is a compliance priority.</span>
+                </div>
+            </div>
+            
+            <!-- CORRECTIVE ACTION TRACKER -->
+            <div class="card" style="border:2px solid #f59e0b;">
+                <div class="card-header">
+                    <span class="card-title">📋 Corrective Action Tracker - January 2026 Audit</span>
+                    <span class="badge badge-amber">0/5 Closed</span>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr><th>Finding</th><th>Corrective Action</th><th>Owner</th><th>Due Date</th><th>Status</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr style="background:rgba(251,191,36,0.15);">
+                                <td style="color:#fbbf24;font-weight:bold;">1.1/1.10 REPEAT</td>
+                                <td>Complete flame locker In/Out checklist implementation. Train all techs on procedure.</td>
+                                <td>Edduyn</td>
+                                <td style="color:#ef4444;">Feb 7</td>
+                                <td><span class="badge badge-amber">In Progress</span></td>
+                            </tr>
+                            <tr>
+                                <td>2.9 Parts Segregation</td>
+                                <td>Create designated unserviceable parts area. Retrain team on RSGOM PP-14.</td>
+                                <td>Jose</td>
+                                <td>Feb 14</td>
+                                <td><span class="badge badge-red">Not Started</span></td>
+                            </tr>
+                            <tr>
+                                <td>1.3 Parts Storage</td>
+                                <td>Update CTQMA work order with vendor parts. Implement parts documentation SOP.</td>
+                                <td>John Watson</td>
+                                <td>Feb 7</td>
+                                <td><span class="badge badge-red">Not Started</span></td>
+                            </tr>
+                            <tr>
+                                <td>1.4 Work Area</td>
+                                <td>Implement end-of-shift cleanup checklist. Daily walk-through before close.</td>
+                                <td>Ken</td>
+                                <td>Feb 7</td>
+                                <td><span class="badge badge-red">Not Started</span></td>
+                            </tr>
+                            <tr>
+                                <td>1.3 Parts Tagging</td>
+                                <td>Update CU0VA with panel removals in AS400. Retrain on parts tagging requirements.</td>
+                                <td>Jose</td>
+                                <td>Feb 7</td>
+                                <td><span class="badge badge-red">Not Started</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div style="background:#0f172a;padding:10px;border-radius:6px;margin-top:10px;font-size:0.85em;color:#94a3b8;">
+                    📧 <strong>Report to:</strong> Chris Demarest (Audit Dept) | <strong>Next audit:</strong> ~Feb/Mar 2026 | <strong>Goal:</strong> Close all findings before next audit
+                </div>
+            </div>
+            
+            <!-- 2026 YTD SUMMARY -->
             <div class="card">
                 <div class="card-header">
-                    <span class="card-title">Goal #7: Quality & Audit Performance</span>
-                    <span class="badge badge-gray">2026: No Audits Yet</span>
+                    <span class="card-title">Goal #7: 2026 Audit Performance</span>
+                    <span class="badge badge-red">5 Findings YTD</span>
                 </div>
-                <div style="background:#1e293b;padding:10px;border-radius:6px;margin-bottom:15px;font-size:0.9em;color:#94a3b8;">
-                    ⏳ <strong>2026 Status:</strong> Waiting for first audit. Data below is 2025 reference for focus areas.
+                <div class="card-grid">
+                    <div class="metric">
+                        <div class="metric-value" style="color:#ef4444">0%</div>
+                        <div class="metric-label">Clean Audits</div>
+                        <div class="metric-sub">2026 YTD (0/1)</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" style="color:#ef4444">5</div>
+                        <div class="metric-label">Total Findings</div>
+                        <div class="metric-sub">2026 YTD</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" style="color:#fbbf24">1</div>
+                        <div class="metric-label">Repeat Findings</div>
+                        <div class="metric-sub">From Dec 2025</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" style="color:#ef4444">0</div>
+                        <div class="metric-label">Closed</div>
+                        <div class="metric-sub">Corrective Actions</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 2025 REFERENCE DATA -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">📊 2025 Reference Data</span>
+                    <span class="badge badge-gray">Historical</span>
                 </div>
                 <div class="card-grid">
                     <div class="metric">
@@ -1046,8 +1198,8 @@
                             <tr><th>Issue</th><th>Occurrences</th><th>Action</th></tr>
                         </thead>
                         <tbody>
-                            <tr><td>Parts Traceability</td><td>5</td><td>Train on label/paperwork requirements</td></tr>
-                            <tr><td>Flammable Locker Control</td><td>3</td><td>Weekly flam locker inspection</td></tr>
+                            <tr style="background:rgba(239,68,68,0.15);"><td style="color:#ef4444;font-weight:bold;">⚠️ Flammable Locker Control</td><td style="color:#ef4444;">3 + Jan 2026</td><td>PRIORITY - Complete In/Out checklist</td></tr>
+                            <tr style="background:rgba(239,68,68,0.15);"><td style="color:#ef4444;font-weight:bold;">⚠️ Parts Traceability/Tagging</td><td style="color:#ef4444;">5 + Jan 2026</td><td>PRIORITY - Retrain team on RSGOM PP-13/14</td></tr>
                             <tr><td>Tool Control</td><td>2</td><td>Audit before QI visits</td></tr>
                             <tr><td>RTS/Paperwork</td><td>12</td><td>Tech training on documentation</td></tr>
                             <tr><td>Work Authorization</td><td>11</td><td>Verify signatures before work</td></tr>
@@ -1228,32 +1380,43 @@
                     <span class="card-title">📋 Top 10 WOs by WIP Value</span>
                     <span class="badge badge-green">Bill these → Get revenue</span>
                 </div>
+                <div style="background:#14532d;padding:10px;border-radius:6px;margin-bottom:15px;font-size:0.85em;color:#bbf7d0;">
+                    <strong style="color:#4ade80;">🤖 SMART AUTO-DETECT:</strong> Cross-references Time Sold × Anchor (OPEN) × Billed (excluded). Updates when new reports uploaded.
+                </div>
                 <div class="table-container">
                     <table>
                         <thead>
-                            <tr><th>WO#</th><th>Shop</th><th>Customer</th><th>Hours</th><th>Rate</th><th style="color:#10b981">WIP $</th></tr>
+                            <tr><th>WO#</th><th>Shop</th><th>Customer</th><th>Hours</th><th>Rate</th><th style="color:#10b981">WIP $</th><th>Notes</th></tr>
                         </thead>
                         <tbody>
-                            <tr><td>DB1UA</td><td>STI</td><td>Hogs Head Air 1 LLC</td><td>75.0h</td><td>$145</td><td style="color:#10b981;font-weight:bold">$10,875</td></tr>
-                            <tr><td>CU1EA</td><td>SDN</td><td>42K Re Management LLC</td><td>35.5h</td><td>$145</td><td style="color:#10b981;font-weight:bold">$5,148</td></tr>
-                            <tr><td>CTQMA</td><td>SDR</td><td>Robert P Husted</td><td>33.5h</td><td>$145</td><td style="color:#10b981;font-weight:bold">$4,858</td></tr>
-                            <tr style="background:rgba(16,185,129,0.25)"><td>CU16A ✅</td><td>SDN</td><td>Flying Orchard LLC <span style="color:#10b981;font-size:0.75em;">(billing this week)</span></td><td>30.5h</td><td>$145</td><td style="color:#10b981;font-weight:bold">$4,422</td></tr>
-                            <tr><td>CU0VA</td><td>SDR</td><td>The Club at Centennial</td><td>17.5h</td><td>$145</td><td style="color:#10b981;font-weight:bold">$2,538</td></tr>
-                            <tr><td>CUPFA</td><td>SDN</td><td>Flying Orchard LLC</td><td>15.9h</td><td>$145</td><td style="color:#10b981;font-weight:bold">$2,306</td></tr>
-                            <tr><td>CUL2A</td><td>SDR</td><td>Peregrine</td><td>12.5h</td><td>$145</td><td style="color:#10b981;font-weight:bold">$1,812</td></tr>
-                            <tr style="background:rgba(251,191,36,0.15)"><td>DUL0A</td><td>SDV⭐</td><td>Duncan Avionics-Denver</td><td>24.5h</td><td style="color:#fbbf24">$70</td><td style="color:#fbbf24;font-weight:bold">$1,715</td></tr>
-                            <tr><td>CU92A</td><td>SDN</td><td>Robbins Aviation</td><td>11.0h</td><td>$145</td><td style="color:#10b981;font-weight:bold">$1,595</td></tr>
-                            <tr style="background:rgba(251,191,36,0.15)"><td>CUS4A</td><td>SDV⭐</td><td>Flying Orchard LLC</td><td>21.0h</td><td style="color:#fbbf24">$70</td><td style="color:#fbbf24;font-weight:bold">$1,470</td></tr>
-                            <tr style="background:rgba(16,185,129,0.25);font-weight:bold;font-size:1.1em;">
-                                <td colspan="4">TOTAL WIP (29 WOs)</td>
-                                <td>-</td>
-                                <td style="color:#10b981;font-size:1.2em;">$44,320</td>
+                            <tr style="background:rgba(147,51,234,0.15)"><td>DB1UA 📍</td><td>SDV</td><td>Hogs Head Air 1 LLC</td><td>73.0h</td><td style="color:#a855f7">$70</td><td style="color:#a855f7;font-weight:bold">$5,110</td><td style="color:#a855f7;font-size:0.75em;">NJ shop - Juan loaned</td></tr>
+                            <tr><td>CU1EA</td><td>SDN</td><td>42K Re Management LLC</td><td>35.5h</td><td>$145</td><td style="color:#10b981;font-weight:bold">$5,148</td><td></td></tr>
+                            <tr><td>CTQMA</td><td>SDR</td><td>Robert P Husted</td><td>33.5h</td><td>$145</td><td style="color:#10b981;font-weight:bold">$4,858</td><td style="color:#f59e0b;font-size:0.75em;">⚠️ Cited in audit</td></tr>
+                            <tr style="background:rgba(16,185,129,0.25)"><td>CU16A ✅</td><td>SDN</td><td>Flying Orchard LLC</td><td>30.5h</td><td>$145</td><td style="color:#10b981;font-weight:bold">$4,422</td><td style="color:#10b981;font-size:0.75em;">Billing this week</td></tr>
+                            <tr><td>CU0VA</td><td>SDR</td><td>The Club at Centennial</td><td>17.5h</td><td>$145</td><td style="color:#10b981;font-weight:bold">$2,538</td><td style="color:#f59e0b;font-size:0.75em;">⚠️ Cited in audit</td></tr>
+                            <tr><td>CUPFA</td><td>SDN</td><td>Flying Orchard LLC</td><td>15.9h</td><td>$145</td><td style="color:#10b981;font-weight:bold">$2,306</td><td></td></tr>
+                            <tr style="background:rgba(251,191,36,0.15)"><td>DUXFA</td><td>SDV⭐</td><td>Duncan Avionics-Denver</td><td>16.0h</td><td style="color:#fbbf24">$70</td><td style="color:#fbbf24;font-weight:bold">$1,120</td><td style="color:#64748b;font-size:0.75em;">Denver controlled</td></tr>
+                            <tr><td>CUL2A</td><td>SDR</td><td>Peregrine</td><td>12.5h</td><td>$145</td><td style="color:#10b981;font-weight:bold">$1,812</td><td></td></tr>
+                            <tr><td>CU92A</td><td>SDN</td><td>Robbins Aviation</td><td>15.0h</td><td>$145</td><td style="color:#10b981;font-weight:bold">$2,175</td><td></td></tr>
+                            <tr><td>CU3LA</td><td>SDN</td><td>Jetsetter Aviation</td><td>10.5h</td><td>$145</td><td style="color:#10b981;font-weight:bold">$1,523</td><td></td></tr>
+                            <tr style="background:rgba(16,185,129,0.2);font-weight:bold;font-size:1.1em;">
+                                <td colspan="5">TOTAL TOP 10 WIP</td>
+                                <td style="color:#10b981;font-size:1.2em;">$31,012</td>
+                                <td></td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
+                <div style="background:#0f172a;padding:10px;border-radius:6px;margin-top:10px;font-size:0.8em;color:#94a3b8;">
+                    <strong style="color:#a855f7;">🤖 AUTO-DETECT LOGIC:</strong><br>
+                    1️⃣ Time Sold report → Get all hours by WO<br>
+                    2️⃣ Anchor report → Filter OPEN WOs only<br>
+                    3️⃣ Billed report → EXCLUDE already billed WOs<br>
+                    4️⃣ Sort by WIP value → Show top 10<br>
+                    <span style="color:#4ade80;">✅ Last verified: 01/28/26 | Excluded: CUS4A (billed 01/27), DTBLA (billed 01/26)</span>
+                </div>
                 <div style="background:#1e293b;padding:10px;border-radius:6px;margin-top:10px;font-size:0.85em;color:#e2e8f0;">
-                    <span style="color:#fbbf24;">⭐ SDV</span> = Special WIP @ $70/hr. All others @ $145/hr standard rate.
+                    <span style="color:#fbbf24;">⭐ SDV</span> = Special WIP @ $70/hr | <span style="color:#a855f7;">📍 NJ</span> = Loaned hours (no billing control) | <span style="color:#f59e0b;">⚠️ Audit</span> = Cited in Jan audit
                 </div>
             </div>
             
