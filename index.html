@@ -390,15 +390,42 @@
             <div class="card" style="border:2px solid #a855f7;">
                 <div class="card-header">
                     <span class="card-title">⭐ NPS Survey - Goal #2</span>
-                    <span class="badge badge-red">Jan: 0/1 ⚠️</span>
+                    <span class="badge" id="npsBadge" style="background:#ef4444;">Jan: 0/1 ⚠️</span>
                 </div>
-                <div style="background:#14532d;padding:12px;border-radius:8px;margin-bottom:15px;">
-                    <strong style="color:#86efac;">🚀 ONE-CLICK EMAIL:</strong>
-                    <span style="color:#bbf7d0;">Enter details below, click Send → Outlook Web opens with email ready!</span>
+                
+                <!-- Stats Banner -->
+                <div id="npsStats" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:15px;">
+                    <div style="background:#1e293b;padding:10px;border-radius:8px;text-align:center;">
+                        <div style="color:#94a3b8;font-size:0.7em;">SENT</div>
+                        <div id="statSent" style="color:#60a5fa;font-size:1.5em;font-weight:bold;">0</div>
+                    </div>
+                    <div style="background:#1e293b;padding:10px;border-radius:8px;text-align:center;">
+                        <div style="color:#94a3b8;font-size:0.7em;">COMPLETED</div>
+                        <div id="statCompleted" style="color:#10b981;font-size:1.5em;font-weight:bold;">0</div>
+                    </div>
+                    <div style="background:#1e293b;padding:10px;border-radius:8px;text-align:center;">
+                        <div style="color:#94a3b8;font-size:0.7em;">PENDING</div>
+                        <div id="statPending" style="color:#f59e0b;font-size:1.5em;font-weight:bold;">0</div>
+                    </div>
+                    <div style="background:#1e293b;padding:10px;border-radius:8px;text-align:center;">
+                        <div style="color:#94a3b8;font-size:0.7em;">RATE</div>
+                        <div id="statRate" style="color:#a855f7;font-size:1.5em;font-weight:bold;">-</div>
+                    </div>
                 </div>
                 
                 <div style="background:linear-gradient(135deg,#581c87,#7c3aed);padding:20px;border-radius:10px;margin-bottom:15px;">
                     <div style="color:#e9d5ff;font-size:0.9em;margin-bottom:15px;font-weight:bold;">📧 SEND NPS SURVEY</div>
+                    
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-bottom:10px;">
+                        <div>
+                            <label style="color:#c4b5fd;font-size:0.8em;display:block;margin-bottom:5px;">Customer Name *</label>
+                            <input type="text" id="npsCustomerName" placeholder="Peregrine" style="width:100%;padding:10px;border-radius:6px;border:none;background:#1e1b4b;color:white;font-size:1em;">
+                        </div>
+                        <div>
+                            <label style="color:#c4b5fd;font-size:0.8em;display:block;margin-bottom:5px;">WO# (optional)</label>
+                            <input type="text" id="npsWO" placeholder="DTBLA" style="width:100%;padding:10px;border-radius:6px;border:none;background:#1e1b4b;color:white;font-size:1em;text-transform:uppercase;">
+                        </div>
+                    </div>
                     
                     <div style="display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-bottom:15px;">
                         <div>
@@ -411,19 +438,44 @@
                         </div>
                     </div>
                     
-                    <button id="sendNpsSurveyBtn" style="width:100%;padding:15px;background:linear-gradient(135deg,#10b981,#059669);color:white;border:none;border-radius:8px;font-size:1.1em;font-weight:bold;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;">
-                        📧 Send Survey Email (Opens Outlook Web)
-                    </button>
+                    <div style="display:grid;grid-template-columns:2fr 1fr;gap:10px;">
+                        <button id="sendNpsSurveyBtn" style="padding:15px;background:linear-gradient(135deg,#10b981,#059669);color:white;border:none;border-radius:8px;font-size:1em;font-weight:bold;cursor:pointer;">
+                            📧 Send & Log Survey
+                        </button>
+                        <button id="logOnlyBtn" style="padding:15px;background:#475569;color:white;border:none;border-radius:8px;font-size:0.9em;cursor:pointer;">
+                            📝 Log Only
+                        </button>
+                    </div>
                     
-                    <div id="npsError" style="display:none;color:#fca5a5;font-size:0.85em;margin-top:10px;text-align:center;">⚠️ Please enter customer email</div>
+                    <div id="npsError" style="display:none;color:#fca5a5;font-size:0.85em;margin-top:10px;text-align:center;">⚠️ Please enter customer name and email</div>
+                    <div id="npsSuccess" style="display:none;color:#86efac;font-size:0.85em;margin-top:10px;text-align:center;">✅ Survey logged!</div>
+                </div>
+                
+                <!-- Tracking Table -->
+                <div style="background:#0f172a;padding:15px;border-radius:8px;margin-bottom:15px;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                        <span style="color:#a855f7;font-weight:bold;">📊 Survey Tracking Log</span>
+                        <button id="clearNpsLog" style="background:#dc2626;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.75em;cursor:pointer;">Clear All</button>
+                    </div>
+                    <div class="table-container" style="max-height:200px;overflow-y:auto;">
+                        <table id="npsTrackingTable" style="font-size:0.85em;">
+                            <thead>
+                                <tr><th>Date</th><th>Customer</th><th>WO#</th><th>Status</th><th>Score</th><th>Action</th></tr>
+                            </thead>
+                            <tbody id="npsTrackingBody">
+                                <tr><td colspan="6" style="color:#64748b;text-align:center;">No surveys logged yet</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
                 
                 <div style="background:#1e293b;padding:12px;border-radius:8px;margin-bottom:15px;">
                     <div style="color:#94a3b8;font-size:0.85em;margin-bottom:8px;">📋 <strong>January Candidate (Ready):</strong></div>
-                    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">
+                    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;">
                         <div><span style="color:#64748b;">WO:</span> <span style="color:#fbbf24;">DTBLA</span></div>
                         <div><span style="color:#64748b;">Customer:</span> <span style="color:white;">Peregrine</span></div>
                         <div><span style="color:#64748b;">Amount:</span> <span style="color:#10b981;">$6,600</span></div>
+                        <button onclick="document.getElementById('npsCustomerName').value='Peregrine';document.getElementById('npsWO').value='DTBLA';document.getElementById('npsCustomerEmail').value=document.getElementById('peregrine-email').textContent;document.getElementById('npsRegNumber').focus();" style="background:#a855f7;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">Auto-Fill</button>
                     </div>
                 </div>
                 
@@ -438,14 +490,14 @@
                                 <td>144668</td>
                                 <td>Peregrine</td>
                                 <td style="color:#fbbf24;font-family:monospace;font-size:0.85em;" id="peregrine-email">Loading...</td>
-                                <td><button onclick="document.getElementById('npsCustomerEmail').value=document.getElementById('peregrine-email').textContent;document.getElementById('npsRegNumber').focus();" style="background:#a855f7;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">Use</button></td>
+                                <td><button onclick="document.getElementById('npsCustomerName').value='Peregrine';document.getElementById('npsCustomerEmail').value=document.getElementById('peregrine-email').textContent;document.getElementById('npsRegNumber').focus();" style="background:#a855f7;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">Use</button></td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
                 
                 <div style="background:#0f172a;padding:10px;border-radius:6px;margin-top:10px;font-size:0.8em;color:#64748b;">
-                    💡 <strong>How it works:</strong> Click "Send Survey Email" → Outlook Web opens with To, Subject, and Body pre-filled → Just click Send!
+                    💡 <strong>Workflow:</strong> Fill form → "Send & Log" opens Outlook + logs it → When results come in, click "Complete" to add score → Tell Claude to update files
                 </div>
             </div>
         </div>
@@ -1357,7 +1409,7 @@
             startAutoRotate();
         }
         
-        // NPS One-Click Email System
+        // NPS One-Click Email System with Tracking
         const npsEmailParts = ['ths', 'masd.metrea.aero'];
         const npsEmail = npsEmailParts.join('@');
         
@@ -1365,68 +1417,190 @@
         const peregineEmailEl = document.getElementById('peregrine-email');
         if (peregineEmailEl) peregineEmailEl.textContent = npsEmail;
         
-        // Send Survey Button - Opens Outlook Web with pre-filled email
+        // NPS Tracking Storage
+        const NPS_STORAGE_KEY = 'denver_nps_tracking';
+        
+        function getNpsSurveys() {
+            const data = localStorage.getItem(NPS_STORAGE_KEY);
+            return data ? JSON.parse(data) : [];
+        }
+        
+        function saveNpsSurveys(surveys) {
+            localStorage.setItem(NPS_STORAGE_KEY, JSON.stringify(surveys));
+        }
+        
+        function updateNpsStats() {
+            const surveys = getNpsSurveys();
+            const sent = surveys.length;
+            const completed = surveys.filter(s => s.status === 'Completed').length;
+            const pending = surveys.filter(s => s.status === 'Sent').length;
+            const rate = sent > 0 ? Math.round((completed / sent) * 100) + '%' : '-';
+            
+            document.getElementById('statSent').textContent = sent;
+            document.getElementById('statCompleted').textContent = completed;
+            document.getElementById('statPending').textContent = pending;
+            document.getElementById('statRate').textContent = rate;
+            
+            // Update badge
+            const badge = document.getElementById('npsBadge');
+            if (completed >= 1) {
+                badge.textContent = `Jan: ${completed}/1 ✅`;
+                badge.style.background = '#10b981';
+            } else if (sent > 0) {
+                badge.textContent = `Jan: ${completed}/1 ⏳`;
+                badge.style.background = '#f59e0b';
+            } else {
+                badge.textContent = 'Jan: 0/1 ⚠️';
+                badge.style.background = '#ef4444';
+            }
+        }
+        
+        function renderNpsTable() {
+            const surveys = getNpsSurveys();
+            const tbody = document.getElementById('npsTrackingBody');
+            
+            if (surveys.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="color:#64748b;text-align:center;">No surveys logged yet</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = surveys.map((s, idx) => `
+                <tr style="background:${s.status === 'Completed' ? 'rgba(16,185,129,0.2)' : s.status === 'No Response' ? 'rgba(239,68,68,0.2)' : 'rgba(251,191,36,0.2)'}">
+                    <td>${s.date}</td>
+                    <td>${s.customer}</td>
+                    <td>${s.wo || '-'}</td>
+                    <td><span style="color:${s.status === 'Completed' ? '#10b981' : s.status === 'No Response' ? '#ef4444' : '#f59e0b'}">${s.status}</span></td>
+                    <td>${s.score || '-'}</td>
+                    <td>
+                        ${s.status === 'Sent' ? `
+                            <button onclick="completeNpsSurvey(${idx})" style="background:#10b981;color:white;border:none;padding:2px 6px;border-radius:3px;font-size:0.75em;cursor:pointer;margin-right:3px;">✓</button>
+                            <button onclick="noResponseNpsSurvey(${idx})" style="background:#ef4444;color:white;border:none;padding:2px 6px;border-radius:3px;font-size:0.75em;cursor:pointer;">✗</button>
+                        ` : ''}
+                    </td>
+                </tr>
+            `).join('');
+            
+            updateNpsStats();
+        }
+        
+        function logNpsSurvey(openOutlook = false) {
+            const customerName = document.getElementById('npsCustomerName').value.trim();
+            const email = document.getElementById('npsCustomerEmail').value.trim();
+            const wo = document.getElementById('npsWO').value.trim().toUpperCase();
+            const regNum = document.getElementById('npsRegNumber').value.trim().toUpperCase();
+            const errorDiv = document.getElementById('npsError');
+            const successDiv = document.getElementById('npsSuccess');
+            
+            // Validate
+            if (!customerName || !email) {
+                errorDiv.textContent = '⚠️ Please enter customer name and email';
+                errorDiv.style.display = 'block';
+                successDiv.style.display = 'none';
+                return false;
+            }
+            errorDiv.style.display = 'none';
+            
+            // Log to storage
+            const surveys = getNpsSurveys();
+            const today = new Date();
+            const dateStr = `${String(today.getMonth()+1).padStart(2,'0')}/${String(today.getDate()).padStart(2,'0')}/${String(today.getFullYear()).slice(-2)}`;
+            
+            surveys.push({
+                date: dateStr,
+                customer: customerName,
+                email: email,
+                wo: wo,
+                regNum: regNum,
+                status: 'Sent',
+                score: null
+            });
+            
+            saveNpsSurveys(surveys);
+            renderNpsTable();
+            
+            // Show success
+            successDiv.style.display = 'block';
+            setTimeout(() => successDiv.style.display = 'none', 2000);
+            
+            // Clear form
+            document.getElementById('npsCustomerName').value = '';
+            document.getElementById('npsCustomerEmail').value = '';
+            document.getElementById('npsWO').value = '';
+            document.getElementById('npsRegNumber').value = '';
+            
+            // Open Outlook if requested
+            if (openOutlook) {
+                let subject, body;
+                if (regNum) {
+                    subject = `Quick Feedback Request - ${regNum} Service`;
+                    body = `Hi,\n\nThank you for choosing Duncan Aviation Denver for your recent service on ${regNum}.\n\nHelp us improve by filling out a quick 8-question survey:\n\nhttps://form.jotform.com/231574976012155\n\nInclude your phone number in the comments for the monthly prize raffle.\n\nBest Regards,`;
+                } else {
+                    subject = `Quick Feedback Request - Duncan Aviation Denver Service`;
+                    body = `Hi,\n\nThank you for choosing Duncan Aviation Denver for your recent service.\n\nHelp us improve by filling out a quick 8-question survey:\n\nhttps://form.jotform.com/231574976012155\n\nInclude your phone number in the comments for the monthly prize raffle.\n\nBest Regards,`;
+                }
+                const outlookUrl = `https://outlook.office365.com/mail/deeplink/compose?to=${email}&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+                window.open(outlookUrl, '_blank');
+            }
+            
+            return true;
+        }
+        
+        window.completeNpsSurvey = function(idx) {
+            const score = prompt('Enter NPS Score (0-10):');
+            if (score === null) return;
+            const scoreNum = parseInt(score);
+            if (isNaN(scoreNum) || scoreNum < 0 || scoreNum > 10) {
+                alert('Please enter a valid score between 0 and 10');
+                return;
+            }
+            const surveys = getNpsSurveys();
+            surveys[idx].status = 'Completed';
+            surveys[idx].score = scoreNum;
+            saveNpsSurveys(surveys);
+            renderNpsTable();
+        };
+        
+        window.noResponseNpsSurvey = function(idx) {
+            if (!confirm('Mark as No Response?')) return;
+            const surveys = getNpsSurveys();
+            surveys[idx].status = 'No Response';
+            saveNpsSurveys(surveys);
+            renderNpsTable();
+        };
+        
+        // Send & Log button
         const sendBtn = document.getElementById('sendNpsSurveyBtn');
         if (sendBtn) {
             sendBtn.onclick = function(e) {
-                e.stopPropagation(); // Prevent pause scroll
-                
-                const email = document.getElementById('npsCustomerEmail').value.trim();
-                const regNum = document.getElementById('npsRegNumber').value.trim().toUpperCase();
-                const errorDiv = document.getElementById('npsError');
-                
-                // Validate - only email required
-                if (!email) {
-                    errorDiv.textContent = '⚠️ Please enter customer email';
-                    errorDiv.style.display = 'block';
-                    return;
-                }
-                errorDiv.style.display = 'none';
-                
-                // Build email content - registration is optional
-                let subject, body;
-                
-                if (regNum) {
-                    // With registration number
-                    subject = `Quick Feedback Request - ${regNum} Service`;
-                    body = `Hi,
-
-Thank you for choosing Duncan Aviation Denver for your recent service on ${regNum}.
-
-Help us improve by filling out a quick 8-question survey:
-
-https://form.jotform.com/231574976012155
-
-Include your phone number in the comments for the monthly prize raffle.
-
-Best Regards,`;
-                } else {
-                    // Without registration number (component work like Peregrine)
-                    subject = `Quick Feedback Request - Duncan Aviation Denver Service`;
-                    body = `Hi,
-
-Thank you for choosing Duncan Aviation Denver for your recent service.
-
-Help us improve by filling out a quick 8-question survey:
-
-https://form.jotform.com/231574976012155
-
-Include your phone number in the comments for the monthly prize raffle.
-
-Best Regards,`;
-                }
-                
-                // URL encode
-                const subjectEncoded = encodeURIComponent(subject);
-                const bodyEncoded = encodeURIComponent(body);
-                
-                // Build Outlook Web URL
-                const outlookUrl = `https://outlook.office365.com/mail/deeplink/compose?to=${email}&subject=${subjectEncoded}&body=${bodyEncoded}`;
-                
-                // Open in new tab
-                window.open(outlookUrl, '_blank');
+                e.stopPropagation();
+                logNpsSurvey(true); // true = open Outlook
             };
         }
+        
+        // Log Only button
+        const logOnlyBtn = document.getElementById('logOnlyBtn');
+        if (logOnlyBtn) {
+            logOnlyBtn.onclick = function(e) {
+                e.stopPropagation();
+                logNpsSurvey(false); // false = don't open Outlook
+            };
+        }
+        
+        // Clear log button
+        const clearBtn = document.getElementById('clearNpsLog');
+        if (clearBtn) {
+            clearBtn.onclick = function(e) {
+                e.stopPropagation();
+                if (confirm('Clear all NPS tracking data?')) {
+                    localStorage.removeItem(NPS_STORAGE_KEY);
+                    renderNpsTable();
+                    updateNpsStats();
+                }
+            };
+        }
+        
+        // Initialize tracking table
+        renderNpsTable();
         
         // Prevent input fields from triggering scroll pause
         document.querySelectorAll('input').forEach(input => {
