@@ -197,10 +197,23 @@
                             <span class="badge badge-red">Action Needed!</span>
                         </div>
                     </div>
-                    <div class="progress-container">
-                        <div class="progress-bar"><div class="progress-fill progress-red" style="width:0%"></div></div>
+                    <!-- Completed Surveys -->
+                    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+                        <span style="font-size:0.85em;color:#10b981;width:80px;">✅ Completed</span>
+                        <div class="progress-container" style="flex:1;margin:0;">
+                            <div class="progress-bar"><div class="progress-fill progress-green" style="width:0%"></div></div>
+                        </div>
+                        <span style="font-size:0.85em;color:#94a3b8;width:60px;">0 / 12</span>
                     </div>
-                    <div>Current: 0 of 1 | Target: 1 survey/month, 12/year</div>
+                    <!-- Sent Surveys -->
+                    <div style="display:flex;align-items:center;gap:10px;">
+                        <span style="font-size:0.85em;color:#a855f7;width:80px;">📧 Sent</span>
+                        <div class="progress-container" style="flex:1;margin:0;">
+                            <div class="progress-bar"><div class="progress-fill" style="width:0%;background:linear-gradient(90deg,#a855f7,#c084fc);"></div></div>
+                        </div>
+                        <span style="font-size:0.85em;color:#94a3b8;width:60px;">0 / 12</span>
+                    </div>
+                    <div style="margin-top:10px;">Target: 1 survey/month | Jan: 0 completed, 0 sent</div>
                     <div class="goal-notes">📞 Peregrine (DTBLA) now billed - good NPS candidate! See Actions tab.</div>
                 </div>
                 
@@ -298,15 +311,15 @@
                     <div class="goal-header">
                         <span class="goal-title">#9 Dealer Programs Utilization</span>
                         <div class="goal-progress">
-                            <span class="goal-pct" style="color:#10b981">80%</span>
+                            <span class="goal-pct" style="color:#10b981">100%</span>
                             <span class="badge badge-green">On Track</span>
                         </div>
                     </div>
                     <div class="progress-container">
-                        <div class="progress-bar"><div class="progress-fill progress-green" style="width:80%"></div></div>
+                        <div class="progress-bar"><div class="progress-fill progress-green" style="width:100%"></div></div>
                     </div>
-                    <div>Active Programs: Using dealer tab | Est. Revenue: $1.7M</div>
-                    <div class="goal-notes">✅ Good utilization. Track success rate and customer feedback.</div>
+                    <div>2026 Programs: <strong>1 Completed</strong> / 1 Total | WO: DUSFA (Concorde Holdings)</div>
+                    <div class="goal-notes">✅ DP2026.00486 Collins CASP - Completed. Tracking 2026 programs only.</div>
                 </div>
                 
                 <div class="goal-card">
@@ -320,8 +333,8 @@
                     <div class="progress-container">
                         <div class="progress-bar"><div class="progress-fill progress-green" style="width:100%"></div></div>
                     </div>
-                    <div>Target: Communicate to BZ within 30 days of dispute</div>
-                    <div class="goal-notes">✅ All disputes communicated within timeframe.</div>
+                    <div>Target: Communicate to BZ within 30 days of dispute | <strong>2026 Emails: 1</strong></div>
+                    <div class="goal-notes">✅ CG4NA communicated 1/21. Forward BZ emails to Claude for tracking.</div>
                 </div>
                 
                 <div class="goal-card">
@@ -479,8 +492,8 @@
                     </div>
                 </div>
                 
-                <div style="color:#94a3b8;font-size:0.85em;margin-bottom:10px;">📊 Customer Email Database: 6 contacts on file</div>
-                <div class="table-container">
+                <div style="color:#94a3b8;font-size:0.85em;margin-bottom:10px;">📊 Customer Email Database: 14 contacts on file (Updated 01/28)</div>
+                <div class="table-container" style="max-height:250px;overflow-y:auto;">
                     <table>
                         <thead>
                             <tr><th>CustNum</th><th>Customer</th><th>Email</th><th>Action</th></tr>
@@ -489,8 +502,86 @@
                             <tr style="background:rgba(16,185,129,0.2)">
                                 <td>144668</td>
                                 <td>Peregrine</td>
-                                <td style="color:#fbbf24;font-family:monospace;font-size:0.85em;" id="peregrine-email">Loading...</td>
-                                <td><button onclick="document.getElementById('npsCustomerName').value='Peregrine';document.getElementById('npsCustomerEmail').value=document.getElementById('peregrine-email').textContent;document.getElementById('npsRegNumber').focus();" style="background:#a855f7;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">Use</button></td>
+                                <td style="color:#fbbf24;font-family:monospace;font-size:0.85em;" id="peregrine-email">ths@masd.metrea.aero</td>
+                                <td><button onclick="document.getElementById('npsCustomerName').value='Peregrine';document.getElementById('npsCustomerEmail').value='ths@masd.metrea.aero';document.getElementById('npsRegNumber').focus();" style="background:#a855f7;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">Use</button></td>
+                            </tr>
+                            <tr>
+                                <td>109004</td>
+                                <td>International Jet</td>
+                                <td style="color:#fbbf24;font-family:monospace;font-size:0.85em;">heike@internationaljet.com</td>
+                                <td><button onclick="document.getElementById('npsCustomerName').value='International Jet Aviation';document.getElementById('npsCustomerEmail').value='heike@internationaljet.com';document.getElementById('npsRegNumber').focus();" style="background:#a855f7;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">Use</button></td>
+                            </tr>
+                            <tr>
+                                <td>113966</td>
+                                <td>GMR</td>
+                                <td style="color:#fbbf24;font-family:monospace;font-size:0.85em;">parts-mtc@gmr.net</td>
+                                <td><button onclick="document.getElementById('npsCustomerName').value='GMR';document.getElementById('npsCustomerEmail').value='parts-mtc@gmr.net';document.getElementById('npsRegNumber').focus();" style="background:#a855f7;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">Use</button></td>
+                            </tr>
+                            <tr>
+                                <td>117171</td>
+                                <td>Liberty Global</td>
+                                <td style="color:#fbbf24;font-family:monospace;font-size:0.85em;">apdenver@libertyglobal.com</td>
+                                <td><button onclick="document.getElementById('npsCustomerName').value='Liberty Global';document.getElementById('npsCustomerEmail').value='apdenver@libertyglobal.com';document.getElementById('npsRegNumber').focus();" style="background:#a855f7;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">Use</button></td>
+                            </tr>
+                            <tr>
+                                <td>125945</td>
+                                <td>Bode Aviation</td>
+                                <td style="color:#fbbf24;font-family:monospace;font-size:0.85em;">michelle.amezcua@flybode.com</td>
+                                <td><button onclick="document.getElementById('npsCustomerName').value='Bode Aviation';document.getElementById('npsCustomerEmail').value='michelle.amezcua@flybode.com';document.getElementById('npsRegNumber').focus();" style="background:#a855f7;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">Use</button></td>
+                            </tr>
+                            <tr>
+                                <td>127007</td>
+                                <td>AirMax</td>
+                                <td style="color:#fbbf24;font-family:monospace;font-size:0.85em;">rong@airmaxonline.com</td>
+                                <td><button onclick="document.getElementById('npsCustomerName').value='AirMax';document.getElementById('npsCustomerEmail').value='rong@airmaxonline.com';document.getElementById('npsRegNumber').focus();" style="background:#a855f7;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">Use</button></td>
+                            </tr>
+                            <tr>
+                                <td>129186</td>
+                                <td>M&N Aviation</td>
+                                <td style="color:#fbbf24;font-family:monospace;font-size:0.85em;">accounting@mandn.aero</td>
+                                <td><button onclick="document.getElementById('npsCustomerName').value='M&N Aviation';document.getElementById('npsCustomerEmail').value='accounting@mandn.aero';document.getElementById('npsRegNumber').focus();" style="background:#a855f7;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">Use</button></td>
+                            </tr>
+                            <tr>
+                                <td>135888</td>
+                                <td>Pilot Service Provider</td>
+                                <td style="color:#fbbf24;font-family:monospace;font-size:0.85em;">scott.j@pilotserviceprovider.com</td>
+                                <td><button onclick="document.getElementById('npsCustomerName').value='Pilot Service Provider';document.getElementById('npsCustomerEmail').value='scott.j@pilotserviceprovider.com';document.getElementById('npsRegNumber').focus();" style="background:#a855f7;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">Use</button></td>
+                            </tr>
+                            <tr>
+                                <td>137367</td>
+                                <td>CAP (Civil Air Patrol)</td>
+                                <td style="color:#fbbf24;font-family:monospace;font-size:0.85em;">capconsmx@capnhq.gov</td>
+                                <td><button onclick="document.getElementById('npsCustomerName').value='Civil Air Patrol';document.getElementById('npsCustomerEmail').value='capconsmx@capnhq.gov';document.getElementById('npsRegNumber').focus();" style="background:#a855f7;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">Use</button></td>
+                            </tr>
+                            <tr>
+                                <td>139695</td>
+                                <td>Aspen Flying Club</td>
+                                <td style="color:#fbbf24;font-family:monospace;font-size:0.85em;">accounting@aspenflyingclub.com</td>
+                                <td><button onclick="document.getElementById('npsCustomerName').value='Aspen Flying Club';document.getElementById('npsCustomerEmail').value='accounting@aspenflyingclub.com';document.getElementById('npsRegNumber').focus();" style="background:#a855f7;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">Use</button></td>
+                            </tr>
+                            <tr>
+                                <td>142768</td>
+                                <td>Flights Inc</td>
+                                <td style="color:#fbbf24;font-family:monospace;font-size:0.85em;">ABAUER@FLIGHTS-INC.COM</td>
+                                <td><button onclick="document.getElementById('npsCustomerName').value='Flights Inc';document.getElementById('npsCustomerEmail').value='ABAUER@FLIGHTS-INC.COM';document.getElementById('npsRegNumber').focus();" style="background:#a855f7;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">Use</button></td>
+                            </tr>
+                            <tr>
+                                <td>151065</td>
+                                <td>Arapahoe Aero</td>
+                                <td style="color:#fbbf24;font-family:monospace;font-size:0.85em;">customercare@arapahoeaero.com</td>
+                                <td><button onclick="document.getElementById('npsCustomerName').value='Arapahoe Aero';document.getElementById('npsCustomerEmail').value='customercare@arapahoeaero.com';document.getElementById('npsRegNumber').focus();" style="background:#a855f7;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">Use</button></td>
+                            </tr>
+                            <tr>
+                                <td>155665</td>
+                                <td>MIMG Transport</td>
+                                <td style="color:#fbbf24;font-family:monospace;font-size:0.85em;">n950kmmx@gmail.com</td>
+                                <td><button onclick="document.getElementById('npsCustomerName').value='MIMG Transportation';document.getElementById('npsCustomerEmail').value='n950kmmx@gmail.com';document.getElementById('npsRegNumber').focus();" style="background:#a855f7;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">Use</button></td>
+                            </tr>
+                            <tr>
+                                <td>157238</td>
+                                <td>Infinity Energia</td>
+                                <td style="color:#fbbf24;font-family:monospace;font-size:0.85em;">EDUARDO@INFINITYENERGIAD.COM.BR</td>
+                                <td><button onclick="document.getElementById('npsCustomerName').value='Infinity Energia';document.getElementById('npsCustomerEmail').value='EDUARDO@INFINITYENERGIAD.COM.BR';document.getElementById('npsRegNumber').focus();" style="background:#a855f7;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">Use</button></td>
                             </tr>
                         </tbody>
                     </table>
@@ -505,7 +596,7 @@
         <!-- OVERVIEW TAB -->
         <div class="content" id="overview">
             <div class="alert-banner">
-                ⚠️ A/B RATIO: 25.0% vs 58.5% Target | Gap: -33.5 pts | Rank: 20th of 21
+                ⚠️ A/B RATIO: 26.7% vs 58.5% Target | Gap: -31.8 pts | Rank: 20th of 21
             </div>
             
             <!-- A/B COMPARISON CARD -->
