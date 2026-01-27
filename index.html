@@ -539,108 +539,138 @@
                     <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;">
                         <div><span style="color:#64748b;">WO:</span> <span style="color:#fbbf24;">DTBLA</span></div>
                         <div><span style="color:#64748b;">Customer:</span> <span style="color:white;">Peregrine</span></div>
-                        <div><span style="color:#64748b;">Amount:</span> <span style="color:#10b981;">$6,600</span></div>
-                        <button onclick="document.getElementById('npsCustomerName').value='Peregrine';document.getElementById('npsWO').value='DTBLA';document.getElementById('npsCustomerEmail').value=document.getElementById('peregrine-email').textContent;document.getElementById('npsWO').focus();" style="background:#a855f7;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">Auto-Fill</button>
+                        <div><span style="color:#64748b;">Amount:</span> <span style="color:#10b981;">$6,856</span></div>
+                        <button onclick="fillNps('Peregrine','ths@masd.metrea.aero','DTBLA','')" style="background:#10b981;color:white;border:none;padding:8px 15px;border-radius:4px;font-size:0.9em;cursor:pointer;font-weight:bold;">✓ Auto-Fill</button>
                     </div>
                 </div>
                 
-                <div style="color:#94a3b8;font-size:0.85em;margin-bottom:10px;">📊 Customer Email Database: 14 contacts on file (Updated 01/28)</div>
-                <div class="table-container" style="max-height:250px;overflow-y:auto;">
+                <div style="color:#94a3b8;font-size:0.85em;margin-bottom:10px;">📊 Customer Email Database: 14 contacts with billed WO data (Updated 01/28)</div>
+                <div class="table-container" style="max-height:300px;overflow-y:auto;">
                     <table>
                         <thead>
-                            <tr><th>CustNum</th><th>Customer</th><th>Email</th><th>Action</th></tr>
+                            <tr><th>Customer</th><th>Email</th><th>WO#</th><th>Reg#</th><th>Revenue</th><th>Action</th></tr>
                         </thead>
                         <tbody>
                             <tr style="background:rgba(16,185,129,0.2)">
-                                <td>144668</td>
-                                <td>Peregrine</td>
-                                <td style="color:#fbbf24;font-family:monospace;font-size:0.85em;" id="peregrine-email">ths@masd.metrea.aero</td>
-                                <td><button onclick="document.getElementById('npsCustomerName').value='Peregrine';document.getElementById('npsCustomerEmail').value='ths@masd.metrea.aero';document.getElementById('npsWO').focus();" style="background:#a855f7;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">Use</button></td>
-                            </tr>
-                            <tr>
-                                <td>109004</td>
-                                <td>International Jet</td>
-                                <td style="color:#fbbf24;font-family:monospace;font-size:0.85em;">heike@internationaljet.com</td>
-                                <td><button onclick="document.getElementById('npsCustomerName').value='International Jet Aviation';document.getElementById('npsCustomerEmail').value='heike@internationaljet.com';document.getElementById('npsWO').focus();" style="background:#a855f7;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">Use</button></td>
-                            </tr>
-                            <tr>
-                                <td>113966</td>
-                                <td>GMR</td>
-                                <td style="color:#fbbf24;font-family:monospace;font-size:0.85em;">parts-mtc@gmr.net</td>
-                                <td><button onclick="document.getElementById('npsCustomerName').value='GMR';document.getElementById('npsCustomerEmail').value='parts-mtc@gmr.net';document.getElementById('npsWO').focus();" style="background:#a855f7;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">Use</button></td>
-                            </tr>
-                            <tr>
-                                <td>117171</td>
-                                <td>Liberty Global</td>
-                                <td style="color:#fbbf24;font-family:monospace;font-size:0.85em;">apdenver@libertyglobal.com</td>
-                                <td><button onclick="document.getElementById('npsCustomerName').value='Liberty Global';document.getElementById('npsCustomerEmail').value='apdenver@libertyglobal.com';document.getElementById('npsWO').focus();" style="background:#a855f7;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">Use</button></td>
-                            </tr>
-                            <tr>
-                                <td>125945</td>
                                 <td>Bode Aviation</td>
-                                <td style="color:#fbbf24;font-family:monospace;font-size:0.85em;">michelle.amezcua@flybode.com</td>
-                                <td><button onclick="document.getElementById('npsCustomerName').value='Bode Aviation';document.getElementById('npsCustomerEmail').value='michelle.amezcua@flybode.com';document.getElementById('npsWO').focus();" style="background:#a855f7;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">Use</button></td>
+                                <td style="color:#fbbf24;font-family:monospace;font-size:0.8em;">michelle.amezcua@flybode.com</td>
+                                <td style="color:#60a5fa;font-weight:bold;">DSW5A</td>
+                                <td style="color:#94a3b8;">N328SF</td>
+                                <td style="color:#10b981;">$34,270</td>
+                                <td><button onclick="fillNps('Bode Aviation','michelle.amezcua@flybode.com','DSW5A','N328SF')" style="background:#10b981;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">✓ Use</button></td>
                             </tr>
-                            <tr>
-                                <td>127007</td>
-                                <td>AirMax</td>
-                                <td style="color:#fbbf24;font-family:monospace;font-size:0.85em;">rong@airmaxonline.com</td>
-                                <td><button onclick="document.getElementById('npsCustomerName').value='AirMax';document.getElementById('npsCustomerEmail').value='rong@airmaxonline.com';document.getElementById('npsWO').focus();" style="background:#a855f7;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">Use</button></td>
-                            </tr>
-                            <tr>
-                                <td>129186</td>
-                                <td>M&N Aviation</td>
-                                <td style="color:#fbbf24;font-family:monospace;font-size:0.85em;">accounting@mandn.aero</td>
-                                <td><button onclick="document.getElementById('npsCustomerName').value='M&N Aviation';document.getElementById('npsCustomerEmail').value='accounting@mandn.aero';document.getElementById('npsWO').focus();" style="background:#a855f7;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">Use</button></td>
-                            </tr>
-                            <tr>
-                                <td>135888</td>
-                                <td>Pilot Service Provider</td>
-                                <td style="color:#fbbf24;font-family:monospace;font-size:0.85em;">scott.j@pilotserviceprovider.com</td>
-                                <td><button onclick="document.getElementById('npsCustomerName').value='Pilot Service Provider';document.getElementById('npsCustomerEmail').value='scott.j@pilotserviceprovider.com';document.getElementById('npsWO').focus();" style="background:#a855f7;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">Use</button></td>
-                            </tr>
-                            <tr>
-                                <td>137367</td>
-                                <td>CAP (Civil Air Patrol)</td>
-                                <td style="color:#fbbf24;font-family:monospace;font-size:0.85em;">capconsmx@capnhq.gov</td>
-                                <td><button onclick="document.getElementById('npsCustomerName').value='Civil Air Patrol';document.getElementById('npsCustomerEmail').value='capconsmx@capnhq.gov';document.getElementById('npsWO').focus();" style="background:#a855f7;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">Use</button></td>
-                            </tr>
-                            <tr>
-                                <td>139695</td>
-                                <td>Aspen Flying Club</td>
-                                <td style="color:#fbbf24;font-family:monospace;font-size:0.85em;">accounting@aspenflyingclub.com</td>
-                                <td><button onclick="document.getElementById('npsCustomerName').value='Aspen Flying Club';document.getElementById('npsCustomerEmail').value='accounting@aspenflyingclub.com';document.getElementById('npsWO').focus();" style="background:#a855f7;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">Use</button></td>
-                            </tr>
-                            <tr>
-                                <td>142768</td>
-                                <td>Flights Inc</td>
-                                <td style="color:#fbbf24;font-family:monospace;font-size:0.85em;">ABAUER@FLIGHTS-INC.COM</td>
-                                <td><button onclick="document.getElementById('npsCustomerName').value='Flights Inc';document.getElementById('npsCustomerEmail').value='ABAUER@FLIGHTS-INC.COM';document.getElementById('npsWO').focus();" style="background:#a855f7;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">Use</button></td>
-                            </tr>
-                            <tr>
-                                <td>151065</td>
-                                <td>Arapahoe Aero</td>
-                                <td style="color:#fbbf24;font-family:monospace;font-size:0.85em;">customercare@arapahoeaero.com</td>
-                                <td><button onclick="document.getElementById('npsCustomerName').value='Arapahoe Aero';document.getElementById('npsCustomerEmail').value='customercare@arapahoeaero.com';document.getElementById('npsWO').focus();" style="background:#a855f7;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">Use</button></td>
-                            </tr>
-                            <tr>
-                                <td>155665</td>
+                            <tr style="background:rgba(16,185,129,0.2)">
                                 <td>MIMG Transport</td>
-                                <td style="color:#fbbf24;font-family:monospace;font-size:0.85em;">n950kmmx@gmail.com</td>
-                                <td><button onclick="document.getElementById('npsCustomerName').value='MIMG Transportation';document.getElementById('npsCustomerEmail').value='n950kmmx@gmail.com';document.getElementById('npsWO').focus();" style="background:#a855f7;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">Use</button></td>
+                                <td style="color:#fbbf24;font-family:monospace;font-size:0.8em;">n950kmmx@gmail.com</td>
+                                <td style="color:#60a5fa;font-weight:bold;">CV3UA</td>
+                                <td style="color:#94a3b8;">STOCK</td>
+                                <td style="color:#10b981;">$9,297</td>
+                                <td><button onclick="fillNps('MIMG Transportation','n950kmmx@gmail.com','CV3UA','STOCK')" style="background:#10b981;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">✓ Use</button></td>
+                            </tr>
+                            <tr style="background:rgba(16,185,129,0.2)">
+                                <td>Peregrine</td>
+                                <td style="color:#fbbf24;font-family:monospace;font-size:0.8em;">ths@masd.metrea.aero</td>
+                                <td style="color:#60a5fa;font-weight:bold;">DTBLA</td>
+                                <td style="color:#94a3b8;">-</td>
+                                <td style="color:#10b981;">$6,856</td>
+                                <td><button onclick="fillNps('Peregrine','ths@masd.metrea.aero','DTBLA','')" style="background:#10b981;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">✓ Use</button></td>
                             </tr>
                             <tr>
-                                <td>157238</td>
                                 <td>Infinity Energia</td>
-                                <td style="color:#fbbf24;font-family:monospace;font-size:0.85em;">EDUARDO@INFINITYENERGIAD.COM.BR</td>
-                                <td><button onclick="document.getElementById('npsCustomerName').value='Infinity Energia';document.getElementById('npsCustomerEmail').value='EDUARDO@INFINITYENERGIAD.COM.BR';document.getElementById('npsWO').focus();" style="background:#a855f7;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">Use</button></td>
+                                <td style="color:#fbbf24;font-family:monospace;font-size:0.8em;">EDUARDO@INFINITYENERGIAD.COM.BR</td>
+                                <td style="color:#60a5fa;font-weight:bold;">CUGZA</td>
+                                <td style="color:#94a3b8;">PR-BBD</td>
+                                <td style="color:#10b981;">$5,444</td>
+                                <td><button onclick="fillNps('Infinity Energia','EDUARDO@INFINITYENERGIAD.COM.BR','CUGZA','PR-BBD')" style="background:#10b981;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">✓ Use</button></td>
+                            </tr>
+                            <tr>
+                                <td>Liberty Global</td>
+                                <td style="color:#fbbf24;font-family:monospace;font-size:0.8em;">apdenver@libertyglobal.com</td>
+                                <td style="color:#60a5fa;font-weight:bold;">CT8VA</td>
+                                <td style="color:#94a3b8;">N250LG</td>
+                                <td style="color:#10b981;">$4,445</td>
+                                <td><button onclick="fillNps('Liberty Global','apdenver@libertyglobal.com','CT8VA','N250LG')" style="background:#10b981;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">✓ Use</button></td>
+                            </tr>
+                            <tr>
+                                <td>M&N Aviation</td>
+                                <td style="color:#fbbf24;font-family:monospace;font-size:0.8em;">accounting@mandn.aero</td>
+                                <td style="color:#60a5fa;font-weight:bold;">CT0VA</td>
+                                <td style="color:#94a3b8;">N488RJ</td>
+                                <td style="color:#10b981;">$2,475</td>
+                                <td><button onclick="fillNps('M&N Aviation','accounting@mandn.aero','CT0VA','N488RJ')" style="background:#10b981;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">✓ Use</button></td>
+                            </tr>
+                            <tr>
+                                <td>Arapahoe Aero</td>
+                                <td style="color:#fbbf24;font-family:monospace;font-size:0.8em;">customercare@arapahoeaero.com</td>
+                                <td style="color:#60a5fa;font-weight:bold;">CSAZA</td>
+                                <td style="color:#94a3b8;">N426LM</td>
+                                <td style="color:#10b981;">$2,118</td>
+                                <td><button onclick="fillNps('Arapahoe Aero','customercare@arapahoeaero.com','CSAZA','N426LM')" style="background:#10b981;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">✓ Use</button></td>
+                            </tr>
+                            <tr>
+                                <td>GMR</td>
+                                <td style="color:#fbbf24;font-family:monospace;font-size:0.8em;">parts-mtc@gmr.net</td>
+                                <td style="color:#60a5fa;font-weight:bold;">CU44A</td>
+                                <td style="color:#94a3b8;">N866MB</td>
+                                <td style="color:#10b981;">$1,942</td>
+                                <td><button onclick="fillNps('GMR','parts-mtc@gmr.net','CU44A','N866MB')" style="background:#10b981;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">✓ Use</button></td>
+                            </tr>
+                            <tr>
+                                <td>Aspen Flying Club</td>
+                                <td style="color:#fbbf24;font-family:monospace;font-size:0.8em;">accounting@aspenflyingclub.com</td>
+                                <td style="color:#60a5fa;font-weight:bold;">CS1XA</td>
+                                <td style="color:#94a3b8;">N331JK</td>
+                                <td style="color:#10b981;">$1,632</td>
+                                <td><button onclick="fillNps('Aspen Flying Club','accounting@aspenflyingclub.com','CS1XA','N331JK')" style="background:#10b981;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">✓ Use</button></td>
+                            </tr>
+                            <tr>
+                                <td>Flights Inc</td>
+                                <td style="color:#fbbf24;font-family:monospace;font-size:0.8em;">ABAUER@FLIGHTS-INC.COM</td>
+                                <td style="color:#60a5fa;font-weight:bold;">CRW3A</td>
+                                <td style="color:#94a3b8;">N22265</td>
+                                <td style="color:#10b981;">$1,632</td>
+                                <td><button onclick="fillNps('Flights Inc','ABAUER@FLIGHTS-INC.COM','CRW3A','N22265')" style="background:#10b981;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">✓ Use</button></td>
+                            </tr>
+                            <tr>
+                                <td>CAP (Civil Air Patrol)</td>
+                                <td style="color:#fbbf24;font-family:monospace;font-size:0.8em;">capconsmx@capnhq.gov</td>
+                                <td style="color:#60a5fa;font-weight:bold;">CSYNA</td>
+                                <td style="color:#94a3b8;">N846CP</td>
+                                <td style="color:#10b981;">$1,267</td>
+                                <td><button onclick="fillNps('Civil Air Patrol','capconsmx@capnhq.gov','CSYNA','N846CP')" style="background:#10b981;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">✓ Use</button></td>
+                            </tr>
+                            <tr>
+                                <td>AirMax</td>
+                                <td style="color:#fbbf24;font-family:monospace;font-size:0.8em;">rong@airmaxonline.com</td>
+                                <td style="color:#60a5fa;font-weight:bold;">CUCJA</td>
+                                <td style="color:#94a3b8;">N137ZM</td>
+                                <td style="color:#10b981;">$785</td>
+                                <td><button onclick="fillNps('AirMax','rong@airmaxonline.com','CUCJA','N137ZM')" style="background:#10b981;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">✓ Use</button></td>
+                            </tr>
+                            <tr>
+                                <td>International Jet</td>
+                                <td style="color:#fbbf24;font-family:monospace;font-size:0.8em;">heike@internationaljet.com</td>
+                                <td style="color:#60a5fa;font-weight:bold;">CUX4A</td>
+                                <td style="color:#94a3b8;">N219JG</td>
+                                <td style="color:#10b981;">$706</td>
+                                <td><button onclick="fillNps('International Jet Aviation','heike@internationaljet.com','CUX4A','N219JG')" style="background:#10b981;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">✓ Use</button></td>
+                            </tr>
+                            <tr style="background:rgba(107,114,128,0.2)">
+                                <td>Pilot Service Provider</td>
+                                <td style="color:#fbbf24;font-family:monospace;font-size:0.8em;">scott.j@pilotserviceprovider.com</td>
+                                <td style="color:#94a3b8;">CQCAB</td>
+                                <td style="color:#94a3b8;">N750JE</td>
+                                <td style="color:#94a3b8;">$0</td>
+                                <td><button onclick="fillNps('Pilot Service Provider','scott.j@pilotserviceprovider.com','CQCAB','N750JE')" style="background:#475569;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">Use</button></td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-                
-                <div style="background:#0f172a;padding:10px;border-radius:6px;margin-top:10px;font-size:0.8em;color:#64748b;">
-                    💡 <strong>Workflow:</strong> Fill form → "Send & Log" opens Outlook + logs it → When results come in, click "Complete" to add score → Tell Claude to update files
+                <div style="background:#14532d;padding:8px;border-radius:6px;margin-top:10px;font-size:0.8em;color:#bbf7d0;">
+                    ✅ <strong>Smart Fill:</strong> Click "Use" to auto-fill Customer, Email, WO#, and Registration. Sorted by revenue (best NPS candidates at top).
+                </div>
+                <div style="background:#0f172a;padding:8px;border-radius:6px;margin-top:5px;font-size:0.75em;color:#94a3b8;">
+                    ⚠️ <strong>Data Note:</strong> Billed WO report has multiple rows per WO (by Sqk Type). Using MAX revenue per WO to avoid duplicates.
                 </div>
             </div>
         </div>
@@ -1582,6 +1612,16 @@
         
         function saveNpsSurveys(surveys) {
             localStorage.setItem(NPS_STORAGE_KEY, JSON.stringify(surveys));
+        }
+        
+        // Smart Fill function for NPS form
+        function fillNps(name, email, wo, reg) {
+            document.getElementById('npsCustomerName').value = name;
+            document.getElementById('npsCustomerEmail').value = email;
+            document.getElementById('npsWO').value = wo;
+            document.getElementById('npsRegNumber').value = reg || '';
+            // Scroll to form
+            document.getElementById('npsCustomerName').scrollIntoView({behavior: 'smooth', block: 'center'});
         }
         
         function updateNpsStats() {
