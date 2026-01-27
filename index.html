@@ -599,130 +599,25 @@
                     </div>
                 </div>
                 
-                <div style="color:#94a3b8;font-size:0.85em;margin-bottom:10px;">📊 Customer Email Database: 14 contacts with billed WO data (Updated 01/28)</div>
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                    <span style="color:#94a3b8;font-size:0.85em;">📊 Customer Email Database: <span id="customerDbCount">14</span> contacts with billed WO data (Updated 01/28)</span>
+                    <label style="font-size:0.8em;color:#94a3b8;cursor:pointer;">
+                        <input type="checkbox" id="showSentCustomers" checked onchange="renderCustomerTable()" style="margin-right:5px;">
+                        Show sent
+                    </label>
+                </div>
                 <div class="table-container" style="max-height:300px;overflow-y:auto;">
                     <table>
                         <thead>
                             <tr><th>Customer</th><th>Email</th><th>WO#</th><th>Reg#</th><th>Revenue</th><th>Action</th></tr>
                         </thead>
-                        <tbody>
-                            <tr style="background:rgba(16,185,129,0.2)">
-                                <td>Bode Aviation</td>
-                                <td style="color:#fbbf24;font-family:monospace;font-size:0.8em;">michelle.amezcua@flybode.com</td>
-                                <td style="color:#60a5fa;font-weight:bold;">DSW5A</td>
-                                <td style="color:#94a3b8;">N328SF</td>
-                                <td style="color:#10b981;">$34,270</td>
-                                <td><button onclick="fillNps('Bode Aviation','michelle.amezcua@flybode.com','DSW5A','N328SF')" style="background:#10b981;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">✓ Use</button></td>
-                            </tr>
-                            <tr style="background:rgba(16,185,129,0.2)">
-                                <td>MIMG Transport</td>
-                                <td style="color:#fbbf24;font-family:monospace;font-size:0.8em;">n950kmmx@gmail.com</td>
-                                <td style="color:#60a5fa;font-weight:bold;">CV3UA</td>
-                                <td style="color:#94a3b8;">STOCK</td>
-                                <td style="color:#10b981;">$9,297</td>
-                                <td><button onclick="fillNps('MIMG Transportation','n950kmmx@gmail.com','CV3UA','STOCK')" style="background:#10b981;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">✓ Use</button></td>
-                            </tr>
-                            <tr style="background:rgba(16,185,129,0.2)">
-                                <td>Peregrine</td>
-                                <td style="color:#fbbf24;font-family:monospace;font-size:0.8em;">ths@masd.metrea.aero</td>
-                                <td style="color:#60a5fa;font-weight:bold;">DTBLA</td>
-                                <td style="color:#94a3b8;">-</td>
-                                <td style="color:#10b981;">$6,856</td>
-                                <td><button onclick="fillNps('Peregrine','ths@masd.metrea.aero','DTBLA','')" style="background:#10b981;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">✓ Use</button></td>
-                            </tr>
-                            <tr>
-                                <td>Infinity Energia</td>
-                                <td style="color:#fbbf24;font-family:monospace;font-size:0.8em;">EDUARDO@INFINITYENERGIAD.COM.BR</td>
-                                <td style="color:#60a5fa;font-weight:bold;">CUGZA</td>
-                                <td style="color:#94a3b8;">PR-BBD</td>
-                                <td style="color:#10b981;">$5,444</td>
-                                <td><button onclick="fillNps('Infinity Energia','EDUARDO@INFINITYENERGIAD.COM.BR','CUGZA','PR-BBD')" style="background:#10b981;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">✓ Use</button></td>
-                            </tr>
-                            <tr>
-                                <td>Liberty Global</td>
-                                <td style="color:#fbbf24;font-family:monospace;font-size:0.8em;">apdenver@libertyglobal.com</td>
-                                <td style="color:#60a5fa;font-weight:bold;">CT8VA</td>
-                                <td style="color:#94a3b8;">N250LG</td>
-                                <td style="color:#10b981;">$4,445</td>
-                                <td><button onclick="fillNps('Liberty Global','apdenver@libertyglobal.com','CT8VA','N250LG')" style="background:#10b981;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">✓ Use</button></td>
-                            </tr>
-                            <tr>
-                                <td>M&N Aviation</td>
-                                <td style="color:#fbbf24;font-family:monospace;font-size:0.8em;">accounting@mandn.aero</td>
-                                <td style="color:#60a5fa;font-weight:bold;">CT0VA</td>
-                                <td style="color:#94a3b8;">N488RJ</td>
-                                <td style="color:#10b981;">$2,475</td>
-                                <td><button onclick="fillNps('M&N Aviation','accounting@mandn.aero','CT0VA','N488RJ')" style="background:#10b981;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">✓ Use</button></td>
-                            </tr>
-                            <tr>
-                                <td>Arapahoe Aero</td>
-                                <td style="color:#fbbf24;font-family:monospace;font-size:0.8em;">customercare@arapahoeaero.com</td>
-                                <td style="color:#60a5fa;font-weight:bold;">CSAZA</td>
-                                <td style="color:#94a3b8;">N426LM</td>
-                                <td style="color:#10b981;">$2,118</td>
-                                <td><button onclick="fillNps('Arapahoe Aero','customercare@arapahoeaero.com','CSAZA','N426LM')" style="background:#10b981;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">✓ Use</button></td>
-                            </tr>
-                            <tr>
-                                <td>GMR</td>
-                                <td style="color:#fbbf24;font-family:monospace;font-size:0.8em;">parts-mtc@gmr.net</td>
-                                <td style="color:#60a5fa;font-weight:bold;">CU44A</td>
-                                <td style="color:#94a3b8;">N866MB</td>
-                                <td style="color:#10b981;">$1,942</td>
-                                <td><button onclick="fillNps('GMR','parts-mtc@gmr.net','CU44A','N866MB')" style="background:#10b981;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">✓ Use</button></td>
-                            </tr>
-                            <tr>
-                                <td>Aspen Flying Club</td>
-                                <td style="color:#fbbf24;font-family:monospace;font-size:0.8em;">accounting@aspenflyingclub.com</td>
-                                <td style="color:#60a5fa;font-weight:bold;">CS1XA</td>
-                                <td style="color:#94a3b8;">N331JK</td>
-                                <td style="color:#10b981;">$1,632</td>
-                                <td><button onclick="fillNps('Aspen Flying Club','accounting@aspenflyingclub.com','CS1XA','N331JK')" style="background:#10b981;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">✓ Use</button></td>
-                            </tr>
-                            <tr>
-                                <td>Flights Inc</td>
-                                <td style="color:#fbbf24;font-family:monospace;font-size:0.8em;">ABAUER@FLIGHTS-INC.COM</td>
-                                <td style="color:#60a5fa;font-weight:bold;">CRW3A</td>
-                                <td style="color:#94a3b8;">N22265</td>
-                                <td style="color:#10b981;">$1,632</td>
-                                <td><button onclick="fillNps('Flights Inc','ABAUER@FLIGHTS-INC.COM','CRW3A','N22265')" style="background:#10b981;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">✓ Use</button></td>
-                            </tr>
-                            <tr>
-                                <td>CAP (Civil Air Patrol)</td>
-                                <td style="color:#fbbf24;font-family:monospace;font-size:0.8em;">capconsmx@capnhq.gov</td>
-                                <td style="color:#60a5fa;font-weight:bold;">CSYNA</td>
-                                <td style="color:#94a3b8;">N846CP</td>
-                                <td style="color:#10b981;">$1,267</td>
-                                <td><button onclick="fillNps('Civil Air Patrol','capconsmx@capnhq.gov','CSYNA','N846CP')" style="background:#10b981;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">✓ Use</button></td>
-                            </tr>
-                            <tr>
-                                <td>AirMax</td>
-                                <td style="color:#fbbf24;font-family:monospace;font-size:0.8em;">rong@airmaxonline.com</td>
-                                <td style="color:#60a5fa;font-weight:bold;">CUCJA</td>
-                                <td style="color:#94a3b8;">N137ZM</td>
-                                <td style="color:#10b981;">$785</td>
-                                <td><button onclick="fillNps('AirMax','rong@airmaxonline.com','CUCJA','N137ZM')" style="background:#10b981;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">✓ Use</button></td>
-                            </tr>
-                            <tr>
-                                <td>International Jet</td>
-                                <td style="color:#fbbf24;font-family:monospace;font-size:0.8em;">heike@internationaljet.com</td>
-                                <td style="color:#60a5fa;font-weight:bold;">CUX4A</td>
-                                <td style="color:#94a3b8;">N219JG</td>
-                                <td style="color:#10b981;">$706</td>
-                                <td><button onclick="fillNps('International Jet Aviation','heike@internationaljet.com','CUX4A','N219JG')" style="background:#10b981;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">✓ Use</button></td>
-                            </tr>
-                            <tr style="background:rgba(107,114,128,0.2)">
-                                <td>Pilot Service Provider</td>
-                                <td style="color:#fbbf24;font-family:monospace;font-size:0.8em;">scott.j@pilotserviceprovider.com</td>
-                                <td style="color:#94a3b8;">CQCAB</td>
-                                <td style="color:#94a3b8;">N750JE</td>
-                                <td style="color:#94a3b8;">$0</td>
-                                <td><button onclick="fillNps('Pilot Service Provider','scott.j@pilotserviceprovider.com','CQCAB','N750JE')" style="background:#475569;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">Use</button></td>
-                            </tr>
+                        <tbody id="customerDbBody">
+                            <!-- Dynamically populated -->
                         </tbody>
                     </table>
                 </div>
-                <div style="background:#14532d;padding:8px;border-radius:6px;margin-top:10px;font-size:0.8em;color:#bbf7d0;">
-                    ✅ <strong>Smart Fill:</strong> Click "Use" to auto-fill Customer, Email, WO#, and Registration. Sorted by revenue (best NPS candidates at top).
+                <div id="npsDbSummary" style="background:#14532d;padding:8px;border-radius:6px;margin-top:10px;font-size:0.8em;color:#bbf7d0;">
+                    ✅ <strong>All 14 surveys sent!</strong> Waiting for responses. Check "Show sent" to see full list.
                 </div>
                 <div style="background:#0f172a;padding:8px;border-radius:6px;margin-top:5px;font-size:0.75em;color:#94a3b8;">
                     ⚠️ <strong>Data Note:</strong> Billed WO report has multiple rows per WO (by Sqk Type). Using MAX revenue per WO to avoid duplicates.
@@ -983,48 +878,59 @@
             <div class="card">
                 <div class="card-header">
                     <span class="card-title">📅 Scheduled Installs (SDV)</span>
-                    <span class="badge badge-blue">Feb-Mar 2026</span>
+                    <span class="badge badge-amber">Jan-Mar 2026</span>
                 </div>
                 <div class="table-container">
                     <table>
                         <thead>
-                            <tr><th>Aircraft</th><th>Customer</th><th>Start</th><th>End</th><th>Daily Hours</th><th>Status</th></tr>
+                            <tr><th>Aircraft</th><th>Type</th><th>Work</th><th>Start</th><th>End</th><th>Days</th><th>Status</th></tr>
                         </thead>
                         <tbody>
                             <tr style="background:rgba(59,130,246,0.15)">
+                                <td><strong>N4QL</strong></td>
+                                <td>Beechcraft B200</td>
+                                <td>Artex ELT-1000 Install</td>
+                                <td>Jan 27</td>
+                                <td>Jan 29</td>
+                                <td>3 days</td>
+                                <td><span class="badge badge-blue">Firm</span></td>
+                            </tr>
+                            <tr style="background:rgba(59,130,246,0.15)">
                                 <td><strong>N303JJ</strong></td>
-                                <td>LEAR 60</td>
+                                <td>Lear 60</td>
+                                <td>L3 Install</td>
                                 <td>Feb 17</td>
                                 <td>Mar 6</td>
-                                <td>33.3h/day</td>
-                                <td><span class="badge badge-blue">Scheduled</span></td>
+                                <td>12 days</td>
+                                <td><span class="badge badge-blue">Firm</span></td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
+                <div style="margin-top:10px;font-size:0.8em;color:#94a3b8;">
+                    📋 Schedule IDs: N4QL (Schd:86035) | N303JJ (Schd:85877)
+                </div>
                 <div style="margin-top:15px;">
-                    <div style="font-size:0.9em;color:#94a3b8;margin-bottom:10px;">📊 SDV Capacity Utilization:</div>
+                    <div style="font-size:0.9em;color:#94a3b8;margin-bottom:10px;">📊 SDV Capacity - N303JJ L3 Install (Feb 17 - Mar 6):</div>
                     <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:5px;text-align:center;font-size:0.75em;">
-                        <div style="background:#fbbf24;color:#000;padding:8px 4px;border-radius:4px;">Feb 17<br><strong>70%</strong></div>
+                        <div style="background:#fbbf24;color:#000;padding:8px 4px;border-radius:4px;">Feb 17<br><strong>69%</strong></div>
                         <div style="background:#fbbf24;color:#000;padding:8px 4px;border-radius:4px;">Feb 18<br><strong>69%</strong></div>
                         <div style="background:#fbbf24;color:#000;padding:8px 4px;border-radius:4px;">Feb 19<br><strong>69%</strong></div>
                         <div style="background:#fbbf24;color:#000;padding:8px 4px;border-radius:4px;">Feb 20<br><strong>69%</strong></div>
                         <div style="background:#475569;color:#fff;padding:8px 4px;border-radius:4px;">Feb 21<br>Weekend</div>
                         <div style="background:#475569;color:#fff;padding:8px 4px;border-radius:4px;">Feb 22<br>Weekend</div>
-                        <div style="background:#fbbf24;color:#000;padding:8px 4px;border-radius:4px;">Feb 23<br><strong>69%</strong></div>
+                        <div style="background:#fbbf24;color:#000;padding:8px 4px;border-radius:4px;">Feb 24<br><strong>69%</strong></div>
                     </div>
                     <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:5px;text-align:center;font-size:0.75em;margin-top:5px;">
-                        <div style="background:#fbbf24;color:#000;padding:8px 4px;border-radius:4px;">Feb 24<br><strong>69%</strong></div>
                         <div style="background:#fbbf24;color:#000;padding:8px 4px;border-radius:4px;">Feb 25<br><strong>69%</strong></div>
                         <div style="background:#fbbf24;color:#000;padding:8px 4px;border-radius:4px;">Feb 26<br><strong>69%</strong></div>
                         <div style="background:#fbbf24;color:#000;padding:8px 4px;border-radius:4px;">Feb 27<br><strong>69%</strong></div>
-                        <div style="background:#fbbf24;color:#000;padding:8px 4px;border-radius:4px;">Feb 28<br><strong>69%</strong></div>
+                        <div style="background:#475569;color:#fff;padding:8px 4px;border-radius:4px;">Feb 28<br>Weekend</div>
                         <div style="background:#475569;color:#fff;padding:8px 4px;border-radius:4px;">Mar 1<br>Weekend</div>
-                        <div style="background:#fbbf24;color:#000;padding:8px 4px;border-radius:4px;">Mar 2<br><strong>69%</strong></div>
-                    </div>
-                    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:5px;text-align:center;font-size:0.75em;margin-top:5px;max-width:57%;">
                         <div style="background:#fbbf24;color:#000;padding:8px 4px;border-radius:4px;">Mar 3<br><strong>69%</strong></div>
                         <div style="background:#fbbf24;color:#000;padding:8px 4px;border-radius:4px;">Mar 4<br><strong>69%</strong></div>
+                    </div>
+                    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:5px;text-align:center;font-size:0.75em;margin-top:5px;max-width:28%;">
                         <div style="background:#fbbf24;color:#000;padding:8px 4px;border-radius:4px;">Mar 5<br><strong>69%</strong></div>
                         <div style="background:#fbbf24;color:#000;padding:8px 4px;border-radius:4px;">Mar 6<br><strong>69%</strong></div>
                     </div>
@@ -1820,6 +1726,7 @@
             
             saveNpsSurveys(surveys);
             renderNpsTable();
+            renderCustomerTable();
             
             // Show success
             successDiv.style.display = 'block';
@@ -1922,13 +1829,96 @@ ${surveyUrl}`;
                     surveys.pop();
                     saveNpsSurveys(surveys);
                     renderNpsTable();
+                    renderCustomerTable();
                     updateNpsStats();
                 }
             };
         }
         
-        // Initialize tracking table
+        // Customer Database - Update when new Billed WO reports are processed
+        const customerDatabase = [
+            {name: 'Bode Aviation', email: 'michelle.amezcua@flybode.com', wo: 'DSW5A', reg: 'N328SF', revenue: 34270},
+            {name: 'MIMG Transportation', email: 'n950kmmx@gmail.com', wo: 'CV3UA', reg: 'STOCK', revenue: 9297},
+            {name: 'Peregrine', email: 'ths@masd.metrea.aero', wo: 'DTBLA', reg: '', revenue: 6856},
+            {name: 'Infinity Energia', email: 'EDUARDO@INFINITYENERGIAD.COM.BR', wo: 'CUGZA', reg: 'PR-BBD', revenue: 5444},
+            {name: 'Liberty Global', email: 'apdenver@libertyglobal.com', wo: 'CT8VA', reg: 'N250LG', revenue: 4445},
+            {name: 'M&N Aviation', email: 'accounting@mandn.aero', wo: 'CT0VA', reg: 'N488RJ', revenue: 2475},
+            {name: 'Arapahoe Aero', email: 'customercare@arapahoeaero.com', wo: 'CSAZA', reg: 'N426LM', revenue: 2118},
+            {name: 'GMR', email: 'parts-mtc@gmr.net', wo: 'CU44A', reg: 'N866MB', revenue: 1942},
+            {name: 'Aspen Flying Club', email: 'accounting@aspenflyingclub.com', wo: 'CS1XA', reg: 'N331JK', revenue: 1632},
+            {name: 'Flights Inc', email: 'ABAUER@FLIGHTS-INC.COM', wo: 'CRW3A', reg: 'N22265', revenue: 1632},
+            {name: 'Civil Air Patrol', email: 'capconsmx@capnhq.gov', wo: 'CSYNA', reg: 'N846CP', revenue: 1267},
+            {name: 'AirMax', email: 'rong@airmaxonline.com', wo: 'CUCJA', reg: 'N137ZM', revenue: 785},
+            {name: 'International Jet Aviation', email: 'heike@internationaljet.com', wo: 'CUX4A', reg: 'N219JG', revenue: 706},
+            {name: 'Pilot Service Provider', email: 'scott.j@pilotserviceprovider.com', wo: 'CQCAB', reg: 'N750JE', revenue: 0}
+        ];
+        
+        function renderCustomerTable() {
+            const surveys = getNpsSurveys();
+            const sentWOs = surveys.map(s => s.wo.toUpperCase());
+            const showSent = document.getElementById('showSentCustomers').checked;
+            const tbody = document.getElementById('customerDbBody');
+            const summaryDiv = document.getElementById('npsDbSummary');
+            
+            let html = '';
+            let notSentCount = 0;
+            let sentCount = 0;
+            
+            customerDatabase.forEach(c => {
+                const isSent = sentWOs.includes(c.wo.toUpperCase());
+                if (isSent) sentCount++;
+                else notSentCount++;
+                
+                if (!showSent && isSent) return; // Skip sent if checkbox unchecked
+                
+                const rowStyle = isSent ? 'background:rgba(107,114,128,0.3);opacity:0.7;' : (c.revenue > 5000 ? 'background:rgba(16,185,129,0.2);' : '');
+                const woStyle = isSent ? 'color:#64748b;' : 'color:#60a5fa;font-weight:bold;';
+                const revStyle = c.revenue === 0 ? 'color:#94a3b8;' : 'color:#10b981;';
+                const regDisplay = c.reg || '-';
+                const revDisplay = '$' + c.revenue.toLocaleString();
+                
+                let actionCell;
+                if (isSent) {
+                    actionCell = '<span style="color:#10b981;font-size:0.8em;">✓ Sent</span>';
+                } else {
+                    const btnStyle = c.revenue > 0 ? 'background:#10b981;' : 'background:#475569;';
+                    actionCell = `<button onclick="fillNps('${c.name}','${c.email}','${c.wo}','${c.reg}')" style="${btnStyle}color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">✓ Use</button>`;
+                }
+                
+                html += `<tr style="${rowStyle}">
+                    <td>${c.name}</td>
+                    <td style="color:#fbbf24;font-family:monospace;font-size:0.8em;">${c.email}</td>
+                    <td style="${woStyle}">${c.wo}</td>
+                    <td style="color:#94a3b8;">${regDisplay}</td>
+                    <td style="${revStyle}">${revDisplay}</td>
+                    <td>${actionCell}</td>
+                </tr>`;
+            });
+            
+            if (html === '') {
+                html = '<tr><td colspan="6" style="color:#64748b;text-align:center;">All customers have been surveyed! ✅</td></tr>';
+            }
+            
+            tbody.innerHTML = html;
+            
+            // Update summary
+            if (notSentCount === 0) {
+                summaryDiv.innerHTML = '✅ <strong>All ' + sentCount + ' surveys sent!</strong> Waiting for responses.';
+                summaryDiv.style.background = '#14532d';
+                summaryDiv.style.color = '#bbf7d0';
+            } else {
+                summaryDiv.innerHTML = '📋 <strong>' + notSentCount + ' remaining</strong> | ' + sentCount + ' sent. Click "✓ Use" to auto-fill form.';
+                summaryDiv.style.background = '#1e3a5f';
+                summaryDiv.style.color = '#93c5fd';
+            }
+            
+            // Update count in header
+            document.getElementById('customerDbCount').textContent = customerDatabase.length;
+        }
+        
+        // Initialize tracking table and customer table
         renderNpsTable();
+        renderCustomerTable();
         
         // Prevent input fields from triggering scroll pause
         document.querySelectorAll('input').forEach(input => {
