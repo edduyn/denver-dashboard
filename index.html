@@ -390,13 +390,65 @@
                 <div class="action-item"><div class="action-check checked" onclick="this.classList.toggle('checked')"></div><span class="action-text">✅ Reply to Brian Zitek Over 30 list with WO notes</span><span class="action-priority" style="background:#10b981;color:#fff">DONE</span></div>
             </div>
             
-            <div class="card">
+            <div class="card" style="border:2px solid #60a5fa;">
                 <div class="card-header">
                     <span class="card-title">📅 Weekly Goals</span>
+                    <span class="badge badge-blue">Week of 01/27</span>
                 </div>
-                <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">A/B Target: Get to 30%+ by Friday</span></div>
-                <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">Close 5+ WOs from 90+ day aging list</span></div>
-                <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">Move up to 18th rank (pass St. Louis & KC)</span></div>
+                
+                <!-- Goal 1: A/B Target -->
+                <div style="background:#1e293b;padding:12px;border-radius:8px;margin-bottom:10px;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                        <span style="color:#e2e8f0;">📊 A/B Target: Get to 30%+ by Friday</span>
+                        <span id="weeklyABStatus" class="badge badge-amber">In Progress</span>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:10px;">
+                        <div class="progress-container" style="flex:1;margin:0;">
+                            <div class="progress-bar">
+                                <div id="weeklyABBar" class="progress-fill" style="width:89%;background:linear-gradient(90deg,#f59e0b,#fbbf24);"></div>
+                            </div>
+                        </div>
+                        <span id="weeklyABText" style="color:#fbbf24;font-weight:bold;min-width:100px;text-align:right;">26.7% / 30%</span>
+                    </div>
+                    <div style="color:#94a3b8;font-size:0.8em;margin-top:5px;">Need +3.3 pts by Fri | Currently 20th rank</div>
+                </div>
+                
+                <!-- Goal 2: Aging WO Closures -->
+                <div style="background:#1e293b;padding:12px;border-radius:8px;margin-bottom:10px;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                        <span style="color:#e2e8f0;">📋 Close 5+ WOs from 90+ day aging list</span>
+                        <span id="weeklyAgingStatus" class="badge badge-amber">2 / 5</span>
+                    </div>
+                    <div style="display:flex;gap:5px;flex-wrap:wrap;">
+                        <span style="background:#10b981;color:white;padding:2px 8px;border-radius:4px;font-size:0.8em;">✅ DTBLA</span>
+                        <span style="background:#10b981;color:white;padding:2px 8px;border-radius:4px;font-size:0.8em;">✅ DSW4A</span>
+                        <span style="background:#374151;color:#9ca3af;padding:2px 8px;border-radius:4px;font-size:0.8em;">⬜ 3 more needed</span>
+                    </div>
+                    <div style="color:#94a3b8;font-size:0.8em;margin-top:5px;">CG4NA (188 days) still in dispute</div>
+                </div>
+                
+                <!-- Goal 3: Rank Improvement -->
+                <div style="background:#1e293b;padding:12px;border-radius:8px;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                        <span style="color:#e2e8f0;">🏆 Move up to 18th rank (pass St. Louis & KC)</span>
+                        <span id="weeklyRankStatus" class="badge badge-red">20th → 18th</span>
+                    </div>
+                    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;font-size:0.85em;">
+                        <div style="text-align:center;padding:5px;background:#0f172a;border-radius:4px;">
+                            <div style="color:#94a3b8;">18th St. Louis</div>
+                            <div style="color:#f59e0b;font-weight:bold;">28.2%</div>
+                        </div>
+                        <div style="text-align:center;padding:5px;background:#0f172a;border-radius:4px;">
+                            <div style="color:#94a3b8;">19th KC</div>
+                            <div style="color:#f59e0b;font-weight:bold;">27.5%</div>
+                        </div>
+                        <div style="text-align:center;padding:5px;background:#0f172a;border-radius:4px;border:1px solid #ef4444;">
+                            <div style="color:#ef4444;">20th Denver</div>
+                            <div style="color:#ef4444;font-weight:bold;">26.7%</div>
+                        </div>
+                    </div>
+                    <div style="color:#94a3b8;font-size:0.8em;margin-top:5px;">Need +1.5 pts to pass KC, +2.3 pts to pass St. Louis</div>
+                </div>
             </div>
             
             <!-- NPS SURVEY CANDIDATES -->
@@ -452,10 +504,10 @@
                     </div>
                     
                     <div style="display:grid;grid-template-columns:2fr 1fr;gap:10px;">
-                        <button id="sendNpsSurveyBtn" style="padding:15px;background:linear-gradient(135deg,#10b981,#059669);color:white;border:none;border-radius:8px;font-size:1em;font-weight:bold;cursor:pointer;">
+                        <button onclick="logNpsSurvey(true)" style="padding:15px;background:linear-gradient(135deg,#10b981,#059669);color:white;border:none;border-radius:8px;font-size:1em;font-weight:bold;cursor:pointer;">
                             📧 Send & Log Survey
                         </button>
-                        <button id="logOnlyBtn" style="padding:15px;background:#475569;color:white;border:none;border-radius:8px;font-size:0.9em;cursor:pointer;">
+                        <button onclick="logNpsSurvey(false)" style="padding:15px;background:#475569;color:white;border:none;border-radius:8px;font-size:0.9em;cursor:pointer;">
                             📝 Log Only
                         </button>
                     </div>
@@ -488,7 +540,7 @@
                         <div><span style="color:#64748b;">WO:</span> <span style="color:#fbbf24;">DTBLA</span></div>
                         <div><span style="color:#64748b;">Customer:</span> <span style="color:white;">Peregrine</span></div>
                         <div><span style="color:#64748b;">Amount:</span> <span style="color:#10b981;">$6,600</span></div>
-                        <button onclick="document.getElementById('npsCustomerName').value='Peregrine';document.getElementById('npsWO').value='DTBLA';document.getElementById('npsCustomerEmail').value=document.getElementById('peregrine-email').textContent;document.getElementById('npsRegNumber').focus();" style="background:#a855f7;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">Auto-Fill</button>
+                        <button onclick="document.getElementById('npsCustomerName').value='Peregrine';document.getElementById('npsWO').value='DTBLA';document.getElementById('npsCustomerEmail').value=document.getElementById('peregrine-email').textContent;document.getElementById('npsWO').focus();" style="background:#a855f7;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">Auto-Fill</button>
                     </div>
                 </div>
                 
@@ -503,85 +555,85 @@
                                 <td>144668</td>
                                 <td>Peregrine</td>
                                 <td style="color:#fbbf24;font-family:monospace;font-size:0.85em;" id="peregrine-email">ths@masd.metrea.aero</td>
-                                <td><button onclick="document.getElementById('npsCustomerName').value='Peregrine';document.getElementById('npsCustomerEmail').value='ths@masd.metrea.aero';document.getElementById('npsRegNumber').focus();" style="background:#a855f7;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">Use</button></td>
+                                <td><button onclick="document.getElementById('npsCustomerName').value='Peregrine';document.getElementById('npsCustomerEmail').value='ths@masd.metrea.aero';document.getElementById('npsWO').focus();" style="background:#a855f7;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">Use</button></td>
                             </tr>
                             <tr>
                                 <td>109004</td>
                                 <td>International Jet</td>
                                 <td style="color:#fbbf24;font-family:monospace;font-size:0.85em;">heike@internationaljet.com</td>
-                                <td><button onclick="document.getElementById('npsCustomerName').value='International Jet Aviation';document.getElementById('npsCustomerEmail').value='heike@internationaljet.com';document.getElementById('npsRegNumber').focus();" style="background:#a855f7;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">Use</button></td>
+                                <td><button onclick="document.getElementById('npsCustomerName').value='International Jet Aviation';document.getElementById('npsCustomerEmail').value='heike@internationaljet.com';document.getElementById('npsWO').focus();" style="background:#a855f7;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">Use</button></td>
                             </tr>
                             <tr>
                                 <td>113966</td>
                                 <td>GMR</td>
                                 <td style="color:#fbbf24;font-family:monospace;font-size:0.85em;">parts-mtc@gmr.net</td>
-                                <td><button onclick="document.getElementById('npsCustomerName').value='GMR';document.getElementById('npsCustomerEmail').value='parts-mtc@gmr.net';document.getElementById('npsRegNumber').focus();" style="background:#a855f7;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">Use</button></td>
+                                <td><button onclick="document.getElementById('npsCustomerName').value='GMR';document.getElementById('npsCustomerEmail').value='parts-mtc@gmr.net';document.getElementById('npsWO').focus();" style="background:#a855f7;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">Use</button></td>
                             </tr>
                             <tr>
                                 <td>117171</td>
                                 <td>Liberty Global</td>
                                 <td style="color:#fbbf24;font-family:monospace;font-size:0.85em;">apdenver@libertyglobal.com</td>
-                                <td><button onclick="document.getElementById('npsCustomerName').value='Liberty Global';document.getElementById('npsCustomerEmail').value='apdenver@libertyglobal.com';document.getElementById('npsRegNumber').focus();" style="background:#a855f7;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">Use</button></td>
+                                <td><button onclick="document.getElementById('npsCustomerName').value='Liberty Global';document.getElementById('npsCustomerEmail').value='apdenver@libertyglobal.com';document.getElementById('npsWO').focus();" style="background:#a855f7;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">Use</button></td>
                             </tr>
                             <tr>
                                 <td>125945</td>
                                 <td>Bode Aviation</td>
                                 <td style="color:#fbbf24;font-family:monospace;font-size:0.85em;">michelle.amezcua@flybode.com</td>
-                                <td><button onclick="document.getElementById('npsCustomerName').value='Bode Aviation';document.getElementById('npsCustomerEmail').value='michelle.amezcua@flybode.com';document.getElementById('npsRegNumber').focus();" style="background:#a855f7;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">Use</button></td>
+                                <td><button onclick="document.getElementById('npsCustomerName').value='Bode Aviation';document.getElementById('npsCustomerEmail').value='michelle.amezcua@flybode.com';document.getElementById('npsWO').focus();" style="background:#a855f7;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">Use</button></td>
                             </tr>
                             <tr>
                                 <td>127007</td>
                                 <td>AirMax</td>
                                 <td style="color:#fbbf24;font-family:monospace;font-size:0.85em;">rong@airmaxonline.com</td>
-                                <td><button onclick="document.getElementById('npsCustomerName').value='AirMax';document.getElementById('npsCustomerEmail').value='rong@airmaxonline.com';document.getElementById('npsRegNumber').focus();" style="background:#a855f7;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">Use</button></td>
+                                <td><button onclick="document.getElementById('npsCustomerName').value='AirMax';document.getElementById('npsCustomerEmail').value='rong@airmaxonline.com';document.getElementById('npsWO').focus();" style="background:#a855f7;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">Use</button></td>
                             </tr>
                             <tr>
                                 <td>129186</td>
                                 <td>M&N Aviation</td>
                                 <td style="color:#fbbf24;font-family:monospace;font-size:0.85em;">accounting@mandn.aero</td>
-                                <td><button onclick="document.getElementById('npsCustomerName').value='M&N Aviation';document.getElementById('npsCustomerEmail').value='accounting@mandn.aero';document.getElementById('npsRegNumber').focus();" style="background:#a855f7;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">Use</button></td>
+                                <td><button onclick="document.getElementById('npsCustomerName').value='M&N Aviation';document.getElementById('npsCustomerEmail').value='accounting@mandn.aero';document.getElementById('npsWO').focus();" style="background:#a855f7;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">Use</button></td>
                             </tr>
                             <tr>
                                 <td>135888</td>
                                 <td>Pilot Service Provider</td>
                                 <td style="color:#fbbf24;font-family:monospace;font-size:0.85em;">scott.j@pilotserviceprovider.com</td>
-                                <td><button onclick="document.getElementById('npsCustomerName').value='Pilot Service Provider';document.getElementById('npsCustomerEmail').value='scott.j@pilotserviceprovider.com';document.getElementById('npsRegNumber').focus();" style="background:#a855f7;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">Use</button></td>
+                                <td><button onclick="document.getElementById('npsCustomerName').value='Pilot Service Provider';document.getElementById('npsCustomerEmail').value='scott.j@pilotserviceprovider.com';document.getElementById('npsWO').focus();" style="background:#a855f7;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">Use</button></td>
                             </tr>
                             <tr>
                                 <td>137367</td>
                                 <td>CAP (Civil Air Patrol)</td>
                                 <td style="color:#fbbf24;font-family:monospace;font-size:0.85em;">capconsmx@capnhq.gov</td>
-                                <td><button onclick="document.getElementById('npsCustomerName').value='Civil Air Patrol';document.getElementById('npsCustomerEmail').value='capconsmx@capnhq.gov';document.getElementById('npsRegNumber').focus();" style="background:#a855f7;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">Use</button></td>
+                                <td><button onclick="document.getElementById('npsCustomerName').value='Civil Air Patrol';document.getElementById('npsCustomerEmail').value='capconsmx@capnhq.gov';document.getElementById('npsWO').focus();" style="background:#a855f7;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">Use</button></td>
                             </tr>
                             <tr>
                                 <td>139695</td>
                                 <td>Aspen Flying Club</td>
                                 <td style="color:#fbbf24;font-family:monospace;font-size:0.85em;">accounting@aspenflyingclub.com</td>
-                                <td><button onclick="document.getElementById('npsCustomerName').value='Aspen Flying Club';document.getElementById('npsCustomerEmail').value='accounting@aspenflyingclub.com';document.getElementById('npsRegNumber').focus();" style="background:#a855f7;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">Use</button></td>
+                                <td><button onclick="document.getElementById('npsCustomerName').value='Aspen Flying Club';document.getElementById('npsCustomerEmail').value='accounting@aspenflyingclub.com';document.getElementById('npsWO').focus();" style="background:#a855f7;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">Use</button></td>
                             </tr>
                             <tr>
                                 <td>142768</td>
                                 <td>Flights Inc</td>
                                 <td style="color:#fbbf24;font-family:monospace;font-size:0.85em;">ABAUER@FLIGHTS-INC.COM</td>
-                                <td><button onclick="document.getElementById('npsCustomerName').value='Flights Inc';document.getElementById('npsCustomerEmail').value='ABAUER@FLIGHTS-INC.COM';document.getElementById('npsRegNumber').focus();" style="background:#a855f7;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">Use</button></td>
+                                <td><button onclick="document.getElementById('npsCustomerName').value='Flights Inc';document.getElementById('npsCustomerEmail').value='ABAUER@FLIGHTS-INC.COM';document.getElementById('npsWO').focus();" style="background:#a855f7;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">Use</button></td>
                             </tr>
                             <tr>
                                 <td>151065</td>
                                 <td>Arapahoe Aero</td>
                                 <td style="color:#fbbf24;font-family:monospace;font-size:0.85em;">customercare@arapahoeaero.com</td>
-                                <td><button onclick="document.getElementById('npsCustomerName').value='Arapahoe Aero';document.getElementById('npsCustomerEmail').value='customercare@arapahoeaero.com';document.getElementById('npsRegNumber').focus();" style="background:#a855f7;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">Use</button></td>
+                                <td><button onclick="document.getElementById('npsCustomerName').value='Arapahoe Aero';document.getElementById('npsCustomerEmail').value='customercare@arapahoeaero.com';document.getElementById('npsWO').focus();" style="background:#a855f7;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">Use</button></td>
                             </tr>
                             <tr>
                                 <td>155665</td>
                                 <td>MIMG Transport</td>
                                 <td style="color:#fbbf24;font-family:monospace;font-size:0.85em;">n950kmmx@gmail.com</td>
-                                <td><button onclick="document.getElementById('npsCustomerName').value='MIMG Transportation';document.getElementById('npsCustomerEmail').value='n950kmmx@gmail.com';document.getElementById('npsRegNumber').focus();" style="background:#a855f7;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">Use</button></td>
+                                <td><button onclick="document.getElementById('npsCustomerName').value='MIMG Transportation';document.getElementById('npsCustomerEmail').value='n950kmmx@gmail.com';document.getElementById('npsWO').focus();" style="background:#a855f7;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">Use</button></td>
                             </tr>
                             <tr>
                                 <td>157238</td>
                                 <td>Infinity Energia</td>
                                 <td style="color:#fbbf24;font-family:monospace;font-size:0.85em;">EDUARDO@INFINITYENERGIAD.COM.BR</td>
-                                <td><button onclick="document.getElementById('npsCustomerName').value='Infinity Energia';document.getElementById('npsCustomerEmail').value='EDUARDO@INFINITYENERGIAD.COM.BR';document.getElementById('npsRegNumber').focus();" style="background:#a855f7;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">Use</button></td>
+                                <td><button onclick="document.getElementById('npsCustomerName').value='Infinity Energia';document.getElementById('npsCustomerEmail').value='EDUARDO@INFINITYENERGIAD.COM.BR';document.getElementById('npsWO').focus();" style="background:#a855f7;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">Use</button></td>
                             </tr>
                         </tbody>
                     </table>
