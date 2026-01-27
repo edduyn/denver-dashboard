@@ -193,43 +193,43 @@
                     <div class="goal-header">
                         <span class="goal-title">#2 Net Promoter Score (NPS) - Customer Satisfaction</span>
                         <div class="goal-progress">
-                            <span class="goal-pct" style="color:#ef4444">0%</span>
-                            <span class="badge badge-red">Action Needed!</span>
+                            <span id="npsGoalPct" class="goal-pct" style="color:#ef4444">0%</span>
+                            <span id="npsGoalBadge" class="badge badge-red">Action Needed!</span>
                         </div>
                     </div>
                     <!-- Completed Surveys -->
                     <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
                         <span style="font-size:0.85em;color:#10b981;width:80px;">✅ Completed</span>
                         <div class="progress-container" style="flex:1;margin:0;">
-                            <div class="progress-bar"><div class="progress-fill progress-green" style="width:0%"></div></div>
+                            <div class="progress-bar"><div id="npsCompletedBar" class="progress-fill progress-green" style="width:0%"></div></div>
                         </div>
-                        <span style="font-size:0.85em;color:#94a3b8;width:60px;">0 / 12</span>
+                        <span id="npsCompletedCount" style="font-size:0.85em;color:#94a3b8;width:60px;">0 / 12</span>
                     </div>
                     <!-- Sent Surveys -->
                     <div style="display:flex;align-items:center;gap:10px;">
                         <span style="font-size:0.85em;color:#a855f7;width:80px;">📧 Sent</span>
                         <div class="progress-container" style="flex:1;margin:0;">
-                            <div class="progress-bar"><div class="progress-fill" style="width:0%;background:linear-gradient(90deg,#a855f7,#c084fc);"></div></div>
+                            <div class="progress-bar"><div id="npsSentBar" class="progress-fill" style="width:0%;background:linear-gradient(90deg,#a855f7,#c084fc);"></div></div>
                         </div>
-                        <span style="font-size:0.85em;color:#94a3b8;width:60px;">0 / 12</span>
+                        <span id="npsSentCount" style="font-size:0.85em;color:#94a3b8;width:60px;">0 / 12</span>
                     </div>
-                    <div style="margin-top:10px;">Target: 1 survey/month | Jan: 0 completed, 0 sent</div>
+                    <div id="npsGoalSummary" style="margin-top:10px;">Target: 1 survey/month | Jan: 0 completed, 0 sent</div>
                     <div class="goal-notes">📞 Peregrine (DTBLA) now billed - good NPS candidate! See Actions tab.</div>
                 </div>
                 
                 <div class="goal-card">
                     <div class="goal-header">
-                        <span class="goal-title">#3 Training Completion (Mandatory + Technical)</span>
+                        <span class="goal-title">#3 Training Completion</span>
                         <div class="goal-progress">
-                            <span class="goal-pct" style="color:#f59e0b">69%</span>
+                            <span class="goal-pct" style="color:#f59e0b">14%</span>
                             <span class="badge badge-amber">In Progress</span>
                         </div>
                     </div>
                     <div class="progress-container">
-                        <div class="progress-bar"><div class="progress-fill progress-amber" style="width:69%"></div></div>
+                        <div class="progress-bar"><div class="progress-fill progress-amber" style="width:14%"></div></div>
                     </div>
-                    <div>Mandatory: 14/14 compliant (100%) | Technical: 3/8 scheduled (38%)</div>
-                    <div class="goal-notes">✅ Mandatory complete. ⚠️ 5 techs still need technical training dates scheduled.</div>
+                    <div>Training: 0/14 sessions completed | Technical: 3/8 scheduled (38%)</div>
+                    <div class="goal-notes">⏳ 14 sessions available. ⚠️ 5 techs still need technical training dates scheduled.</div>
                 </div>
                 
                 <div class="goal-card">
@@ -789,8 +789,8 @@
                     </div>
                     <div style="background:linear-gradient(135deg,#854d0e,#ca8a04);padding:15px;border-radius:10px;text-align:center;border:2px solid #fbbf24;">
                         <div style="font-size:0.8em;color:#fef3c7;">SDV (Install) ⭐</div>
-                        <div style="font-size:1.8em;font-weight:bold;">$3,213</div>
-                        <div style="font-size:0.8em;color:#fde68a;">45.9h × $70</div>
+                        <div style="font-size:1.8em;font-weight:bold;">$6,230</div>
+                        <div style="font-size:0.8em;color:#fde68a;">89.0h × $70</div>
                     </div>
                     <div style="background:linear-gradient(135deg,#c2410c,#f97316);padding:15px;border-radius:10px;text-align:center;">
                         <div style="font-size:0.8em;color:#fed7aa;">SDR (Recip)</div>
@@ -804,7 +804,8 @@
                     </div>
                 </div>
                 <div style="background:#0f172a;padding:10px;border-radius:6px;font-size:0.85em;color:#94a3b8;">
-                    💡 <strong>WIP Logic:</strong> Only WOs opened in current month. Prior month WOs already WIP'd.
+                    💡 <strong>WIP Logic:</strong> Only WOs opened in current month. Prior month WOs already WIP'd.<br>
+                    ⭐ <strong>SDV Special (for Matt):</strong> 89.0h / $6,230 (2 OPEN WOs >10h verified). See WIP tab.
                 </div>
             </div>
             
@@ -820,20 +821,18 @@
                             <tr><th>WO#</th><th>Shop</th><th>Customer</th><th>Hours</th><th>Rate</th><th style="color:#10b981">WIP $</th></tr>
                         </thead>
                         <tbody>
+                            <tr style="background:rgba(251,191,36,0.15)"><td>DB1UA</td><td>SDV⭐</td><td>Hogs Head Air 1 LLC</td><td>73.0h</td><td style="color:#fbbf24">$70</td><td style="color:#fbbf24;font-weight:bold">$5,110</td></tr>
                             <tr><td>CU1EA</td><td>SDN</td><td>42K Re Management LLC</td><td>35.5h</td><td>$145</td><td style="color:#10b981;font-weight:bold">$5,148</td></tr>
                             <tr><td>CU16A</td><td>SDN</td><td>Flying Orchard LLC</td><td>30.5h</td><td>$145</td><td style="color:#10b981;font-weight:bold">$4,422</td></tr>
                             <tr><td>CU0VA</td><td>SDR</td><td>The Club at Centennial</td><td>17.5h</td><td>$145</td><td style="color:#10b981;font-weight:bold">$2,538</td></tr>
+                            <tr style="background:rgba(251,191,36,0.15)"><td>DUXFA</td><td>SDV⭐</td><td>Duncan Avionics-Denver</td><td>16.0h</td><td style="color:#fbbf24">$70</td><td style="color:#fbbf24;font-weight:bold">$1,120</td></tr>
                             <tr><td>CUPFA</td><td>SDN</td><td>Flying Orchard LLC</td><td>15.9h</td><td>$145</td><td style="color:#10b981;font-weight:bold">$2,306</td></tr>
                             <tr><td>CU92A</td><td>SDN</td><td>Robbins Aviation</td><td>15.0h</td><td>$145</td><td style="color:#10b981;font-weight:bold">$2,175</td></tr>
                             <tr><td>CUL2A</td><td>SDR</td><td>Peregrine</td><td>12.5h</td><td>$145</td><td style="color:#10b981;font-weight:bold">$1,812</td></tr>
-                            <tr style="background:rgba(251,191,36,0.15)"><td>CUS4A</td><td>SDV⭐</td><td>Flying Orchard LLC</td><td>21.4h</td><td style="color:#fbbf24">$70</td><td style="color:#fbbf24;font-weight:bold">$1,498</td></tr>
-                            <tr style="background:rgba(251,191,36,0.15)"><td>DUXFA</td><td>SDV⭐</td><td>Duncan Avionics-Denver</td><td>16.0h</td><td style="color:#fbbf24">$70</td><td style="color:#fbbf24;font-weight:bold">$1,120</td></tr>
-                            <tr><td>CV5EA</td><td>SDN</td><td>Precision Aircraft Mgmt</td><td>4.5h</td><td>$145</td><td style="color:#10b981;font-weight:bold">$652</td></tr>
-                            <tr style="background:rgba(251,191,36,0.15)"><td>CV78A</td><td>SDV⭐</td><td>Primus Capital</td><td>7.0h</td><td style="color:#fbbf24">$70</td><td style="color:#fbbf24;font-weight:bold">$490</td></tr>
                             <tr style="background:rgba(16,185,129,0.2);font-weight:bold;font-size:1.1em;">
-                                <td colspan="4">TOTAL JANUARY WIP (33 WOs)</td>
-                                <td>203.3h</td>
-                                <td style="color:#10b981">$26,036</td>
+                                <td colspan="4">TOTAL JANUARY WIP</td>
+                                <td>216h</td>
+                                <td style="color:#10b981">$24,631</td>
                             </tr>
                         </tbody>
                     </table>
@@ -928,13 +927,13 @@
             <div class="card">
                 <div class="card-header">
                     <span class="card-title">2026 Training Status</span>
-                    <span class="badge badge-amber">69% Complete</span>
+                    <span class="badge badge-amber">In Progress</span>
                 </div>
                 <div class="card-grid">
                     <div class="metric">
-                        <div class="metric-value" style="color:#10b981">14/14</div>
-                        <div class="metric-label">Mandatory</div>
-                        <div class="metric-sub">100% Compliant ✅</div>
+                        <div class="metric-value" style="color:#f59e0b">0/14</div>
+                        <div class="metric-label">Training Completed</div>
+                        <div class="metric-sub">14 sessions available</div>
                     </div>
                     <div class="metric">
                         <div class="metric-value" style="color:#f59e0b">3/8</div>
@@ -951,6 +950,9 @@
                         <div class="metric-label">Need Dates</div>
                         <div class="metric-sub">Action Required</div>
                     </div>
+                </div>
+                <div style="background:#0f172a;padding:10px;border-radius:6px;margin-top:10px;font-size:0.85em;color:#94a3b8;">
+                    💡 <strong>Tracking:</strong> Sessions completed / 14 available. Tell Claude when techs complete training to update count.
                 </div>
             </div>
             
@@ -1083,13 +1085,13 @@
             <div class="card" style="border:2px solid #f59e0b;">
                 <div class="card-header">
                     <span class="card-title">📧 SDV Special WIP List - FOR MATT</span>
-                    <span class="badge badge-amber">Last Week of Month TO-DO</span>
+                    <span class="badge badge-green">✅ VERIFIED</span>
                 </div>
-                <div style="background:#451a03;padding:12px;border-radius:8px;margin-bottom:15px;">
-                    <strong style="color:#fbbf24;">⏰ ACTION REQUIRED:</strong>
-                    <span style="color:#fef3c7;">Email this list to Matt Nelson by end of month for special WIP entry.</span>
+                <div style="background:#14532d;padding:12px;border-radius:8px;margin-bottom:15px;">
+                    <strong style="color:#4ade80;">✅ DATA VERIFIED:</strong>
+                    <span style="color:#bbf7d0;">Cross-referenced Time Sold × Anchor (open) × Billed (excluded)</span>
                 </div>
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-bottom:15px;">
+                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:15px;margin-bottom:15px;">
                     <div style="background:#1e293b;padding:12px;border-radius:8px;">
                         <div style="color:#94a3b8;font-size:0.85em;">SDV Special WIP Rate</div>
                         <div style="color:#fbbf24;font-size:1.5em;font-weight:bold;">$70/hr</div>
@@ -1098,6 +1100,10 @@
                         <div style="color:#94a3b8;font-size:0.85em;">SDV Margin</div>
                         <div style="color:#fbbf24;font-size:1.5em;font-weight:bold;">15%</div>
                     </div>
+                    <div style="background:#1e293b;padding:12px;border-radius:8px;">
+                        <div style="color:#94a3b8;font-size:0.85em;">Threshold</div>
+                        <div style="color:#fbbf24;font-size:1.5em;font-weight:bold;">>10 hrs</div>
+                    </div>
                 </div>
                 <div class="table-container">
                     <table>
@@ -1105,12 +1111,12 @@
                             <tr><th>WO#</th><th>Customer</th><th>Hours</th><th>WIP @ $70</th></tr>
                         </thead>
                         <tbody>
-                            <tr><td>CUS4A</td><td>Flying Orchard LLC</td><td>21.4h</td><td style="color:#fbbf24;font-weight:bold">$1,498</td></tr>
+                            <tr><td>DB1UA</td><td>Hogs Head Air 1 LLC</td><td>73.0h</td><td style="color:#fbbf24;font-weight:bold">$5,110</td></tr>
                             <tr><td>DUXFA</td><td>Duncan Avionics-Denver</td><td>16.0h</td><td style="color:#fbbf24;font-weight:bold">$1,120</td></tr>
                             <tr style="background:rgba(251,191,36,0.2);font-weight:bold;">
-                                <td colspan="2">TOTAL SDV SPECIAL WIP (>10h)</td>
-                                <td>37.4h</td>
-                                <td style="color:#fbbf24;">$2,618</td>
+                                <td colspan="2">TOTAL SDV SPECIAL WIP (>10h, OPEN only)</td>
+                                <td>89.0h</td>
+                                <td style="color:#fbbf24;">$6,230</td>
                             </tr>
                         </tbody>
                     </table>
@@ -1120,12 +1126,18 @@
                     <div style="color:#e2e8f0;font-size:0.9em;margin-top:8px;font-family:monospace;background:#0f172a;padding:10px;border-radius:4px;">
                         Subject: Denver SDV Special WIP - January 2026<br><br>
                         Matt, here are the SDV WOs with >10 hours for special WIP @ $70/hr, 15% margin:<br><br>
-                        DUL0A: 24.5h = $1,715<br>
-                        CUS4A: 21.0h = $1,470<br>
-                        DUXCA: 16.5h = $1,155<br>
-                        DUXFA: 16.0h = $1,120<br><br>
-                        Total: 78.0h = $5,460
+                        DB1UA: 73.0h = $5,110 (Hogs Head Air 1 LLC)<br>
+                        DUXFA: 16.0h = $1,120 (Duncan Avionics-Denver)<br><br>
+                        Total: 89.0h = $6,230
                     </div>
+                </div>
+                <div style="background:#0f172a;padding:10px;border-radius:6px;margin-top:10px;font-size:0.8em;color:#94a3b8;">
+                    <strong style="color:#a855f7;">🤖 SMART AUTO-DETECT LOGIC:</strong><br>
+                    1️⃣ Time Sold (SDV) → Get all SDV hours by WO<br>
+                    2️⃣ Anchor report → Get OPEN WOs only<br>
+                    3️⃣ Billed report → EXCLUDE billed WOs<br>
+                    4️⃣ Filter >10 hours → Calculate @ $70/hr<br>
+                    <span style="color:#4ade80;">Last verified: 01/28/26 from Anchor 01/27 + Billed 01/27</span>
                 </div>
             </div>
             
@@ -1544,6 +1556,41 @@
                 badge.textContent = 'Jan: 0/1 ⚠️';
                 badge.style.background = '#ef4444';
             }
+            
+            // UPDATE GOAL #2 PROGRESS BARS (Smart sync)
+            const yearlyTarget = 12;
+            const completedPct = Math.round((completed / yearlyTarget) * 100);
+            const sentPct = Math.round((sent / yearlyTarget) * 100);
+            
+            // Update completed bar
+            document.getElementById('npsCompletedBar').style.width = completedPct + '%';
+            document.getElementById('npsCompletedCount').textContent = completed + ' / ' + yearlyTarget;
+            
+            // Update sent bar
+            document.getElementById('npsSentBar').style.width = sentPct + '%';
+            document.getElementById('npsSentCount').textContent = sent + ' / ' + yearlyTarget;
+            
+            // Update goal percentage and badge
+            const goalPct = document.getElementById('npsGoalPct');
+            const goalBadge = document.getElementById('npsGoalBadge');
+            goalPct.textContent = completedPct + '%';
+            
+            if (completed >= 1) {
+                goalPct.style.color = '#10b981';
+                goalBadge.textContent = 'On Track';
+                goalBadge.className = 'badge badge-green';
+            } else if (sent > 0) {
+                goalPct.style.color = '#f59e0b';
+                goalBadge.textContent = 'Sent - Awaiting';
+                goalBadge.className = 'badge badge-amber';
+            } else {
+                goalPct.style.color = '#ef4444';
+                goalBadge.textContent = 'Action Needed!';
+                goalBadge.className = 'badge badge-red';
+            }
+            
+            // Update summary text
+            document.getElementById('npsGoalSummary').textContent = 'Target: 1 survey/month | Jan: ' + completed + ' completed, ' + sent + ' sent';
         }
         
         function renderNpsTable() {
