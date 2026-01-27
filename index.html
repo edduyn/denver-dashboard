@@ -422,7 +422,7 @@
                             <input type="text" id="npsCustomerName" placeholder="Peregrine" style="width:100%;padding:10px;border-radius:6px;border:none;background:#1e1b4b;color:white;font-size:1em;">
                         </div>
                         <div>
-                            <label style="color:#c4b5fd;font-size:0.8em;display:block;margin-bottom:5px;">WO# (optional)</label>
+                            <label style="color:#c4b5fd;font-size:0.8em;display:block;margin-bottom:5px;">WO# *</label>
                             <input type="text" id="npsWO" placeholder="DTBLA" style="width:100%;padding:10px;border-radius:6px;border:none;background:#1e1b4b;color:white;font-size:1em;text-transform:uppercase;">
                         </div>
                     </div>
@@ -455,7 +455,7 @@
                 <div style="background:#0f172a;padding:15px;border-radius:8px;margin-bottom:15px;">
                     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
                         <span style="color:#a855f7;font-weight:bold;">📊 Survey Tracking Log</span>
-                        <button id="clearNpsLog" style="background:#dc2626;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.75em;cursor:pointer;">Clear All</button>
+                        <button id="clearLastNps" style="background:#f59e0b;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.75em;cursor:pointer;">Undo Last</button>
                     </div>
                     <div class="table-container" style="max-height:200px;overflow-y:auto;">
                         <table id="npsTrackingTable" style="font-size:0.85em;">
@@ -1491,9 +1491,9 @@
             const errorDiv = document.getElementById('npsError');
             const successDiv = document.getElementById('npsSuccess');
             
-            // Validate
-            if (!customerName || !email) {
-                errorDiv.textContent = '⚠️ Please enter customer name and email';
+            // Validate - customer name, email, and WO are required
+            if (!customerName || !email || !wo) {
+                errorDiv.textContent = '⚠️ Please enter customer name, email, and WO#';
                 errorDiv.style.display = 'block';
                 successDiv.style.display = 'none';
                 return false;
@@ -1531,12 +1531,32 @@
             // Open Outlook if requested
             if (openOutlook) {
                 let subject, body;
+                const surveyUrl = 'https://form.jotform.com/231574976012155';
+                
                 if (regNum) {
                     subject = `Quick Feedback Request - ${regNum} Service`;
-                    body = `Hi,\n\nThank you for choosing Duncan Aviation Denver for your recent service on ${regNum}.\n\nHelp us improve by filling out a quick 8-question survey:\n\nhttps://form.jotform.com/231574976012155\n\nInclude your phone number in the comments for the monthly prize raffle.\n\nBest Regards,`;
+                    body = `Hi,
+
+Thank you for choosing Duncan Aviation Denver for your recent service on ${regNum}.
+
+Please take a moment to fill out our quick 8-question survey:
+${surveyUrl}
+
+Include your phone number in the comments for the monthly prize raffle.
+
+Best Regards,`;
                 } else {
-                    subject = `Quick Feedback Request - Duncan Aviation Denver Service`;
-                    body = `Hi,\n\nThank you for choosing Duncan Aviation Denver for your recent service.\n\nHelp us improve by filling out a quick 8-question survey:\n\nhttps://form.jotform.com/231574976012155\n\nInclude your phone number in the comments for the monthly prize raffle.\n\nBest Regards,`;
+                    subject = `Quick Feedback Request - WO# ${wo}`;
+                    body = `Hi,
+
+Thank you for choosing Duncan Aviation Denver for your recent service.
+
+Please take a moment to fill out our quick 8-question survey:
+${surveyUrl}
+
+Include your phone number in the comments for the monthly prize raffle.
+
+Best Regards,`;
                 }
                 const outlookUrl = `https://outlook.office365.com/mail/deeplink/compose?to=${email}&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
                 window.open(outlookUrl, '_blank');
@@ -1586,13 +1606,20 @@
             };
         }
         
-        // Clear log button
-        const clearBtn = document.getElementById('clearNpsLog');
-        if (clearBtn) {
-            clearBtn.onclick = function(e) {
+        // Clear last entry button
+        const clearLastBtn = document.getElementById('clearLastNps');
+        if (clearLastBtn) {
+            clearLastBtn.onclick = function(e) {
                 e.stopPropagation();
-                if (confirm('Clear all NPS tracking data?')) {
-                    localStorage.removeItem(NPS_STORAGE_KEY);
+                const surveys = getNpsSurveys();
+                if (surveys.length === 0) {
+                    alert('No entries to remove');
+                    return;
+                }
+                const lastEntry = surveys[surveys.length - 1];
+                if (confirm(`Remove last entry?\n\n${lastEntry.date} - ${lastEntry.customer} (${lastEntry.wo})`)) {
+                    surveys.pop();
+                    saveNpsSurveys(surveys);
                     renderNpsTable();
                     updateNpsStats();
                 }
