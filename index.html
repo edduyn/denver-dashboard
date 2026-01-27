@@ -461,8 +461,8 @@
                 <!-- Stats Banner -->
                 <div id="npsStats" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:15px;">
                     <div style="background:#1e293b;padding:10px;border-radius:8px;text-align:center;">
-                        <div style="color:#94a3b8;font-size:0.7em;">SENT</div>
-                        <div id="statSent" style="color:#60a5fa;font-size:1.5em;font-weight:bold;">0</div>
+                        <div style="color:#94a3b8;font-size:0.7em;">SENT / BILLED</div>
+                        <div id="statSent" style="color:#60a5fa;font-size:1.3em;font-weight:bold;">0/41</div>
                     </div>
                     <div style="background:#1e293b;padding:10px;border-radius:8px;text-align:center;">
                         <div style="color:#94a3b8;font-size:0.7em;">COMPLETED</div>
@@ -473,7 +473,7 @@
                         <div id="statPending" style="color:#f59e0b;font-size:1.5em;font-weight:bold;">0</div>
                     </div>
                     <div style="background:#1e293b;padding:10px;border-radius:8px;text-align:center;">
-                        <div style="color:#94a3b8;font-size:0.7em;">RATE</div>
+                        <div style="color:#94a3b8;font-size:0.7em;">RESPONSE RATE</div>
                         <div id="statRate" style="color:#a855f7;font-size:1.5em;font-weight:bold;">-</div>
                     </div>
                 </div>
@@ -1602,16 +1602,32 @@
         const peregineEmailEl = document.getElementById('peregrine-email');
         if (peregineEmailEl) peregineEmailEl.textContent = npsEmail;
         
-        // NPS Tracking Storage
-        const NPS_STORAGE_KEY = 'denver_nps_tracking';
+        // NPS Tracking - HARDCODED DATA (persists across file reloads)
+        // Claude updates this array when you report new surveys sent
+        let npsSurveyData = [
+            {date: '01/28/26', customer: 'Peregrine', email: 'ths@masd.metrea.aero', wo: 'DTBLA', regNum: '', status: 'Sent', score: null},
+            {date: '01/28/26', customer: 'Bode Aviation', email: 'michelle.amezcua@flybode.com', wo: 'DSW5A', regNum: 'N328SF', status: 'Sent', score: null},
+            {date: '01/28/26', customer: 'MIMG Transportation', email: 'n950kmmx@gmail.com', wo: 'CV3UA', regNum: 'STOCK', status: 'Sent', score: null},
+            {date: '01/28/26', customer: 'Infinity Energia', email: 'EDUARDO@INFINITYENERGIAD.COM.BR', wo: 'CUGZA', regNum: 'PR-BBD', status: 'Sent', score: null},
+            {date: '01/28/26', customer: 'Liberty Global', email: 'apdenver@libertyglobal.com', wo: 'CT8VA', regNum: 'N250LG', status: 'Sent', score: null},
+            {date: '01/28/26', customer: 'M&N Aviation', email: 'accounting@mandn.aero', wo: 'CT0VA', regNum: 'N488RJ', status: 'Sent', score: null},
+            {date: '01/28/26', customer: 'Arapahoe Aero', email: 'customercare@arapahoeaero.com', wo: 'CSAZA', regNum: 'N426LM', status: 'Sent', score: null},
+            {date: '01/28/26', customer: 'GMR', email: 'parts-mtc@gmr.net', wo: 'CU44A', regNum: 'N866MB', status: 'Sent', score: null},
+            {date: '01/28/26', customer: 'Aspen Flying Club', email: 'accounting@aspenflyingclub.com', wo: 'CS1XA', regNum: 'N331JK', status: 'Sent', score: null},
+            {date: '01/28/26', customer: 'Flights Inc', email: 'ABAUER@FLIGHTS-INC.COM', wo: 'CRW3A', regNum: 'N22265', status: 'Sent', score: null},
+            {date: '01/28/26', customer: 'Civil Air Patrol', email: 'capconsmx@capnhq.gov', wo: 'CSYNA', regNum: 'N846CP', status: 'Sent', score: null},
+            {date: '01/28/26', customer: 'AirMax', email: 'rong@airmaxonline.com', wo: 'CUCJA', regNum: 'N137ZM', status: 'Sent', score: null},
+            {date: '01/28/26', customer: 'International Jet Aviation', email: 'heike@internationaljet.com', wo: 'CUX4A', regNum: 'N219JG', status: 'Sent', score: null},
+            {date: '01/28/26', customer: 'Pilot Service Provider', email: 'scott.j@pilotserviceprovider.com', wo: 'CQCAB', regNum: 'N750JE', status: 'Sent', score: null}
+        ];
         
         function getNpsSurveys() {
-            const data = localStorage.getItem(NPS_STORAGE_KEY);
-            return data ? JSON.parse(data) : [];
+            return npsSurveyData;
         }
         
         function saveNpsSurveys(surveys) {
-            localStorage.setItem(NPS_STORAGE_KEY, JSON.stringify(surveys));
+            npsSurveyData = surveys;
+            // Note: Changes during session are temporary. Tell Claude to add permanent entries.
         }
         
         // Smart Fill function for NPS form
@@ -1630,8 +1646,9 @@
             const completed = surveys.filter(s => s.status === 'Completed').length;
             const pending = surveys.filter(s => s.status === 'Sent').length;
             const rate = sent > 0 ? Math.round((completed / sent) * 100) + '%' : '-';
+            const billedWOsTarget = 41;  // Total billed WOs in January (update with new Billed WO report)
             
-            document.getElementById('statSent').textContent = sent;
+            document.getElementById('statSent').textContent = sent + '/' + billedWOsTarget;
             document.getElementById('statCompleted').textContent = completed;
             document.getElementById('statPending').textContent = pending;
             document.getElementById('statRate').textContent = rate;
@@ -1651,7 +1668,6 @@
             
             // UPDATE GOAL #2 PROGRESS BARS (Smart sync)
             const yearlyTarget = 12;  // Monthly goal: 1/month = 12/year
-            const billedWOsTarget = 41;  // Total billed WOs in January (from Billed WO report)
             
             const completedPct = Math.round((completed / yearlyTarget) * 100);
             const sentPct = Math.round((sent / billedWOsTarget) * 100);
