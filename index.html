@@ -1022,6 +1022,117 @@
                 </div>
             </div>
             
+            <!-- WO PERFORMANCE TRACKER - Job View Integration -->
+            <div class="card" style="border:2px solid #f59e0b;">
+                <div class="card-header">
+                    <span class="card-title">📈 WO Performance Tracker - Job View Analysis</span>
+                    <span class="badge badge-amber">Estimate Accuracy</span>
+                </div>
+                <div style="background:#14532d;padding:10px;border-radius:6px;margin-bottom:15px;font-size:0.85em;color:#bbf7d0;">
+                    <strong style="color:#4ade80;">🤖 DATA SOURCES:</strong> Job View + Anchor + Time Sold + Calendar | Updated: 01/28/26
+                </div>
+                
+                <!-- Performance Summary Cards -->
+                <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:15px;">
+                    <div style="background:linear-gradient(135deg,#7f1d1d,#ef4444);padding:12px;border-radius:8px;text-align:center;">
+                        <div style="font-size:0.75em;color:#fecaca;">🔴 Over Estimate</div>
+                        <div style="font-size:1.5em;font-weight:bold;color:#fff;">2</div>
+                        <div style="font-size:0.7em;color:#fca5a5;">Major variance</div>
+                    </div>
+                    <div style="background:linear-gradient(135deg,#1e3a5f,#64748b);padding:12px;border-radius:8px;text-align:center;">
+                        <div style="font-size:0.75em;color:#cbd5e1;">⚪ No Estimate</div>
+                        <div style="font-size:1.5em;font-weight:bold;color:#fff;">28</div>
+                        <div style="font-size:0.7em;color:#94a3b8;">Process gap</div>
+                    </div>
+                    <div style="background:linear-gradient(135deg,#854d0e,#f59e0b);padding:12px;border-radius:8px;text-align:center;">
+                        <div style="font-size:0.75em;color:#fef3c7;">📅 >7 Days Open</div>
+                        <div style="font-size:1.5em;font-weight:bold;color:#fff;">16</div>
+                        <div style="font-size:0.7em;color:#fde68a;">With hours</div>
+                    </div>
+                    <div style="background:linear-gradient(135deg,#065f46,#10b981);padding:12px;border-radius:8px;text-align:center;">
+                        <div style="font-size:0.75em;color:#a7f3d0;">🟢 Under Estimate</div>
+                        <div style="font-size:1.5em;font-weight:bold;color:#fff;">1</div>
+                        <div style="font-size:0.7em;color:#bbf7d0;">On target</div>
+                    </div>
+                </div>
+                
+                <!-- ESTIMATE VARIANCE ALERT -->
+                <div style="background:rgba(239,68,68,0.15);border:1px solid #ef4444;border-radius:8px;padding:15px;margin-bottom:15px;">
+                    <div style="color:#ef4444;font-weight:bold;margin-bottom:10px;">🔴 ESTIMATE VARIANCE ALERT - Review Pricing!</div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr><th>WO#</th><th>Customer</th><th>Aircraft</th><th>Est Hrs</th><th>Act Hrs</th><th>Variance</th><th>WIP Impact</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr style="background:rgba(239,68,68,0.2)">
+                                    <td><strong>CU16A</strong></td>
+                                    <td>Flying Orchard</td>
+                                    <td>N176MG (G-IV)</td>
+                                    <td style="color:#10b981;">0.1h</td>
+                                    <td style="color:#ef4444;font-weight:bold;">32.5h</td>
+                                    <td style="color:#ef4444;font-weight:bold;">🔴 +32,400%</td>
+                                    <td>+$4,698 unplanned</td>
+                                </tr>
+                                <tr style="background:rgba(239,68,68,0.2)">
+                                    <td><strong>CUPFA</strong></td>
+                                    <td>Flying Orchard</td>
+                                    <td>N176MG (G-IV)</td>
+                                    <td style="color:#10b981;">0.1h</td>
+                                    <td style="color:#ef4444;font-weight:bold;">16.9h</td>
+                                    <td style="color:#ef4444;font-weight:bold;">🔴 +16,800%</td>
+                                    <td>+$2,436 unplanned</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div style="margin-top:10px;font-size:0.85em;color:#fca5a5;">
+                        ⚠️ <strong>Both WOs are same customer (Flying Orchard) and same aircraft (N176MG).</strong> Estimate accuracy issue or scope change? Review before billing.
+                    </div>
+                </div>
+                
+                <!-- TOP WOs BY DAYS OPEN -->
+                <div style="background:rgba(251,191,36,0.15);border:1px solid #f59e0b;border-radius:8px;padding:15px;margin-bottom:15px;">
+                    <div style="color:#f59e0b;font-weight:bold;margin-bottom:10px;">📅 AGING ANALYSIS - WOs Open >7 Days (Top by WIP)</div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr><th>WO#</th><th>Shop</th><th>Customer</th><th>In Date</th><th>Days Open</th><th>Hours</th><th>WIP</th><th>Action</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><strong>CU1EA</strong></td><td>SDN</td><td>42K RE MGMT</td><td>01/05/26</td><td style="color:#ef4444;font-weight:bold;">23 days</td><td>35.5h</td><td style="color:#10b981;font-weight:bold;">$5,148</td><td style="color:#f59e0b;font-size:0.8em;">Push to bill</td></tr>
+                                <tr><td><strong>CU16A</strong></td><td>SDN</td><td>Flying Orchard</td><td>01/05/26</td><td style="color:#ef4444;font-weight:bold;">23 days</td><td>30.5h</td><td style="color:#10b981;font-weight:bold;">$4,422</td><td style="color:#10b981;font-size:0.8em;">Billing this week</td></tr>
+                                <tr><td><strong>CU92A</strong></td><td>SDN</td><td>Robbins Aviation</td><td>01/07/26</td><td style="color:#f59e0b;font-weight:bold;">21 days</td><td>15.0h</td><td style="color:#10b981;font-weight:bold;">$2,175</td><td style="color:#f59e0b;font-size:0.8em;">Review status</td></tr>
+                                <tr><td><strong>CU97A</strong></td><td>SDN</td><td>Circadian Aviation</td><td>01/07/26</td><td style="color:#f59e0b;font-weight:bold;">21 days</td><td>12.0h</td><td style="color:#10b981;font-weight:bold;">$1,740</td><td style="color:#f59e0b;font-size:0.8em;">Review status</td></tr>
+                                <tr><td><strong>CUPFA</strong></td><td>SDN</td><td>Flying Orchard</td><td>01/19/26</td><td>9 days</td><td>15.9h</td><td style="color:#10b981;font-weight:bold;">$2,306</td><td style="color:#f59e0b;font-size:0.8em;">Review status</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- STATUS CODE LEGEND -->
+                <div style="background:#1e293b;padding:12px;border-radius:8px;">
+                    <div style="color:#e2e8f0;font-weight:bold;margin-bottom:8px;">📋 Job View Status Codes:</div>
+                    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;font-size:0.8em;">
+                        <div><span style="color:#fbbf24;">QII</span> = Quality Inspection Item</div>
+                        <div><span style="color:#3b82f6;">WKR</span> = Working</div>
+                        <div><span style="color:#10b981;">Opn</span> = Open/Pending</div>
+                        <div><span style="color:#a855f7;">TNT</span> = Tech Not Tagged</div>
+                        <div><span style="color:#f59e0b;">PTO</span> = Parts To Order</div>
+                        <div><span style="color:#64748b;">INR</span> = In Review</div>
+                        <div><span style="color:#10b981;">IWK</span> = In Work</div>
+                        <div><span style="color:#3b82f6;">APP</span> = Approved</div>
+                    </div>
+                </div>
+                
+                <div style="background:#0f172a;padding:10px;border-radius:6px;margin-top:15px;font-size:0.8em;color:#94a3b8;">
+                    <strong style="color:#f59e0b;">📈 PERFORMANCE INSIGHT:</strong> 
+                    28 WOs (93%) have <strong>no estimate</strong> - this creates billing uncertainty. 
+                    2 WOs with estimates are <strong>massively over</strong> (avg +24,600%).<br>
+                    <span style="color:#64748b;">Recommendation: Implement quoting/estimate process for all WOs before work begins.</span>
+                </div>
+            </div>
+            
             <!-- CRITICAL / AGING WOs -->
             <div class="card">
                 <div class="card-header">
