@@ -205,15 +205,15 @@
                         </div>
                         <span id="npsCompletedCount" style="font-size:0.85em;color:#94a3b8;width:60px;">0 / 12</span>
                     </div>
-                    <!-- Sent Surveys -->
+                    <!-- Sent vs Billed WOs -->
                     <div style="display:flex;align-items:center;gap:10px;">
                         <span style="font-size:0.85em;color:#a855f7;width:80px;">📧 Sent</span>
                         <div class="progress-container" style="flex:1;margin:0;">
                             <div class="progress-bar"><div id="npsSentBar" class="progress-fill" style="width:0%;background:linear-gradient(90deg,#a855f7,#c084fc);"></div></div>
                         </div>
-                        <span id="npsSentCount" style="font-size:0.85em;color:#94a3b8;width:60px;">0 / 12</span>
+                        <span id="npsSentCount" style="font-size:0.85em;color:#94a3b8;width:70px;">0 / 41</span>
                     </div>
-                    <div id="npsGoalSummary" style="margin-top:10px;">Target: 1 survey/month | Jan: 0 completed, 0 sent</div>
+                    <div id="npsGoalSummary" style="margin-top:10px;">Target: 1/month (12/yr) | Sent vs Billed WOs: 0/41</div>
                     <div class="goal-notes">📞 Peregrine (DTBLA) now billed - good NPS candidate! See Actions tab.</div>
                 </div>
                 
@@ -1650,17 +1650,19 @@
             }
             
             // UPDATE GOAL #2 PROGRESS BARS (Smart sync)
-            const yearlyTarget = 12;
-            const completedPct = Math.round((completed / yearlyTarget) * 100);
-            const sentPct = Math.round((sent / yearlyTarget) * 100);
+            const yearlyTarget = 12;  // Monthly goal: 1/month = 12/year
+            const billedWOsTarget = 41;  // Total billed WOs in January (from Billed WO report)
             
-            // Update completed bar
-            document.getElementById('npsCompletedBar').style.width = completedPct + '%';
+            const completedPct = Math.round((completed / yearlyTarget) * 100);
+            const sentPct = Math.round((sent / billedWOsTarget) * 100);
+            
+            // Update completed bar (vs yearly target)
+            document.getElementById('npsCompletedBar').style.width = Math.min(completedPct, 100) + '%';
             document.getElementById('npsCompletedCount').textContent = completed + ' / ' + yearlyTarget;
             
-            // Update sent bar
-            document.getElementById('npsSentBar').style.width = sentPct + '%';
-            document.getElementById('npsSentCount').textContent = sent + ' / ' + yearlyTarget;
+            // Update sent bar (vs billed WOs)
+            document.getElementById('npsSentBar').style.width = Math.min(sentPct, 100) + '%';
+            document.getElementById('npsSentCount').textContent = sent + ' / ' + billedWOsTarget;
             
             // Update goal percentage and badge
             const goalPct = document.getElementById('npsGoalPct');
@@ -1682,7 +1684,7 @@
             }
             
             // Update summary text
-            document.getElementById('npsGoalSummary').textContent = 'Target: 1 survey/month | Jan: ' + completed + ' completed, ' + sent + ' sent';
+            document.getElementById('npsGoalSummary').textContent = 'Target: 1/month (12/yr) | Sent vs Billed WOs: ' + sent + '/' + billedWOsTarget + ' (' + sentPct + '%)';
         }
         
         function renderNpsTable() {
