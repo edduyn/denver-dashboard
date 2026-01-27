@@ -1539,24 +1539,22 @@
 
 Thank you for choosing Duncan Aviation Denver for your recent service on ${regNum}.
 
-Please take a moment to fill out our quick 8-question survey:
-${surveyUrl}
+Help us make improvements to our service by filling out a quick 8 questions survey for the Denver Satellite Shop. Please leave feedback by clicking on the link below. Include your phone number in the comments to be added to the monthly prize raffle.
 
-Include your phone number in the comments for the monthly prize raffle.
+Best Regards,
 
-Best Regards,`;
+${surveyUrl}`;
                 } else {
                     subject = `Quick Feedback Request - WO# ${wo}`;
                     body = `Hi,
 
 Thank you for choosing Duncan Aviation Denver for your recent service.
 
-Please take a moment to fill out our quick 8-question survey:
-${surveyUrl}
+Help us make improvements to our service by filling out a quick 8 questions survey for the Denver Satellite Shop. Please leave feedback by clicking on the link below. Include your phone number in the comments to be added to the monthly prize raffle.
 
-Include your phone number in the comments for the monthly prize raffle.
+Best Regards,
 
-Best Regards,`;
+${surveyUrl}`;
                 }
                 const outlookUrl = `https://outlook.office365.com/mail/deeplink/compose?to=${email}&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
                 window.open(outlookUrl, '_blank');
