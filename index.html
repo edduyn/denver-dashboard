@@ -406,28 +406,28 @@
             <div class="card">
                 <div class="card-header">
                     <span class="card-title">☀️ Morning Checklist</span>
-                    <span class="badge badge-green">01/28/26</span>
+                    <span class="badge badge-green" id="morningDate">--/--/--</span>
                 </div>
-                <div class="action-item"><div class="action-check checked"></div><span class="action-text">Review yesterday's Time Sold report</span><span style="color:#10b981;font-size:0.8em;margin-left:auto;">✓ Processed</span></div>
-                <div class="action-item"><div class="action-check checked"></div><span class="action-text">Check Anchor for WOs ready to bill</span><span style="color:#10b981;font-size:0.8em;margin-left:auto;">✓ 14 SDV open</span></div>
-                <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">Assign techs to billable customer work first</span></div>
-                <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">Touch base with low performers</span><span style="color:#f59e0b;font-size:0.8em;margin-left:auto;">Douglas, Ken, Jose</span></div>
-                <div style="background:#0f172a;padding:8px;border-radius:6px;margin-top:10px;font-size:0.75em;color:#94a3b8;">
-                    📊 <strong>Reports processed:</strong> Time Sold ✓ | Anchor ✓ | Billed WO ✓ | Over 30 ✓
+                <div class="action-item"><div class="action-check" data-checklist="morning" data-item="0" onclick="toggleDailyCheck(this)"></div><span class="action-text">Review yesterday's Time Sold report</span><span id="morning-note-0" class="checklist-note" style="color:#94a3b8;font-size:0.8em;margin-left:auto;"></span></div>
+                <div class="action-item"><div class="action-check" data-checklist="morning" data-item="1" onclick="toggleDailyCheck(this)"></div><span class="action-text">Check Anchor for WOs ready to bill</span><span id="morning-note-1" class="checklist-note" style="color:#94a3b8;font-size:0.8em;margin-left:auto;"></span></div>
+                <div class="action-item"><div class="action-check" data-checklist="morning" data-item="2" onclick="toggleDailyCheck(this)"></div><span class="action-text">Assign techs to billable customer work first</span></div>
+                <div class="action-item"><div class="action-check" data-checklist="morning" data-item="3" onclick="toggleDailyCheck(this)"></div><span class="action-text">Touch base with low performers</span><span style="color:#f59e0b;font-size:0.8em;margin-left:auto;">Douglas, Ken, Jose</span></div>
+                <div id="morningReportStatus" style="background:#0f172a;padding:8px;border-radius:6px;margin-top:10px;font-size:0.75em;color:#94a3b8;">
+                    📊 <strong>Reports processed:</strong> <span id="reportStatusText">Waiting for today's reports...</span>
                 </div>
             </div>
             
             <div class="card">
                 <div class="card-header">
                     <span class="card-title">🌙 End of Day Checklist</span>
-                    <span class="badge badge-green">01/28/26</span>
+                    <span class="badge badge-green" id="eveningDate">--/--/--</span>
                 </div>
-                <div class="action-item"><div class="action-check checked"></div><span class="action-text">Pull daily reports (Time Sold, Billed, Anchor)</span><span style="color:#10b981;font-size:0.8em;margin-left:auto;">✓ All pulled</span></div>
-                <div class="action-item"><div class="action-check checked"></div><span class="action-text">Upload to Claude for analysis</span><span style="color:#10b981;font-size:0.8em;margin-left:auto;">✓ Dashboard updated</span></div>
-                <div class="action-item"><div class="action-check checked"></div><span class="action-text">Bill any completed WOs (within 1 week target)</span><span style="color:#10b981;font-size:0.8em;margin-left:auto;">✓ DTBLA, DSW4A billed</span></div>
-                <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">Plan tomorrow's assignments</span></div>
-                <div style="background:#0f172a;padding:8px;border-radius:6px;margin-top:10px;font-size:0.75em;color:#94a3b8;">
-                    📈 <strong>Today's results:</strong> A/B 25.8% | Billable +36h | WIP $26K | NPS 14 sent
+                <div class="action-item"><div class="action-check" data-checklist="evening" data-item="0" onclick="toggleDailyCheck(this)"></div><span class="action-text">Pull daily reports (Time Sold, Billed, Anchor)</span><span id="evening-note-0" class="checklist-note" style="color:#94a3b8;font-size:0.8em;margin-left:auto;"></span></div>
+                <div class="action-item"><div class="action-check" data-checklist="evening" data-item="1" onclick="toggleDailyCheck(this)"></div><span class="action-text">Upload to Claude for analysis</span><span id="evening-note-1" class="checklist-note" style="color:#94a3b8;font-size:0.8em;margin-left:auto;"></span></div>
+                <div class="action-item"><div class="action-check" data-checklist="evening" data-item="2" onclick="toggleDailyCheck(this)"></div><span class="action-text">Bill any completed WOs (within 1 week target)</span><span id="evening-note-2" class="checklist-note" style="color:#94a3b8;font-size:0.8em;margin-left:auto;"></span></div>
+                <div class="action-item"><div class="action-check" data-checklist="evening" data-item="3" onclick="toggleDailyCheck(this)"></div><span class="action-text">Plan tomorrow's assignments</span></div>
+                <div id="eveningResultStatus" style="background:#0f172a;padding:8px;border-radius:6px;margin-top:10px;font-size:0.75em;color:#94a3b8;">
+                    📈 <strong>Today's results:</strong> <span id="resultsStatusText">Complete checklist to see results</span>
                 </div>
             </div>
             
@@ -440,9 +440,9 @@
                 <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">Douglas Riera Guzman - improved to 8h billable (keep momentum)</span><span class="action-priority priority-high">HIGH</span></div>
                 <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">Guillermo Tovar S. - improved to 36% (good progress!)</span><span class="action-priority priority-high">HIGH</span></div>
                 <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">CG4NA - 188 days old, vendor dispute (Kauffman)</span><span class="action-priority priority-high">HIGH</span></div>
-                <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">Watson, Andrew - MidYear Review due Feb 4 (8 days)</span><span class="action-priority priority-high">HIGH</span></div>
-                <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">Guillermo Tovar S. - 90-Day Review due Feb 8 (12 days)</span><span class="action-priority priority-high">HIGH</span></div>
-                <div class="action-item"><div class="action-check checked" onclick="this.classList.toggle('checked')"></div><span class="action-text">✅ Reply to Brian Zitek Over 30 list with WO notes</span><span class="action-priority" style="background:#10b981;color:#fff">DONE</span></div>
+                <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">Watson, Andrew - MidYear Review due Feb 4 (7 days)</span><span class="action-priority priority-high">HIGH</span></div>
+                <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">Guillermo Tovar S. - 90-Day Review due Feb 8 (11 days)</span><span class="action-priority priority-high">HIGH</span></div>
+                <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">Reply to Brian Zitek Over 30 list with WO notes</span><span class="action-priority priority-high">HIGH</span></div>
             </div>
             
             <div class="card" style="border:2px solid #60a5fa;">
@@ -2443,6 +2443,151 @@ ${surveyUrl}`;
             input.addEventListener('click', e => e.stopPropagation());
             input.addEventListener('focus', e => e.stopPropagation());
         });
+        
+        // ==========================================
+        // DAILY CHECKLIST AUTO-RESET SYSTEM
+        // ==========================================
+        
+        function getTodayString() {
+            const now = new Date();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const year = String(now.getFullYear()).slice(-2);
+            return `${month}/${day}/${year}`;
+        }
+        
+        function getStorageKey() {
+            return 'denver_checklist_' + getTodayString().replace(/\//g, '_');
+        }
+        
+        function loadDailyChecklists() {
+            const today = getTodayString();
+            const storageKey = getStorageKey();
+            
+            // Update date badges
+            document.getElementById('morningDate').textContent = today;
+            document.getElementById('eveningDate').textContent = today;
+            
+            // Try to load saved state
+            let savedState = localStorage.getItem(storageKey);
+            
+            if (savedState) {
+                savedState = JSON.parse(savedState);
+                
+                // Restore checkbox states
+                document.querySelectorAll('[data-checklist]').forEach(checkbox => {
+                    const list = checkbox.dataset.checklist;
+                    const item = checkbox.dataset.item;
+                    const key = `${list}_${item}`;
+                    
+                    if (savedState.checks && savedState.checks[key]) {
+                        checkbox.classList.add('checked');
+                        // Update note if exists
+                        const noteEl = document.getElementById(`${list}-note-${item}`);
+                        if (noteEl && savedState.notes && savedState.notes[key]) {
+                            noteEl.textContent = savedState.notes[key];
+                            noteEl.style.color = '#10b981';
+                        }
+                    }
+                });
+                
+                // Restore status texts
+                if (savedState.reportStatus) {
+                    document.getElementById('reportStatusText').textContent = savedState.reportStatus;
+                }
+                if (savedState.resultsStatus) {
+                    document.getElementById('resultsStatusText').textContent = savedState.resultsStatus;
+                }
+            }
+            
+            // Clean up old entries (keep only last 7 days)
+            cleanOldChecklistData();
+        }
+        
+        function saveDailyChecklists() {
+            const storageKey = getStorageKey();
+            const state = {
+                date: getTodayString(),
+                checks: {},
+                notes: {},
+                reportStatus: document.getElementById('reportStatusText').textContent,
+                resultsStatus: document.getElementById('resultsStatusText').textContent
+            };
+            
+            document.querySelectorAll('[data-checklist]').forEach(checkbox => {
+                const list = checkbox.dataset.checklist;
+                const item = checkbox.dataset.item;
+                const key = `${list}_${item}`;
+                
+                state.checks[key] = checkbox.classList.contains('checked');
+                
+                const noteEl = document.getElementById(`${list}-note-${item}`);
+                if (noteEl && noteEl.textContent) {
+                    state.notes[key] = noteEl.textContent;
+                }
+            });
+            
+            localStorage.setItem(storageKey, JSON.stringify(state));
+        }
+        
+        function toggleDailyCheck(el) {
+            el.classList.toggle('checked');
+            
+            const list = el.dataset.checklist;
+            const item = el.dataset.item;
+            const noteEl = document.getElementById(`${list}-note-${item}`);
+            
+            if (el.classList.contains('checked') && noteEl) {
+                // Set completion note based on item
+                const time = new Date().toLocaleTimeString('en-US', {hour: 'numeric', minute: '2-digit'});
+                if (list === 'morning') {
+                    if (item === '0') noteEl.textContent = `✓ Processed @ ${time}`;
+                    if (item === '1') noteEl.textContent = `✓ Reviewed @ ${time}`;
+                } else if (list === 'evening') {
+                    if (item === '0') noteEl.textContent = `✓ Pulled @ ${time}`;
+                    if (item === '1') noteEl.textContent = `✓ Uploaded @ ${time}`;
+                    if (item === '2') noteEl.textContent = `✓ Billed @ ${time}`;
+                }
+                if (noteEl.textContent) noteEl.style.color = '#10b981';
+            } else if (noteEl) {
+                noteEl.textContent = '';
+            }
+            
+            saveDailyChecklists();
+        }
+        
+        function cleanOldChecklistData() {
+            const keysToRemove = [];
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key && key.startsWith('denver_checklist_')) {
+                    // Check if older than 7 days
+                    const datePart = key.replace('denver_checklist_', '').replace(/_/g, '/');
+                    const entryDate = new Date(datePart);
+                    const now = new Date();
+                    const diffDays = (now - entryDate) / (1000 * 60 * 60 * 24);
+                    if (diffDays > 7) {
+                        keysToRemove.push(key);
+                    }
+                }
+            }
+            keysToRemove.forEach(key => localStorage.removeItem(key));
+        }
+        
+        // Check for midnight reset every minute
+        let lastCheckedDate = getTodayString();
+        setInterval(() => {
+            const currentDate = getTodayString();
+            if (currentDate !== lastCheckedDate) {
+                // Date changed! Reload checklists (will be fresh for new day)
+                lastCheckedDate = currentDate;
+                loadDailyChecklists();
+                console.log('🌅 New day detected - checklists reset!');
+            }
+        }, 60000); // Check every minute
+        
+        // Initialize on page load
+        loadDailyChecklists();
     </script>
 </body>
 </html>
