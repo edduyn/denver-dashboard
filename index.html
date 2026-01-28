@@ -445,6 +445,99 @@
                 <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">Reply to Brian Zitek Over 30 list with WO notes</span><span class="action-priority priority-high">HIGH</span></div>
             </div>
             
+            <!-- TIME SOLD COMPLIANCE TRACKER -->
+            <div class="card" style="border:2px solid #f97316;">
+                <div class="card-header">
+                    <span class="card-title">⏰ Time Sold Compliance</span>
+                    <span class="badge" id="timeSoldBadge" style="background:#f97316;">Check Required</span>
+                </div>
+                
+                <div style="background:#0f172a;padding:12px;border-radius:8px;margin-bottom:15px;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                        <span style="color:#94a3b8;font-size:0.85em;">📅 Checking for date:</span>
+                        <input type="date" id="timeSoldCheckDate" onchange="renderTimeSoldCompliance()" style="padding:6px 10px;border-radius:6px;border:none;background:#1e293b;color:white;font-size:0.9em;">
+                    </div>
+                    <div style="display:flex;gap:10px;">
+                        <button onclick="setTimeSoldDateYesterday()" style="flex:1;padding:8px;background:#3b82f6;color:white;border:none;border-radius:6px;font-size:0.85em;cursor:pointer;">Yesterday</button>
+                        <button onclick="setTimeSoldDateLastBusinessDay()" style="flex:1;padding:8px;background:#10b981;color:white;border:none;border-radius:6px;font-size:0.85em;cursor:pointer;">Last Business Day</button>
+                    </div>
+                </div>
+                
+                <!-- Employee Status Grid -->
+                <div id="timeSoldGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:15px;">
+                    <!-- Dynamically populated -->
+                </div>
+                
+                <!-- Summary Stats -->
+                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:15px;">
+                    <div style="background:#14532d;padding:10px;border-radius:8px;text-align:center;">
+                        <div style="color:#86efac;font-size:0.75em;">✅ SOLD TIME</div>
+                        <div id="timeSoldCount" style="color:#4ade80;font-size:1.5em;font-weight:bold;">0</div>
+                    </div>
+                    <div style="background:#7f1d1d;padding:10px;border-radius:8px;text-align:center;">
+                        <div style="color:#fca5a5;font-size:0.75em;">❌ NO TIME SOLD</div>
+                        <div id="noTimeSoldCount" style="color:#f87171;font-size:1.5em;font-weight:bold;">0</div>
+                    </div>
+                    <div style="background:#1e293b;padding:10px;border-radius:8px;text-align:center;">
+                        <div style="color:#94a3b8;font-size:0.75em;">📊 COMPLIANCE</div>
+                        <div id="timeSoldCompliance" style="color:#f59e0b;font-size:1.5em;font-weight:bold;">--%</div>
+                    </div>
+                </div>
+                
+                <!-- Non-Compliant List with Email Buttons -->
+                <div id="nonCompliantSection" style="display:none;">
+                    <div style="background:rgba(239,68,68,0.15);border:1px solid #ef4444;border-radius:8px;padding:15px;">
+                        <div style="color:#f87171;font-weight:bold;margin-bottom:10px;">⚠️ Employees Who Did NOT Sell Time</div>
+                        <div class="table-container" style="max-height:200px;overflow-y:auto;">
+                            <table id="nonCompliantTable" style="font-size:0.85em;">
+                                <thead>
+                                    <tr><th>Employee</th><th>Email</th><th>Action</th></tr>
+                                </thead>
+                                <tbody id="nonCompliantBody">
+                                    <!-- Dynamically populated -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <button onclick="sendAllTimeSoldReminders()" style="width:100%;margin-top:10px;padding:12px;background:linear-gradient(135deg,#dc2626,#ef4444);color:white;border:none;border-radius:8px;font-weight:bold;cursor:pointer;">📧 Send Reminder to ALL Non-Compliant</button>
+                    </div>
+                </div>
+                
+                <!-- All Compliant Message -->
+                <div id="allCompliantSection" style="display:none;background:#14532d;padding:15px;border-radius:8px;text-align:center;">
+                    <div style="color:#86efac;font-size:1.2em;">✅ All employees sold time on this date!</div>
+                </div>
+                
+                <!-- Employee Database Management -->
+                <div style="background:#1e293b;padding:12px;border-radius:8px;margin-top:15px;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                        <span style="color:#94a3b8;font-size:0.85em;">👥 Employee Database: <span id="employeeDbCount">0</span> employees</span>
+                        <button onclick="toggleEmployeeManager()" style="background:#475569;color:white;border:none;padding:5px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">⚙️ Manage</button>
+                    </div>
+                    
+                    <div id="employeeManager" style="display:none;margin-top:10px;">
+                        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:10px;">
+                            <input type="text" id="newEmpName" placeholder="Employee Name" style="padding:8px;border-radius:6px;border:none;background:#0f172a;color:white;font-size:0.85em;">
+                            <input type="text" id="newEmpCode" placeholder="Emp Code (e.g. SMIKZ)" style="padding:8px;border-radius:6px;border:none;background:#0f172a;color:white;font-size:0.85em;text-transform:uppercase;">
+                            <input type="email" id="newEmpEmail" placeholder="Email" style="padding:8px;border-radius:6px;border:none;background:#0f172a;color:white;font-size:0.85em;">
+                        </div>
+                        <button onclick="addEmployeeToDb()" style="width:100%;padding:8px;background:#10b981;color:white;border:none;border-radius:6px;font-size:0.85em;cursor:pointer;">➕ Add Employee</button>
+                        <div id="empAddMsg" style="display:none;margin-top:5px;font-size:0.8em;text-align:center;"></div>
+                        
+                        <div class="table-container" style="max-height:150px;overflow-y:auto;margin-top:10px;">
+                            <table style="font-size:0.8em;">
+                                <thead><tr><th>Name</th><th>Code</th><th>Email</th><th></th></tr></thead>
+                                <tbody id="employeeDbBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Time Sold Data Input -->
+                <div style="background:#0f172a;padding:10px;border-radius:6px;margin-top:10px;font-size:0.75em;color:#94a3b8;">
+                    💡 <strong>How to use:</strong> When Claude processes your Time Sold report, ask it to update the "employees who sold time" list. Use <code>updateTimeSoldData('YYYY-MM-DD', ['EMPCODE1', 'EMPCODE2', ...])</code> in console.
+                </div>
+            </div>
+            
             <div class="card" style="border:2px solid #60a5fa;">
                 <div class="card-header">
                     <span class="card-title">📅 Weekly Goals</span>
@@ -2641,6 +2734,291 @@ ${surveyUrl}`;
             input.addEventListener('click', e => e.stopPropagation());
             input.addEventListener('focus', e => e.stopPropagation());
         });
+        
+        // ==========================================
+        // TIME SOLD COMPLIANCE SYSTEM
+        // ==========================================
+        
+        // Default employee database (Denver Satellite Dept 889)
+        const defaultEmployees = [
+            {name: 'Sean R Macoomb', code: 'MACOS', email: 'sean.macoomb@duncanaviation.aero'},
+            {name: 'Kenneth O Smith', code: 'SMIKZ', email: 'kenneth.smith@duncanaviation.aero'},
+            {name: 'Michael Huber', code: 'HUBEM', email: 'michael.huber@duncanaviation.aero'},
+            {name: 'Julia Langford', code: 'LANJU', email: 'julia.langford@duncanaviation.aero'},
+            {name: 'Jose Noris', code: 'NORIJ', email: 'jose.noris@duncanaviation.aero'},
+            {name: 'Armando Triana-Cruz', code: 'CRUZA', email: 'armando.triana-cruz@duncanaviation.aero'},
+            {name: 'Douglas Riera Guzman', code: 'RIERD', email: 'douglas.rieraguzman@duncanaviation.aero'},
+            {name: 'Andrew Watson', code: 'WATAN', email: 'andrew.watson@duncanaviation.aero'},
+            {name: 'Kim D Owen', code: 'OWEKI', email: 'kim.owen@duncanaviation.aero'},
+            {name: 'Guillermo Tovar Sanchez', code: 'TOVAG', email: 'guillermo.tovarsanchez@duncanaviation.aero'},
+            {name: 'Juan R Medina', code: 'MEDIJ', email: 'juan.medina@duncanaviation.aero'},
+            {name: 'John Watson', code: 'WATJO', email: 'john.watson@duncanaviation.aero'}
+        ];
+        
+        function getEmployeeDatabase() {
+            let db = localStorage.getItem('denver_employee_db');
+            if (!db) {
+                localStorage.setItem('denver_employee_db', JSON.stringify(defaultEmployees));
+                return defaultEmployees;
+            }
+            return JSON.parse(db);
+        }
+        
+        function saveEmployeeDatabase(db) {
+            localStorage.setItem('denver_employee_db', JSON.stringify(db));
+        }
+        
+        function getTimeSoldData() {
+            let data = localStorage.getItem('denver_timesold_data');
+            if (!data) return {};
+            return JSON.parse(data);
+        }
+        
+        function saveTimeSoldData(data) {
+            localStorage.setItem('denver_timesold_data', JSON.stringify(data));
+        }
+        
+        // Update time sold data for a specific date
+        // Usage: updateTimeSoldData('2026-01-27', ['MACOS', 'SMIKZ', 'HUBEM', ...])
+        window.updateTimeSoldData = function(dateStr, empCodesList) {
+            const data = getTimeSoldData();
+            data[dateStr] = empCodesList.map(c => c.toUpperCase());
+            saveTimeSoldData(data);
+            renderTimeSoldCompliance();
+            console.log(`✅ Updated time sold data for ${dateStr}: ${empCodesList.length} employees recorded`);
+            return data[dateStr];
+        };
+        
+        function getLastBusinessDay() {
+            const today = new Date();
+            let lastBiz = new Date(today);
+            lastBiz.setDate(lastBiz.getDate() - 1);
+            
+            // Skip weekends
+            while (lastBiz.getDay() === 0 || lastBiz.getDay() === 6) {
+                lastBiz.setDate(lastBiz.getDate() - 1);
+            }
+            return lastBiz;
+        }
+        
+        function formatDateForInput(date) {
+            return date.toISOString().split('T')[0];
+        }
+        
+        function formatDateDisplay(dateStr) {
+            const date = new Date(dateStr + 'T00:00:00');
+            return date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+        }
+        
+        function setTimeSoldDateYesterday() {
+            const yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+            document.getElementById('timeSoldCheckDate').value = formatDateForInput(yesterday);
+            renderTimeSoldCompliance();
+        }
+        
+        function setTimeSoldDateLastBusinessDay() {
+            document.getElementById('timeSoldCheckDate').value = formatDateForInput(getLastBusinessDay());
+            renderTimeSoldCompliance();
+        }
+        
+        function renderTimeSoldCompliance() {
+            const dateInput = document.getElementById('timeSoldCheckDate');
+            if (!dateInput.value) {
+                dateInput.value = formatDateForInput(getLastBusinessDay());
+            }
+            
+            const checkDate = dateInput.value;
+            const employees = getEmployeeDatabase();
+            const timeSoldData = getTimeSoldData();
+            const soldCodes = timeSoldData[checkDate] || [];
+            
+            const grid = document.getElementById('timeSoldGrid');
+            const nonCompliantSection = document.getElementById('nonCompliantSection');
+            const allCompliantSection = document.getElementById('allCompliantSection');
+            const nonCompliantBody = document.getElementById('nonCompliantBody');
+            const badge = document.getElementById('timeSoldBadge');
+            
+            let soldCount = 0;
+            let notSoldCount = 0;
+            let gridHtml = '';
+            let nonCompliantHtml = '';
+            const nonCompliantList = [];
+            
+            employees.forEach(emp => {
+                const didSell = soldCodes.includes(emp.code.toUpperCase());
+                
+                if (didSell) {
+                    soldCount++;
+                    gridHtml += `<div style="background:#14532d;padding:10px;border-radius:8px;display:flex;align-items:center;gap:8px;">
+                        <span style="color:#4ade80;font-size:1.2em;">✅</span>
+                        <span style="color:#86efac;font-size:0.85em;">${emp.name.split(' ')[0]}</span>
+                    </div>`;
+                } else {
+                    notSoldCount++;
+                    nonCompliantList.push(emp);
+                    gridHtml += `<div style="background:#7f1d1d;padding:10px;border-radius:8px;display:flex;align-items:center;gap:8px;">
+                        <span style="color:#f87171;font-size:1.2em;">❌</span>
+                        <span style="color:#fca5a5;font-size:0.85em;">${emp.name.split(' ')[0]}</span>
+                    </div>`;
+                    
+                    nonCompliantHtml += `<tr>
+                        <td>${emp.name}</td>
+                        <td style="color:#94a3b8;font-size:0.8em;">${emp.email}</td>
+                        <td><button onclick="sendTimeSoldReminder('${emp.name.replace(/'/g, "\\'")}', '${emp.email}', '${checkDate}')" style="background:#ef4444;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">📧 Send</button></td>
+                    </tr>`;
+                }
+            });
+            
+            grid.innerHTML = gridHtml || '<div style="color:#64748b;text-align:center;grid-column:span 4;">No employee data. Add employees in Manage section.</div>';
+            
+            // Update stats
+            document.getElementById('timeSoldCount').textContent = soldCount;
+            document.getElementById('noTimeSoldCount').textContent = notSoldCount;
+            const compliance = employees.length > 0 ? Math.round((soldCount / employees.length) * 100) : 0;
+            document.getElementById('timeSoldCompliance').textContent = compliance + '%';
+            document.getElementById('employeeDbCount').textContent = employees.length;
+            
+            // Update badge
+            if (soldCodes.length === 0) {
+                badge.textContent = 'No Data';
+                badge.style.background = '#64748b';
+            } else if (notSoldCount === 0) {
+                badge.textContent = '✅ All Compliant';
+                badge.style.background = '#10b981';
+            } else {
+                badge.textContent = `⚠️ ${notSoldCount} Missing`;
+                badge.style.background = '#ef4444';
+            }
+            
+            // Show/hide sections
+            if (notSoldCount > 0 && soldCodes.length > 0) {
+                nonCompliantSection.style.display = 'block';
+                allCompliantSection.style.display = 'none';
+                nonCompliantBody.innerHTML = nonCompliantHtml;
+                
+                // Store list for "Send All" button
+                window.currentNonCompliant = nonCompliantList;
+                window.currentCheckDate = checkDate;
+            } else if (soldCodes.length > 0) {
+                nonCompliantSection.style.display = 'none';
+                allCompliantSection.style.display = 'block';
+            } else {
+                nonCompliantSection.style.display = 'none';
+                allCompliantSection.style.display = 'none';
+            }
+        }
+        
+        function sendTimeSoldReminder(name, email, dateStr) {
+            const displayDate = formatDateDisplay(dateStr);
+            const firstName = name.split(' ')[0];
+            
+            const subject = encodeURIComponent(`No time sold on ${displayDate}`);
+            const body = encodeURIComponent(`${firstName},
+
+There was no time sold on ${displayDate}. In order to accurately track A/B, hours must be sold to the respective work order upon completion of each daily task.
+
+Thank you,
+
+---
+This is an automated message.`);
+            
+            window.open(`https://outlook.office.com/mail/deeplink/compose?to=${email}&subject=${subject}&body=${body}`, '_blank');
+        }
+        
+        function sendAllTimeSoldReminders() {
+            if (!window.currentNonCompliant || window.currentNonCompliant.length === 0) {
+                alert('No non-compliant employees to email.');
+                return;
+            }
+            
+            if (!confirm(`Send reminder emails to ${window.currentNonCompliant.length} employees?`)) {
+                return;
+            }
+            
+            window.currentNonCompliant.forEach((emp, idx) => {
+                setTimeout(() => {
+                    sendTimeSoldReminder(emp.name, emp.email, window.currentCheckDate);
+                }, idx * 500); // Stagger by 500ms to avoid popup blockers
+            });
+        }
+        
+        function toggleEmployeeManager() {
+            const mgr = document.getElementById('employeeManager');
+            mgr.style.display = mgr.style.display === 'none' ? 'block' : 'none';
+            if (mgr.style.display === 'block') {
+                renderEmployeeTable();
+            }
+        }
+        
+        function renderEmployeeTable() {
+            const employees = getEmployeeDatabase();
+            const tbody = document.getElementById('employeeDbBody');
+            
+            let html = '';
+            employees.forEach(emp => {
+                html += `<tr>
+                    <td>${emp.name}</td>
+                    <td style="color:#60a5fa;">${emp.code}</td>
+                    <td style="color:#94a3b8;font-size:0.75em;">${emp.email}</td>
+                    <td><button onclick="removeEmployee('${emp.code}')" style="background:transparent;color:#64748b;border:none;cursor:pointer;">✕</button></td>
+                </tr>`;
+            });
+            
+            tbody.innerHTML = html || '<tr><td colspan="4" style="color:#64748b;text-align:center;">No employees</td></tr>';
+        }
+        
+        function addEmployeeToDb() {
+            const name = document.getElementById('newEmpName').value.trim();
+            const code = document.getElementById('newEmpCode').value.trim().toUpperCase();
+            const email = document.getElementById('newEmpEmail').value.trim();
+            const msgEl = document.getElementById('empAddMsg');
+            
+            if (!name || !code || !email) {
+                msgEl.textContent = '⚠️ All fields required';
+                msgEl.style.color = '#fca5a5';
+                msgEl.style.display = 'block';
+                setTimeout(() => msgEl.style.display = 'none', 3000);
+                return;
+            }
+            
+            const db = getEmployeeDatabase();
+            if (db.some(e => e.code === code)) {
+                msgEl.textContent = '⚠️ Employee code already exists';
+                msgEl.style.color = '#fca5a5';
+                msgEl.style.display = 'block';
+                setTimeout(() => msgEl.style.display = 'none', 3000);
+                return;
+            }
+            
+            db.push({ name, code, email });
+            db.sort((a, b) => a.name.localeCompare(b.name));
+            saveEmployeeDatabase(db);
+            
+            document.getElementById('newEmpName').value = '';
+            document.getElementById('newEmpCode').value = '';
+            document.getElementById('newEmpEmail').value = '';
+            
+            msgEl.textContent = '✅ Added ' + name;
+            msgEl.style.color = '#86efac';
+            msgEl.style.display = 'block';
+            setTimeout(() => msgEl.style.display = 'none', 3000);
+            
+            renderEmployeeTable();
+            renderTimeSoldCompliance();
+        }
+        
+        function removeEmployee(code) {
+            if (!confirm('Remove employee ' + code + '?')) return;
+            let db = getEmployeeDatabase();
+            db = db.filter(e => e.code !== code);
+            saveEmployeeDatabase(db);
+            renderEmployeeTable();
+            renderTimeSoldCompliance();
+        }
+        
+        // Initialize time sold compliance on page load
+        renderTimeSoldCompliance();
         
         // ==========================================
         // DAILY CHECKLIST AUTO-RESET SYSTEM
