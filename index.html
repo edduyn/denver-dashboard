@@ -838,6 +838,36 @@
         
         <!-- EMPLOYEES TAB -->
         <div class="content" id="employees">
+            <!-- TIME NOT SOLD - PREVIOUS DAY -->
+            <div class="card" style="border:2px solid #ef4444;">
+                <div class="card-header">
+                    <span class="card-title">⚠️ Time Not Sold - Previous Working Day</span>
+                    <span class="badge" id="timeNotSoldBadge">Loading...</span>
+                </div>
+                <div style="background:#7f1d1d;padding:10px;border-radius:6px;margin-bottom:15px;font-size:0.85em;color:#fecaca;">
+                    <strong style="color:#fca5a5;">📊 DATA SOURCE:</strong> Time Sold Report | Check Date: <span id="timeNotSoldDate">--</span>
+                </div>
+                
+                <!-- Non-compliant employees grid -->
+                <div id="timeNotSoldSection" style="display:none;">
+                    <div id="timeNotSoldGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:15px;">
+                        <!-- Dynamically populated -->
+                    </div>
+                    <button onclick="sendAllTimeNotSoldEmails()" style="width:100%;padding:12px;background:linear-gradient(135deg,#dc2626,#ef4444);color:white;border:none;border-radius:8px;font-weight:bold;cursor:pointer;margin-bottom:10px;">
+                        📧 Send Reminder to All Non-Compliant
+                    </button>
+                </div>
+                
+                <div id="allSoldTimeSection" style="display:none;background:#14532d;padding:15px;border-radius:8px;text-align:center;">
+                    <div style="color:#86efac;font-size:1.2em;">✅ All employees sold time on this date!</div>
+                </div>
+                
+                <div style="background:#0f172a;padding:10px;border-radius:6px;font-size:0.8em;color:#94a3b8;">
+                    💡 <strong>How it works:</strong> When Claude processes your Time Sold report, it updates this list automatically. 
+                    Employees who didn't sell time on the previous working day will appear here with email buttons.
+                </div>
+            </div>
+            
             <div class="card">
                 <div class="card-header">
                     <span class="card-title">Employee Performance - A/B Efficiency</span>
@@ -877,10 +907,10 @@
                             <tr><th>Date</th><th>Employee</th><th>Type</th><th>Days</th></tr>
                         </thead>
                         <tbody>
-                            <tr style="background:rgba(245,158,11,0.2)"><td>02/04</td><td>Watson, Andrew</td><td>MidYear</td><td><span class="badge badge-amber">9</span></td></tr>
-                            <tr style="background:rgba(245,158,11,0.2)"><td>02/08</td><td>Guillermo Tovar S.</td><td>90-Day</td><td><span class="badge badge-amber">13</span></td></tr>
-                            <tr><td>03/10</td><td>Noris, Jose</td><td>Yearly</td><td>43</td></tr>
-                            <tr style="background:rgba(100,116,139,0.2)"><td>07/15</td><td>Hannas, Michael 🔴 LOA</td><td>Yearly</td><td>170</td></tr>
+                            <tr style="background:rgba(245,158,11,0.2)"><td>02/04</td><td>Watson, Andrew</td><td>MidYear</td><td><span class="badge badge-amber">7</span></td></tr>
+                            <tr style="background:rgba(245,158,11,0.2)"><td>02/08</td><td>Guillermo Tovar S.</td><td>90-Day</td><td><span class="badge badge-amber">11</span></td></tr>
+                            <tr><td>03/10</td><td>Noris, Jose</td><td>Yearly</td><td>41</td></tr>
+                            <tr style="background:rgba(100,116,139,0.2)"><td>07/15</td><td>Hannas, Michael 🔴 LOA</td><td>Yearly</td><td>168</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -3398,6 +3428,203 @@ This is an automated message.`);
         
         // Initialize SDV table on load
         renderSdvTable();
+        
+        // ==========================================
+        // TIME NOT SOLD TRACKING SYSTEM
+        // ==========================================
+        
+        // Employee database with emails - UPDATE THIS WITH YOUR DATA
+        const employeeEmails = {
+            'MACSE': {name: 'Sean Macoomb', email: ''},
+            'MEDJU': {name: 'Juan Medina', email: ''},
+            'LANJU': {name: 'Julia Langford', email: ''},
+            'HUBEM': {name: 'Michael Huber', email: ''},
+            'OWEKI': {name: 'Kim Owen', email: ''},
+            'TOVGU': {name: 'Guillermo Tovar S.', email: ''},
+            'TRIAR': {name: 'Armando Triana-Cruz', email: ''},
+            'NORJO': {name: 'Jose Noris', email: ''},
+            'SMIKE': {name: 'Ken Smith', email: ''},
+            'WATAN': {name: 'Andrew Watson', email: ''},
+            'WATJO': {name: 'John Watson', email: ''},
+            'RIEDO': {name: 'Douglas Riera Guzman', email: ''},
+            'HANMI': {name: 'Michael Hannas', email: ''}
+        };
+        
+        function getTimeNotSoldData() {
+            let data = localStorage.getItem('denver_time_not_sold');
+            if (!data) return { date: null, employeesWhoSold: [] };
+            return JSON.parse(data);
+        }
+        
+        function saveTimeNotSoldData(data) {
+            localStorage.setItem('denver_time_not_sold', JSON.stringify(data));
+        }
+        
+        // Function for Claude to call when processing Time Sold report
+        window.updateTimeNotSold = function(dateStr, employeeCodesWhoSold) {
+            const data = {
+                date: dateStr,
+                employeesWhoSold: employeeCodesWhoSold.map(c => c.toUpperCase())
+            };
+            saveTimeNotSoldData(data);
+            renderTimeNotSold();
+            console.log(`✅ Updated time sold data for ${dateStr}: ${employeeCodesWhoSold.length} employees sold time`);
+            return data;
+        };
+        
+        function formatDateForEmail(dateStr) {
+            // Convert YYYY-MM-DD to readable format
+            if (!dateStr) return '--';
+            const parts = dateStr.split('-');
+            if (parts.length === 3) {
+                const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+                return `${months[parseInt(parts[1])-1]} ${parseInt(parts[2])}, ${parts[0]}`;
+            }
+            return dateStr;
+        }
+        
+        function formatDateShort(dateStr) {
+            if (!dateStr) return '--';
+            const parts = dateStr.split('-');
+            if (parts.length === 3) {
+                return `${parts[1]}/${parts[2]}/${parts[0].slice(-2)}`;
+            }
+            return dateStr;
+        }
+        
+        function sendTimeNotSoldEmail(empCode) {
+            const emp = employeeEmails[empCode];
+            if (!emp || !emp.email) {
+                alert(`No email address for ${emp ? emp.name : empCode}. Please update employee emails.`);
+                return;
+            }
+            
+            const data = getTimeNotSoldData();
+            const dateDisplay = formatDateForEmail(data.date);
+            const firstName = emp.name.split(' ')[0];
+            
+            const subject = `Time not sold on ${dateDisplay}`;
+            const body = `${firstName},
+
+In order to accurately track A/B, technicians are required to sell time at completion of the task. Please sell time for ${dateDisplay}.
+
+---
+This is an automated message.`;
+            
+            const outlookUrl = `https://outlook.office365.com/mail/deeplink/compose?to=${encodeURIComponent(emp.email)}&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            window.open(outlookUrl, '_blank');
+        }
+        
+        function sendAllTimeNotSoldEmails() {
+            const data = getTimeNotSoldData();
+            if (!data.date) {
+                alert('No time sold data available.');
+                return;
+            }
+            
+            const allCodes = Object.keys(employeeEmails).filter(code => employeeEmails[code].email);
+            const notSold = allCodes.filter(code => !data.employeesWhoSold.includes(code));
+            
+            if (notSold.length === 0) {
+                alert('All employees sold time!');
+                return;
+            }
+            
+            const withEmail = notSold.filter(code => employeeEmails[code].email);
+            if (withEmail.length === 0) {
+                alert('No email addresses configured for non-compliant employees.');
+                return;
+            }
+            
+            if (!confirm(`Send reminder emails to ${withEmail.length} employees?`)) return;
+            
+            withEmail.forEach((code, idx) => {
+                setTimeout(() => sendTimeNotSoldEmail(code), idx * 500);
+            });
+        }
+        
+        function renderTimeNotSold() {
+            const data = getTimeNotSoldData();
+            const badge = document.getElementById('timeNotSoldBadge');
+            const dateSpan = document.getElementById('timeNotSoldDate');
+            const grid = document.getElementById('timeNotSoldGrid');
+            const notSoldSection = document.getElementById('timeNotSoldSection');
+            const allSoldSection = document.getElementById('allSoldTimeSection');
+            
+            if (!data.date) {
+                badge.textContent = 'No Data';
+                badge.className = 'badge badge-gray';
+                dateSpan.textContent = 'No report processed yet';
+                notSoldSection.style.display = 'none';
+                allSoldSection.style.display = 'none';
+                return;
+            }
+            
+            dateSpan.textContent = formatDateShort(data.date);
+            
+            // Get all employee codes (excluding those on leave)
+            const allCodes = Object.keys(employeeEmails).filter(code => code !== 'HANMI'); // Exclude Hannas (LOA)
+            const notSold = allCodes.filter(code => !data.employeesWhoSold.includes(code));
+            
+            if (notSold.length === 0) {
+                badge.textContent = '✅ All Compliant';
+                badge.className = 'badge badge-green';
+                notSoldSection.style.display = 'none';
+                allSoldSection.style.display = 'block';
+                return;
+            }
+            
+            badge.textContent = `⚠️ ${notSold.length} Missing`;
+            badge.className = 'badge badge-red';
+            notSoldSection.style.display = 'block';
+            allSoldSection.style.display = 'none';
+            
+            // Build grid
+            let html = '';
+            notSold.forEach(code => {
+                const emp = employeeEmails[code];
+                const hasEmail = emp && emp.email;
+                const btnStyle = hasEmail 
+                    ? 'background:#ef4444;cursor:pointer;' 
+                    : 'background:#64748b;cursor:not-allowed;opacity:0.6;';
+                const btnTitle = hasEmail ? 'Send reminder email' : 'No email configured';
+                
+                html += `<div style="background:rgba(239,68,68,0.2);border:1px solid #ef4444;border-radius:8px;padding:12px;text-align:center;">
+                    <div style="font-weight:bold;color:#fecaca;margin-bottom:5px;">${emp ? emp.name : code}</div>
+                    <div style="font-size:0.75em;color:#94a3b8;margin-bottom:8px;">${code}</div>
+                    <button onclick="sendTimeNotSoldEmail('${code}')" style="${btnStyle}color:white;border:none;padding:6px 12px;border-radius:4px;font-size:0.8em;" title="${btnTitle}" ${hasEmail ? '' : 'disabled'}>
+                        📧 Send Reminder
+                    </button>
+                </div>`;
+            });
+            
+            grid.innerHTML = html;
+        }
+        
+        // Update employee emails function - for Claude to use
+        window.setEmployeeEmail = function(code, email) {
+            if (employeeEmails[code]) {
+                employeeEmails[code].email = email;
+                console.log(`✅ Set email for ${employeeEmails[code].name}: ${email}`);
+                renderTimeNotSold();
+            } else {
+                console.error(`Unknown employee code: ${code}`);
+            }
+        };
+        
+        // Bulk set emails
+        window.setAllEmployeeEmails = function(emailMap) {
+            Object.entries(emailMap).forEach(([code, email]) => {
+                if (employeeEmails[code]) {
+                    employeeEmails[code].email = email;
+                }
+            });
+            console.log('✅ Updated all employee emails');
+            renderTimeNotSold();
+        };
+        
+        // Initialize on load
+        renderTimeNotSold();
     </script>
 </body>
 </html>
