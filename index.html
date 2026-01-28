@@ -3453,7 +3453,15 @@ This is an automated message.`);
         
         function getTimeNotSoldData() {
             let data = localStorage.getItem('denver_time_not_sold');
-            if (!data) return { date: null, employeesWhoSold: [] };
+            if (!data) {
+                // Default data from 01/28/26 report (previous day = 01/27/26)
+                const defaultData = {
+                    date: '2026-01-27',
+                    employeesWhoSold: ['LANJU', 'NORIJ', 'OWEKI', 'MACOS', 'SMIKZ', 'CRUZA', 'WATJO', 'WATAN', 'TOVAG', 'HUBEM', 'RIERD']
+                };
+                localStorage.setItem('denver_time_not_sold', JSON.stringify(defaultData));
+                return defaultData;
+            }
             return JSON.parse(data);
         }
         
