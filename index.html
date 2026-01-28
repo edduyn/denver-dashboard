@@ -1130,86 +1130,74 @@
                 </div>
             </div>
             
-            <!-- SDV EXPECTED HOURS TRACKER - Goal #4 -->
+            <!-- SDV EXPECTED HOURS TRACKER - Goal #4 (DYNAMIC) -->
             <div class="card" style="border:2px solid #a855f7;">
                 <div class="card-header">
                     <span class="card-title">📊 SDV Expected Hours Tracker (Goal #4)</span>
-                    <span class="badge badge-amber">⚠️ 1/3 Have Estimates (33%)</span>
+                    <span class="badge" id="sdvEstimateBadge">Loading...</span>
                 </div>
                 <div style="background:#14532d;padding:10px;border-radius:6px;margin-bottom:15px;font-size:0.85em;color:#bbf7d0;">
-                    <strong style="color:#4ade80;">🤖 DATA SOURCE:</strong> Job View Report | SDV Shop Only | Updated: 01/27/26 3:44 PM
+                    <strong style="color:#4ade80;">🤖 DATA SOURCE:</strong> Anchor Report (Expected Hrs) + Time Sold (Actual Hrs) | SDV Shop | <span id="sdvDataTimestamp">Updated: --</span>
                 </div>
                 
                 <!-- SDV Summary Cards -->
                 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:15px;">
                     <div style="background:linear-gradient(135deg,#581c87,#a855f7);padding:12px;border-radius:8px;text-align:center;">
                         <div style="font-size:0.75em;color:#e9d5ff;">SDV WOs with Hours</div>
-                        <div style="font-size:1.5em;font-weight:bold;color:#fff;">3</div>
+                        <div style="font-size:1.5em;font-weight:bold;color:#fff;" id="sdvTotalWOs">0</div>
                         <div style="font-size:0.7em;color:#d8b4fe;">Active work</div>
                     </div>
                     <div style="background:linear-gradient(135deg,#7f1d1d,#ef4444);padding:12px;border-radius:8px;text-align:center;">
                         <div style="font-size:0.75em;color:#fecaca;">⚠️ No Estimate</div>
-                        <div style="font-size:1.5em;font-weight:bold;color:#fff;">2</div>
+                        <div style="font-size:1.5em;font-weight:bold;color:#fff;" id="sdvNoEstimate">0</div>
                         <div style="font-size:0.7em;color:#fca5a5;">Process gap!</div>
                     </div>
                     <div style="background:linear-gradient(135deg,#065f46,#10b981);padding:12px;border-radius:8px;text-align:center;">
                         <div style="font-size:0.75em;color:#a7f3d0;">With Estimate</div>
-                        <div style="font-size:1.5em;font-weight:bold;color:#fff;">1</div>
+                        <div style="font-size:1.5em;font-weight:bold;color:#fff;" id="sdvWithEstimate">0</div>
                         <div style="font-size:0.7em;color:#bbf7d0;">Target: 100%</div>
                     </div>
                 </div>
                 
-                <!-- SDV WOs Detail -->
+                <!-- Add SDV WO Form -->
+                <div style="background:linear-gradient(135deg,#581c87,#7c3aed);padding:15px;border-radius:10px;margin-bottom:15px;">
+                    <div style="color:#e9d5ff;font-size:0.85em;margin-bottom:10px;font-weight:bold;">➕ ADD/UPDATE SDV WO DATA</div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr;gap:10px;margin-bottom:10px;">
+                        <input type="text" id="sdvWO" placeholder="WO#" style="padding:8px;border-radius:6px;border:none;background:#1e1b4b;color:white;font-size:0.85em;text-transform:uppercase;">
+                        <input type="text" id="sdvCustomer" placeholder="Customer" style="padding:8px;border-radius:6px;border:none;background:#1e1b4b;color:white;font-size:0.85em;">
+                        <input type="number" id="sdvActualHrs" placeholder="Actual Hrs" step="0.1" style="padding:8px;border-radius:6px;border:none;background:#1e1b4b;color:white;font-size:0.85em;">
+                        <input type="number" id="sdvExpectedHrs" placeholder="Expected Hrs" step="0.1" style="padding:8px;border-radius:6px;border:none;background:#1e1b4b;color:white;font-size:0.85em;">
+                        <input type="text" id="sdvNotes" placeholder="Notes (opt)" style="padding:8px;border-radius:6px;border:none;background:#1e1b4b;color:white;font-size:0.85em;">
+                    </div>
+                    <div style="display:flex;gap:10px;">
+                        <button onclick="addSdvWO()" style="flex:1;padding:10px;background:#10b981;color:white;border:none;border-radius:6px;font-weight:bold;cursor:pointer;">➕ Add/Update WO</button>
+                        <button onclick="clearSdvData()" style="padding:10px;background:#ef4444;color:white;border:none;border-radius:6px;cursor:pointer;font-size:0.85em;">🗑️ Clear All</button>
+                    </div>
+                    <div id="sdvAddMsg" style="display:none;margin-top:8px;font-size:0.8em;text-align:center;"></div>
+                </div>
+                
+                <!-- SDV WOs Detail Table -->
                 <div style="background:rgba(147,51,234,0.15);border:1px solid #a855f7;border-radius:8px;padding:15px;margin-bottom:15px;">
                     <div style="color:#a855f7;font-weight:bold;margin-bottom:10px;">📋 SDV WOs - Expected Hours Status</div>
                     <div class="table-container">
                         <table>
                             <thead>
-                                <tr><th>WO#</th><th>Customer</th><th>Actual Hrs</th><th>WIP @ $70</th><th>Exp Hrs</th><th>Status</th></tr>
+                                <tr><th>WO#</th><th>Customer</th><th>Actual Hrs</th><th>WIP @ $70</th><th>Exp Hrs</th><th>Status</th><th></th></tr>
                             </thead>
-                            <tbody>
-                                <tr style="background:rgba(239,68,68,0.15)">
-                                    <td><strong>DB1UA</strong> 📍</td>
-                                    <td>Hogs Head Air 1 LLC</td>
-                                    <td>73.0h</td>
-                                    <td style="color:#a855f7;font-weight:bold;">$5,110</td>
-                                    <td style="color:#ef4444;">❌ Not Set</td>
-                                    <td style="color:#64748b;font-size:0.8em;">NJ controlled</td>
-                                </tr>
-                                <tr style="background:rgba(239,68,68,0.15)">
-                                    <td><strong>CV78A</strong></td>
-                                    <td>Primus Capital</td>
-                                    <td>8.0h</td>
-                                    <td style="color:#a855f7;font-weight:bold;">$560</td>
-                                    <td style="color:#ef4444;">❌ Not Set</td>
-                                    <td style="color:#ef4444;font-size:0.8em;">Add estimate</td>
-                                </tr>
-                                <tr style="background:rgba(16,185,129,0.15)">
-                                    <td><strong>CVN0A</strong></td>
-                                    <td>Stevens Aerospace</td>
-                                    <td>5.0h</td>
-                                    <td style="color:#a855f7;font-weight:bold;">$350</td>
-                                    <td style="color:#10b981;">✅ 41.0h</td>
-                                    <td style="color:#10b981;font-size:0.8em;">Under estimate!</td>
-                                </tr>
-                                <tr style="background:rgba(147,51,234,0.2);font-weight:bold;">
-                                    <td colspan="2">TOTAL SDV WIP</td>
-                                    <td>86.0h</td>
-                                    <td style="color:#a855f7;">$6,020</td>
-                                    <td colspan="2" style="color:#f59e0b;">33% with estimates</td>
-                                </tr>
+                            <tbody id="sdvWOsBody">
+                                <tr><td colspan="7" style="color:#64748b;text-align:center;">No SDV WOs tracked. Add from reports above.</td></tr>
                             </tbody>
                         </table>
                     </div>
-                    <div style="margin-top:10px;font-size:0.85em;color:#d8b4fe;">
-                        📋 <strong>Goal #4 requires expected hours tracking on SDV WOs.</strong> Currently 33% compliance - need estimates on DB1UA and CV78A.
+                    <div id="sdvGoalNote" style="margin-top:10px;font-size:0.85em;color:#d8b4fe;">
+                        📋 <strong>Goal #4 requires expected hours tracking on SDV WOs.</strong>
                     </div>
                 </div>
                 
                 <div style="background:#0f172a;padding:10px;border-radius:6px;font-size:0.8em;color:#94a3b8;">
                     <strong style="color:#a855f7;">📊 SDV TRACKING:</strong> 
                     SDV shop tracks Expected vs Actual hours to measure estimate accuracy. 
-                    <strong style="color:#f59e0b;">Current gap: 2/3 WOs missing estimates (DB1UA, CV78A).</strong>
+                    <span id="sdvGapText" style="color:#f59e0b;">Add WOs above to track compliance.</span>
                 </div>
             </div>
             
@@ -3164,6 +3152,252 @@ This is an automated message.`);
         
         // Initialize on page load
         loadDailyChecklists();
+        
+        // ==========================================
+        // SDV EXPECTED HOURS TRACKING SYSTEM
+        // ==========================================
+        
+        // Default seed data from Anchor report
+        const defaultSdvWOs = [
+            {wo: 'CV78A', customer: 'Primus Capital', actualHrs: 8.0, expectedHrs: 400, notes: 'Major install'},
+            {wo: 'CVN0A', customer: 'Stevens Aerospace', actualHrs: 5.0, expectedHrs: 41, notes: ''},
+            {wo: 'DB1UA', customer: 'Hogs Head Air 1 LLC', actualHrs: 73.0, expectedHrs: 0, notes: 'NJ controlled'},
+            {wo: 'CMJHA', customer: '', actualHrs: 0, expectedHrs: 24, notes: ''},
+            {wo: 'DSGKA', customer: '', actualHrs: 0, expectedHrs: 6, notes: ''},
+            {wo: 'DRT6C', customer: '', actualHrs: 0, expectedHrs: 2, notes: ''}
+        ];
+        
+        function getSdvWOs() {
+            let data = localStorage.getItem('denver_sdv_wos');
+            if (!data) {
+                localStorage.setItem('denver_sdv_wos', JSON.stringify(defaultSdvWOs));
+                return defaultSdvWOs;
+            }
+            return JSON.parse(data);
+        }
+        
+        function saveSdvWOs(wos) {
+            localStorage.setItem('denver_sdv_wos', JSON.stringify(wos));
+        }
+        
+        function addSdvWO() {
+            const wo = document.getElementById('sdvWO').value.trim().toUpperCase();
+            const customer = document.getElementById('sdvCustomer').value.trim();
+            const actualHrs = parseFloat(document.getElementById('sdvActualHrs').value) || 0;
+            const expectedHrs = parseFloat(document.getElementById('sdvExpectedHrs').value) || 0;
+            const notes = document.getElementById('sdvNotes').value.trim();
+            
+            const msgEl = document.getElementById('sdvAddMsg');
+            
+            if (!wo) {
+                msgEl.textContent = '⚠️ WO# is required';
+                msgEl.style.color = '#fca5a5';
+                msgEl.style.display = 'block';
+                setTimeout(() => msgEl.style.display = 'none', 3000);
+                return;
+            }
+            
+            let wos = getSdvWOs();
+            const existingIdx = wos.findIndex(w => w.wo === wo);
+            
+            if (existingIdx >= 0) {
+                // Update existing
+                wos[existingIdx] = { wo, customer: customer || wos[existingIdx].customer, actualHrs, expectedHrs, notes: notes || wos[existingIdx].notes };
+                msgEl.textContent = `✅ Updated ${wo}`;
+            } else {
+                // Add new
+                wos.push({ wo, customer, actualHrs, expectedHrs, notes });
+                msgEl.textContent = `✅ Added ${wo}`;
+            }
+            
+            saveSdvWOs(wos);
+            
+            // Clear form
+            document.getElementById('sdvWO').value = '';
+            document.getElementById('sdvCustomer').value = '';
+            document.getElementById('sdvActualHrs').value = '';
+            document.getElementById('sdvExpectedHrs').value = '';
+            document.getElementById('sdvNotes').value = '';
+            
+            msgEl.style.color = '#86efac';
+            msgEl.style.display = 'block';
+            setTimeout(() => msgEl.style.display = 'none', 3000);
+            
+            renderSdvTable();
+        }
+        
+        function removeSdvWO(wo) {
+            if (!confirm(`Remove ${wo} from SDV tracking?`)) return;
+            let wos = getSdvWOs();
+            wos = wos.filter(w => w.wo !== wo);
+            saveSdvWOs(wos);
+            renderSdvTable();
+        }
+        
+        function clearSdvData() {
+            if (!confirm('Clear ALL SDV WO data?')) return;
+            localStorage.removeItem('denver_sdv_wos');
+            renderSdvTable();
+        }
+        
+        // Bulk update function for Claude to use
+        window.bulkUpdateSdvWOs = function(wos) {
+            if (!Array.isArray(wos)) {
+                console.error('bulkUpdateSdvWOs expects an array');
+                return;
+            }
+            
+            let current = getSdvWOs();
+            let added = 0, updated = 0;
+            
+            wos.forEach(w => {
+                if (!w.wo) return;
+                const wo = w.wo.toUpperCase();
+                const existingIdx = current.findIndex(c => c.wo === wo);
+                
+                if (existingIdx >= 0) {
+                    // Update existing - merge data
+                    if (w.actualHrs !== undefined) current[existingIdx].actualHrs = w.actualHrs;
+                    if (w.expectedHrs !== undefined) current[existingIdx].expectedHrs = w.expectedHrs;
+                    if (w.customer) current[existingIdx].customer = w.customer;
+                    if (w.notes) current[existingIdx].notes = w.notes;
+                    updated++;
+                } else {
+                    current.push({
+                        wo: wo,
+                        customer: w.customer || '',
+                        actualHrs: w.actualHrs || 0,
+                        expectedHrs: w.expectedHrs || 0,
+                        notes: w.notes || ''
+                    });
+                    added++;
+                }
+            });
+            
+            saveSdvWOs(current);
+            renderSdvTable();
+            console.log(`✅ SDV bulk update: ${added} added, ${updated} updated. Total: ${current.length}`);
+            return { added, updated, total: current.length };
+        };
+        
+        function renderSdvTable() {
+            const wos = getSdvWOs();
+            const tbody = document.getElementById('sdvWOsBody');
+            const badge = document.getElementById('sdvEstimateBadge');
+            
+            // Filter to only WOs with actual hours > 0
+            const activeWOs = wos.filter(w => w.actualHrs > 0);
+            const withEstimate = activeWOs.filter(w => w.expectedHrs > 0);
+            const noEstimate = activeWOs.filter(w => w.expectedHrs === 0);
+            
+            // Update summary cards
+            document.getElementById('sdvTotalWOs').textContent = activeWOs.length;
+            document.getElementById('sdvNoEstimate').textContent = noEstimate.length;
+            document.getElementById('sdvWithEstimate').textContent = withEstimate.length;
+            
+            // Update timestamp
+            document.getElementById('sdvDataTimestamp').textContent = 'Updated: ' + getTodayString() + ' (localStorage)';
+            
+            // Update badge
+            const pct = activeWOs.length > 0 ? Math.round((withEstimate.length / activeWOs.length) * 100) : 0;
+            if (activeWOs.length === 0) {
+                badge.textContent = 'No Active WOs';
+                badge.className = 'badge badge-gray';
+            } else if (pct === 100) {
+                badge.textContent = `✅ ${withEstimate.length}/${activeWOs.length} (100%)`;
+                badge.className = 'badge badge-green';
+            } else if (pct >= 50) {
+                badge.textContent = `⚠️ ${withEstimate.length}/${activeWOs.length} (${pct}%)`;
+                badge.className = 'badge badge-amber';
+            } else {
+                badge.textContent = `⚠️ ${withEstimate.length}/${activeWOs.length} (${pct}%)`;
+                badge.className = 'badge badge-red';
+            }
+            
+            // Build table
+            let html = '';
+            let totalActual = 0;
+            let totalWip = 0;
+            
+            // Sort: no estimate first, then by actual hours desc
+            const sorted = [...activeWOs].sort((a, b) => {
+                if ((a.expectedHrs === 0) !== (b.expectedHrs === 0)) {
+                    return a.expectedHrs === 0 ? -1 : 1;
+                }
+                return b.actualHrs - a.actualHrs;
+            });
+            
+            sorted.forEach(w => {
+                totalActual += w.actualHrs;
+                const wip = w.actualHrs * 70;
+                totalWip += wip;
+                
+                const hasEstimate = w.expectedHrs > 0;
+                const rowBg = hasEstimate ? 'background:rgba(16,185,129,0.15)' : 'background:rgba(239,68,68,0.15)';
+                const expDisplay = hasEstimate ? `<span style="color:#10b981;">✅ ${w.expectedHrs}h</span>` : `<span style="color:#ef4444;">❌ Not Set</span>`;
+                
+                let status = '';
+                if (hasEstimate) {
+                    if (w.actualHrs < w.expectedHrs) {
+                        status = '<span style="color:#10b981;font-size:0.8em;">Under estimate</span>';
+                    } else {
+                        status = '<span style="color:#ef4444;font-size:0.8em;">Over estimate!</span>';
+                    }
+                } else if (w.notes) {
+                    status = `<span style="color:#64748b;font-size:0.8em;">${w.notes}</span>`;
+                } else {
+                    status = '<span style="color:#ef4444;font-size:0.8em;">Add estimate</span>';
+                }
+                
+                const isNJ = w.notes && w.notes.toLowerCase().includes('nj');
+                const woDisplay = isNJ ? `<strong>${w.wo}</strong> 📍` : `<strong>${w.wo}</strong>`;
+                
+                html += `<tr style="${rowBg}">
+                    <td>${woDisplay}</td>
+                    <td>${w.customer || '-'}</td>
+                    <td>${w.actualHrs}h</td>
+                    <td style="color:#a855f7;font-weight:bold;">$${wip.toLocaleString()}</td>
+                    <td>${expDisplay}</td>
+                    <td>${status}</td>
+                    <td><button onclick="removeSdvWO('${w.wo}')" style="background:transparent;color:#64748b;border:none;padding:2px 5px;font-size:0.7em;cursor:pointer;" title="Remove">✕</button></td>
+                </tr>`;
+            });
+            
+            // Total row
+            if (activeWOs.length > 0) {
+                html += `<tr style="background:rgba(147,51,234,0.2);font-weight:bold;">
+                    <td colspan="2">TOTAL SDV WIP</td>
+                    <td>${totalActual.toFixed(1)}h</td>
+                    <td style="color:#a855f7;">$${totalWip.toLocaleString()}</td>
+                    <td colspan="3" style="color:#f59e0b;">${pct}% with estimates</td>
+                </tr>`;
+            }
+            
+            if (html === '') {
+                html = '<tr><td colspan="7" style="color:#64748b;text-align:center;">No SDV WOs with hours. Add from reports above.</td></tr>';
+            }
+            
+            tbody.innerHTML = html;
+            
+            // Update goal note
+            const goalNote = document.getElementById('sdvGoalNote');
+            const gapText = document.getElementById('sdvGapText');
+            
+            if (noEstimate.length > 0) {
+                const missing = noEstimate.map(w => w.wo).join(', ');
+                goalNote.innerHTML = `📋 <strong>Goal #4 requires expected hours tracking on SDV WOs.</strong> Currently ${pct}% compliance - need estimates on ${missing}.`;
+                gapText.innerHTML = `<strong style="color:#f59e0b;">Current gap: ${noEstimate.length}/${activeWOs.length} WOs missing estimates (${missing}).</strong>`;
+            } else if (activeWOs.length > 0) {
+                goalNote.innerHTML = `📋 <strong>Goal #4: ✅ 100% compliance!</strong> All active SDV WOs have expected hours set.`;
+                gapText.innerHTML = `<strong style="color:#10b981;">✅ All SDV WOs have estimates. Great job!</strong>`;
+            } else {
+                goalNote.innerHTML = `📋 <strong>Goal #4 requires expected hours tracking on SDV WOs.</strong>`;
+                gapText.innerHTML = `Add WOs above to track compliance.`;
+            }
+        }
+        
+        // Initialize SDV table on load
+        renderSdvTable();
     </script>
 </body>
 </html>
