@@ -1728,7 +1728,7 @@
         
         <!-- WIP TAB -->
         <div class="content" id="wip">
-            <!-- THE BIG NUMBER -->
+            <!-- THE BIG NUMBER - DYNAMIC -->
             <div class="card">
                 <div class="card-header">
                     <span class="card-title">💰 January 2026 WIP</span>
@@ -1737,8 +1737,21 @@
                 
                 <div style="text-align:center;padding:30px;background:linear-gradient(135deg,#064e3b,#065f46);border-radius:12px;margin-bottom:20px;">
                     <div style="color:#6ee7b7;font-size:1em;margin-bottom:5px;">JANUARY WIP (WOs opened this month, still open)</div>
-                    <div style="font-size:3.5em;font-weight:bold;color:#10b981;">$26,036</div>
-                    <div style="color:#a7f3d0;font-size:1.1em;margin-top:10px;">203.3 hours × WIP rates | 33 WOs</div>
+                    <div style="font-size:3.5em;font-weight:bold;color:#10b981;" id="janWipAmount">$0</div>
+                    <div style="color:#a7f3d0;font-size:1.1em;margin-top:10px;" id="janWipDetails">Loading...</div>
+                </div>
+                
+                <!-- Update January WIP Form -->
+                <div style="background:linear-gradient(135deg,#065f46,#10b981);padding:15px;border-radius:10px;margin-bottom:15px;">
+                    <div style="color:#d1fae5;font-size:0.85em;margin-bottom:10px;font-weight:bold;">📊 UPDATE JANUARY WIP DATA</div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;margin-bottom:10px;">
+                        <input type="number" id="janWipHours" placeholder="Hours" step="0.1" style="padding:8px;border-radius:6px;border:none;background:#064e3b;color:white;font-size:0.85em;">
+                        <input type="number" id="janWipValue" placeholder="WIP Value $" step="1" style="padding:8px;border-radius:6px;border:none;background:#064e3b;color:white;font-size:0.85em;">
+                        <input type="number" id="janWipWOCount" placeholder="WO Count" style="padding:8px;border-radius:6px;border:none;background:#064e3b;color:white;font-size:0.85em;">
+                        <button onclick="updateJanWip()" style="padding:8px;background:#fbbf24;color:#1e1b4b;border:none;border-radius:6px;font-weight:bold;cursor:pointer;">💾 Update</button>
+                    </div>
+                    <div id="janWipMsg" style="display:none;font-size:0.8em;text-align:center;"></div>
+                    <div style="font-size:0.75em;color:#a7f3d0;text-align:center;">Last updated: <span id="janWipTimestamp">--</span></div>
                 </div>
                 
                 <div style="background:#0f172a;padding:15px;border-radius:8px;border-left:4px solid #10b981;">
@@ -3665,6 +3678,89 @@ This is an automated message.`;
         
         // Initialize on load
         renderTimeNotSold();
+        
+        // ==========================================
+        // JANUARY WIP TRACKING SYSTEM
+        // ==========================================
+        
+        function getJanWipData() {
+            let data = localStorage.getItem('denver_jan_wip');
+            if (!data) {
+                // Default data
+                const defaultData = {
+                    hours: 203.3,
+                    value: 26036,
+                    woCount: 33,
+                    timestamp: '01/27/26 3:44 PM'
+                };
+                localStorage.setItem('denver_jan_wip', JSON.stringify(defaultData));
+                return defaultData;
+            }
+            return JSON.parse(data);
+        }
+        
+        function saveJanWipData(data) {
+            localStorage.setItem('denver_jan_wip', JSON.stringify(data));
+        }
+        
+        function updateJanWip() {
+            const hours = parseFloat(document.getElementById('janWipHours').value);
+            const value = parseFloat(document.getElementById('janWipValue').value);
+            const woCount = parseInt(document.getElementById('janWipWOCount').value);
+            
+            const msgEl = document.getElementById('janWipMsg');
+            
+            if (isNaN(hours) || isNaN(value) || isNaN(woCount)) {
+                msgEl.textContent = '⚠️ Please fill in all fields';
+                msgEl.style.color = '#fca5a5';
+                msgEl.style.display = 'block';
+                setTimeout(() => msgEl.style.display = 'none', 3000);
+                return;
+            }
+            
+            const now = new Date();
+            const timestamp = now.toLocaleDateString('en-US', {month:'2-digit', day:'2-digit', year:'2-digit'}) + ' ' + 
+                             now.toLocaleTimeString('en-US', {hour:'numeric', minute:'2-digit', hour12:true});
+            
+            const data = { hours, value, woCount, timestamp };
+            saveJanWipData(data);
+            
+            // Clear form
+            document.getElementById('janWipHours').value = '';
+            document.getElementById('janWipValue').value = '';
+            document.getElementById('janWipWOCount').value = '';
+            
+            msgEl.textContent = '✅ January WIP updated!';
+            msgEl.style.color = '#86efac';
+            msgEl.style.display = 'block';
+            setTimeout(() => msgEl.style.display = 'none', 3000);
+            
+            renderJanWip();
+        }
+        
+        // Function for Claude to call
+        window.updateJanWipData = function(hours, value, woCount) {
+            const now = new Date();
+            const timestamp = now.toLocaleDateString('en-US', {month:'2-digit', day:'2-digit', year:'2-digit'}) + ' ' + 
+                             now.toLocaleTimeString('en-US', {hour:'numeric', minute:'2-digit', hour12:true});
+            
+            const data = { hours, value, woCount, timestamp };
+            saveJanWipData(data);
+            renderJanWip();
+            console.log(`✅ Updated January WIP: $${value.toLocaleString()} (${hours}h, ${woCount} WOs)`);
+            return data;
+        };
+        
+        function renderJanWip() {
+            const data = getJanWipData();
+            
+            document.getElementById('janWipAmount').textContent = '$' + data.value.toLocaleString();
+            document.getElementById('janWipDetails').textContent = `${data.hours.toFixed(1)} hours × WIP rates | ${data.woCount} WOs`;
+            document.getElementById('janWipTimestamp').textContent = data.timestamp;
+        }
+        
+        // Initialize on load
+        renderJanWip();
     </script>
 </body>
 </html>
