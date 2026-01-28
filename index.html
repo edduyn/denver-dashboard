@@ -3433,21 +3433,22 @@ This is an automated message.`);
         // TIME NOT SOLD TRACKING SYSTEM
         // ==========================================
         
-        // Employee database with emails - UPDATE THIS WITH YOUR DATA
+        // Employee database with emails - From Team Members report
         const employeeEmails = {
-            'MACSE': {name: 'Sean Macoomb', email: ''},
-            'MEDJU': {name: 'Juan Medina', email: ''},
-            'LANJU': {name: 'Julia Langford', email: ''},
-            'HUBEM': {name: 'Michael Huber', email: ''},
-            'OWEKI': {name: 'Kim Owen', email: ''},
-            'TOVGU': {name: 'Guillermo Tovar S.', email: ''},
-            'TRIAR': {name: 'Armando Triana-Cruz', email: ''},
-            'NORJO': {name: 'Jose Noris', email: ''},
-            'SMIKE': {name: 'Ken Smith', email: ''},
-            'WATAN': {name: 'Andrew Watson', email: ''},
-            'WATJO': {name: 'John Watson', email: ''},
-            'RIEDO': {name: 'Douglas Riera Guzman', email: ''},
-            'HANMI': {name: 'Michael Hannas', email: ''}
+            'CRUZA': {name: 'Armando Triana-Cruz', email: 'Armando.Triana-Cruz@duncanaviation.com'},
+            'HMICH': {name: 'Michael Hannas', email: 'Michael.Hannas@duncanaviation.com', loa: true},
+            'HUBEM': {name: 'Michael Huber', email: 'Michael.Huber@duncanaviation.com'},
+            'LANJU': {name: 'Julia Langford', email: 'Julia.Langford@duncanaviation.com'},
+            'MACOS': {name: 'Sean Macoomb', email: 'Sean.Macoomb@duncanaviation.com'},
+            'MEDIJ': {name: 'Juan Medina', email: 'Juan.Medina@duncanaviation.com'},
+            'NORIJ': {name: 'Jose Noris', email: 'Jose.Noris@duncanaviation.com'},
+            'OWEKI': {name: 'Kim Owen', email: 'Kim.Owen@duncanaviation.com'},
+            'PITAE': {name: 'Edduyn Pita', email: 'Edduyn.Pita@duncanaviation.com', manager: true},
+            'RIERD': {name: 'Douglas Riera Guzman', email: 'Douglas.Riera@duncanaviation.com'},
+            'SMIKZ': {name: 'Ken Smith', email: 'Kenneth.Smith@duncanaviation.com'},
+            'TOVAG': {name: 'Guillermo Tovar S.', email: 'Guillermo.Tovar@duncanaviation.com'},
+            'WATAN': {name: 'Andrew Watson', email: 'Andrew.Watson@duncanaviation.com'},
+            'WATJO': {name: 'John Watson', email: 'John.Watson@duncanaviation.com'}
         };
         
         function getTimeNotSoldData() {
@@ -3562,8 +3563,11 @@ This is an automated message.`;
             
             dateSpan.textContent = formatDateShort(data.date);
             
-            // Get all employee codes (excluding those on leave)
-            const allCodes = Object.keys(employeeEmails).filter(code => code !== 'HANMI'); // Exclude Hannas (LOA)
+            // Get all employee codes (excluding those on leave and manager)
+            const allCodes = Object.keys(employeeEmails).filter(code => {
+                const emp = employeeEmails[code];
+                return !emp.loa && !emp.manager; // Exclude LOA and manager
+            });
             const notSold = allCodes.filter(code => !data.employeesWhoSold.includes(code));
             
             if (notSold.length === 0) {
