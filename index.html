@@ -589,18 +589,33 @@
                     </div>
                 </div>
                 
-                <div style="background:#1e293b;padding:12px;border-radius:8px;margin-bottom:15px;">
-                    <div style="color:#94a3b8;font-size:0.85em;margin-bottom:8px;">📋 <strong>January Candidate (Ready):</strong></div>
-                    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;">
-                        <div><span style="color:#64748b;">WO:</span> <span style="color:#fbbf24;">DTBLA</span></div>
-                        <div><span style="color:#64748b;">Customer:</span> <span style="color:white;">Peregrine</span></div>
-                        <div><span style="color:#64748b;">Amount:</span> <span style="color:#10b981;">$6,856</span></div>
-                        <button onclick="fillNps('Peregrine','ths@masd.metrea.aero','DTBLA','')" style="background:#10b981;color:white;border:none;padding:8px 15px;border-radius:4px;font-size:0.9em;cursor:pointer;font-weight:bold;">✓ Auto-Fill</button>
+                <!-- Dynamic Top Candidate - Shows highest revenue unsurveyed customer -->
+                <div id="topCandidateSection" style="background:#1e293b;padding:12px;border-radius:8px;margin-bottom:15px;">
+                    <div style="color:#94a3b8;font-size:0.85em;margin-bottom:8px;">📋 <strong>Top NPS Candidate (Highest Revenue Unsurveyed):</strong></div>
+                    <div id="topCandidateContent" style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;">
+                        <!-- Dynamically populated -->
                     </div>
                 </div>
                 
+                <!-- Add New Customer Form -->
+                <div style="background:linear-gradient(135deg,#1e3a5f,#2563eb);padding:15px;border-radius:10px;margin-bottom:15px;">
+                    <div style="color:#93c5fd;font-size:0.85em;margin-bottom:10px;font-weight:bold;">➕ ADD BILLED WO TO DATABASE</div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr;gap:10px;margin-bottom:10px;">
+                        <input type="text" id="newCustName" placeholder="Customer Name" style="padding:8px;border-radius:6px;border:none;background:#1e1b4b;color:white;font-size:0.85em;">
+                        <input type="email" id="newCustEmail" placeholder="Email" style="padding:8px;border-radius:6px;border:none;background:#1e1b4b;color:white;font-size:0.85em;">
+                        <input type="text" id="newCustWO" placeholder="WO#" style="padding:8px;border-radius:6px;border:none;background:#1e1b4b;color:white;font-size:0.85em;text-transform:uppercase;">
+                        <input type="text" id="newCustReg" placeholder="Reg# (opt)" style="padding:8px;border-radius:6px;border:none;background:#1e1b4b;color:white;font-size:0.85em;text-transform:uppercase;">
+                        <input type="number" id="newCustRevenue" placeholder="Revenue $" style="padding:8px;border-radius:6px;border:none;background:#1e1b4b;color:white;font-size:0.85em;">
+                    </div>
+                    <div style="display:flex;gap:10px;">
+                        <button onclick="addCustomerToDb()" style="flex:1;padding:10px;background:#10b981;color:white;border:none;border-radius:6px;font-weight:bold;cursor:pointer;">➕ Add Customer</button>
+                        <button onclick="clearCustomerDb()" style="padding:10px;background:#ef4444;color:white;border:none;border-radius:6px;cursor:pointer;font-size:0.85em;">🗑️ Clear All</button>
+                    </div>
+                    <div id="addCustMsg" style="display:none;margin-top:8px;font-size:0.8em;text-align:center;"></div>
+                </div>
+                
                 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-                    <span style="color:#94a3b8;font-size:0.85em;">📊 Customer Email Database: <span id="customerDbCount">14</span> contacts with billed WO data (Updated 01/28)</span>
+                    <span style="color:#94a3b8;font-size:0.85em;">📊 Customer Email Database: <span id="customerDbCount">0</span> contacts with billed WO data</span>
                     <label style="font-size:0.8em;color:#94a3b8;cursor:pointer;">
                         <input type="checkbox" id="showSentCustomers" checked onchange="renderCustomerTable()" style="margin-right:5px;">
                         Show sent
@@ -616,11 +631,11 @@
                         </tbody>
                     </table>
                 </div>
-                <div id="npsDbSummary" style="background:#14532d;padding:8px;border-radius:6px;margin-top:10px;font-size:0.8em;color:#bbf7d0;">
-                    ✅ <strong>All 14 surveys sent!</strong> Waiting for responses. Check "Show sent" to see full list.
+                <div id="npsDbSummary" style="background:#1e3a5f;padding:8px;border-radius:6px;margin-top:10px;font-size:0.8em;color:#93c5fd;">
+                    📋 Add billed WOs above to track NPS surveys.
                 </div>
                 <div style="background:#0f172a;padding:8px;border-radius:6px;margin-top:5px;font-size:0.75em;color:#94a3b8;">
-                    ⚠️ <strong>Data Note:</strong> Billed WO report has multiple rows per WO (by Sqk Type). Using MAX revenue per WO to avoid duplicates.
+                    💡 <strong>Tip:</strong> When Claude processes your Billed WO report, ask it to provide customer data to add here.
                 </div>
             </div>
         </div>
@@ -2353,8 +2368,12 @@ ${surveyUrl}`;
             };
         }
         
-        // Customer Database - Update when new Billed WO reports are processed
-        const customerDatabase = [
+        // ==========================================
+        // DYNAMIC CUSTOMER DATABASE SYSTEM
+        // ==========================================
+        
+        // Default seed data (will be loaded into localStorage if empty)
+        const defaultCustomers = [
             {name: 'Bode Aviation', email: 'michelle.amezcua@flybode.com', wo: 'DSW5A', reg: 'N328SF', revenue: 34270},
             {name: 'MIMG Transportation', email: 'n950kmmx@gmail.com', wo: 'CV3UA', reg: 'STOCK', revenue: 9297},
             {name: 'Peregrine', email: 'ths@masd.metrea.aero', wo: 'DTBLA', reg: '', revenue: 6856},
@@ -2371,12 +2390,183 @@ ${surveyUrl}`;
             {name: 'Pilot Service Provider', email: 'scott.j@pilotserviceprovider.com', wo: 'CQCAB', reg: 'N750JE', revenue: 0}
         ];
         
+        function getCustomerDatabase() {
+            let db = localStorage.getItem('denver_nps_customers');
+            if (!db) {
+                // Initialize with default data
+                localStorage.setItem('denver_nps_customers', JSON.stringify(defaultCustomers));
+                return defaultCustomers;
+            }
+            return JSON.parse(db);
+        }
+        
+        function saveCustomerDatabase(db) {
+            localStorage.setItem('denver_nps_customers', JSON.stringify(db));
+        }
+        
+        function addCustomerToDb() {
+            const name = document.getElementById('newCustName').value.trim();
+            const email = document.getElementById('newCustEmail').value.trim();
+            const wo = document.getElementById('newCustWO').value.trim().toUpperCase();
+            const reg = document.getElementById('newCustReg').value.trim().toUpperCase();
+            const revenue = parseInt(document.getElementById('newCustRevenue').value) || 0;
+            
+            const msgEl = document.getElementById('addCustMsg');
+            
+            if (!name || !email || !wo) {
+                msgEl.textContent = '⚠️ Name, Email, and WO# are required';
+                msgEl.style.color = '#fca5a5';
+                msgEl.style.display = 'block';
+                setTimeout(() => msgEl.style.display = 'none', 3000);
+                return;
+            }
+            
+            const db = getCustomerDatabase();
+            
+            // Check for duplicate WO
+            if (db.some(c => c.wo.toUpperCase() === wo)) {
+                msgEl.textContent = '⚠️ WO# ' + wo + ' already exists in database';
+                msgEl.style.color = '#fca5a5';
+                msgEl.style.display = 'block';
+                setTimeout(() => msgEl.style.display = 'none', 3000);
+                return;
+            }
+            
+            // Add new customer
+            db.push({ name, email, wo, reg, revenue });
+            
+            // Sort by revenue descending
+            db.sort((a, b) => b.revenue - a.revenue);
+            
+            saveCustomerDatabase(db);
+            
+            // Clear form
+            document.getElementById('newCustName').value = '';
+            document.getElementById('newCustEmail').value = '';
+            document.getElementById('newCustWO').value = '';
+            document.getElementById('newCustReg').value = '';
+            document.getElementById('newCustRevenue').value = '';
+            
+            // Show success
+            msgEl.textContent = '✅ Added ' + name + ' (' + wo + ') - $' + revenue.toLocaleString();
+            msgEl.style.color = '#86efac';
+            msgEl.style.display = 'block';
+            setTimeout(() => msgEl.style.display = 'none', 3000);
+            
+            // Refresh display
+            renderCustomerTable();
+            updateTopCandidate();
+        }
+        
+        function removeCustomerFromDb(wo) {
+            if (!confirm('Remove ' + wo + ' from database?')) return;
+            
+            let db = getCustomerDatabase();
+            db = db.filter(c => c.wo.toUpperCase() !== wo.toUpperCase());
+            saveCustomerDatabase(db);
+            
+            renderCustomerTable();
+            updateTopCandidate();
+        }
+        
+        function clearCustomerDb() {
+            if (!confirm('Clear ALL customers from database? This cannot be undone.')) return;
+            if (!confirm('Are you sure? This will remove all ' + getCustomerDatabase().length + ' customers.')) return;
+            
+            localStorage.removeItem('denver_nps_customers');
+            renderCustomerTable();
+            updateTopCandidate();
+        }
+        
+        // Bulk import function - can be called from console
+        // Usage: bulkAddCustomers([{name:'Test', email:'test@test.com', wo:'ABC123', reg:'N123', revenue:5000}])
+        window.bulkAddCustomers = function(customers) {
+            if (!Array.isArray(customers)) {
+                console.error('bulkAddCustomers expects an array');
+                return;
+            }
+            
+            const db = getCustomerDatabase();
+            let added = 0;
+            let skipped = 0;
+            
+            customers.forEach(c => {
+                if (!c.name || !c.email || !c.wo) {
+                    console.warn('Skipping invalid customer:', c);
+                    skipped++;
+                    return;
+                }
+                
+                const wo = c.wo.toUpperCase();
+                if (db.some(existing => existing.wo.toUpperCase() === wo)) {
+                    console.log('Skipping duplicate WO:', wo);
+                    skipped++;
+                    return;
+                }
+                
+                db.push({
+                    name: c.name,
+                    email: c.email,
+                    wo: wo,
+                    reg: (c.reg || '').toUpperCase(),
+                    revenue: parseInt(c.revenue) || 0
+                });
+                added++;
+            });
+            
+            // Sort by revenue descending
+            db.sort((a, b) => b.revenue - a.revenue);
+            saveCustomerDatabase(db);
+            
+            renderCustomerTable();
+            updateTopCandidate();
+            
+            console.log(`✅ Bulk import complete: ${added} added, ${skipped} skipped. Total: ${db.length} customers.`);
+            return { added, skipped, total: db.length };
+        };
+        
+        // Export function to get current database
+        window.exportCustomerDb = function() {
+            return getCustomerDatabase();
+        };
+        
+        function updateTopCandidate() {
+            const surveys = getNpsSurveys();
+            const sentWOs = surveys.map(s => s.wo.toUpperCase());
+            const db = getCustomerDatabase();
+            
+            // Find highest revenue unsurveyed customer
+            const unsurveyed = db.filter(c => !sentWOs.includes(c.wo.toUpperCase()));
+            const container = document.getElementById('topCandidateContent');
+            const section = document.getElementById('topCandidateSection');
+            
+            if (unsurveyed.length === 0) {
+                section.style.background = '#14532d';
+                container.innerHTML = '<div style="grid-column:span 4;color:#86efac;text-align:center;">✅ All customers surveyed! Great job!</div>';
+                return;
+            }
+            
+            // Sort by revenue and get top
+            unsurveyed.sort((a, b) => b.revenue - a.revenue);
+            const top = unsurveyed[0];
+            
+            section.style.background = '#1e293b';
+            container.innerHTML = `
+                <div><span style="color:#64748b;">WO:</span> <span style="color:#fbbf24;">${top.wo}</span></div>
+                <div><span style="color:#64748b;">Customer:</span> <span style="color:white;">${top.name}</span></div>
+                <div><span style="color:#64748b;">Amount:</span> <span style="color:#10b981;">$${top.revenue.toLocaleString()}</span></div>
+                <button onclick="fillNps('${top.name.replace(/'/g, "\\'")}','${top.email}','${top.wo}','${top.reg}')" style="background:#10b981;color:white;border:none;padding:8px 15px;border-radius:4px;font-size:0.9em;cursor:pointer;font-weight:bold;">✓ Auto-Fill</button>
+            `;
+        }
+        
         function renderCustomerTable() {
             const surveys = getNpsSurveys();
             const sentWOs = surveys.map(s => s.wo.toUpperCase());
             const showSent = document.getElementById('showSentCustomers').checked;
             const tbody = document.getElementById('customerDbBody');
             const summaryDiv = document.getElementById('npsDbSummary');
+            
+            const customerDatabase = getCustomerDatabase();
             
             let html = '';
             let notSentCount = 0;
@@ -2400,8 +2590,11 @@ ${surveyUrl}`;
                     actionCell = '<span style="color:#10b981;font-size:0.8em;">✓ Sent</span>';
                 } else {
                     const btnStyle = c.revenue > 0 ? 'background:#10b981;' : 'background:#475569;';
-                    actionCell = `<button onclick="fillNps('${c.name}','${c.email}','${c.wo}','${c.reg}')" style="${btnStyle}color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">✓ Use</button>`;
+                    actionCell = `<button onclick="fillNps('${c.name.replace(/'/g, "\\'")}','${c.email}','${c.wo}','${c.reg}')" style="${btnStyle}color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">✓ Use</button>`;
                 }
+                
+                // Add delete button
+                const deleteBtn = `<button onclick="removeCustomerFromDb('${c.wo}')" style="background:transparent;color:#64748b;border:none;padding:2px 5px;font-size:0.7em;cursor:pointer;margin-left:5px;" title="Remove">✕</button>`;
                 
                 html += `<tr style="${rowStyle}">
                     <td>${c.name}</td>
@@ -2409,18 +2602,22 @@ ${surveyUrl}`;
                     <td style="${woStyle}">${c.wo}</td>
                     <td style="color:#94a3b8;">${regDisplay}</td>
                     <td style="${revStyle}">${revDisplay}</td>
-                    <td>${actionCell}</td>
+                    <td>${actionCell}${deleteBtn}</td>
                 </tr>`;
             });
             
             if (html === '') {
-                html = '<tr><td colspan="6" style="color:#64748b;text-align:center;">All customers have been surveyed! ✅</td></tr>';
+                html = '<tr><td colspan="6" style="color:#64748b;text-align:center;">No customers in database. Add billed WOs above.</td></tr>';
             }
             
             tbody.innerHTML = html;
             
             // Update summary
-            if (notSentCount === 0) {
+            if (customerDatabase.length === 0) {
+                summaryDiv.innerHTML = '📋 Add billed WOs above to track NPS surveys.';
+                summaryDiv.style.background = '#1e3a5f';
+                summaryDiv.style.color = '#93c5fd';
+            } else if (notSentCount === 0) {
                 summaryDiv.innerHTML = '✅ <strong>All ' + sentCount + ' surveys sent!</strong> Waiting for responses.';
                 summaryDiv.style.background = '#14532d';
                 summaryDiv.style.color = '#bbf7d0';
@@ -2437,6 +2634,7 @@ ${surveyUrl}`;
         // Initialize tracking table and customer table
         renderNpsTable();
         renderCustomerTable();
+        updateTopCandidate();
         
         // Prevent input fields from triggering scroll pause
         document.querySelectorAll('input').forEach(input => {
