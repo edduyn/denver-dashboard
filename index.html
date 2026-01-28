@@ -3457,12 +3457,15 @@ This is an automated message.`);
                 // Default data from 01/28/26 report (previous day = 01/27/26)
                 const defaultData = {
                     date: '2026-01-27',
-                    employeesWhoSold: ['LANJU', 'NORIJ', 'OWEKI', 'MACOS', 'SMIKZ', 'CRUZA', 'WATJO', 'WATAN', 'TOVAG', 'HUBEM', 'RIERD']
+                    employeesWhoSold: ['LANJU', 'NORIJ', 'OWEKI', 'MACOS', 'SMIKZ', 'CRUZA', 'WATJO', 'WATAN', 'TOVAG', 'HUBEM', 'RIERD'],
+                    emailsSent: ['MEDIJ'] // Track who has been emailed
                 };
                 localStorage.setItem('denver_time_not_sold', JSON.stringify(defaultData));
                 return defaultData;
             }
-            return JSON.parse(data);
+            const parsed = JSON.parse(data);
+            if (!parsed.emailsSent) parsed.emailsSent = [];
+            return parsed;
         }
         
         function saveTimeNotSoldData(data) {
@@ -3473,7 +3476,8 @@ This is an automated message.`);
         window.updateTimeNotSold = function(dateStr, employeeCodesWhoSold) {
             const data = {
                 date: dateStr,
-                employeesWhoSold: employeeCodesWhoSold.map(c => c.toUpperCase())
+                employeesWhoSold: employeeCodesWhoSold.map(c => c.toUpperCase()),
+                emailsSent: [] // Reset sent status for new date
             };
             saveTimeNotSoldData(data);
             renderTimeNotSold();
@@ -3522,6 +3526,14 @@ This is an automated message.`;
             
             const outlookUrl = `https://outlook.office365.com/mail/deeplink/compose?to=${encodeURIComponent(emp.email)}&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
             window.open(outlookUrl, '_blank');
+            
+            // Mark as sent
+            if (!data.emailsSent) data.emailsSent = [];
+            if (!data.emailsSent.includes(empCode)) {
+                data.emailsSent.push(empCode);
+                saveTimeNotSoldData(data);
+                renderTimeNotSold();
+            }
         }
         
         function sendAllTimeNotSoldEmails() {
@@ -3531,23 +3543,27 @@ This is an automated message.`;
                 return;
             }
             
-            const allCodes = Object.keys(employeeEmails).filter(code => employeeEmails[code].email);
+            const allCodes = Object.keys(employeeEmails).filter(code => {
+                const emp = employeeEmails[code];
+                return emp.email && !emp.loa && !emp.manager;
+            });
             const notSold = allCodes.filter(code => !data.employeesWhoSold.includes(code));
+            const emailsSent = data.emailsSent || [];
+            const notYetEmailed = notSold.filter(code => !emailsSent.includes(code));
             
             if (notSold.length === 0) {
                 alert('All employees sold time!');
                 return;
             }
             
-            const withEmail = notSold.filter(code => employeeEmails[code].email);
-            if (withEmail.length === 0) {
-                alert('No email addresses configured for non-compliant employees.');
+            if (notYetEmailed.length === 0) {
+                alert('All reminders have already been sent!');
                 return;
             }
             
-            if (!confirm(`Send reminder emails to ${withEmail.length} employees?`)) return;
+            if (!confirm(`Send reminder emails to ${notYetEmailed.length} employees?`)) return;
             
-            withEmail.forEach((code, idx) => {
+            notYetEmailed.forEach((code, idx) => {
                 setTimeout(() => sendTimeNotSoldEmail(code), idx * 500);
             });
         }
@@ -3593,21 +3609,33 @@ This is an automated message.`;
             
             // Build grid
             let html = '';
+            const emailsSent = data.emailsSent || [];
             notSold.forEach(code => {
                 const emp = employeeEmails[code];
                 const hasEmail = emp && emp.email;
-                const btnStyle = hasEmail 
-                    ? 'background:#ef4444;cursor:pointer;' 
-                    : 'background:#64748b;cursor:not-allowed;opacity:0.6;';
-                const btnTitle = hasEmail ? 'Send reminder email' : 'No email configured';
+                const wasSent = emailsSent.includes(code);
                 
-                html += `<div style="background:rgba(239,68,68,0.2);border:1px solid #ef4444;border-radius:8px;padding:12px;text-align:center;">
-                    <div style="font-weight:bold;color:#fecaca;margin-bottom:5px;">${emp ? emp.name : code}</div>
-                    <div style="font-size:0.75em;color:#94a3b8;margin-bottom:8px;">${code}</div>
-                    <button onclick="sendTimeNotSoldEmail('${code}')" style="${btnStyle}color:white;border:none;padding:6px 12px;border-radius:4px;font-size:0.8em;" title="${btnTitle}" ${hasEmail ? '' : 'disabled'}>
-                        📧 Send Reminder
-                    </button>
-                </div>`;
+                if (wasSent) {
+                    // Show sent status
+                    html += `<div style="background:rgba(16,185,129,0.2);border:1px solid #10b981;border-radius:8px;padding:12px;text-align:center;">
+                        <div style="font-weight:bold;color:#86efac;margin-bottom:5px;">${emp ? emp.name : code}</div>
+                        <div style="font-size:0.75em;color:#94a3b8;margin-bottom:8px;">${code}</div>
+                        <div style="color:#10b981;font-size:0.85em;font-weight:bold;">✅ Email Sent</div>
+                    </div>`;
+                } else {
+                    const btnStyle = hasEmail 
+                        ? 'background:#ef4444;cursor:pointer;' 
+                        : 'background:#64748b;cursor:not-allowed;opacity:0.6;';
+                    const btnTitle = hasEmail ? 'Send reminder email' : 'No email configured';
+                    
+                    html += `<div style="background:rgba(239,68,68,0.2);border:1px solid #ef4444;border-radius:8px;padding:12px;text-align:center;">
+                        <div style="font-weight:bold;color:#fecaca;margin-bottom:5px;">${emp ? emp.name : code}</div>
+                        <div style="font-size:0.75em;color:#94a3b8;margin-bottom:8px;">${code}</div>
+                        <button onclick="sendTimeNotSoldEmail('${code}')" style="${btnStyle}color:white;border:none;padding:6px 12px;border-radius:4px;font-size:0.8em;" title="${btnTitle}" ${hasEmail ? '' : 'disabled'}>
+                            📧 Send Reminder
+                        </button>
+                    </div>`;
+                }
             });
             
             grid.innerHTML = html;
