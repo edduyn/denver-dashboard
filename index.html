@@ -7,6 +7,7 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); color: #fff; min-height: 100vh; }
+        
         .login-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
         .login-box { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border-radius: 20px; padding: 40px; text-align: center; max-width: 400px; width: 100%; }
         .login-box h1 { color: #f59e0b; margin-bottom: 10px; font-size: 1.8em; }
@@ -16,32 +17,65 @@
         .login-box button { width: 100%; padding: 15px; background: #f59e0b; color: #000; border: none; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; }
         .login-box button:hover { background: #d97706; }
         .error-msg { color: #ef4444; margin-top: 10px; display: none; }
+        
         .dashboard { display: none; min-height: 100vh; }
         .header { background: rgba(0,0,0,0.3); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
         .header h1 { font-size: 1.3em; color: #f59e0b; }
-        .header-btn { padding: 8px 15px; border-radius: 8px; border: none; cursor: pointer; font-size: 14px; font-weight: 500; background: #64748b; color: #fff; }
+        .header-right { display: flex; gap: 10px; align-items: center; }
+        .header-btn { padding: 8px 15px; border-radius: 8px; border: none; cursor: pointer; font-size: 14px; font-weight: 500; }
+        .btn-lock { background: #64748b; color: #fff; }
+        
         .tabs { display: flex; background: rgba(0,0,0,0.2); padding: 10px; gap: 5px; overflow-x: auto; }
-        .tab { padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 500; white-space: nowrap; }
+        .tab { padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 500; white-space: nowrap; transition: all 0.3s; }
         .tab:hover { background: rgba(255,255,255,0.1); }
         .tab.active { background: #f59e0b; color: #000; }
+        
         .content { padding: 20px; display: none; }
         .content.active { display: block; }
+        
         .card { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border-radius: 15px; padding: 20px; margin-bottom: 15px; }
-        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px; }
         .card-title { font-size: 1.1em; color: #f59e0b; }
-        .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; }
+        
         .metric { text-align: center; padding: 15px; background: rgba(0,0,0,0.2); border-radius: 10px; }
-        .metric-value { font-size: 2em; font-weight: bold; color: #f59e0b; }
-        .metric-label { color: #94a3b8; font-size: 0.9em; margin-top: 5px; }
-        .metric-sub { color: #64748b; font-size: 0.8em; }
+        .metric-value { font-size: 1.8em; font-weight: bold; color: #f59e0b; }
+        .metric-label { color: #94a3b8; font-size: 0.85em; margin-top: 5px; }
+        .metric-sub { color: #64748b; font-size: 0.75em; }
+        
         .badge { padding: 4px 10px; border-radius: 20px; font-size: 0.8em; font-weight: 600; }
         .badge-green { background: #10b981; color: #fff; }
         .badge-amber { background: #f59e0b; color: #000; }
         .badge-red { background: #ef4444; color: #fff; }
         .badge-blue { background: #3b82f6; color: #fff; }
-        .progress-bar { height: 20px; background: #334155; border-radius: 10px; overflow: hidden; margin: 10px 0; }
-        .progress-fill { height: 100%; border-radius: 10px; }
-        .alert-banner { background: linear-gradient(90deg, #10b981, #059669); padding: 15px 20px; text-align: center; font-weight: 600; }
+        
+        .progress-container { margin: 10px 0; }
+        .progress-bar { height: 20px; background: #334155; border-radius: 10px; overflow: hidden; }
+        .progress-fill { height: 100%; border-radius: 10px; transition: width 0.5s; }
+        .progress-green { background: linear-gradient(90deg, #10b981, #34d399); }
+        .progress-amber { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+        .progress-red { background: linear-gradient(90deg, #ef4444, #f87171); }
+        
+        .alert-banner { background: linear-gradient(90deg, #f59e0b, #d97706); padding: 15px 20px; text-align: center; font-weight: 600; }
+        
+        .goal-card { background: rgba(0,0,0,0.2); border-radius: 12px; padding: 15px; margin-bottom: 12px; }
+        .goal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 10px; }
+        .goal-title { font-weight: 600; font-size: 0.95em; }
+        .goal-pct { font-size: 1.2em; font-weight: bold; }
+        .goal-notes { color: #94a3b8; font-size: 0.85em; margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.1); }
+        
+        .table-container { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.9em; }
+        th, td { padding: 10px 8px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        th { color: #f59e0b; font-weight: 600; }
+        tr:hover { background: rgba(255,255,255,0.05); }
+        
+        @media (max-width: 768px) {
+            .card-grid { grid-template-columns: repeat(2, 1fr); }
+            .metric-value { font-size: 1.5em; }
+            .tabs { padding: 8px; }
+            .tab { padding: 8px 12px; font-size: 0.9em; }
+        }
     </style>
 </head>
 <body>
@@ -58,30 +92,38 @@
     <div class="dashboard" id="dashboard">
         <div class="header">
             <h1>🛩️ Denver Satellite (889)</h1>
-            <button class="header-btn" onclick="logout()">🔒 Lock</button>
+            <div class="header-right">
+                <span class="badge badge-green">Live</span>
+                <button class="header-btn btn-lock" onclick="logout()">🔒 Lock</button>
+            </div>
         </div>
         
         <div class="tabs">
             <div class="tab active" data-tab="overview">📊 Overview</div>
             <div class="tab" data-tab="goals">🎯 Goals</div>
+            <div class="tab" data-tab="employees">👥 Employees</div>
             <div class="tab" data-tab="workorders">📋 Work Orders</div>
             <div class="tab" data-tab="wip">💰 WIP</div>
+            <div class="tab" data-tab="training">📚 Training</div>
+            <div class="tab" data-tab="quality">✅ Quality</div>
+            <div class="tab" data-tab="rankings">🏆 Rankings</div>
         </div>
         
+        <!-- OVERVIEW TAB -->
         <div class="content active" id="overview">
             <div class="alert-banner">
-                🎉 SSH AUTO-SYNC WORKING! | A/B: 47.2% | 01/29/26 3:35 PM
+                📈 A/B RATIO: 47.2% vs 58.5% Target | Gap: -11.3 pts | Progress: 80% | Updated 01/29/26
             </div>
             <div class="card">
                 <div class="card-header">
-                    <span class="card-title">January 2026 Metrics</span>
-                    <span class="badge badge-green">✅ LIVE</span>
+                    <span class="card-title">January 2026 MTD Metrics</span>
+                    <span class="badge badge-blue">01/29/26</span>
                 </div>
                 <div class="card-grid">
                     <div class="metric">
                         <div class="metric-value" style="color:#fbbf24">47.2%</div>
                         <div class="metric-label">A/B Ratio</div>
-                        <div class="metric-sub">⬆️ Up from 25.2%!</div>
+                        <div class="metric-sub">Target: 58.5%</div>
                     </div>
                     <div class="metric">
                         <div class="metric-value">1,977h</div>
@@ -121,22 +163,146 @@
                     </div>
                 </div>
             </div>
-        </div>
-        
-        <div class="content" id="goals">
             <div class="card">
                 <div class="card-header">
-                    <span class="card-title">#1 A/B Ratio Goal</span>
-                    <span class="badge badge-amber">80% Progress</span>
+                    <span class="card-title">Shop Breakdown</span>
                 </div>
-                <div>Current: 47.2% | Target: 58.5% | Gap: -11.3 pts</div>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width:80%;background:linear-gradient(90deg,#f59e0b,#fbbf24);"></div>
+                <div class="card-grid">
+                    <div class="metric">
+                        <div class="metric-value">55</div>
+                        <div class="metric-label">SDN WOs</div>
+                        <div class="metric-sub">Service - Ken</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">13</div>
+                        <div class="metric-label">SDV WOs</div>
+                        <div class="metric-sub">Install - John</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">10</div>
+                        <div class="metric-label">SDR WOs</div>
+                        <div class="metric-sub">Service - Sean</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">16</div>
+                        <div class="metric-label">SHC WOs</div>
+                        <div class="metric-sub">Battery</div>
+                    </div>
                 </div>
-                <div style="color:#94a3b8;margin-top:10px;">📈 Major improvement from 25.2%! Keep momentum.</div>
             </div>
         </div>
         
+        <!-- GOALS TAB -->
+        <div class="content" id="goals">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">2026 Performance Goals</span>
+                    <span class="badge badge-amber">In Progress</span>
+                </div>
+                
+                <div class="goal-card">
+                    <div class="goal-header">
+                        <span class="goal-title">#1 A/B Ratio (58.5% Target)</span>
+                        <span class="goal-pct" style="color:#fbbf24">80%</span>
+                    </div>
+                    <div class="progress-bar"><div class="progress-fill progress-amber" style="width:80%"></div></div>
+                    <div>Current: 47.2% | Target: 58.5% | Gap: -11.3 pts</div>
+                    <div class="goal-notes">📈 Major improvement from 25.2%! Keep the momentum going.</div>
+                </div>
+                
+                <div class="goal-card">
+                    <div class="goal-header">
+                        <span class="goal-title">#2 Effective Labor Rate ($147+ Target)</span>
+                        <span class="goal-pct" style="color:#94a3b8">TBD</span>
+                    </div>
+                    <div class="progress-bar"><div class="progress-fill progress-amber" style="width:50%"></div></div>
+                    <div class="goal-notes">Calculated from labor revenue ÷ labor hours billed</div>
+                </div>
+                
+                <div class="goal-card">
+                    <div class="goal-header">
+                        <span class="goal-title">#3 NPS Surveys (12/year)</span>
+                        <span class="goal-pct" style="color:#ef4444">0%</span>
+                    </div>
+                    <div class="progress-bar"><div class="progress-fill progress-red" style="width:0%"></div></div>
+                    <div>Completed: 0/12 | Sent: 0/46 billed WOs</div>
+                    <div class="goal-notes">⚠️ Need to start sending NPS surveys!</div>
+                </div>
+                
+                <div class="goal-card">
+                    <div class="goal-header">
+                        <span class="goal-title">#4 SDV Expected Hours Tracking</span>
+                        <span class="goal-pct" style="color:#10b981">✓</span>
+                    </div>
+                    <div class="progress-bar"><div class="progress-fill progress-green" style="width:100%"></div></div>
+                    <div class="goal-notes">Currently tracking 479 hours ($33.5K WIP)</div>
+                </div>
+                
+                <div class="goal-card">
+                    <div class="goal-header">
+                        <span class="goal-title">#5 Training Completion (14 sessions)</span>
+                        <span class="goal-pct" style="color:#fbbf24">0%</span>
+                    </div>
+                    <div class="progress-bar"><div class="progress-fill progress-amber" style="width:0%"></div></div>
+                    <div>Completed: 0/14 | Technical Training: 5/8 scheduled</div>
+                    <div class="goal-notes">⏳ 3 techs still need technical training dates</div>
+                </div>
+                
+                <div class="goal-card">
+                    <div class="goal-header">
+                        <span class="goal-title">#6 Culture Audit Actions</span>
+                        <span class="goal-pct" style="color:#fbbf24">25%</span>
+                    </div>
+                    <div class="progress-bar"><div class="progress-fill progress-amber" style="width:25%"></div></div>
+                    <div>Team lunches: 1 | One-on-ones: In Progress</div>
+                    <div class="goal-notes">Jan 8: Team lunch with Ken, Hubber, Armando</div>
+                </div>
+                
+                <div class="goal-card">
+                    <div class="goal-header">
+                        <span class="goal-title">#7 Audit Compliance</span>
+                        <span class="goal-pct" style="color:#ef4444">Action Needed</span>
+                    </div>
+                    <div class="progress-bar"><div class="progress-fill progress-red" style="width:30%"></div></div>
+                    <div>Jan 21 Audit: 5 findings (1 repeat)</div>
+                    <div class="goal-notes">⚠️ Corrective actions needed</div>
+                </div>
+                
+                <div class="goal-card">
+                    <div class="goal-header">
+                        <span class="goal-title">#8 Vendor Dispute Resolution</span>
+                        <span class="goal-pct" style="color:#94a3b8">Ongoing</span>
+                    </div>
+                    <div class="progress-bar"><div class="progress-fill progress-amber" style="width:50%"></div></div>
+                    <div class="goal-notes">Track and resolve vendor disputes within 30 days</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- EMPLOYEES TAB -->
+        <div class="content" id="employees">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Employee A/B Performance</span>
+                    <span class="badge badge-amber">Target: 58.5%</span>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr><th>Employee</th><th>Shop</th><th>A Hours</th><th>B Hours</th><th>A/B %</th><th>Status</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>John Watson</td><td>SDV</td><td>-</td><td>-</td><td>-</td><td><span class="badge badge-blue">Lead</span></td></tr>
+                            <tr><td>Kenneth Smith</td><td>SDN</td><td>-</td><td>-</td><td>-</td><td><span class="badge badge-blue">Lead</span></td></tr>
+                            <tr><td>Sean Macoomb</td><td>SDR</td><td>-</td><td>-</td><td>-</td><td><span class="badge badge-blue">Lead</span></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="goal-notes" style="margin-top:15px;">📊 Individual employee data populated from Time Sold report</div>
+            </div>
+        </div>
+        
+        <!-- WORK ORDERS TAB -->
         <div class="content" id="workorders">
             <div class="card">
                 <div class="card-header">
@@ -149,31 +315,55 @@
                         <div class="metric-label">Total Open</div>
                     </div>
                     <div class="metric">
+                        <div class="metric-value">46</div>
+                        <div class="metric-label">Billed (Jan)</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" style="color:#ef4444">0</div>
+                        <div class="metric-label">Over 30 Days</div>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">By Shop</span>
+                </div>
+                <div class="card-grid">
+                    <div class="metric">
                         <div class="metric-value">55</div>
                         <div class="metric-label">SDN</div>
+                        <div class="metric-sub">Service</div>
                     </div>
                     <div class="metric">
                         <div class="metric-value">13</div>
                         <div class="metric-label">SDV</div>
+                        <div class="metric-sub">Install</div>
                     </div>
                     <div class="metric">
                         <div class="metric-value">10</div>
                         <div class="metric-label">SDR</div>
+                        <div class="metric-sub">Service</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">16</div>
+                        <div class="metric-label">SHC</div>
+                        <div class="metric-sub">Battery</div>
                     </div>
                 </div>
             </div>
         </div>
         
+        <!-- WIP TAB -->
         <div class="content" id="wip">
             <div class="card">
                 <div class="card-header">
-                    <span class="card-title">💰 SDV WIP (for Matt)</span>
+                    <span class="card-title">💰 SDV WIP Summary (for Matt)</span>
                     <span class="badge badge-green">Verified 01/29</span>
                 </div>
-                <div style="text-align:center;padding:20px;background:linear-gradient(135deg,#064e3b,#065f46);border-radius:12px;margin-bottom:15px;">
-                    <div style="color:#6ee7b7;font-size:0.9em;">SDV EXPECTED HOURS × $70/hr</div>
+                <div style="text-align:center;padding:25px;background:linear-gradient(135deg,#064e3b,#065f46);border-radius:12px;margin-bottom:20px;">
+                    <div style="color:#6ee7b7;font-size:0.9em;margin-bottom:5px;">SDV EXPECTED HOURS × $70/hr</div>
                     <div style="font-size:3em;font-weight:bold;color:#10b981;">$33,537</div>
-                    <div style="color:#a7f3d0;">479 hours</div>
+                    <div style="color:#a7f3d0;margin-top:5px;">479 hours across 13 open WOs</div>
                 </div>
                 <div class="card-grid">
                     <div class="metric">
@@ -184,14 +374,93 @@
                     <div class="metric">
                         <div class="metric-value">$2.9K</div>
                         <div class="metric-label">CVN0A</div>
-                        <div class="metric-sub">41h - ELT</div>
+                        <div class="metric-sub">41h - ELT Install</div>
                     </div>
                     <div class="metric">
                         <div class="metric-value">$1.7K</div>
                         <div class="metric-label">CMJHA</div>
                         <div class="metric-sub">24h - Ensemble</div>
                     </div>
+                    <div class="metric">
+                        <div class="metric-value">$980</div>
+                        <div class="metric-label">Other</div>
+                        <div class="metric-sub">14h misc</div>
+                    </div>
                 </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">WIP Account 0889.35015</span>
+                    <span class="badge badge-red">Negative</span>
+                </div>
+                <div style="color:#94a3b8;">Current balance tracking from AS400. Positive = good (unbilled work), Negative = bad (overdrawn).</div>
+            </div>
+        </div>
+        
+        <!-- TRAINING TAB -->
+        <div class="content" id="training">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">2026 Training Status</span>
+                    <span class="badge badge-amber">In Progress</span>
+                </div>
+                <div class="card-grid">
+                    <div class="metric">
+                        <div class="metric-value">0/14</div>
+                        <div class="metric-label">Sessions Done</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">5/8</div>
+                        <div class="metric-label">Tech Training Scheduled</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" style="color:#ef4444">3</div>
+                        <div class="metric-label">Need Dates</div>
+                    </div>
+                </div>
+                <div class="goal-notes" style="margin-top:15px;">⏳ 14 training sessions available for the year. 3 technicians still need technical training dates scheduled.</div>
+            </div>
+        </div>
+        
+        <!-- QUALITY TAB -->
+        <div class="content" id="quality">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Quality & Audit Status</span>
+                    <span class="badge badge-red">5 Findings</span>
+                </div>
+                <div class="card-grid">
+                    <div class="metric">
+                        <div class="metric-value" style="color:#ef4444">5</div>
+                        <div class="metric-label">Total Findings</div>
+                        <div class="metric-sub">Jan 21 Audit</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" style="color:#ef4444">1</div>
+                        <div class="metric-label">Repeat Finding</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">0</div>
+                        <div class="metric-label">Closed</div>
+                    </div>
+                </div>
+                <div class="goal-notes" style="margin-top:15px;">⚠️ Jan 21, 2026 audit: 5 findings identified including 1 repeat. Corrective actions in progress.</div>
+            </div>
+        </div>
+        
+        <!-- RANKINGS TAB -->
+        <div class="content" id="rankings">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">🏆 Network Satellite Rankings</span>
+                    <span class="badge badge-amber">Awaiting Friday Data</span>
+                </div>
+                <div style="background:rgba(245,158,11,0.2);border:2px solid #f59e0b;border-radius:12px;padding:20px;text-align:center;margin-bottom:15px;">
+                    <div style="font-size:0.9em;color:#fbbf24;">DENVER (889)</div>
+                    <div style="font-size:2.5em;font-weight:bold;color:#f59e0b;">47.2%</div>
+                    <div style="color:#94a3b8;">Current A/B Ratio</div>
+                </div>
+                <div class="goal-notes">📊 Matt Nelson sends satellite rankings every Friday. Check email for latest network comparison data.</div>
             </div>
         </div>
     </div>
