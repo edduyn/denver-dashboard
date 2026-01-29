@@ -762,15 +762,15 @@
                 <div style="margin-top:15px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;text-align:center;">
                     <div style="background:#1e293b;padding:10px;border-radius:6px;">
                         <div style="color:#94a3b8;font-size:0.8em;">Billable Hours</div>
-                        <div style="color:#60a5fa;font-weight:bold;">462.0h</div>
+                        <div style="color:#60a5fa;font-weight:bold;">490.6h</div>
                     </div>
                     <div style="background:#1e293b;padding:10px;border-radius:6px;">
-                        <div style="color:#94a3b8;font-size:0.8em;">Paid Hours</div>
-                        <div style="color:#f59e0b;font-weight:bold;">1,793h</div>
+                        <div style="color:#94a3b8;font-size:0.8em;">Total Hours</div>
+                        <div style="color:#f59e0b;font-weight:bold;">1,869h</div>
                     </div>
                     <div style="background:#1e293b;padding:10px;border-radius:6px;">
-                        <div style="color:#94a3b8;font-size:0.8em;">Variance</div>
-                        <div style="color:#fbbf24;font-weight:bold;">-0.1 pts</div>
+                        <div style="color:#94a3b8;font-size:0.8em;">Gap to Target</div>
+                        <div style="color:#ef4444;font-weight:bold;">-32.3 pts</div>
                     </div>
                 </div>
                 <div style="background:#0f172a;padding:10px;border-radius:6px;margin-top:10px;font-size:0.85em;color:#94a3b8;">
@@ -781,28 +781,28 @@
             <div class="card">
                 <div class="card-header">
                     <span class="card-title">January 2026 Metrics</span>
-                    <span class="badge badge-blue">MTD - Updated 3:45 PM</span>
+                    <span class="badge badge-blue">MTD - Updated 4:37 PM</span>
                 </div>
                 <div class="card-grid">
                     <div class="metric">
-                        <div class="metric-value">25.8%</div>
+                        <div class="metric-value">26.2%</div>
                         <div class="metric-label">Calculated A/B</div>
-                        <div class="metric-sub">462h ÷ 1,793h</div>
+                        <div class="metric-sub">491h ÷ 1,869h</div>
                     </div>
                     <div class="metric">
-                        <div class="metric-value">462h</div>
+                        <div class="metric-value">491h</div>
                         <div class="metric-label">Billable Hours</div>
-                        <div class="metric-sub">Excl shop WO DT39A</div>
+                        <div class="metric-sub">Component+Aircraft</div>
                     </div>
                     <div class="metric">
-                        <div class="metric-value">$182K</div>
+                        <div class="metric-value">$377K</div>
                         <div class="metric-label">Revenue MTD</div>
-                        <div class="metric-sub">26% of $694K goal</div>
+                        <div class="metric-sub">54% of $694K goal</div>
                     </div>
                     <div class="metric">
-                        <div class="metric-value">42</div>
+                        <div class="metric-value">176</div>
                         <div class="metric-label">Billed WOs</div>
-                        <div class="metric-sub">$74.8K GP</div>
+                        <div class="metric-sub">$159K GP</div>
                     </div>
                 </div>
             </div>
@@ -922,25 +922,25 @@
             <div class="card">
                 <div class="card-header">
                     <span class="card-title">Work Order Summary</span>
-                    <span class="badge badge-blue">72 Open WOs</span>
+                    <span class="badge badge-blue">85 Open WOs</span>
                 </div>
                 <div class="card-grid">
                     <div class="metric">
-                        <div class="metric-value">72</div>
+                        <div class="metric-value">85</div>
                         <div class="metric-label">Total Open WOs</div>
                     </div>
                     <div class="metric">
-                        <div class="metric-value">42</div>
+                        <div class="metric-value">176</div>
                         <div class="metric-label">Billed WOs (Jan)</div>
                     </div>
                     <div class="metric">
-                        <div class="metric-value" style="color:#10b981">$36,456</div>
+                        <div class="metric-value" style="color:#10b981">$33,608</div>
                         <div class="metric-label">Total Open WIP</div>
-                        <div class="metric-sub">💰 295.9h unbilled</div>
+                        <div class="metric-sub">💰 480h expected</div>
                     </div>
                     <div class="metric">
-                        <div class="metric-value" style="color:#f59e0b">296h</div>
-                        <div class="metric-label">Unbilled Hours</div>
+                        <div class="metric-value" style="color:#f59e0b">480h</div>
+                        <div class="metric-label">Expected Hours</div>
                     </div>
                 </div>
             </div>
@@ -949,7 +949,7 @@
             <div class="card">
                 <div class="card-header">
                     <span class="card-title">💰 WIP by Shop (Open WOs)</span>
-                    <span class="badge badge-blue">01/27/26 3:45 PM</span>
+                    <span class="badge badge-blue">01/28/26 4:30 PM</span>
                 </div>
                 <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin-bottom:15px;">
                     <div style="background:linear-gradient(135deg,#1e40af,#3b82f6);padding:15px;border-radius:10px;text-align:center;">
@@ -3280,14 +3280,20 @@ This is an automated message.`);
         // SDV EXPECTED HOURS TRACKING SYSTEM
         // ==========================================
         
-        // Default seed data from Anchor report
+        // Default seed data from Anchor report 01/28/26 4:30 PM
         const defaultSdvWOs = [
             {wo: 'CV78A', customer: 'Primus Capital', actualHrs: 8.0, expectedHrs: 400, notes: 'Major install'},
             {wo: 'CVN0A', customer: 'Stevens Aerospace', actualHrs: 5.0, expectedHrs: 41, notes: ''},
+            {wo: 'CP5EA', customer: 'The Tashi Corporation', actualHrs: 0, expectedHrs: 6, notes: ''},
             {wo: 'DB1UA', customer: 'Hogs Head Air 1 LLC', actualHrs: 73.0, expectedHrs: 0, notes: 'NJ controlled'},
-            {wo: 'CMJHA', customer: '', actualHrs: 0, expectedHrs: 24, notes: ''},
-            {wo: 'DSGKA', customer: '', actualHrs: 0, expectedHrs: 6, notes: ''},
-            {wo: 'DRT6C', customer: '', actualHrs: 0, expectedHrs: 2, notes: ''}
+            {wo: 'DFPJA', customer: 'Duncan Dallas 893', actualHrs: 0, expectedHrs: 0, notes: 'Internal'},
+            {wo: 'CMJHA', customer: 'Business Aviators Inc', actualHrs: 0, expectedHrs: 24, notes: ''},
+            {wo: 'DSGKA', customer: 'Air Methods LLC', actualHrs: 0, expectedHrs: 6, notes: ''},
+            {wo: 'CS9XA', customer: 'Peregrine', actualHrs: 0, expectedHrs: 0.1, notes: ''},
+            {wo: 'DRT6B', customer: 'Peregrine', actualHrs: 0, expectedHrs: 0, notes: 'Needs estimate'},
+            {wo: 'DRT6C', customer: 'Peregrine', actualHrs: 0, expectedHrs: 2, notes: ''},
+            {wo: 'CTTTA', customer: 'Robins and Morton Group', actualHrs: 0, expectedHrs: 0, notes: 'Needs estimate'},
+            {wo: 'DUKZA', customer: 'Duncan Denver 889', actualHrs: 0, expectedHrs: 0, notes: 'Internal'}
         ];
         
         function getSdvWOs() {
