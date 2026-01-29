@@ -702,6 +702,7 @@
                     </div>
                     <div style="display:flex;gap:10px;">
                         <button onclick="addCustomerToDb()" style="flex:1;padding:10px;background:#10b981;color:white;border:none;border-radius:6px;font-weight:bold;cursor:pointer;">➕ Add Customer</button>
+                        <button onclick="resetToDefaultCustomers()" style="padding:10px;background:#3b82f6;color:white;border:none;border-radius:6px;cursor:pointer;font-size:0.85em;">🔄 Reset Defaults</button>
                         <button onclick="clearCustomerDb()" style="padding:10px;background:#ef4444;color:white;border:none;border-radius:6px;cursor:pointer;font-size:0.85em;">🗑️ Clear All</button>
                     </div>
                     <div id="addCustMsg" style="display:none;margin-top:8px;font-size:0.8em;text-align:center;"></div>
@@ -727,8 +728,11 @@
                 <div id="npsDbSummary" style="background:#1e3a5f;padding:8px;border-radius:6px;margin-top:10px;font-size:0.8em;color:#93c5fd;">
                     📋 Add billed WOs above to track NPS surveys.
                 </div>
-                <div style="background:#0f172a;padding:8px;border-radius:6px;margin-top:5px;font-size:0.75em;color:#94a3b8;">
-                    💡 <strong>Tip:</strong> When Claude processes your Billed WO report, ask it to provide customer data to add here.
+                <div id="npsLastSync" style="background:#0f172a;padding:8px;border-radius:6px;margin-top:5px;font-size:0.75em;color:#fbbf24;">
+                    ⏳ Not synced yet - process Billed WO report to auto-populate
+                </div>
+                <div style="background:#1e293b;padding:8px;border-radius:6px;margin-top:5px;font-size:0.75em;color:#94a3b8;">
+                    🤖 <strong>Auto-Sync:</strong> When I process your Billed WO report, I'll automatically update this database with customer info, WO#, and revenue.
                 </div>
             </div>
         </div>
@@ -2678,8 +2682,26 @@ ${surveyUrl}`;
             if (!confirm('Are you sure? This will remove all ' + getCustomerDatabase().length + ' customers.')) return;
             
             localStorage.removeItem('denver_nps_customers');
+            localStorage.removeItem('denver_nps_last_update');
             renderCustomerTable();
             updateTopCandidate();
+            updateLastSyncDisplay();
+        }
+        
+        function resetToDefaultCustomers() {
+            if (!confirm('Reset to default customers? This will replace current data with the original 14 customers.')) return;
+            
+            localStorage.setItem('denver_nps_customers', JSON.stringify(defaultCustomers));
+            localStorage.removeItem('denver_nps_last_update');
+            renderCustomerTable();
+            updateTopCandidate();
+            updateLastSyncDisplay();
+            
+            const msgEl = document.getElementById('addCustMsg');
+            msgEl.textContent = '✅ Reset to default 14 customers';
+            msgEl.style.color = '#86efac';
+            msgEl.style.display = 'block';
+            setTimeout(() => msgEl.style.display = 'none', 3000);
         }
         
         // Bulk import function - can be called from console
@@ -2733,6 +2755,159 @@ ${surveyUrl}`;
         window.exportCustomerDb = function() {
             return getCustomerDatabase();
         };
+        
+        // ==========================================
+        // AUTO-UPDATE FROM BILLED WO REPORT
+        // ==========================================
+        
+        // Function for Claude to call after processing Billed WO report
+        // Usage: updateFromBilledWO([{name:'Customer', email:'email@co.com', wo:'ABC123', reg:'N123', revenue:5000, gp:2000}])
+        window.updateFromBilledWO = function(customers, reportDate) {
+            if (!Array.isArray(customers)) {
+                console.error('updateFromBilledWO expects an array');
+                return { error: 'Invalid input - expected array' };
+            }
+            
+            const db = getCustomerDatabase();
+            let added = 0;
+            let updated = 0;
+            let skipped = 0;
+            
+            customers.forEach(c => {
+                if (!c.wo) {
+                    skipped++;
+                    return;
+                }
+                
+                const wo = c.wo.toUpperCase();
+                const existingIdx = db.findIndex(existing => existing.wo.toUpperCase() === wo);
+                
+                const customerData = {
+                    name: c.name || 'Unknown',
+                    email: c.email || '',
+                    wo: wo,
+                    reg: (c.reg || '').toUpperCase(),
+                    revenue: parseInt(c.revenue) || 0,
+                    gp: parseInt(c.gp) || 0,
+                    shop: c.shop || '',
+                    dateBilled: c.dateBilled || reportDate || new Date().toLocaleDateString()
+                };
+                
+                if (existingIdx >= 0) {
+                    // Update existing - merge data, keep email if exists
+                    if (!db[existingIdx].email && customerData.email) {
+                        db[existingIdx].email = customerData.email;
+                    }
+                    db[existingIdx].revenue = customerData.revenue;
+                    db[existingIdx].gp = customerData.gp;
+                    db[existingIdx].shop = customerData.shop;
+                    db[existingIdx].dateBilled = customerData.dateBilled;
+                    if (customerData.reg) db[existingIdx].reg = customerData.reg;
+                    updated++;
+                } else {
+                    // Add new
+                    db.push(customerData);
+                    added++;
+                }
+            });
+            
+            // Sort by revenue descending
+            db.sort((a, b) => b.revenue - a.revenue);
+            saveCustomerDatabase(db);
+            
+            // Save last update timestamp
+            const now = new Date();
+            const timestamp = now.toLocaleDateString('en-US', {month:'2-digit', day:'2-digit', year:'2-digit'}) + ' ' + 
+                             now.toLocaleTimeString('en-US', {hour:'numeric', minute:'2-digit', hour12:true});
+            localStorage.setItem('denver_nps_last_update', JSON.stringify({
+                timestamp: timestamp,
+                reportDate: reportDate || 'Unknown',
+                added: added,
+                updated: updated,
+                total: db.length
+            }));
+            
+            renderCustomerTable();
+            updateTopCandidate();
+            updateLastSyncDisplay();
+            
+            console.log(`✅ Billed WO sync complete: ${added} added, ${updated} updated, ${skipped} skipped. Total: ${db.length} customers.`);
+            return { added, updated, skipped, total: db.length };
+        };
+        
+        // Replace entire database from Billed WO (clear and reload)
+        window.replaceFromBilledWO = function(customers, reportDate) {
+            if (!Array.isArray(customers)) {
+                console.error('replaceFromBilledWO expects an array');
+                return { error: 'Invalid input - expected array' };
+            }
+            
+            // Get existing sent status from NPS surveys
+            const surveys = getNpsSurveys();
+            const sentWOs = surveys.map(s => s.wo.toUpperCase());
+            
+            const newDb = [];
+            let count = 0;
+            
+            customers.forEach(c => {
+                if (!c.wo) return;
+                
+                const wo = c.wo.toUpperCase();
+                newDb.push({
+                    name: c.name || 'Unknown',
+                    email: c.email || '',
+                    wo: wo,
+                    reg: (c.reg || '').toUpperCase(),
+                    revenue: parseInt(c.revenue) || 0,
+                    gp: parseInt(c.gp) || 0,
+                    shop: c.shop || '',
+                    dateBilled: c.dateBilled || reportDate || new Date().toLocaleDateString()
+                });
+                count++;
+            });
+            
+            // Sort by revenue descending
+            newDb.sort((a, b) => b.revenue - a.revenue);
+            saveCustomerDatabase(newDb);
+            
+            // Save last update timestamp
+            const now = new Date();
+            const timestamp = now.toLocaleDateString('en-US', {month:'2-digit', day:'2-digit', year:'2-digit'}) + ' ' + 
+                             now.toLocaleTimeString('en-US', {hour:'numeric', minute:'2-digit', hour12:true});
+            localStorage.setItem('denver_nps_last_update', JSON.stringify({
+                timestamp: timestamp,
+                reportDate: reportDate || 'Unknown',
+                added: count,
+                updated: 0,
+                total: count,
+                replaced: true
+            }));
+            
+            renderCustomerTable();
+            updateTopCandidate();
+            updateLastSyncDisplay();
+            
+            console.log(`✅ Billed WO database replaced: ${count} customers loaded.`);
+            return { total: count };
+        };
+        
+        function updateLastSyncDisplay() {
+            const el = document.getElementById('npsLastSync');
+            if (!el) return;
+            
+            const data = localStorage.getItem('denver_nps_last_update');
+            if (data) {
+                const info = JSON.parse(data);
+                el.innerHTML = `🔄 Last sync: ${info.timestamp} (Report: ${info.reportDate}) | ${info.total} customers`;
+                el.style.color = '#86efac';
+            } else {
+                el.innerHTML = '⏳ Not synced yet - process Billed WO report to auto-populate';
+                el.style.color = '#fbbf24';
+            }
+        }
+        
+        // Initialize last sync display
+        setTimeout(updateLastSyncDisplay, 100);
         
         function updateTopCandidate() {
             const surveys = getNpsSurveys();
