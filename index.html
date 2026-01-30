@@ -604,10 +604,10 @@
                 </div>
                 
                 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-                    <span style="color:#94a3b8;font-size:0.85em;">📊 Customer Email Database: <span id="customerDbCount">46</span> contacts from Billed WO (Updated 01/29 12:59PM)</span>
+                    <span style="color:#94a3b8;font-size:0.85em;">📊 Customer Email Database: <span id="customerDbCount">46</span> contacts from Billed WO (Updated 01/30 8:20AM)</span>
                     <label style="font-size:0.8em;color:#94a3b8;cursor:pointer;">
                         <input type="checkbox" id="showSentCustomers" checked onchange="renderCustomerTable()" style="margin-right:5px;">
-                        Show sent
+                        Show sent/skipped
                     </label>
                 </div>
                 <div class="table-container" style="max-height:300px;overflow-y:auto;">
@@ -2200,6 +2200,30 @@
             // Note: Changes during session are temporary. Tell Claude to add permanent entries.
         }
         
+        // Skipped WOs management
+        let skippedWOs = [];
+        
+        function getSkippedWOs() {
+            return skippedWOs;
+        }
+        
+        function skipWO(wo, name) {
+            if (!skippedWOs.includes(wo.toUpperCase())) {
+                skippedWOs.push(wo.toUpperCase());
+                renderCustomerTable();
+                // Show brief confirmation
+                const btn = event.target;
+                btn.textContent = '✓ Skipped';
+                btn.style.background = '#475569';
+                setTimeout(() => renderCustomerTable(), 500);
+            }
+        }
+        
+        function undoSkip(wo) {
+            skippedWOs = skippedWOs.filter(w => w !== wo.toUpperCase());
+            renderCustomerTable();
+        }
+        
         // Smart Fill function for NPS form
         function fillNps(name, email, wo, reg) {
             document.getElementById('npsCustomerName').value = name;
@@ -2503,6 +2527,7 @@ ${surveyUrl}`;
         function renderCustomerTable() {
             const surveys = getNpsSurveys();
             const sentWOs = surveys.map(s => s.wo.toUpperCase());
+            const skipped = getSkippedWOs();
             const showSent = document.getElementById('showSentCustomers').checked;
             const tbody = document.getElementById('customerDbBody');
             const summaryDiv = document.getElementById('npsDbSummary');
@@ -2510,33 +2535,39 @@ ${surveyUrl}`;
             let html = '';
             let notSentCount = 0;
             let sentCount = 0;
+            let skippedCount = 0;
             let needEmailCount = 0;
             let readyCount = 0;
             
             customerDatabase.forEach(c => {
                 const isSent = sentWOs.includes(c.wo.toUpperCase());
+                const isSkipped = skipped.includes(c.wo.toUpperCase());
                 const needsEmail = !c.email || c.name === 'NEED LOOKUP';
                 
                 if (isSent) sentCount++;
+                else if (isSkipped) skippedCount++;
                 else {
                     notSentCount++;
                     if (needsEmail) needEmailCount++;
                     else readyCount++;
                 }
                 
-                if (!showSent && isSent) return; // Skip sent if checkbox unchecked
+                // Skip sent/skipped if checkbox unchecked
+                if (!showSent && (isSent || isSkipped)) return;
                 
                 // Row styling based on status
                 let rowStyle = '';
                 if (isSent) {
                     rowStyle = 'background:rgba(107,114,128,0.3);opacity:0.7;';
+                } else if (isSkipped) {
+                    rowStyle = 'background:rgba(100,116,139,0.2);opacity:0.6;';
                 } else if (needsEmail) {
                     rowStyle = 'background:rgba(239,68,68,0.15);'; // Red tint for needs email
                 } else if (c.revenue > 5000) {
                     rowStyle = 'background:rgba(16,185,129,0.2);'; // Green for high value ready
                 }
                 
-                const woStyle = isSent ? 'color:#64748b;' : 'color:#60a5fa;font-weight:bold;';
+                const woStyle = (isSent || isSkipped) ? 'color:#64748b;' : 'color:#60a5fa;font-weight:bold;';
                 const revStyle = c.revenue === 0 ? 'color:#94a3b8;' : 'color:#10b981;';
                 const regDisplay = c.reg || '-';
                 const revDisplay = '$' + c.revenue.toLocaleString();
@@ -2555,11 +2586,13 @@ ${surveyUrl}`;
                 let actionCell;
                 if (isSent) {
                     actionCell = '<span style="color:#10b981;font-size:0.8em;">✓ Sent</span>';
+                } else if (isSkipped) {
+                    actionCell = `<span style="color:#64748b;font-size:0.75em;">⊘ Skipped</span> <button onclick="undoSkip('${c.wo}')" style="background:#475569;color:white;border:none;padding:2px 6px;border-radius:3px;font-size:0.7em;cursor:pointer;margin-left:4px;">Undo</button>`;
                 } else if (needsEmail) {
                     actionCell = `<span style="color:#f87171;font-size:0.75em;">📋 Lookup</span>`;
                 } else {
                     const btnStyle = c.revenue > 0 ? 'background:#10b981;' : 'background:#475569;';
-                    actionCell = `<button onclick="fillNps('${c.name}','${c.email}','${c.wo}','${c.reg}')" style="${btnStyle}color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">✓ Use</button>`;
+                    actionCell = `<button onclick="fillNps('${c.name}','${c.email}','${c.wo}','${c.reg}')" style="${btnStyle}color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">✓ Use</button><button onclick="skipWO('${c.wo}','${c.name}')" style="background:#64748b;color:white;border:none;padding:4px 8px;border-radius:4px;font-size:0.75em;cursor:pointer;margin-left:4px;" title="Skip this customer">⊘</button>`;
                 }
                 
                 html += `<tr style="${rowStyle}">
@@ -2579,12 +2612,16 @@ ${surveyUrl}`;
             tbody.innerHTML = html;
             
             // Update summary with detailed breakdown
-            if (notSentCount === 0) {
+            if (notSentCount === 0 && skippedCount === 0) {
                 summaryDiv.innerHTML = '✅ <strong>All ' + sentCount + ' surveys sent!</strong> Waiting for responses.';
                 summaryDiv.style.background = '#14532d';
                 summaryDiv.style.color = '#bbf7d0';
             } else {
-                summaryDiv.innerHTML = `📊 <strong>${readyCount} ready to send</strong> | <span style="color:#f87171;">${needEmailCount} need email lookup</span> | ${sentCount} already sent`;
+                let summaryText = `📊 <strong>${readyCount} ready</strong> | <span style="color:#f87171;">${needEmailCount} need email</span> | ${sentCount} sent`;
+                if (skippedCount > 0) {
+                    summaryText += ` | <span style="color:#94a3b8;">${skippedCount} skipped</span>`;
+                }
+                summaryDiv.innerHTML = summaryText;
                 summaryDiv.style.background = '#1e3a5f';
                 summaryDiv.style.color = '#93c5fd';
             }
