@@ -2855,9 +2855,8 @@ ${surveyUrl}`;
         const customerDatabase = [
             // === TODAY'S BILLING 01/30/26 ===
             {name: 'Alpine Aviation', email: '', wo: 'CVLNA', reg: 'N197GA', shop: 'SDN', revenue: 1770, dateBilled: '01/30/26', custNum: 101328},
-            {name: 'SHC Battery Work', email: '', wo: 'CVJ0A', reg: 'STOCK', shop: 'SHC', revenue: 785, dateBilled: '01/30/26', custNum: 158993},
-            {name: 'Flights Inc', email: '', wo: 'CUSDA', reg: 'N7701A', shop: 'SDR', revenue: 669, dateBilled: '01/30/26', custNum: 142768},
-            {name: 'Bombardier SFI', email: '', wo: 'CP5EA', reg: 'N365CJ', shop: 'SFI', revenue: 780, dateBilled: '01/30/26', custNum: 116393},
+            {name: 'NEED LOOKUP', email: '', wo: 'CVJ0A', reg: 'STOCK', shop: 'SHC', revenue: 785, dateBilled: '01/30/26', custNum: 158993},
+            {name: 'NEED LOOKUP', email: '', wo: 'CP5EA', reg: 'N365CJ', shop: 'SFI', revenue: 780, dateBilled: '01/30/26', custNum: 116393},
             // === HIGH REVENUE (>$5K) - PRIORITY ===
             {name: 'MHH Inc', email: 'BILL.BENTON@MHHINC.NET', wo: 'DSW4A', reg: 'N7BD', shop: 'SDN', revenue: 65835, dateBilled: '01/26/26', custNum: 157998},
             {name: 'Skyport Co', email: 'ryan.himango@skyportco.com', wo: 'DUSFA', reg: 'N65LR', shop: 'SDN', revenue: 42398, dateBilled: '01/29/26', custNum: 153916},
@@ -2950,17 +2949,22 @@ ${surveyUrl}`;
                 const needsEmail = !c.email || c.name === 'NEED LOOKUP';
                 const customerKey = c.email || c.custNum.toString();
                 
-                // Check if this customer already shown (duplicate)
+                // Check if this customer already surveyed this month
+                const alreadySurveyed = customerSurveyed.has(customerKey);
+                // Check if this customer already shown (duplicate WO for same customer)
                 const isDuplicate = customerShown.has(customerKey);
                 
                 if (isSent) {
                     sentList.push({...c, status: 'sent'});
                     customerSurveyed.add(customerKey);
+                    customerShown.add(customerKey);
+                } else if (alreadySurveyed || isDuplicate) {
+                    // This customer already surveyed OR has a higher-revenue WO - waive this one
+                    waivedList.push({...c, status: 'waived', reason: alreadySurveyed ? 'Already surveyed' : 'Duplicate'});
+                    customerShown.add(customerKey);
                 } else if (isSkipped) {
                     skippedList.push({...c, status: 'skipped'});
-                } else if (isDuplicate) {
-                    // This customer already has a higher-revenue WO shown - waive this one
-                    waivedList.push({...c, status: 'waived'});
+                    customerShown.add(customerKey);
                 } else if (needsEmail) {
                     lookupList.push({...c, status: 'lookup'});
                     customerShown.add(customerKey);
