@@ -693,12 +693,13 @@
                 <!-- Add New Customer Form -->
                 <div style="background:linear-gradient(135deg,#1e3a5f,#2563eb);padding:15px;border-radius:10px;margin-bottom:15px;">
                     <div style="color:#93c5fd;font-size:0.85em;margin-bottom:10px;font-weight:bold;">➕ ADD BILLED WO TO DATABASE</div>
-                    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr;gap:10px;margin-bottom:10px;">
+                    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr 1fr;gap:10px;margin-bottom:10px;">
                         <input type="text" id="newCustName" placeholder="Customer Name" style="padding:8px;border-radius:6px;border:none;background:#1e1b4b;color:white;font-size:0.85em;">
                         <input type="email" id="newCustEmail" placeholder="Email" style="padding:8px;border-radius:6px;border:none;background:#1e1b4b;color:white;font-size:0.85em;">
                         <input type="text" id="newCustWO" placeholder="WO#" style="padding:8px;border-radius:6px;border:none;background:#1e1b4b;color:white;font-size:0.85em;text-transform:uppercase;">
                         <input type="text" id="newCustReg" placeholder="Reg# (opt)" style="padding:8px;border-radius:6px;border:none;background:#1e1b4b;color:white;font-size:0.85em;text-transform:uppercase;">
                         <input type="number" id="newCustRevenue" placeholder="Revenue $" style="padding:8px;border-radius:6px;border:none;background:#1e1b4b;color:white;font-size:0.85em;">
+                        <input type="date" id="newCustBilledDate" style="padding:8px;border-radius:6px;border:none;background:#1e1b4b;color:white;font-size:0.85em;" title="Billed Date">
                     </div>
                     <div style="display:flex;gap:10px;">
                         <button onclick="addCustomerToDb()" style="flex:1;padding:10px;background:#10b981;color:white;border:none;border-radius:6px;font-weight:bold;cursor:pointer;">➕ Add Customer</button>
@@ -717,7 +718,7 @@
                 <div class="table-container" style="max-height:300px;overflow-y:auto;">
                     <table>
                         <thead>
-                            <tr><th>Customer</th><th>Email</th><th>WO#</th><th>Reg#</th><th>Revenue</th><th>Action</th></tr>
+                            <tr><th>Billed</th><th>Customer</th><th>Email</th><th>WO#</th><th>Reg#</th><th>Revenue</th><th>Action</th></tr>
                         </thead>
                         <tbody id="customerDbBody">
                             <!-- Dynamically populated -->
@@ -2410,7 +2411,23 @@
                 return;
             }
             
-            tbody.innerHTML = surveys.map((s, idx) => `
+            // Create indexed array and sort by date (most recent first)
+            const indexedSurveys = surveys.map((s, idx) => ({ ...s, originalIdx: idx }));
+            indexedSurveys.sort((a, b) => {
+                // Parse date MM/DD/YY format
+                const parseDate = (d) => {
+                    if (!d) return new Date(0);
+                    const parts = d.split('/');
+                    if (parts.length === 3) {
+                        const year = parseInt(parts[2]) + 2000;
+                        return new Date(year, parseInt(parts[0])-1, parseInt(parts[1]));
+                    }
+                    return new Date(0);
+                };
+                return parseDate(b.date) - parseDate(a.date);
+            });
+            
+            tbody.innerHTML = indexedSurveys.map(s => `
                 <tr style="background:${s.status === 'Completed' ? 'rgba(16,185,129,0.2)' : s.status === 'No Response' ? 'rgba(239,68,68,0.2)' : 'rgba(251,191,36,0.2)'}">
                     <td>${s.date}</td>
                     <td>${s.customer}</td>
@@ -2419,8 +2436,8 @@
                     <td>${s.score || '-'}</td>
                     <td>
                         ${s.status === 'Sent' ? `
-                            <button onclick="completeNpsSurvey(${idx})" style="background:#10b981;color:white;border:none;padding:2px 6px;border-radius:3px;font-size:0.75em;cursor:pointer;margin-right:3px;">✓</button>
-                            <button onclick="noResponseNpsSurvey(${idx})" style="background:#ef4444;color:white;border:none;padding:2px 6px;border-radius:3px;font-size:0.75em;cursor:pointer;">✗</button>
+                            <button onclick="completeNpsSurvey(${s.originalIdx})" style="background:#10b981;color:white;border:none;padding:2px 6px;border-radius:3px;font-size:0.75em;cursor:pointer;margin-right:3px;">✓</button>
+                            <button onclick="noResponseNpsSurvey(${s.originalIdx})" style="background:#ef4444;color:white;border:none;padding:2px 6px;border-radius:3px;font-size:0.75em;cursor:pointer;">✗</button>
                         ` : ''}
                     </td>
                 </tr>
@@ -2614,6 +2631,8 @@ ${surveyUrl}`;
             const wo = document.getElementById('newCustWO').value.trim().toUpperCase();
             const reg = document.getElementById('newCustReg').value.trim().toUpperCase();
             const revenue = parseInt(document.getElementById('newCustRevenue').value) || 0;
+            const billedDateInput = document.getElementById('newCustBilledDate').value;
+            const billedDate = billedDateInput || new Date().toISOString().split('T')[0]; // Default to today
             
             const msgEl = document.getElementById('addCustMsg');
             
@@ -2636,11 +2655,15 @@ ${surveyUrl}`;
                 return;
             }
             
-            // Add new customer
-            db.push({ name, email, wo, reg, revenue });
+            // Add new customer with billed date
+            db.push({ name, email, wo, reg, revenue, billedDate });
             
-            // Sort by revenue descending
-            db.sort((a, b) => b.revenue - a.revenue);
+            // Sort by billed date descending (most recent first)
+            db.sort((a, b) => {
+                const dateA = a.billedDate || '1970-01-01';
+                const dateB = b.billedDate || '1970-01-01';
+                return dateB.localeCompare(dateA);
+            });
             
             saveCustomerDatabase(db);
             
@@ -2650,6 +2673,7 @@ ${surveyUrl}`;
             document.getElementById('newCustWO').value = '';
             document.getElementById('newCustReg').value = '';
             document.getElementById('newCustRevenue').value = '';
+            document.getElementById('newCustBilledDate').value = '';
             
             // Show success
             msgEl.textContent = '✅ Added ' + name + ' (' + wo + ') - $' + revenue.toLocaleString();
@@ -2770,7 +2794,14 @@ ${surveyUrl}`;
             const tbody = document.getElementById('customerDbBody');
             const summaryDiv = document.getElementById('npsDbSummary');
             
-            const customerDatabase = getCustomerDatabase();
+            let customerDatabase = getCustomerDatabase();
+            
+            // Sort by billed date descending (most recent first)
+            customerDatabase.sort((a, b) => {
+                const dateA = a.billedDate || '1970-01-01';
+                const dateB = b.billedDate || '1970-01-01';
+                return dateB.localeCompare(dateA);
+            });
             
             let html = '';
             let notSentCount = 0;
@@ -2789,6 +2820,13 @@ ${surveyUrl}`;
                 const regDisplay = c.reg || '-';
                 const revDisplay = '$' + c.revenue.toLocaleString();
                 
+                // Format billed date for display
+                let billedDisplay = '-';
+                if (c.billedDate) {
+                    const d = new Date(c.billedDate + 'T00:00:00');
+                    billedDisplay = (d.getMonth()+1).toString().padStart(2,'0') + '/' + d.getDate().toString().padStart(2,'0');
+                }
+                
                 let actionCell;
                 if (isSent) {
                     actionCell = '<span style="color:#10b981;font-size:0.8em;">✓ Sent</span>';
@@ -2801,6 +2839,7 @@ ${surveyUrl}`;
                 const deleteBtn = `<button onclick="removeCustomerFromDb('${c.wo}')" style="background:transparent;color:#64748b;border:none;padding:2px 5px;font-size:0.7em;cursor:pointer;margin-left:5px;" title="Remove">✕</button>`;
                 
                 html += `<tr style="${rowStyle}">
+                    <td style="color:#94a3b8;font-size:0.85em;">${billedDisplay}</td>
                     <td>${c.name}</td>
                     <td style="color:#fbbf24;font-family:monospace;font-size:0.8em;">${c.email}</td>
                     <td style="${woStyle}">${c.wo}</td>
@@ -2809,9 +2848,10 @@ ${surveyUrl}`;
                     <td>${actionCell}${deleteBtn}</td>
                 </tr>`;
             });
+            });
             
             if (html === '') {
-                html = '<tr><td colspan="6" style="color:#64748b;text-align:center;">No customers in database. Add billed WOs above.</td></tr>';
+                html = '<tr><td colspan="7" style="color:#64748b;text-align:center;">No customers in database. Add billed WOs above.</td></tr>';
             }
             
             tbody.innerHTML = html;
