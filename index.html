@@ -50,6 +50,7 @@
         .tab-quality { border-left: 3px solid #06b6d4; }
         .tab-rankings { border-left: 3px solid #eab308; }
         .tab-wip { border-left: 3px solid #22c55e; }
+        .tab-nqa { border-left: 3px solid #14b8a6; }
         .tab-training { border-left: 3px solid #a855f7; }
         
         /* Content */
@@ -163,6 +164,7 @@
             <div class="tab tab-training" data-tab="training">📚 Training</div>
             <div class="tab tab-quality" data-tab="quality">✅ Quality</div>
             <div class="tab tab-wip" data-tab="wip">💰 WIP</div>
+            <div class="tab tab-nqa" data-tab="nqa">📋 NQA</div>
             <div class="tab tab-rankings" data-tab="rankings">🏆 Rankings</div>
         </div>
         
@@ -2003,6 +2005,295 @@
                 </div>
                 <div style="margin-top:15px;background:#451a03;padding:10px;border-radius:6px;font-size:0.85em;color:#fef3c7;">
                     <strong style="color:#fbbf24;">⭐ SDV Special:</strong> $70/hr rate, 15% margin. Email WOs >10hrs to Matt last week of month. Exclude shop WO (DT39A).
+                </div>
+            </div>
+        </div>
+        
+        <!-- NQA TAB -->
+        <div class="content" id="nqa">
+            <!-- NQA OVERVIEW -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">📋 NQA Flat Rate Analysis - Service Shops</span>
+                    <span class="badge badge-green">Updated 01/30/26</span>
+                </div>
+                <div style="color:#94a3b8;font-size:0.9em;margin-bottom:15px;">
+                    <strong>NQA (Non-Quoted Agreement)</strong> = Flat rate pricing for standard service jobs. Goal: Track if we're making or losing money on flat rate vs actual hours worked.
+                </div>
+                
+                <!-- SUMMARY METRICS -->
+                <div class="card-grid" style="margin-bottom:20px;">
+                    <div class="metric">
+                        <div class="metric-value" style="color:#10b981;">6/9</div>
+                        <div class="metric-label">Win Rate</div>
+                        <div class="metric-sub">Jobs at/under flat rate</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" style="color:#10b981;">-5.8h</div>
+                        <div class="metric-label">Hours Variance</div>
+                        <div class="metric-sub">Under flat rate = PROFIT</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" style="color:#10b981;">+$1,264</div>
+                        <div class="metric-label">Margin Saved</div>
+                        <div class="metric-sub">@ $218/hr NQA rate</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" style="color:#f59e0b;">9</div>
+                        <div class="metric-label">T&M Jobs</div>
+                        <div class="metric-sub">No flat rate (billed hourly)</div>
+                    </div>
+                </div>
+                
+                <!-- DECISION INDICATOR -->
+                <div style="background:rgba(16,185,129,0.2);border:2px solid #10b981;border-radius:10px;padding:15px;text-align:center;margin-bottom:20px;">
+                    <div style="font-size:1.5em;font-weight:bold;color:#10b981;">✅ NQA PROFITABLE THIS MONTH</div>
+                    <div style="color:#a7f3d0;margin-top:5px;">Net -5.8h under flat rate = Keep NQA system</div>
+                </div>
+            </div>
+            
+            <!-- NQA JOBS TABLE -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">🎯 NQA Flat Rate Jobs (SDN/SDR/SHC)</span>
+                    <span class="badge badge-blue">9 Jobs</span>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>WO#</th>
+                                <th>Reg</th>
+                                <th>Shop</th>
+                                <th>Squawk</th>
+                                <th style="text-align:right;">Actual</th>
+                                <th style="text-align:right;">Flat Rate</th>
+                                <th style="text-align:right;">Variance</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="background:rgba(16,185,129,0.1);">
+                                <td>CU0VA</td>
+                                <td>N84RJ</td>
+                                <td>SDR</td>
+                                <td>91.411 & 91.413 (Cessna 172S)</td>
+                                <td style="text-align:right;">4.0h</td>
+                                <td style="text-align:right;">18.6h</td>
+                                <td style="text-align:right;color:#10b981;font-weight:bold;">-14.6h</td>
+                                <td><span class="badge badge-green">✅ WIN</span></td>
+                            </tr>
+                            <tr style="background:rgba(16,185,129,0.1);">
+                                <td>CU1EA</td>
+                                <td>N505RR</td>
+                                <td>SDN</td>
+                                <td>Autopilot troubleshooting</td>
+                                <td style="text-align:right;">4.5h</td>
+                                <td style="text-align:right;">8.0h</td>
+                                <td style="text-align:right;color:#10b981;font-weight:bold;">-3.5h</td>
+                                <td><span class="badge badge-green">✅ WIN</span></td>
+                            </tr>
+                            <tr style="background:rgba(16,185,129,0.1);">
+                                <td>CU92A</td>
+                                <td>N331MW</td>
+                                <td>SDN</td>
+                                <td>Troubleshoot Autopilot</td>
+                                <td style="text-align:right;">4.0h</td>
+                                <td style="text-align:right;">8.0h</td>
+                                <td style="text-align:right;color:#10b981;font-weight:bold;">-4.0h</td>
+                                <td><span class="badge badge-green">✅ WIN</span></td>
+                            </tr>
+                            <tr style="background:rgba(16,185,129,0.1);">
+                                <td>CU92A</td>
+                                <td>N331MW</td>
+                                <td>SDN</td>
+                                <td>Perform ULB Test</td>
+                                <td style="text-align:right;">2.0h</td>
+                                <td style="text-align:right;">2.0h</td>
+                                <td style="text-align:right;color:#10b981;font-weight:bold;">0.0h</td>
+                                <td><span class="badge badge-green">✅ WIN</span></td>
+                            </tr>
+                            <tr style="background:rgba(239,68,68,0.15);">
+                                <td>CUC9A</td>
+                                <td>N3278</td>
+                                <td>SHC</td>
+                                <td>Overhaul Main Ship Battery</td>
+                                <td style="text-align:right;">12.0h</td>
+                                <td style="text-align:right;">3.0h</td>
+                                <td style="text-align:right;color:#ef4444;font-weight:bold;">+9.0h</td>
+                                <td><span class="badge badge-red">❌ LOSS</span></td>
+                            </tr>
+                            <tr style="background:rgba(239,68,68,0.15);">
+                                <td>CUL2A</td>
+                                <td>N5203U</td>
+                                <td>SDR</td>
+                                <td>KT74 inoperative (transponder)</td>
+                                <td style="text-align:right;">12.5h</td>
+                                <td style="text-align:right;">4.0h</td>
+                                <td style="text-align:right;color:#ef4444;font-weight:bold;">+8.5h</td>
+                                <td><span class="badge badge-red">❌ LOSS</span></td>
+                            </tr>
+                            <tr style="background:rgba(239,68,68,0.1);">
+                                <td>CUPFA</td>
+                                <td>N176MG</td>
+                                <td>SDN</td>
+                                <td>Replace #2 ADC due to red X</td>
+                                <td style="text-align:right;">9.9h</td>
+                                <td style="text-align:right;">8.0h</td>
+                                <td style="text-align:right;color:#f59e0b;font-weight:bold;">+1.9h</td>
+                                <td><span class="badge badge-amber">⚠️ OVER</span></td>
+                            </tr>
+                            <tr style="background:rgba(16,185,129,0.1);">
+                                <td>CUSDA</td>
+                                <td>N7701A</td>
+                                <td>SDR</td>
+                                <td>91.411 & 91.413 (Piper PA-44)</td>
+                                <td style="text-align:right;">4.9h</td>
+                                <td style="text-align:right;">6.0h</td>
+                                <td style="text-align:right;color:#10b981;font-weight:bold;">-1.1h</td>
+                                <td><span class="badge badge-green">✅ WIN</span></td>
+                            </tr>
+                            <tr style="background:rgba(16,185,129,0.1);">
+                                <td>DUYYA</td>
+                                <td>N219JG</td>
+                                <td>SDN</td>
+                                <td>Exchange Vertical Gyro</td>
+                                <td style="text-align:right;">2.0h</td>
+                                <td style="text-align:right;">4.0h</td>
+                                <td style="text-align:right;color:#10b981;font-weight:bold;">-2.0h</td>
+                                <td><span class="badge badge-green">✅ WIN</span></td>
+                            </tr>
+                            <tr style="font-weight:bold;background:rgba(255,255,255,0.1);">
+                                <td colspan="4">TOTAL NQA</td>
+                                <td style="text-align:right;">55.8h</td>
+                                <td style="text-align:right;">61.6h</td>
+                                <td style="text-align:right;color:#10b981;">-5.8h</td>
+                                <td><span class="badge badge-green">NET WIN</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- PROBLEM JOBS -->
+            <div class="card" style="border:2px solid #ef4444;">
+                <div class="card-header">
+                    <span class="card-title" style="color:#ef4444;">⚠️ Problem Jobs - Review for NQA Adjustment</span>
+                </div>
+                <div style="color:#fca5a5;font-size:0.9em;margin-bottom:15px;">
+                    These jobs exceeded flat rate hours. Consider: adjusting NQA price, switching to T&M, or reviewing tech efficiency.
+                </div>
+                <div style="display:grid;gap:10px;">
+                    <div style="background:rgba(239,68,68,0.15);padding:15px;border-radius:8px;border-left:4px solid #ef4444;">
+                        <div style="display:flex;justify-content:space-between;align-items:center;">
+                            <div>
+                                <span style="font-weight:bold;color:#fca5a5;">CUC9A - Battery Overhaul (SHC)</span>
+                                <div style="color:#94a3b8;font-size:0.85em;">N3278 | Overhaul Main Ship Battery 405CH10</div>
+                            </div>
+                            <div style="text-align:right;">
+                                <div style="color:#ef4444;font-weight:bold;font-size:1.2em;">+9.0h over</div>
+                                <div style="color:#fca5a5;font-size:0.9em;">~$1,962 margin loss</div>
+                            </div>
+                        </div>
+                        <div style="margin-top:10px;color:#fde68a;font-size:0.85em;">💡 Recommend: Update battery overhaul NQA from 3h to 10-12h or quote T&M</div>
+                    </div>
+                    <div style="background:rgba(239,68,68,0.15);padding:15px;border-radius:8px;border-left:4px solid #ef4444;">
+                        <div style="display:flex;justify-content:space-between;align-items:center;">
+                            <div>
+                                <span style="font-weight:bold;color:#fca5a5;">CUL2A - Transponder Troubleshoot (SDR)</span>
+                                <div style="color:#94a3b8;font-size:0.85em;">N5203U | KT74 inoperative - Cessna 206</div>
+                            </div>
+                            <div style="text-align:right;">
+                                <div style="color:#ef4444;font-weight:bold;font-size:1.2em;">+8.5h over</div>
+                                <div style="color:#fca5a5;font-size:0.9em;">~$1,853 margin loss</div>
+                            </div>
+                        </div>
+                        <div style="margin-top:10px;color:#fde68a;font-size:0.85em;">💡 Recommend: Complex transponder issues → Quote T&M upfront</div>
+                    </div>
+                    <div style="background:rgba(251,191,36,0.15);padding:15px;border-radius:8px;border-left:4px solid #f59e0b;">
+                        <div style="display:flex;justify-content:space-between;align-items:center;">
+                            <div>
+                                <span style="font-weight:bold;color:#fde68a;">CUPFA - ADC Replacement (SDN)</span>
+                                <div style="color:#94a3b8;font-size:0.85em;">N176MG | Replace #2 ADC - G-IV</div>
+                            </div>
+                            <div style="text-align:right;">
+                                <div style="color:#f59e0b;font-weight:bold;font-size:1.2em;">+1.9h over</div>
+                                <div style="color:#fde68a;font-size:0.9em;">~$414 margin loss</div>
+                            </div>
+                        </div>
+                        <div style="margin-top:10px;color:#a7f3d0;font-size:0.85em;">✓ Minor variance - within acceptable range for complex aircraft</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- T&M JOBS -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">🔧 T&M Jobs (No NQA Match)</span>
+                    <span class="badge badge-gray">9 Jobs | 72.5h</span>
+                </div>
+                <div style="color:#94a3b8;font-size:0.9em;margin-bottom:15px;">
+                    These jobs don't have a matching NQA flat rate - billed at actual hours worked (T&M).
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr><th>WO#</th><th>Reg</th><th>Shop</th><th>Squawk</th><th style="text-align:right;">Hours</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>CU0VA</td><td>N84RJ</td><td>SDR</td><td>GSU75 AHRS intermittent red x</td><td style="text-align:right;">31.5h</td></tr>
+                            <tr><td>CU1EA</td><td>N505RR</td><td>SDN</td><td>Tail Number Restrap</td><td style="text-align:right;">15.0h</td></tr>
+                            <tr><td>CU1EA</td><td>N505RR</td><td>SDN</td><td>SATCOM Restrap</td><td style="text-align:right;">5.0h</td></tr>
+                            <tr><td>CU1EA</td><td>N505RR</td><td>SDN</td><td>SVS troubleshooting</td><td style="text-align:right;">2.5h</td></tr>
+                            <tr><td>CU1EA</td><td>N505RR</td><td>SDN</td><td>Databases for NAV, and charts</td><td style="text-align:right;">2.0h</td></tr>
+                            <tr><td>CU1EA</td><td>N505RR</td><td>SDN</td><td>Travel to BJC</td><td style="text-align:right;">6.5h</td></tr>
+                            <tr><td>CUPFA</td><td>N176MG</td><td>SDN</td><td>Troubleshoot leaks on P/S system</td><td style="text-align:right;">7.0h</td></tr>
+                            <tr><td>CVLNA</td><td>N197GA</td><td>SDN</td><td>Travel Time</td><td style="text-align:right;">2.0h</td></tr>
+                            <tr><td>DVR0A</td><td>STOCK</td><td>SDN</td><td>Repair Servo</td><td style="text-align:right;">1.0h</td></tr>
+                            <tr style="font-weight:bold;background:rgba(255,255,255,0.1);">
+                                <td colspan="4">TOTAL T&M</td>
+                                <td style="text-align:right;">72.5h</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- NQA SYSTEM INFO -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">📝 NQA System Reference</span>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:15px;">
+                    <div style="background:rgba(20,184,166,0.15);padding:15px;border-radius:8px;border:1px solid #14b8a6;">
+                        <div style="font-weight:bold;color:#14b8a6;margin-bottom:8px;">📋 NQA Applies To:</div>
+                        <div style="color:#e2e8f0;font-size:0.9em;">
+                            • SDN (Service)<br>
+                            • SDR (Service)<br>
+                            • SHC (Service/Hardware)<br>
+                            • Standard troubleshooting jobs<br>
+                            • Cert inspections (91.411/413)
+                        </div>
+                    </div>
+                    <div style="background:rgba(139,92,246,0.15);padding:15px;border-radius:8px;border:1px solid #8b5cf6;">
+                        <div style="font-weight:bold;color:#8b5cf6;margin-bottom:8px;">🚫 NOT NQA (Quote Separately):</div>
+                        <div style="color:#e2e8f0;font-size:0.9em;">
+                            • SDV (Installs) - Standard quotes<br>
+                            • Complex troubleshooting - T&M<br>
+                            • Custom/unusual work - T&M<br>
+                            • Travel time - T&M
+                        </div>
+                    </div>
+                </div>
+                <div style="margin-top:15px;background:#0f172a;padding:15px;border-radius:8px;">
+                    <div style="color:#94a3b8;font-size:0.9em;">
+                        <strong style="color:#14b8a6;">NQA Decision Rule:</strong><br>
+                        If monthly variance is consistently <span style="color:#ef4444;">POSITIVE (over flat rate)</span> → Adjust NQA prices or switch to T&M<br>
+                        If monthly variance is <span style="color:#10b981;">NEGATIVE (under flat rate)</span> → NQA system is profitable, keep it
+                    </div>
+                </div>
+                <div style="margin-top:10px;background:#1e1b4b;padding:10px;border-radius:6px;font-size:0.85em;color:#c4b5fd;">
+                    <strong>📊 Price Items Master:</strong> 160 NQA items loaded | Implied rate: ~$218/hr | Source: AS400 Price Item Search
                 </div>
             </div>
         </div>
