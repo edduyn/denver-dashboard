@@ -50,7 +50,6 @@
         .tab-quality { border-left: 3px solid #06b6d4; }
         .tab-rankings { border-left: 3px solid #eab308; }
         .tab-wip { border-left: 3px solid #22c55e; }
-        .tab-nqa { border-left: 3px solid #14b8a6; }
         .tab-training { border-left: 3px solid #a855f7; }
         
         /* Content */
@@ -104,7 +103,7 @@
         .action-item { display: flex; align-items: center; gap: 12px; padding: 12px; background: rgba(0,0,0,0.2); border-radius: 8px; margin-bottom: 8px; }
         .action-check { width: 24px; height: 24px; border: 2px solid #64748b; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
         .action-check.checked { background: #10b981; border-color: #10b981; }
-        .action-check.checked::after { content: '✓'; color: #fff; font-weight: bold; }
+        .action-check.checked::after { content: '✔'; color: #fff; font-weight: bold; }
         .action-text { flex: 1; }
         .action-priority { padding: 2px 8px; border-radius: 4px; font-size: 0.75em; }
         .priority-high { background: #ef4444; color: #fff; }
@@ -132,7 +131,7 @@
     <!-- Login Screen -->
     <div class="login-screen" id="loginScreen">
         <div class="login-box">
-            <h1>🛩️ Denver Satellite</h1>
+            <h1>🛩️ Denver Satellite</h1>
             <p>Department 889 Performance Dashboard</p>
             <input type="password" id="passwordInput" placeholder="Enter access code" onkeypress="if(event.key==='Enter')login()">
             <button onclick="login()">Access Dashboard</button>
@@ -150,8 +149,8 @@
             <div class="header-right">
                 <span class="status-indicator" id="statusIndicator">Ready</span>
                 <button class="header-btn btn-full" onclick="toggleFullscreen()">⛶ Full</button>
-                <button class="header-btn btn-rotate" id="rotateBtn" onclick="toggleRotate()">▶️ Auto</button>
-                <button class="header-btn btn-lock" onclick="logout()">🔒 Lock</button>
+                <button class="header-btn btn-rotate" id="rotateBtn" onclick="toggleRotate()">▶️ Auto</button>
+                <button class="header-btn btn-lock" onclick="logout()">🔑 Lock</button>
             </div>
         </div>
         
@@ -164,7 +163,6 @@
             <div class="tab tab-training" data-tab="training">📚 Training</div>
             <div class="tab tab-quality" data-tab="quality">✅ Quality</div>
             <div class="tab tab-wip" data-tab="wip">💰 WIP</div>
-            <div class="tab tab-nqa" data-tab="nqa">📋 NQA</div>
             <div class="tab tab-rankings" data-tab="rankings">🏆 Rankings</div>
         </div>
         
@@ -201,7 +199,7 @@
                     </div>
                     <!-- Completed Surveys -->
                     <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-                        <span style="font-size:0.85em;color:#10b981;width:80px;">✅ Completed</span>
+                        <span style="font-size:0.85em;color:#10b981;width:80px;">âœ… Completed</span>
                         <div class="progress-container" style="flex:1;margin:0;">
                             <div class="progress-bar"><div id="npsCompletedBar" class="progress-fill progress-green" style="width:0%"></div></div>
                         </div>
@@ -231,7 +229,7 @@
                         <div class="progress-bar"><div class="progress-fill progress-amber" style="width:50%"></div></div>
                     </div>
                     <div>Training: 0/14 sessions completed | Technical: 7/8 scheduled (88%)</div>
-                    <div class="goal-notes">⏳ 14 sessions available. Watson now registered Apr 13-17. Only Juan needs dates.</div>
+                    <div class="goal-notes">â³ 14 sessions available. Watson now registered Apr 13-17. Only Juan needs dates.</div>
                 </div>
                 
                 <div class="goal-card">
@@ -275,7 +273,7 @@
                     <div class="progress-container">
                         <div class="progress-bar"><div class="progress-fill progress-amber" style="width:0%"></div></div>
                     </div>
-                    <div>Current: Awaiting financial data | Target: ≤2.5% of revenue</div>
+                    <div>Current: Awaiting financial data | Target: â‰¤2.5% of revenue</div>
                     <div class="goal-notes">📊 Expense data available after month-end financial reports.</div>
                 </div>
                 
@@ -322,19 +320,19 @@
                                     <td>58.5%</td>
                                     <td style="color:#f59e0b;font-weight:bold;">32.5%</td>
                                     <td style="color:#f59e0b;">-26.0 pts</td>
-                                    <td><span style="color:#f59e0b;">🟡 In Progress (↑)</span></td>
+                                    <td><span style="color:#f59e0b;">🟡 In Progress (â†‘)</span></td>
                                 </tr>
-                                <tr><td>Feb</td><td>58.5%</td><td style="color:#64748b;">--</td><td>--</td><td><span style="color:#64748b;">⏳ Upcoming</span></td></tr>
-                                <tr><td>Mar</td><td>58.5%</td><td style="color:#64748b;">--</td><td>--</td><td><span style="color:#64748b;">⏳ Upcoming</span></td></tr>
-                                <tr><td>Apr</td><td>58.5%</td><td style="color:#64748b;">--</td><td>--</td><td><span style="color:#64748b;">⏳ Upcoming</span></td></tr>
-                                <tr><td>May</td><td>58.5%</td><td style="color:#64748b;">--</td><td>--</td><td><span style="color:#64748b;">⏳ Upcoming</span></td></tr>
-                                <tr><td>Jun</td><td>58.5%</td><td style="color:#64748b;">--</td><td>--</td><td><span style="color:#64748b;">⏳ Upcoming</span></td></tr>
-                                <tr><td>Jul</td><td>58.5%</td><td style="color:#64748b;">--</td><td>--</td><td><span style="color:#64748b;">⏳ Upcoming</span></td></tr>
-                                <tr><td>Aug</td><td>58.5%</td><td style="color:#64748b;">--</td><td>--</td><td><span style="color:#64748b;">⏳ Upcoming</span></td></tr>
-                                <tr><td>Sep</td><td>58.5%</td><td style="color:#64748b;">--</td><td>--</td><td><span style="color:#64748b;">⏳ Upcoming</span></td></tr>
-                                <tr><td>Oct</td><td>58.5%</td><td style="color:#64748b;">--</td><td>--</td><td><span style="color:#64748b;">⏳ Upcoming</span></td></tr>
-                                <tr><td>Nov</td><td>58.5%</td><td style="color:#64748b;">--</td><td>--</td><td><span style="color:#64748b;">⏳ Upcoming</span></td></tr>
-                                <tr><td>Dec</td><td>58.5%</td><td style="color:#64748b;">--</td><td>--</td><td><span style="color:#64748b;">⏳ Upcoming</span></td></tr>
+                                <tr><td>Feb</td><td>58.5%</td><td style="color:#64748b;">--</td><td>--</td><td><span style="color:#64748b;">â³ Upcoming</span></td></tr>
+                                <tr><td>Mar</td><td>58.5%</td><td style="color:#64748b;">--</td><td>--</td><td><span style="color:#64748b;">â³ Upcoming</span></td></tr>
+                                <tr><td>Apr</td><td>58.5%</td><td style="color:#64748b;">--</td><td>--</td><td><span style="color:#64748b;">â³ Upcoming</span></td></tr>
+                                <tr><td>May</td><td>58.5%</td><td style="color:#64748b;">--</td><td>--</td><td><span style="color:#64748b;">â³ Upcoming</span></td></tr>
+                                <tr><td>Jun</td><td>58.5%</td><td style="color:#64748b;">--</td><td>--</td><td><span style="color:#64748b;">â³ Upcoming</span></td></tr>
+                                <tr><td>Jul</td><td>58.5%</td><td style="color:#64748b;">--</td><td>--</td><td><span style="color:#64748b;">â³ Upcoming</span></td></tr>
+                                <tr><td>Aug</td><td>58.5%</td><td style="color:#64748b;">--</td><td>--</td><td><span style="color:#64748b;">â³ Upcoming</span></td></tr>
+                                <tr><td>Sep</td><td>58.5%</td><td style="color:#64748b;">--</td><td>--</td><td><span style="color:#64748b;">â³ Upcoming</span></td></tr>
+                                <tr><td>Oct</td><td>58.5%</td><td style="color:#64748b;">--</td><td>--</td><td><span style="color:#64748b;">â³ Upcoming</span></td></tr>
+                                <tr><td>Nov</td><td>58.5%</td><td style="color:#64748b;">--</td><td>--</td><td><span style="color:#64748b;">â³ Upcoming</span></td></tr>
+                                <tr><td>Dec</td><td>58.5%</td><td style="color:#64748b;">--</td><td>--</td><td><span style="color:#64748b;">â³ Upcoming</span></td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -353,7 +351,7 @@
                             <div style="color:#ef4444;font-size:1.2em;font-weight:bold;">0/12</div>
                         </div>
                     </div>
-                    <div class="goal-notes">📊 <strong>Tracker System:</strong> ✅ Implemented | <strong>Execution:</strong> Need +33.3 pts to hit Jan target. Focus on billable hour assignments.</div>
+                    <div class="goal-notes">📊 <strong>Tracker System:</strong> âœ… Implemented | <strong>Execution:</strong> Need +33.3 pts to hit Jan target. Focus on billable hour assignments.</div>
                 </div>
                 
                 <div class="goal-card">
@@ -368,7 +366,7 @@
                         <div class="progress-bar"><div class="progress-fill progress-green" style="width:100%"></div></div>
                     </div>
                     <div>2026 Programs: <strong>1 Completed</strong> / 1 Total | WO: DUSFA (Concorde Holdings)</div>
-                    <div class="goal-notes">✅ DP2026.00486 Collins CASP - Completed. Tracking 2026 programs only.</div>
+                    <div class="goal-notes">âœ… DP2026.00486 Collins CASP - Completed. Tracking 2026 programs only.</div>
                 </div>
                 
                 <div class="goal-card">
@@ -383,7 +381,7 @@
                         <div class="progress-bar"><div class="progress-fill progress-green" style="width:100%"></div></div>
                     </div>
                     <div>Target: Communicate to BZ within 30 days of dispute | <strong>2026 Emails: 1</strong></div>
-                    <div class="goal-notes">✅ CG4NA communicated 1/21. Forward BZ emails to Claude for tracking.</div>
+                    <div class="goal-notes">âœ… CG4NA communicated 1/21. Forward BZ emails to Claude for tracking.</div>
                 </div>
                 
                 <div class="goal-card">
@@ -407,15 +405,15 @@
         <div class="content" id="actions">
             <div class="card">
                 <div class="card-header">
-                    <span class="card-title">☀️ Morning Checklist</span>
+                    <span class="card-title">â˜€ï¸ Morning Checklist</span>
                     <span class="badge badge-green">01/28/26</span>
                 </div>
-                <div class="action-item"><div class="action-check checked"></div><span class="action-text">Review yesterday's Time Sold report</span><span style="color:#10b981;font-size:0.8em;margin-left:auto;">✓ Processed</span></div>
-                <div class="action-item"><div class="action-check checked"></div><span class="action-text">Check Anchor for WOs ready to bill</span><span style="color:#10b981;font-size:0.8em;margin-left:auto;">✓ 71 open, 3 AOG</span></div>
+                <div class="action-item"><div class="action-check checked"></div><span class="action-text">Review yesterday's Time Sold report</span><span style="color:#10b981;font-size:0.8em;margin-left:auto;">✔ Processed</span></div>
+                <div class="action-item"><div class="action-check checked"></div><span class="action-text">Check Anchor for WOs ready to bill</span><span style="color:#10b981;font-size:0.8em;margin-left:auto;">✔ 71 open, 3 AOG</span></div>
                 <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">Assign techs to billable customer work first</span></div>
                 <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">Touch base with low performers</span><span style="color:#f59e0b;font-size:0.8em;margin-left:auto;">Douglas, Ken, Jose</span></div>
                 <div style="background:#0f172a;padding:8px;border-radius:6px;margin-top:10px;font-size:0.75em;color:#94a3b8;">
-                    📊 <strong>Reports processed:</strong> Anchor ✓ (01/29 10:32 AM) | Time Sold ✓ (10:32 AM) | Paid Hrs ✓ (12:27 PM)
+                    📊 <strong>Reports processed:</strong> Anchor ✔ (01/29 10:32 AM) | Time Sold ✔ (10:32 AM) | Paid Hrs ✔ (12:27 PM)
                 </div>
             </div>
             
@@ -424,9 +422,9 @@
                     <span class="card-title">🌙 End of Day Checklist</span>
                     <span class="badge badge-green">01/28/26</span>
                 </div>
-                <div class="action-item"><div class="action-check checked"></div><span class="action-text">Pull daily reports (Time Sold, Billed, Anchor)</span><span style="color:#10b981;font-size:0.8em;margin-left:auto;">✓ All pulled</span></div>
-                <div class="action-item"><div class="action-check checked"></div><span class="action-text">Upload to Claude for analysis</span><span style="color:#10b981;font-size:0.8em;margin-left:auto;">✓ Dashboard updated</span></div>
-                <div class="action-item"><div class="action-check checked"></div><span class="action-text">Bill any completed WOs (within 1 week target)</span><span style="color:#10b981;font-size:0.8em;margin-left:auto;">✓ DTBLA, DSW4A billed</span></div>
+                <div class="action-item"><div class="action-check checked"></div><span class="action-text">Pull daily reports (Time Sold, Billed, Anchor)</span><span style="color:#10b981;font-size:0.8em;margin-left:auto;">✔ All pulled</span></div>
+                <div class="action-item"><div class="action-check checked"></div><span class="action-text">Upload to Claude for analysis</span><span style="color:#10b981;font-size:0.8em;margin-left:auto;">✔ Dashboard updated</span></div>
+                <div class="action-item"><div class="action-check checked"></div><span class="action-text">Bill any completed WOs (within 1 week target)</span><span style="color:#10b981;font-size:0.8em;margin-left:auto;">✔ DTBLA, DSW4A billed</span></div>
                 <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">Plan tomorrow's assignments</span></div>
                 <div style="background:#0f172a;padding:8px;border-radius:6px;margin-top:10px;font-size:0.75em;color:#94a3b8;">
                     📈 <strong>Today's results:</strong> A/B 25.2% | Billable 528h | Paid 2,093h | 71 open WOs
@@ -438,18 +436,18 @@
                     <span class="card-title">🚨 Critical Actions</span>
                     <span class="badge badge-red">Urgent</span>
                 </div>
-                <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">⭐ NPS Survey - One-Click in Goals tab - READY!</span><span class="action-priority priority-high">HIGH</span></div>
+                <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">⭐ NPS Survey - One-Click in Goals tab - READY!</span><span class="action-priority priority-high">HIGH</span></div>
                 <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">Douglas Riera Guzman - improved to 8h billable (keep momentum)</span><span class="action-priority priority-high">HIGH</span></div>
                 <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">Guillermo Tovar S. - improved to 36% (good progress!)</span><span class="action-priority priority-high">HIGH</span></div>
                 <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">CG4NA - 188 days old, vendor dispute (Kauffman)</span><span class="action-priority priority-high">HIGH</span></div>
                 <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">Watson, Andrew - MidYear Review due Feb 4 (8 days)</span><span class="action-priority priority-high">HIGH</span></div>
                 <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">Guillermo Tovar S. - 90-Day Review due Feb 8 (12 days)</span><span class="action-priority priority-high">HIGH</span></div>
-                <div class="action-item"><div class="action-check checked" onclick="this.classList.toggle('checked')"></div><span class="action-text">✅ Reply to Brian Zitek Over 30 list with WO notes</span><span class="action-priority" style="background:#10b981;color:#fff">DONE</span></div>
+                <div class="action-item"><div class="action-check checked" onclick="this.classList.toggle('checked')"></div><span class="action-text">âœ… Reply to Brian Zitek Over 30 list with WO notes</span><span class="action-priority" style="background:#10b981;color:#fff">DONE</span></div>
             </div>
             
             <div class="card" style="border:2px solid #60a5fa;">
                 <div class="card-header">
-                    <span class="card-title">📅 Weekly Goals</span>
+                    <span class="card-title">📧 Weekly Goals</span>
                     <span class="badge badge-blue">Week of 01/27</span>
                 </div>
                 
@@ -477,8 +475,8 @@
                         <span id="weeklyAgingStatus" class="badge badge-amber">2 / 5</span>
                     </div>
                     <div style="display:flex;gap:5px;flex-wrap:wrap;">
-                        <span style="background:#10b981;color:white;padding:2px 8px;border-radius:4px;font-size:0.8em;">✅ DTBLA</span>
-                        <span style="background:#10b981;color:white;padding:2px 8px;border-radius:4px;font-size:0.8em;">✅ DSW4A</span>
+                        <span style="background:#10b981;color:white;padding:2px 8px;border-radius:4px;font-size:0.8em;">âœ… DTBLA</span>
+                        <span style="background:#10b981;color:white;padding:2px 8px;border-radius:4px;font-size:0.8em;">âœ… DSW4A</span>
                         <span style="background:#374151;color:#9ca3af;padding:2px 8px;border-radius:4px;font-size:0.8em;">⬜ 3 more needed</span>
                     </div>
                     <div style="color:#94a3b8;font-size:0.8em;margin-top:5px;">CG4NA (188 days) still in dispute</div>
@@ -488,7 +486,7 @@
                 <div style="background:#1e293b;padding:12px;border-radius:8px;">
                     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
                         <span style="color:#e2e8f0;">🏆 Move up to 17th rank (pass Austin & St. Louis)</span>
-                        <span id="weeklyRankStatus" class="badge badge-amber">19th → 17th</span>
+                        <span id="weeklyRankStatus" class="badge badge-amber">19th â†’ 17th</span>
                     </div>
                     <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;font-size:0.85em;">
                         <div style="text-align:center;padding:5px;background:#0f172a;border-radius:4px;">
@@ -500,7 +498,7 @@
                             <div style="color:#f59e0b;font-weight:bold;">35.4%</div>
                         </div>
                         <div style="text-align:center;padding:5px;background:#0f172a;border-radius:4px;border:1px solid #f59e0b;">
-                            <div style="color:#f59e0b;">19th Denver ↑</div>
+                            <div style="color:#f59e0b;">19th Denver â†‘</div>
                             <div style="color:#f59e0b;font-weight:bold;">32.5%</div>
                         </div>
                         <div style="text-align:center;padding:5px;background:#0f172a;border-radius:4px;">
@@ -508,14 +506,14 @@
                             <div style="color:#ef4444;font-weight:bold;">26.3%</div>
                         </div>
                     </div>
-                    <div style="color:#10b981;font-size:0.8em;margin-top:5px;">✅ Passed KC! Need +2.9 pts to pass Austin, +9.7 pts to pass St. Louis</div>
+                    <div style="color:#10b981;font-size:0.8em;margin-top:5px;">âœ… Passed KC! Need +2.9 pts to pass Austin, +9.7 pts to pass St. Louis</div>
                 </div>
             </div>
             
             <!-- NPS SURVEY CANDIDATES -->
             <div class="card" style="border:2px solid #a855f7;">
                 <div class="card-header">
-                    <span class="card-title">⭐ NPS Survey - Goal #2</span>
+                    <span class="card-title">⭐ NPS Survey - Goal #2</span>
                     <span class="badge" id="npsBadge" style="background:#ef4444;">Jan: 0/1 ⚠️</span>
                 </div>
                 
@@ -574,7 +572,7 @@
                     </div>
                     
                     <div id="npsError" style="display:none;color:#fca5a5;font-size:0.85em;margin-top:10px;text-align:center;">⚠️ Please enter customer name and email</div>
-                    <div id="npsSuccess" style="display:none;color:#86efac;font-size:0.85em;margin-top:10px;text-align:center;">✅ Survey logged!</div>
+                    <div id="npsSuccess" style="display:none;color:#86efac;font-size:0.85em;margin-top:10px;text-align:center;">âœ… Survey logged!</div>
                 </div>
                 
                 <!-- Tracking Table -->
@@ -601,12 +599,12 @@
                         <div><span style="color:#64748b;">WO:</span> <span style="color:#fbbf24;">DTBLA</span></div>
                         <div><span style="color:#64748b;">Customer:</span> <span style="color:white;">Peregrine</span></div>
                         <div><span style="color:#64748b;">Amount:</span> <span style="color:#10b981;">$6,856</span></div>
-                        <button onclick="fillNps('Peregrine','ths@masd.metrea.aero','DTBLA','')" style="background:#10b981;color:white;border:none;padding:8px 15px;border-radius:4px;font-size:0.9em;cursor:pointer;font-weight:bold;">✓ Auto-Fill</button>
+                        <button onclick="fillNps('Peregrine','ths@masd.metrea.aero','DTBLA','')" style="background:#10b981;color:white;border:none;padding:8px 15px;border-radius:4px;font-size:0.9em;cursor:pointer;font-weight:bold;">✔ Auto-Fill</button>
                     </div>
                 </div>
                 
                 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-                    <span style="color:#94a3b8;font-size:0.85em;">📊 Customer Email Database: <span id="customerDbCount">46</span> contacts (Updated 01/30 8:20AM) - <span style="color:#a78bfa;">1 per customer/month</span></span>
+                    <span style="color:#94a3b8;font-size:0.85em;">📊 Customer Email Database: <span id="customerDbCount">46</span> contacts (Updated 01/30 1:47PM) - <span style="color:#a78bfa;">1 per customer/month</span></span>
                     <label style="font-size:0.8em;color:#94a3b8;cursor:pointer;">
                         <input type="checkbox" id="showSentCustomers" onchange="renderCustomerTable()" style="margin-right:5px;">
                         Show all
@@ -634,7 +632,7 @@
         <!-- OVERVIEW TAB -->
         <div class="content" id="overview">
             <div class="alert-banner">
-                ⚠️ A/B RATIO: 32.5% vs 58.5% Target | Gap: -26.0 pts | Rank: 19th of 21 | +5.7 pts vs last week ✅
+                ⚠️ A/B RATIO: 32.5% vs 58.5% Target | Gap: -26.0 pts | Rank: 19th of 21 | +5.7 pts vs last week âœ…
             </div>
             
             <!-- A/B COMPARISON CARD -->
@@ -651,7 +649,7 @@
                         <div style="color:#fca5a5;font-size:0.9em;margin-top:5px;">Gap: -26.0 pts | <span style="color:#4ade80;">+5.7 vs last wk</span></div>
                     </div>
                     <div style="background:linear-gradient(135deg,#1e293b,#334155);padding:20px;border-radius:12px;text-align:center;">
-                        <div style="color:#cbd5e1;font-size:0.9em;margin-bottom:5px;">🌐 NETWORK AVERAGE</div>
+                        <div style="color:#cbd5e1;font-size:0.9em;margin-bottom:5px;">🌍 NETWORK AVERAGE</div>
                         <div style="font-size:2.8em;font-weight:bold;color:#f59e0b;">49.2%</div>
                         <div style="color:#94a3b8;font-size:0.85em;margin-top:8px;">Budget: 58.7%</div>
                         <div style="color:#fca5a5;font-size:0.9em;margin-top:5px;">Gap: -9.5 pts</div>
@@ -672,7 +670,7 @@
                     </div>
                 </div>
                 <div style="background:#14532d;padding:10px;border-radius:6px;margin-top:10px;font-size:0.85em;color:#bbf7d0;">
-                    ✅ <strong>Improving!</strong> Up from 26.8% last week. Keep pushing billable hours.
+                    âœ… <strong>Improving!</strong> Up from 26.8% last week. Keep pushing billable hours.
                 </div>
             </div>
             
@@ -698,9 +696,9 @@
                         <div class="metric-sub">35% of $694K goal</div>
                     </div>
                     <div class="metric">
-                        <div class="metric-value">50</div>
+                        <div class="metric-value">49</div>
                         <div class="metric-label">Billed WOs</div>
-                        <div class="metric-sub">$92K GP (37.8%)</div>
+                        <div class="metric-sub">$91K GP</div>
                     </div>
                 </div>
             </div>
@@ -739,7 +737,7 @@
             <div class="card">
                 <div class="card-header">
                     <span class="card-title">Employee Performance - A/B Efficiency</span>
-                    <span class="badge badge-amber">Target: 58.5% | Updated 01/30 8:17 AM</span>
+                    <span class="badge badge-amber">Target: 58.5% | Updated 01/30 1:47 PM</span>
                 </div>
                 <div class="table-container">
                     <table>
@@ -750,14 +748,14 @@
                             <tr style="background:rgba(16,185,129,0.2)"><td>1</td><td>Sean Macoomb</td><td>111.0h</td><td>160.0h</td><td>69%</td><td><span class="badge badge-green">Above Target</span></td></tr>
                             <tr style="background:rgba(16,185,129,0.2)"><td>2</td><td>Juan Medina</td><td>110.5h</td><td>160.0h</td><td>69%</td><td><span class="badge badge-green">Above Target</span></td></tr>
                             <tr><td>3</td><td>Julia Langford</td><td>72.5h</td><td>162.0h</td><td>45%</td><td><span class="badge badge-amber">Below Target</span></td></tr>
-                            <tr><td>4</td><td>Michael Huber</td><td>64.0h</td><td>162.0h</td><td>40%</td><td><span class="badge badge-amber">Below Target</span></td></tr>
-                            <tr><td>5</td><td>Kim Owen</td><td>58.2h</td><td>161.5h</td><td>36%</td><td><span class="badge badge-amber">Below Target</span></td></tr>
-                            <tr><td>6</td><td>Armando Triana-Cruz</td><td>54.5h</td><td>160.0h</td><td>34%</td><td><span class="badge badge-red">Critical</span></td></tr>
+                            <tr><td>4</td><td>Michael Huber</td><td>64.0h</td><td>163.0h</td><td>39%</td><td><span class="badge badge-amber">Below Target</span></td></tr>
+                            <tr><td>5</td><td>Kim Owen</td><td>58.2h</td><td>164.5h</td><td>35%</td><td><span class="badge badge-amber">Below Target</span></td></tr>
+                            <tr><td>6</td><td>Armando Triana-Cruz</td><td>111.5h</td><td>160.0h</td><td>34%</td><td><span class="badge badge-red">Critical</span></td></tr>
                             <tr><td>7</td><td>Guillermo Tovar S.</td><td>49.0h</td><td>159.5h</td><td>31%</td><td><span class="badge badge-red">Critical</span></td></tr>
                             <tr><td>8</td><td>Andrew Watson</td><td>40.5h</td><td>138.5h</td><td>29%</td><td><span class="badge badge-red">Critical</span></td></tr>
-                            <tr><td>9</td><td>Jose Noris</td><td>43.0h</td><td>158.0h</td><td>27%</td><td><span class="badge badge-red">Critical</span></td></tr>
-                            <tr><td>10</td><td>Ken Smith</td><td>37.0h</td><td>167.0h</td><td>22%</td><td><span class="badge badge-red">Critical</span></td></tr>
-                            <tr><td>11</td><td>John Watson</td><td>30.0h</td><td>138.5h</td><td>22%</td><td><span class="badge badge-red">Critical</span></td></tr>
+                            <tr><td>9</td><td>Jose Noris</td><td>43.0h</td><td>160.0h</td><td>27%</td><td><span class="badge badge-red">Critical</span></td></tr>
+                            <tr><td>10</td><td>Ken Smith</td><td>37.0h</td><td>168.0h</td><td>22%</td><td><span class="badge badge-red">Critical</span></td></tr>
+                            <tr><td>11</td><td>John Watson</td><td>30.0h</td><td>160.0h</td><td>19%</td><td><span class="badge badge-red">Critical</span></td></tr>
                             <tr><td>12</td><td>Douglas Riera Guzman</td><td>11.0h</td><td>160.0h</td><td>7%</td><td><span class="badge badge-red">Critical</span></td></tr>
                         </tbody>
                     </table>
@@ -817,33 +815,33 @@
             <div class="card">
                 <div class="card-header">
                     <span class="card-title">💰 WIP by Shop (Open WOs)</span>
-                    <span class="badge badge-blue">01/30/26 8:17 AM</span>
+                    <span class="badge badge-blue">01/30/26 1:47 PM</span>
                 </div>
                 <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin-bottom:15px;">
                     <div style="background:linear-gradient(135deg,#1e40af,#3b82f6);padding:15px;border-radius:10px;text-align:center;">
                         <div style="font-size:0.8em;color:#bfdbfe;">SDN (Line)</div>
-                        <div style="font-size:1.8em;font-weight:bold;">$14,428</div>
-                        <div style="font-size:0.8em;color:#93c5fd;">99.5h × $145</div>
+                        <div style="font-size:1.8em;font-weight:bold;">$19,111</div>
+                        <div style="font-size:0.8em;color:#93c5fd;">131.8h Ã— $145</div>
                     </div>
                     <div style="background:linear-gradient(135deg,#854d0e,#ca8a04);padding:15px;border-radius:10px;text-align:center;border:2px solid #fbbf24;">
-                        <div style="font-size:0.8em;color:#fef3c7;">SDV (Install) ⭐</div>
-                        <div style="font-size:1.8em;font-weight:bold;">$9,240</div>
-                        <div style="font-size:0.8em;color:#fde68a;">132.0h × $70</div>
+                        <div style="font-size:0.8em;color:#fef3c7;">SDV (Install) ⭐</div>
+                        <div style="font-size:1.8em;font-weight:bold;">$13,230</div>
+                        <div style="font-size:0.8em;color:#fde68a;">189.0h Ã— $70</div>
                     </div>
                     <div style="background:linear-gradient(135deg,#c2410c,#f97316);padding:15px;border-radius:10px;text-align:center;">
                         <div style="font-size:0.8em;color:#fed7aa;">SDR (Recip)</div>
-                        <div style="font-size:1.8em;font-weight:bold;">$15,515</div>
-                        <div style="font-size:0.8em;color:#fdba74;">107.0h × $145</div>
+                        <div style="font-size:1.8em;font-weight:bold;">$16,153</div>
+                        <div style="font-size:0.8em;color:#fdba74;">111.4h Ã— $145</div>
                     </div>
                     <div style="background:linear-gradient(135deg,#475569,#64748b);padding:15px;border-radius:10px;text-align:center;">
                         <div style="font-size:0.8em;color:#cbd5e1;">SHC</div>
-                        <div style="font-size:1.8em;font-weight:bold;">$0</div>
-                        <div style="font-size:0.8em;color:#94a3b8;">0.0h × $145</div>
+                        <div style="font-size:1.8em;font-weight:bold;">$1,812</div>
+                        <div style="font-size:0.8em;color:#94a3b8;">12.5h Ã— $145</div>
                     </div>
                 </div>
                 <div style="background:#0f172a;padding:10px;border-radius:6px;font-size:0.85em;color:#94a3b8;">
-                    💡 <strong>Total WIP:</strong> $39,182 (338.5h sold on OPEN WOs) | SDV @ $70/hr, others @ $145/hr<br>
-                    ⭐ <strong>SDV Special (for Matt) >10h:</strong> CVN0A (38.5h/$2.7K), CV78A (16h/$1.1K) = <strong style="color:#fbbf24;">$3,815</strong> (excl DB1UA)
+                    💡 <strong>Total WIP:</strong> $50,306 (444.7h sold on OPEN WOs) | SDV @ $70/hr, others @ $145/hr<br>
+                    ⭐ <strong>SDV Special (for Matt) >10h:</strong> CVN0A (38.5h/$2.7K), CV78A (16h/$1.1K) = <strong style="color:#fbbf24;">$7,805</strong> (excl DB1UA)
                 </div>
             </div>
             
@@ -851,10 +849,10 @@
             <div class="card">
                 <div class="card-header">
                     <span class="card-title">📋 January WIP - Top WOs by Value</span>
-                    <span class="badge badge-green">Open in Anchor (01/27/26)</span>
+                    <span class="badge badge-green">Open in Anchor (01/30/26)</span>
                 </div>
                 <div style="background:#14532d;padding:8px;border-radius:6px;margin-bottom:10px;font-size:0.8em;color:#bbf7d0;">
-                    🤖 <strong>Auto-detected:</strong> Time Sold × Anchor (OPEN) × Billed (excluded)
+                    🤖 <strong>Auto-detected:</strong> Time Sold Ã— Anchor (OPEN) Ã— Billed (excluded)
                 </div>
                 <div class="table-container">
                     <table>
@@ -862,31 +860,31 @@
                             <tr><th>WO#</th><th>Shop</th><th>Customer</th><th>Hours</th><th>Rate</th><th style="color:#10b981">WIP $</th></tr>
                         </thead>
                         <tbody>
-                            <tr><td>CTQMA</td><td>SDR</td><td>Robert P Husted <span style="color:#f59e0b;font-size:0.75em;">⚠️ audit</span></td><td>43.5h</td><td>$145</td><td style="color:#10b981;font-weight:bold">$6,308</td></tr>
-                            <tr style="background:rgba(147,51,234,0.15)"><td>DB1UA 📍</td><td>SDV</td><td>Hogs Head Air 1 LLC <span style="color:#a855f7;font-size:0.75em;">(NJ - Juan loaned)</span></td><td>75.0h</td><td style="color:#a855f7">$70</td><td style="color:#a855f7;font-weight:bold">$5,250</td></tr>
+                            <tr><td>CTQMA</td><td>SDR</td><td>Robert P Husted <span style="color:#f59e0b;font-size:0.75em;">⚠️ audit</span></td><td>59.0h</td><td>$145</td><td style="color:#10b981;font-weight:bold">$8,555</td></tr>
+                            <tr style="background:rgba(147,51,234,0.15)"><td>DB1UA 🔍</td><td>SDV</td><td>Hogs Head Air 1 LLC <span style="color:#a855f7;font-size:0.75em;">(NJ - Juan loaned)</span></td><td>73.0h</td><td style="color:#a855f7">$70</td><td style="color:#a855f7;font-weight:bold">$5,110</td></tr>
                             <tr><td>CU1EA</td><td>SDN</td><td>42K Re Management LLC</td><td>35.5h</td><td>$145</td><td style="color:#10b981;font-weight:bold">$5,148</td></tr>
-                            <tr style="background:rgba(16,185,129,0.25)"><td>CU16A ✅</td><td>SDN</td><td>Flying Orchard LLC <span style="color:#10b981;font-size:0.75em;">(billing this week)</span></td><td>30.5h</td><td>$145</td><td style="color:#10b981;font-weight:bold">$4,422</td></tr>
-                            <tr><td>CU0VA</td><td>SDR</td><td>The Club at Centennial <span style="color:#f59e0b;font-size:0.75em;">⚠️ audit</span></td><td>21.5h</td><td>$145</td><td style="color:#10b981;font-weight:bold">$3,118</td></tr>
-                            <tr><td>CUPFA</td><td>SDN</td><td>Flying Orchard LLC</td><td>15.9h</td><td>$145</td><td style="color:#10b981;font-weight:bold">$2,306</td></tr>
-                            <tr><td>CU92A</td><td>SDN</td><td>Robbins Aviation</td><td>15.0h</td><td>$145</td><td style="color:#10b981;font-weight:bold">$2,175</td></tr>
+                            <tr style="background:rgba(16,185,129,0.25)"><td>CU97A âœ…</td><td>SDN</td><td>Circadian Aviation LLC</td><td>26.0h</td><td>$145</td><td style="color:#10b981;font-weight:bold">$3,770</td></tr>
+                            <tr><td>CU0VA</td><td>SDR</td><td>Aspen Flying Club <span style="color:#f59e0b;font-size:0.75em;">⚠️ audit</span></td><td>35.5h</td><td>$145</td><td style="color:#10b981;font-weight:bold">$5,148</td></tr>
+                            <tr><td>CUPFA</td><td>SDN</td><td>Flying Orchard LLC</td><td>16.0h</td><td>$145</td><td style="color:#10b981;font-weight:bold">$2,320</td></tr>
+                            <tr><td>CUL2A</td><td>SDR</td><td>Peregrine</td><td>12.5h</td><td>$145</td><td style="color:#10b981;font-weight:bold">$1,812</td></tr>
                             <tr><td>CUL2A</td><td>SDR</td><td>Peregrine</td><td>12.5h</td><td>$145</td><td style="color:#10b981;font-weight:bold">$1,812</td></tr>
                             <tr style="background:rgba(16,185,129,0.2);font-weight:bold;font-size:1.1em;">
                                 <td colspan="4">TOP 8 WIP</td>
-                                <td>249h</td>
-                                <td style="color:#10b981">$30,539</td>
+                                <td>298h</td>
+                                <td style="color:#10b981">$38,181</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
                 <div style="background:#0f172a;padding:10px;border-radius:6px;margin-top:10px;font-size:0.85em;color:#94a3b8;">
-                    💡 <strong>WIP = Work that will carry to February</strong> (if not billed by Jan 31). Excluded: DUXFA, CUS4A, DUL0A (not in Anchor - already closed/billed).
+                    💡 <strong>WIP = Work that will carry to February</strong> (if not billed by Jan 31). Data from 01/30/26 reports. Shows WIP on open WOs.
                 </div>
             </div>
             
             <!-- SCHEDULED INSTALLS -->
             <div class="card">
                 <div class="card-header">
-                    <span class="card-title">📅 Scheduled Installs (SDV)</span>
+                    <span class="card-title">📧 Scheduled Installs (SDV)</span>
                     <span class="badge badge-amber">Jan-Mar 2026</span>
                 </div>
                 <div class="table-container">
@@ -928,23 +926,23 @@
                     <span class="badge badge-purple">Days to Bill</span>
                 </div>
                 <div style="background:#14532d;padding:10px;border-radius:6px;margin-bottom:15px;font-size:0.85em;color:#bbf7d0;">
-                    <strong style="color:#4ade80;">🤖 AUTO-CORRELATION:</strong> Anchor WOs × Calendar Events (SDN/SDR Service) | Updated: 01/27/26 PM
+                    <strong style="color:#4ade80;">🤖 AUTO-CORRELATION:</strong> Anchor WOs Ã— Calendar Events (SDN/SDR Service) | Updated: 01/27/26 PM
                 </div>
                 
                 <!-- Status Summary -->
                 <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:15px;">
                     <div style="background:linear-gradient(135deg,#1e40af,#3b82f6);padding:12px;border-radius:8px;text-align:center;">
-                        <div style="font-size:0.75em;color:#93c5fd;">🔧 In Progress</div>
+                        <div style="font-size:0.75em;color:#93c5fd;">🔥 In Progress</div>
                         <div style="font-size:1.5em;font-weight:bold;color:#fff;">7</div>
                         <div style="font-size:0.7em;color:#bfdbfe;">Being worked today</div>
                     </div>
                     <div style="background:linear-gradient(135deg,#065f46,#10b981);padding:12px;border-radius:8px;text-align:center;">
-                        <div style="font-size:0.75em;color:#a7f3d0;">✅ Worked On</div>
+                        <div style="font-size:0.75em;color:#a7f3d0;">âœ… Worked On</div>
                         <div style="font-size:1.5em;font-weight:bold;color:#fff;">4</div>
                         <div style="font-size:0.7em;color:#bbf7d0;">Review for billing</div>
                     </div>
                     <div style="background:linear-gradient(135deg,#854d0e,#f59e0b);padding:12px;border-radius:8px;text-align:center;">
-                        <div style="font-size:0.75em;color:#fef3c7;">📅 Scheduled</div>
+                        <div style="font-size:0.75em;color:#fef3c7;">📧 Scheduled</div>
                         <div style="font-size:1.5em;font-weight:bold;color:#fff;">1</div>
                         <div style="font-size:0.7em;color:#fde68a;">Future work</div>
                     </div>
@@ -964,7 +962,7 @@
                                 <tr><th>WO#</th><th>Customer</th><th>Hours</th><th>WIP</th><th>Calendar Dates</th><th>Tech</th><th>Action</th></tr>
                             </thead>
                             <tbody>
-                                <tr style="background:rgba(16,185,129,0.25)"><td><strong>CU16A</strong> ✅</td><td>Flying Orchard</td><td>30.5h</td><td style="color:#10b981;font-weight:bold;">$4,422</td><td>Jan 5-7</td><td>HUBER/Julia</td><td style="color:#10b981;">Billing this week</td></tr>
+                                <tr style="background:rgba(16,185,129,0.25)"><td><strong>CU16A</strong> âœ…</td><td>Flying Orchard</td><td>30.5h</td><td style="color:#10b981;font-weight:bold;">$4,422</td><td>Jan 5-7</td><td>HUBER/Julia</td><td style="color:#10b981;">Billing this week</td></tr>
                                 <tr><td><strong>CU92A</strong></td><td>Robbins Aviation</td><td>15.0h</td><td style="color:#10b981;font-weight:bold;">$2,175</td><td>Jan 12-27</td><td>CRUZA/SMIKZ</td><td style="color:#f59e0b;">Ready to bill?</td></tr>
                                 <tr><td><strong>CUPFA</strong></td><td>Flying Orchard</td><td>15.9h</td><td style="color:#10b981;font-weight:bold;">$2,306</td><td>Jan 19-21</td><td>HUBER</td><td style="color:#f59e0b;">Ready to bill?</td></tr>
                                 <tr><td><strong>CV5EA</strong></td><td>Precision Aircraft</td><td>4.5h</td><td style="color:#10b981;font-weight:bold;">$653</td><td>Jan 20-21</td><td>CRUZA/SMIKZ</td><td style="color:#f59e0b;">Ready to bill?</td></tr>
@@ -981,8 +979,8 @@
                 <!-- Currently In Progress - CALENDAR DRIVEN -->
                 <div style="background:rgba(59,130,246,0.15);border:1px solid #3b82f6;border-radius:8px;padding:15px;margin-bottom:15px;">
                     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-                        <span style="color:#3b82f6;font-weight:bold;">🔧 IN PROGRESS TODAY (Jan 29)</span>
-                        <span style="font-size:0.75em;color:#60a5fa;">📅 Source: SDN/SDR Calendars</span>
+                        <span style="color:#3b82f6;font-weight:bold;">🔥 IN PROGRESS TODAY (Jan 29)</span>
+                        <span style="font-size:0.75em;color:#60a5fa;">📧 Source: SDN/SDR Calendars</span>
                     </div>
                     <div class="table-container">
                         <table>
@@ -1008,7 +1006,7 @@
                                 <tr><th>WO#</th><th>Shop</th><th>Customer</th><th>Hours</th><th>WIP</th><th>Action Needed</th></tr>
                             </thead>
                             <tbody>
-                                <tr style="background:rgba(147,51,234,0.15)"><td>DB1UA 📍</td><td>SDV</td><td>Hogs Head Air 1 LLC</td><td>75.0h</td><td style="color:#a855f7;">$5,250</td><td style="color:#a855f7;font-size:0.8em;">NJ controlled - no action</td></tr>
+                                <tr style="background:rgba(147,51,234,0.15)"><td>DB1UA 🔍</td><td>SDV</td><td>Hogs Head Air 1 LLC</td><td>75.0h</td><td style="color:#a855f7;">$5,250</td><td style="color:#a855f7;font-size:0.8em;">NJ controlled - no action</td></tr>
                                 <tr><td>CUL2A</td><td>SDR</td><td>Peregrine</td><td>12.5h</td><td>$1,812</td><td style="color:#ef4444;font-size:0.8em;">Add to SDR calendar</td></tr>
                                 <tr><td>CV78A</td><td>SDV</td><td>Primus Capital</td><td>8.0h</td><td style="color:#fbbf24;">$560</td><td style="color:#ef4444;font-size:0.8em;">Add to SDV calendar</td></tr>
                                 <tr><td>CVN0A</td><td>SDV</td><td>Stevens Aerospace</td><td>5.0h</td><td style="color:#fbbf24;">$350</td><td style="color:#ef4444;font-size:0.8em;">Add to SDV calendar</td></tr>
@@ -1024,7 +1022,7 @@
                     <strong style="color:#8b5cf6;">📊 DAYS TO BILL INSIGHT:</strong> 
                     "Worked On" WOs (4) totaling <strong style="color:#10b981;">$9,556</strong> may be ready for billing review. 
                     Calendar dates show work completed but WOs still open in Anchor.<br>
-                    <span style="color:#64748b;">Data sources: SDN Service Calendar + SDR Service Calendar → Anchor Report (01/27/26)</span>
+                    <span style="color:#64748b;">Data sources: SDN Service Calendar + SDR Service Calendar â†’ Anchor Report (01/27/26)</span>
                 </div>
             </div>
             
@@ -1067,11 +1065,11 @@
                             </thead>
                             <tbody>
                                 <tr style="background:rgba(239,68,68,0.15)">
-                                    <td><strong>DB1UA</strong> 📍</td>
+                                    <td><strong>DB1UA</strong> 🔍</td>
                                     <td>Hogs Head Air 1 LLC</td>
                                     <td>73.0h</td>
                                     <td style="color:#a855f7;font-weight:bold;">$5,110</td>
-                                    <td style="color:#ef4444;">❌ Not Set</td>
+                                    <td style="color:#ef4444;">âŒ Not Set</td>
                                     <td style="color:#64748b;font-size:0.8em;">NJ controlled</td>
                                 </tr>
                                 <tr style="background:rgba(239,68,68,0.15)">
@@ -1079,7 +1077,7 @@
                                     <td>Primus Capital</td>
                                     <td>8.0h</td>
                                     <td style="color:#a855f7;font-weight:bold;">$560</td>
-                                    <td style="color:#ef4444;">❌ Not Set</td>
+                                    <td style="color:#ef4444;">âŒ Not Set</td>
                                     <td style="color:#ef4444;font-size:0.8em;">Add estimate</td>
                                 </tr>
                                 <tr style="background:rgba(16,185,129,0.15)">
@@ -1087,7 +1085,7 @@
                                     <td>Stevens Aerospace</td>
                                     <td>5.0h</td>
                                     <td style="color:#a855f7;font-weight:bold;">$350</td>
-                                    <td style="color:#10b981;">✅ 41.0h</td>
+                                    <td style="color:#10b981;">âœ… 41.0h</td>
                                     <td style="color:#10b981;font-size:0.8em;">Under estimate!</td>
                                 </tr>
                                 <tr style="background:rgba(147,51,234,0.2);font-weight:bold;">
@@ -1115,10 +1113,35 @@
             <div class="card" style="border:2px solid #10b981;">
                 <div class="card-header">
                     <span class="card-title">💰 Flat Rate Profitability Analysis (January 2026 Billed)</span>
-                    <span class="badge badge-green">✅ System is PROFITABLE</span>
+                    <span class="badge badge-green">âœ… System is PROFITABLE</span>
                 </div>
                 <div style="background:rgba(16,185,129,0.15);padding:10px;border-radius:6px;margin-bottom:15px;font-size:0.85em;color:#a7f3d0;">
                     <strong style="color:#10b981;">📊 DATA SOURCE:</strong> Billed WO Report (AS400) | 42 WOs | $182K Revenue | Updated: 01/27/26 3:40 PM
+                </div>
+                
+                <!-- FLAT RATE ANALYSIS - WO REPORTS NEEDED -->
+                <div style="background:linear-gradient(135deg,#78350f,#92400e);padding:15px;border-radius:8px;margin-bottom:15px;border:2px dashed #fbbf24;">
+                    <div style="display:flex;align-items:center;gap:10px;">
+                        <span style="font-size:1.5em;">📋</span>
+                        <div>
+                            <div style="color:#fbbf24;font-weight:bold;">ACTION: Squawk-Level Hours Reports Needed for Claude</div>
+                            <div style="color:#fef3c7;font-size:0.9em;margin-top:5px;">Pull "Hours per WO" report from AS400 for these billed WOs and upload to Claude:</div>
+                        </div>
+                    </div>
+                    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;">
+                        <span style="background:#10b981;padding:4px 10px;border-radius:4px;font-size:0.8em;text-decoration:line-through;">✓ CVLNA</span>
+                        <span style="background:#10b981;padding:4px 10px;border-radius:4px;font-size:0.8em;text-decoration:line-through;">✓ CU16A</span>
+                        <span style="background:#7f1d1d;padding:4px 10px;border-radius:4px;font-size:0.8em;">DTBLA (48.5h)</span>
+                        <span style="background:#7f1d1d;padding:4px 10px;border-radius:4px;font-size:0.8em;">CT8VA (21.9h)</span>
+                        <span style="background:#7f1d1d;padding:4px 10px;border-radius:4px;font-size:0.8em;">CUGZA (17.9h)</span>
+                        <span style="background:#7f1d1d;padding:4px 10px;border-radius:4px;font-size:0.8em;">CU44A (17.9h)</span>
+                        <span style="background:#7f1d1d;padding:4px 10px;border-radius:4px;font-size:0.8em;">CSAZA (14.4h)</span>
+                        <span style="background:#7f1d1d;padding:4px 10px;border-radius:4px;font-size:0.8em;">CU56A (11.9h)</span>
+                        <span style="background:#7f1d1d;padding:4px 10px;border-radius:4px;font-size:0.8em;">CUKYA (9.9h)</span>
+                        <span style="background:#7f1d1d;padding:4px 10px;border-radius:4px;font-size:0.8em;">CS1XA (10.3h)</span>
+                        <span style="background:#7f1d1d;padding:4px 10px;border-radius:4px;font-size:0.8em;">CUS4A (26.4h)</span>
+                    </div>
+                    <div style="color:#fde68a;font-size:0.8em;margin-top:10px;">📊 Progress: 2/11 WOs | 39.9h analyzed | TM vs FR: <strong style="color:#4ade80;">+$4,780 advantage</strong></div>
                 </div>
                 
                 <!-- Profitability Summary Cards -->
@@ -1202,7 +1225,7 @@
                                     <td>$47,894</td>
                                     <td style="color:#10b981;">+$3,793</td>
                                     <td style="color:#10b981;">$156/hr</td>
-                                    <td><span class="badge badge-green">✅ NET PROFIT</span></td>
+                                    <td><span class="badge badge-green">âœ… NET PROFIT</span></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -1248,17 +1271,17 @@
                 
                 <div style="background:#0f172a;padding:15px;border-radius:6px;font-size:0.85em;color:#94a3b8;">
                     <strong style="color:#10b981;">📊 KEY INSIGHTS:</strong><br>
-                    • <strong>SDN & SDR are profitable</strong> - billing above $145/hr effective rate<br>
-                    • <strong>SDV needs attention</strong> - effective rate $132/hr (losing $13/hr vs target)<br>
-                    • <strong>Overall system is working</strong> - $3,793 profit vs hourly billing<br>
-                    • <span style="color:#f59e0b;">Still need flat rate pricing report to see which specific service rates need adjustment</span>
+                    â€¢ <strong>SDN & SDR are profitable</strong> - billing above $145/hr effective rate<br>
+                    â€¢ <strong>SDV needs attention</strong> - effective rate $132/hr (losing $13/hr vs target)<br>
+                    â€¢ <strong>Overall system is working</strong> - $3,793 profit vs hourly billing<br>
+                    â€¢ <span style="color:#f59e0b;">Still need flat rate pricing report to see which specific service rates need adjustment</span>
                 </div>
             </div>
             
             <!-- AGING ANALYSIS -->
             <div class="card">
                 <div class="card-header">
-                    <span class="card-title">📅 Top 10 Open WOs by WIP</span>
+                    <span class="card-title">📧 Top 10 Open WOs by WIP</span>
                     <span class="badge badge-blue">$36,456 Total WIP</span>
                 </div>
                 <div class="table-container">
@@ -1269,7 +1292,7 @@
                         <tbody>
                             <tr><td><strong>CTQMA</strong></td><td>SDR</td><td>Robert P Husted</td><td>43.5h</td><td>$145</td><td style="color:#10b981;font-weight:bold;">$6,308</td><td style="font-size:0.8em;">QA audit cited</td></tr>
                             <tr><td><strong>CU1EA</strong></td><td>SDN</td><td>42K RE MGMT</td><td>35.5h</td><td>$145</td><td style="color:#10b981;font-weight:bold;">$5,148</td><td style="color:#f59e0b;font-size:0.8em;">Push to bill</td></tr>
-                            <tr><td><strong>DB1UA</strong> 📍</td><td>SDV</td><td>Hogs Head Air</td><td>73.0h</td><td>$70</td><td style="color:#a855f7;font-weight:bold;">$5,110</td><td style="color:#64748b;font-size:0.8em;">NJ controlled</td></tr>
+                            <tr><td><strong>DB1UA</strong> 🔍</td><td>SDV</td><td>Hogs Head Air</td><td>73.0h</td><td>$70</td><td style="color:#a855f7;font-weight:bold;">$5,110</td><td style="color:#64748b;font-size:0.8em;">NJ controlled</td></tr>
                             <tr><td><strong>CU16A</strong></td><td>SDN</td><td>Flying Orchard</td><td>30.5h</td><td>$145</td><td style="color:#10b981;font-weight:bold;">$4,422</td><td style="color:#10b981;font-size:0.8em;">Billing this week</td></tr>
                             <tr><td><strong>CU0VA</strong></td><td>SDR</td><td>Club at Centennial</td><td>27.5h</td><td>$145</td><td style="color:#10b981;font-weight:bold;">$3,988</td><td style="font-size:0.8em;">QA audit cited</td></tr>
                             <tr><td><strong>CU97A</strong></td><td>SDN</td><td>Circadian Aviation</td><td>20.0h</td><td>$145</td><td style="color:#10b981;font-weight:bold;">$2,900</td><td style="color:#f59e0b;font-size:0.8em;">Review status</td></tr>
@@ -1296,7 +1319,7 @@
             <div class="card">
                 <div class="card-header">
                     <span class="card-title">⚠️ Over 30 Days (BZ List)</span>
-                    <span class="badge badge-green">✅ CLEAR</span>
+                    <span class="badge badge-green">âœ… CLEAR</span>
                 </div>
                 <div style="background:rgba(16,185,129,0.2);padding:15px;border-radius:6px;margin-bottom:15px;font-size:0.9em;border:2px solid #10b981;">
                     🎉 <strong style="color:#10b981;">Denver is in the clear!</strong> Per Brian's 01/28 email - only long-term dispute remains.
@@ -1307,15 +1330,15 @@
                             <tr><th>WO#</th><th>Shop</th><th>Days</th><th>WIP $</th><th>Status</th><th>Action/Notes</th></tr>
                         </thead>
                         <tbody>
-                            <tr style="background:rgba(16,185,129,0.2)"><td>DTBLA</td><td>SDV</td><td>40</td><td>$1,327</td><td><span class="badge badge-green">✅ BILLED</span></td><td>Billed 01/26/26</td></tr>
-                            <tr style="background:rgba(16,185,129,0.2)"><td>DSW4A</td><td>SDN</td><td>48</td><td>$52,763</td><td><span class="badge badge-green">✅ BILLED</span></td><td>Billed before EOM ✅</td></tr>
+                            <tr style="background:rgba(16,185,129,0.2)"><td>DTBLA</td><td>SDV</td><td>40</td><td>$1,327</td><td><span class="badge badge-green">âœ… BILLED</span></td><td>Billed 01/26/26</td></tr>
+                            <tr style="background:rgba(16,185,129,0.2)"><td>DSW4A</td><td>SDN</td><td>48</td><td>$52,763</td><td><span class="badge badge-green">âœ… BILLED</span></td><td>Billed before EOM âœ…</td></tr>
                             <tr style="background:rgba(239,68,68,0.15)"><td>CG4NA</td><td>SDN</td><td>188</td><td>$2,486</td><td><span class="badge badge-red">🔴 DISPUTE</span></td><td>Kauffman owner was in ICU, hope to resolve soon</td></tr>
                         </tbody>
                     </table>
                 </div>
                 <div style="background:#0f172a;padding:10px;border-radius:6px;margin-top:10px;font-size:0.85em;color:#94a3b8;">
                     <strong style="color:#60a5fa;">📋 Data Sources:</strong> Over30 report (Brian) + Billed WO report (auto-detect billed status)<br>
-                    <strong style="color:#f59e0b;">⏰ 30-Day Rule:</strong> Communicate to BZ within 30 days for any disputes
+                    <strong style="color:#f59e0b;">â° 30-Day Rule:</strong> Communicate to BZ within 30 days for any disputes
                 </div>
             </div>
         </div>
@@ -1365,13 +1388,13 @@
                             <tr><th>Employee</th><th>Course</th><th>Location</th><th>Dates</th><th>Status</th></tr>
                         </thead>
                         <tbody>
-                            <tr style="background:rgba(16,185,129,0.15)"><td>Armando Triana-Cruz</td><td>Honeywell Primus EPIC Line Maint</td><td>Dallas, TX</td><td>Apr 27 - May 1</td><td><span class="badge badge-green">✅ Scheduled</span></td></tr>
-                            <tr style="background:rgba(16,185,129,0.15)"><td>Michael Huber</td><td>Virtual Garmin G3000/G5000</td><td>Virtual</td><td>Jan 28-29</td><td><span class="badge badge-green">✅ Scheduled</span></td></tr>
-                            <tr style="background:rgba(16,185,129,0.15)"><td>Jose Noris</td><td>Virtual Garmin G1000 NXi</td><td>Virtual</td><td>Feb 26-27</td><td><span class="badge badge-green">✅ Scheduled</span></td></tr>
-                            <tr style="background:rgba(16,185,129,0.15)"><td>Michael Hannas</td><td>Virtual Garmin G3000/G5000</td><td>Virtual</td><td>Jun 17-18</td><td><span class="badge badge-green">✅ Scheduled</span></td></tr>
-                            <tr style="background:rgba(16,185,129,0.15)"><td>Julia Langford</td><td>Virtual Garmin G3000/G5000</td><td>Virtual</td><td>Jan 28-29</td><td><span class="badge badge-green">✅ Scheduled</span></td></tr>
-                            <tr style="background:rgba(16,185,129,0.15)"><td>Ken Smith</td><td>Virtual Gogo Dealer Training</td><td>Virtual</td><td>TBD</td><td><span class="badge badge-green">✅ Scheduled</span></td></tr>
-                            <tr style="background:rgba(16,185,129,0.15)"><td>John Watson</td><td>aeroIT Certification</td><td>TBD</td><td>Apr 13-17</td><td><span class="badge badge-green">✅ Registered</span></td></tr>
+                            <tr style="background:rgba(16,185,129,0.15)"><td>Armando Triana-Cruz</td><td>Honeywell Primus EPIC Line Maint</td><td>Dallas, TX</td><td>Apr 27 - May 1</td><td><span class="badge badge-green">âœ… Scheduled</span></td></tr>
+                            <tr style="background:rgba(16,185,129,0.15)"><td>Michael Huber</td><td>Virtual Garmin G3000/G5000</td><td>Virtual</td><td>Jan 28-29</td><td><span class="badge badge-green">âœ… Scheduled</span></td></tr>
+                            <tr style="background:rgba(16,185,129,0.15)"><td>Jose Noris</td><td>Virtual Garmin G1000 NXi</td><td>Virtual</td><td>Feb 26-27</td><td><span class="badge badge-green">âœ… Scheduled</span></td></tr>
+                            <tr style="background:rgba(16,185,129,0.15)"><td>Michael Hannas</td><td>Virtual Garmin G3000/G5000</td><td>Virtual</td><td>Jun 17-18</td><td><span class="badge badge-green">âœ… Scheduled</span></td></tr>
+                            <tr style="background:rgba(16,185,129,0.15)"><td>Julia Langford</td><td>Virtual Garmin G3000/G5000</td><td>Virtual</td><td>Jan 28-29</td><td><span class="badge badge-green">âœ… Scheduled</span></td></tr>
+                            <tr style="background:rgba(16,185,129,0.15)"><td>Ken Smith</td><td>Virtual Gogo Dealer Training</td><td>Virtual</td><td>TBD</td><td><span class="badge badge-green">âœ… Scheduled</span></td></tr>
+                            <tr style="background:rgba(16,185,129,0.15)"><td>John Watson</td><td>aeroIT Certification</td><td>TBD</td><td>Apr 13-17</td><td><span class="badge badge-green">âœ… Registered</span></td></tr>
                             <tr style="background:rgba(245,158,11,0.15)"><td>Juan Medina</td><td>Composite Repair</td><td>Lincoln, NE</td><td>TBD</td><td><span class="badge badge-amber">⚠️ Dates TBD</span></td></tr>
                         </tbody>
                     </table>
@@ -1393,7 +1416,7 @@
                 
                 <!-- VI, QI, RTS Recurrent Training -->
                 <div style="margin-bottom:15px;">
-                    <div style="color:#60a5fa;font-weight:bold;margin-bottom:8px;">🔧 VI, QI, RTS Recurrent Training 2026 - Satellites</div>
+                    <div style="color:#60a5fa;font-weight:bold;margin-bottom:8px;">🔥 VI, QI, RTS Recurrent Training 2026 - Satellites</div>
                     <div style="display:flex;flex-wrap:wrap;gap:8px;">
                         <span style="background:#1e3a5f;padding:4px 10px;border-radius:4px;font-size:0.85em;">Edduyn Pita</span>
                         <span style="background:#1e3a5f;padding:4px 10px;border-radius:4px;font-size:0.85em;">Jose Noris</span>
@@ -1419,7 +1442,7 @@
                 
                 <!-- CMMC-CUI Security Training -->
                 <div style="margin-bottom:10px;">
-                    <div style="color:#a855f7;font-weight:bold;margin-bottom:8px;">🔒 CMMC-CUI & ISP-1402 Security Training</div>
+                    <div style="color:#a855f7;font-weight:bold;margin-bottom:8px;">🔑 CMMC-CUI & ISP-1402 Security Training</div>
                     <div style="display:flex;flex-wrap:wrap;gap:8px;">
                         <span style="background:#581c87;padding:4px 10px;border-radius:4px;font-size:0.85em;">John Watson</span>
                         <span style="background:#581c87;padding:4px 10px;border-radius:4px;font-size:0.85em;">Jose Noris</span>
@@ -1666,14 +1689,14 @@
                 </div>
                 
                 <div style="background:#0f172a;padding:20px;border-radius:12px;margin-bottom:20px;">
-                    <div style="color:#93c5fd;font-size:1.1em;font-weight:bold;margin-bottom:15px;">Denver tracks THREE different WIP figures — don't confuse them:</div>
+                    <div style="color:#93c5fd;font-size:1.1em;font-weight:bold;margin-bottom:15px;">Denver tracks THREE different WIP figures â€” don't confuse them:</div>
                     
                     <!-- Three WIP Types Grid -->
                     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-bottom:20px;">
                         
                         <!-- WIP Account -->
                         <div style="background:linear-gradient(135deg,#7f1d1d,#991b1b);padding:20px;border-radius:12px;border:2px solid #ef4444;">
-                            <div style="color:#fca5a5;font-size:0.9em;font-weight:bold;margin-bottom:5px;">1️⃣ WIP ACCOUNT 0889.35015</div>
+                            <div style="color:#fca5a5;font-size:0.9em;font-weight:bold;margin-bottom:5px;">1ï¸âƒ£ WIP ACCOUNT 0889.35015</div>
                             <div style="color:#ef4444;font-size:2.2em;font-weight:bold;">-$8,600</div>
                             <div style="color:#fecaca;font-size:0.85em;margin-top:8px;">Accounting ledger balance</div>
                             <div style="color:#f87171;font-size:0.75em;margin-top:5px;font-style:italic;">⚠️ NEGATIVE = In the hole</div>
@@ -1681,18 +1704,18 @@
                         
                         <!-- SDV Total WIP -->
                         <div style="background:linear-gradient(135deg,#065f46,#047857);padding:20px;border-radius:12px;border:2px solid #10b981;">
-                            <div style="color:#6ee7b7;font-size:0.9em;font-weight:bold;margin-bottom:5px;">2️⃣ SDV TOTAL WIP</div>
-                            <div style="color:#10b981;font-size:2.2em;font-weight:bold;">$9,240</div>
-                            <div style="color:#a7f3d0;font-size:0.85em;margin-top:8px;">All open SDV WOs × $70/hr</div>
+                            <div style="color:#6ee7b7;font-size:0.9em;font-weight:bold;margin-bottom:5px;">2ï¸âƒ£ SDV TOTAL WIP</div>
+                            <div style="color:#10b981;font-size:2.2em;font-weight:bold;">$13,230</div>
+                            <div style="color:#a7f3d0;font-size:0.85em;margin-top:8px;">All open SDV WOs Ã— $70/hr</div>
                             <div style="color:#34d399;font-size:0.75em;margin-top:5px;">132.0 hours sold</div>
                         </div>
                         
                         <!-- SDV Special WIP -->
                         <div style="background:linear-gradient(135deg,#78350f,#92400e);padding:20px;border-radius:12px;border:2px solid #f59e0b;">
-                            <div style="color:#fcd34d;font-size:0.9em;font-weight:bold;margin-bottom:5px;">3️⃣ SDV SPECIAL WIP (Matt)</div>
-                            <div style="color:#fbbf24;font-size:2.2em;font-weight:bold;">$3,815</div>
-                            <div style="color:#fde68a;font-size:0.85em;margin-top:8px;">WOs >10h × $70 (excl DB1UA)</div>
-                            <div style="color:#fcd34d;font-size:0.75em;margin-top:5px;">54.5h | CVN0A + CV78A</div>
+                            <div style="color:#fcd34d;font-size:0.9em;font-weight:bold;margin-bottom:5px;">3ï¸âƒ£ SDV SPECIAL WIP (Matt)</div>
+                            <div style="color:#fbbf24;font-size:2.2em;font-weight:bold;">$7,805</div>
+                            <div style="color:#fde68a;font-size:0.85em;margin-top:8px;">WOs >10h Ã— $70 (excl DB1UA)</div>
+                            <div style="color:#fcd34d;font-size:0.75em;margin-top:5px;">111.5h | CVN0A + CV78A</div>
                         </div>
                     </div>
                     
@@ -1700,18 +1723,18 @@
                     <div style="background:#1e293b;padding:15px;border-radius:8px;margin-bottom:15px;">
                         <div style="color:#f8fafc;font-size:0.95em;line-height:1.7;">
                             <strong style="color:#60a5fa;">What's the difference?</strong><br>
-                            • <strong>#2 SDV Total WIP</strong> = All open SDV WOs × $70 (based on actual sold hours)<br>
-                            • <strong>#3 SDV Special WIP</strong> = Only >10h WOs with hours sold in Jan (for Matt's report)<br>
-                            CV78A ($28K) excluded from Jan → work starts Feb 17
+                            â€¢ <strong>#2 SDV Total WIP</strong> = All open SDV WOs Ã— $70 (based on actual sold hours)<br>
+                            â€¢ <strong>#3 SDV Special WIP</strong> = Only >10h WOs with hours sold in Jan (for Matt's report)<br>
+                            CV78A ($28K) excluded from Jan â†’ work starts Feb 17
                         </div>
                     </div>
                     
                     <!-- KEY METHODOLOGY -->
                     <div style="background:linear-gradient(135deg,#1e3a5f,#1e40af);padding:15px;border-radius:8px;border-left:4px solid #60a5fa;">
-                        <div style="color:#93c5fd;font-size:0.95em;font-weight:bold;margin-bottom:8px;">🔑 KEY: WIP = Hours Actually SOLD by Month End</div>
+                        <div style="color:#93c5fd;font-size:0.95em;font-weight:bold;margin-bottom:8px;">🔒 KEY: WIP = Hours Actually SOLD by Month End</div>
                         <div style="color:#e0e7ff;font-size:0.9em;line-height:1.6;">
                             WIP is based on <strong>actual hours charged</strong> to the WO by Jan 31, NOT expected hours.<br>
-                            Example: CV78A has 400h expected, but work starts Feb 17 → <strong>January WIP = $0</strong>, February WIP = $28K
+                            Example: CV78A has 400h expected, but work starts Feb 17 â†’ <strong>January WIP = $0</strong>, February WIP = $28K
                         </div>
                     </div>
                 </div>
@@ -1731,7 +1754,7 @@
                                 </span>
                             </div>
                         </div>
-                        Think of it like a credit card balance — hitting your monthly savings goal doesn't mean much if you're also carrying debt. <strong style="color:#fbbf24;">You need to cover both.</strong>
+                        Think of it like a credit card balance â€” hitting your monthly savings goal doesn't mean much if you're also carrying debt. <strong style="color:#fbbf24;">You need to cover both.</strong>
                     </div>
                     <div style="background:#1e293b;padding:12px;border-radius:8px;margin-top:15px;text-align:center;">
                         <span style="color:#94a3b8;">Your REAL January target to be "whole" = </span>
@@ -1750,11 +1773,11 @@
                 <div style="text-align:center;padding:30px;background:linear-gradient(135deg,#064e3b,#065f46);border-radius:12px;margin-bottom:20px;">
                     <div style="color:#6ee7b7;font-size:1em;margin-bottom:5px;">JANUARY WIP (WOs opened this month, still open)</div>
                     <div style="font-size:3.5em;font-weight:bold;color:#10b981;">$26,036</div>
-                    <div style="color:#a7f3d0;font-size:1.1em;margin-top:10px;">203.3 hours × WIP rates | 33 WOs</div>
+                    <div style="color:#a7f3d0;font-size:1.1em;margin-top:10px;">203.3 hours Ã— WIP rates | 33 WOs</div>
                 </div>
                 
                 <div style="background:#0f172a;padding:15px;border-radius:8px;border-left:4px solid #10b981;">
-                    <div style="font-size:1.1em;font-weight:bold;color:#10b981;margin-bottom:8px;">✅ WIP Methodology (Correct)</div>
+                    <div style="font-size:1.1em;font-weight:bold;color:#10b981;margin-bottom:8px;">âœ… WIP Methodology (Correct)</div>
                     <div style="color:#e2e8f0;line-height:1.6;">
                         <strong>Current Month WIP</strong> = Hours on WOs <u>opened this month</u> that are still open.<br>
                         <strong>Prior Month WOs</strong> = Already WIP'd when they opened. NOT included again.<br>
@@ -1767,10 +1790,10 @@
             <div class="card" style="border:2px solid #f59e0b;">
                 <div class="card-header">
                     <span class="card-title">📧 SDV Special WIP List - FOR MATT</span>
-                    <span class="badge badge-green">✅ Based on SOLD Hours 01/30/26</span>
+                    <span class="badge badge-green">âœ… Based on SOLD Hours 01/30/26</span>
                 </div>
                 <div style="background:#14532d;padding:12px;border-radius:8px;margin-bottom:15px;">
-                    <strong style="color:#4ade80;">✅ WIP = Hours SOLD (not expected)</strong>
+                    <strong style="color:#4ade80;">âœ… WIP = Hours SOLD (not expected)</strong>
                     <span style="color:#bbf7d0;">These are actual hours charged to open SDV WOs with >10h sold.</span>
                 </div>
                 <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:15px;margin-bottom:15px;">
@@ -1793,20 +1816,23 @@
                             <tr><th>WO#</th><th>Customer</th><th>Sold Hrs</th><th>WIP @ $70</th><th>Notes</th></tr>
                         </thead>
                         <tbody>
-                            <tr style="background:rgba(147,51,234,0.2)"><td><strong>DB1UA</strong> 📍</td><td>Hogs Head Air 1 LLC</td><td style="color:#a855f7;">73.0h</td><td style="color:#a855f7;">$5,110</td><td style="font-size:0.8em;color:#a855f7;">NJ controlled - EXCLUDE from Matt</td></tr>
+                            <tr style="background:rgba(147,51,234,0.2)"><td><strong>DB1UA</strong> 🔍</td><td>Hogs Head Air 1 LLC</td><td style="color:#a855f7;">73.0h</td><td style="color:#a855f7;">$5,110</td><td style="font-size:0.8em;color:#a855f7;">NJ controlled - EXCLUDE from Matt</td></tr>
                             <tr style="background:rgba(16,185,129,0.2)"><td><strong>CVN0A</strong></td><td>Stevens Aerospace (N4QL)</td><td style="color:#10b981;font-weight:bold;">38.5h</td><td style="color:#fbbf24;font-weight:bold">$2,695</td><td style="font-size:0.8em;">ARTEX ELT Install</td></tr>
+                            <tr style="background:rgba(16,185,129,0.2)"><td><strong>DUL0A</strong></td><td>SDV Install WO</td><td style="color:#10b981;font-weight:bold;">24.5h</td><td style="color:#fbbf24;font-weight:bold">$1,715</td><td style="font-size:0.8em;">NEW >10h this period</td></tr>
+                            <tr style="background:rgba(16,185,129,0.2)"><td><strong>DUXCA</strong></td><td>SDV Install WO</td><td style="color:#10b981;font-weight:bold;">16.5h</td><td style="color:#fbbf24;font-weight:bold">$1,155</td><td style="font-size:0.8em;">NEW >10h this period</td></tr>
+                            <tr style="background:rgba(16,185,129,0.2)"><td><strong>DUXFA</strong></td><td>SDV Install WO</td><td style="color:#10b981;font-weight:bold;">16.0h</td><td style="color:#fbbf24;font-weight:bold">$1,120</td><td style="font-size:0.8em;">NEW >10h this period</td></tr>
                             <tr style="background:rgba(16,185,129,0.2)"><td><strong>CV78A</strong></td><td>Primus Capital (N303JJ)</td><td style="color:#10b981;font-weight:bold;">16.0h</td><td style="color:#fbbf24;font-weight:bold">$1,120</td><td style="font-size:0.8em;">Gogo L3 - more hours coming Feb</td></tr>
                             <tr style="background:rgba(251,191,36,0.2);font-weight:bold;">
                                 <td colspan="2">TOTAL FOR MATT (excl DB1UA)</td>
-                                <td>54.5h</td>
-                                <td style="color:#fbbf24;">$3,815</td>
+                                <td>111.5h</td>
+                                <td style="color:#fbbf24;">$7,805</td>
                                 <td></td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
                 <div style="background:rgba(147,51,234,0.2);padding:10px;border-radius:6px;margin-top:10px;border:1px solid #a855f7;">
-                    <strong style="color:#a855f7;">📍 DB1UA NOTE:</strong> <span style="color:#e9d5ff;">NJ shop controls billing (Juan loaned out). Hours count for Denver metrics but excluded from Matt's SDV Special WIP report.</span>
+                    <strong style="color:#a855f7;">🔍 DB1UA NOTE:</strong> <span style="color:#e9d5ff;">NJ shop controls billing (Juan loaned out). Hours count for Denver metrics but excluded from Matt's SDV Special WIP report.</span>
                 </div>
                 <div style="background:#1e293b;padding:12px;border-radius:8px;margin-top:15px;">
                     <strong style="color:#60a5fa;">📋 Email Template for Matt:</strong>
@@ -1814,18 +1840,21 @@
                         Subject: Denver SDV Special WIP - January 2026<br><br>
                         Matt, here are the SDV WOs with >10 sold hours for special WIP @ $70/hr, 15% margin:<br><br>
                         CVN0A: 38.5h = $2,695 (Stevens Aerospace - ARTEX ELT)<br>
-                        CV78A: 16.0h = $1,120 (Primus Capital - Gogo L3, more hours coming Feb)<br><br>
-                        Total: 54.5h = $3,815<br><br>
+                        DUL0A: 24.5h = $1,715<br>
+                        DUXCA: 16.5h = $1,155<br>
+                        DUXFA: 16.0h = $1,120<br>
+                        CV78A: 16.0h = $1,120 (Primus Capital - Gogo L3)<br><br>
+                        Total: 111.5h = $7,805<br><br>
                         Note: DB1UA (73h/$5,110) excluded - NJ controlled.
                     </div>
                 </div>
                 <div style="background:#0f172a;padding:10px;border-radius:6px;margin-top:10px;font-size:0.8em;color:#94a3b8;">
                     <strong style="color:#4ade80;">🤖 WIP CALCULATION METHOD:</strong><br>
-                    1️⃣ Time Sold report → Get SOLD hours by WO (not expected)<br>
-                    2️⃣ Anchor report → Filter to OPEN WOs only<br>
-                    3️⃣ Cross-reference → Only hours sold on open WOs = WIP<br>
-                    4️⃣ Filter >10h sold → SDV Special WIP for Matt<br>
-                    <span style="color:#4ade80;">✅ Data: Time Sold + Anchor 01/30/26 8:04 AM</span>
+                    1ï¸âƒ£ Time Sold report â†’ Get SOLD hours by WO (not expected)<br>
+                    2ï¸âƒ£ Anchor report â†’ Filter to OPEN WOs only<br>
+                    3ï¸âƒ£ Cross-reference â†’ Only hours sold on open WOs = WIP<br>
+                    4ï¸âƒ£ Filter >10h sold â†’ SDV Special WIP for Matt<br>
+                    <span style="color:#4ade80;">âœ… Data: Time Sold + Anchor 01/30/26 8:04 AM</span>
                 </div>
             </div>
             
@@ -1868,27 +1897,27 @@
                 <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin-bottom:15px;">
                     <div style="background:linear-gradient(135deg,#1e40af,#3b82f6);padding:20px;border-radius:12px;text-align:center;">
                         <div style="font-size:0.85em;color:#bfdbfe;">SDN (Line Avionics)</div>
-                        <div style="font-size:2em;font-weight:bold;color:white;">$14,428</div>
-                        <div style="font-size:0.85em;color:#93c5fd;">99.5h × $145</div>
+                        <div style="font-size:2em;font-weight:bold;color:white;">$19,111</div>
+                        <div style="font-size:0.85em;color:#93c5fd;">131.8h Ã— $145</div>
                     </div>
                     <div style="background:linear-gradient(135deg,#854d0e,#ca8a04);padding:20px;border-radius:12px;text-align:center;border:2px solid #fbbf24;">
-                        <div style="font-size:0.85em;color:#fef3c7;">SDV (Install) ⭐ SPECIAL</div>
-                        <div style="font-size:2em;font-weight:bold;color:white;">$9,240</div>
-                        <div style="font-size:0.85em;color:#fde68a;">132.0h × $70</div>
+                        <div style="font-size:0.85em;color:#fef3c7;">SDV (Install) ⭐ SPECIAL</div>
+                        <div style="font-size:2em;font-weight:bold;color:white;">$13,230</div>
+                        <div style="font-size:0.85em;color:#fde68a;">189.0h Ã— $70</div>
                     </div>
                     <div style="background:linear-gradient(135deg,#c2410c,#f97316);padding:20px;border-radius:12px;text-align:center;">
                         <div style="font-size:0.85em;color:#fed7aa;">SDR (Recip)</div>
-                        <div style="font-size:2em;font-weight:bold;color:white;">$15,515</div>
-                        <div style="font-size:0.85em;color:#fdba74;">107.0h × $145</div>
+                        <div style="font-size:2em;font-weight:bold;color:white;">$16,153</div>
+                        <div style="font-size:0.85em;color:#fdba74;">111.4h Ã— $145</div>
                     </div>
                     <div style="background:linear-gradient(135deg,#475569,#64748b);padding:20px;border-radius:12px;text-align:center;">
                         <div style="font-size:0.85em;color:#e2e8f0;">SHC</div>
-                        <div style="font-size:2em;font-weight:bold;color:white;">$0</div>
-                        <div style="font-size:0.85em;color:#cbd5e1;">0.0h × $145</div>
+                        <div style="font-size:2em;font-weight:bold;color:white;">$1,812</div>
+                        <div style="font-size:0.8em;color:#94a3b8;">12.5h Ã— $145</div>
                     </div>
                 </div>
                 <div style="background:#1e293b;padding:10px;border-radius:6px;font-size:0.85em;color:#e2e8f0;">
-                    <strong style="color:#fbbf24;">⭐ SDV Special WIP:</strong> $70/hr rate, 15% margin. Email list to Matt last week of month for WOs >10 hours.
+                    <strong style="color:#fbbf24;">⭐ SDV Special WIP:</strong> $70/hr rate, 15% margin. Email list to Matt last week of month for WOs >10 hours.
                 </div>
             </div>
             
@@ -1896,10 +1925,10 @@
             <div class="card">
                 <div class="card-header">
                     <span class="card-title">📋 Top 10 WOs by WIP Value</span>
-                    <span class="badge badge-green">Bill these → Get revenue</span>
+                    <span class="badge badge-green">Bill these â†’ Get revenue</span>
                 </div>
                 <div style="background:#14532d;padding:10px;border-radius:6px;margin-bottom:15px;font-size:0.85em;color:#bbf7d0;">
-                    <strong style="color:#4ade80;">🤖 SMART AUTO-DETECT:</strong> Cross-references Time Sold × Anchor (OPEN) × Billed (excluded). Updates when new reports uploaded.
+                    <strong style="color:#4ade80;">🤖 SMART AUTO-DETECT:</strong> Cross-references Time Sold Ã— Anchor (OPEN) Ã— Billed (excluded). Updates when new reports uploaded.
                 </div>
                 <div class="table-container">
                     <table>
@@ -1907,16 +1936,16 @@
                             <tr><th>WO#</th><th>Shop</th><th>Customer</th><th>Hours</th><th>Rate</th><th style="color:#10b981">WIP $</th><th>Notes</th></tr>
                         </thead>
                         <tbody>
-                            <tr><td>CTQMA</td><td>SDR</td><td>Robert P Husted</td><td>43.5h</td><td>$145</td><td style="color:#10b981;font-weight:bold">$6,308</td><td style="color:#f59e0b;font-size:0.75em;">⚠️ Cited in audit</td></tr>
-                            <tr style="background:rgba(147,51,234,0.15)"><td>DB1UA 📍</td><td>SDV</td><td>Hogs Head Air 1 LLC</td><td>75.0h</td><td style="color:#a855f7">$70</td><td style="color:#a855f7;font-weight:bold">$5,250</td><td style="color:#a855f7;font-size:0.75em;">NJ shop - Juan loaned</td></tr>
+                            <tr><td>CTQMA</td><td>SDR</td><td>Robert P Husted</td><td>59.0h</td><td>$145</td><td style="color:#10b981;font-weight:bold">$8,555</td><td style="color:#f59e0b;font-size:0.75em;">⚠️ Cited in audit</td></tr>
+                            <tr style="background:rgba(147,51,234,0.15)"><td>DB1UA 🔍</td><td>SDV</td><td>Hogs Head Air 1 LLC</td><td>73.0h</td><td style="color:#a855f7">$70</td><td style="color:#a855f7;font-weight:bold">$5,110</td><td style="color:#a855f7;font-size:0.75em;">NJ shop - Juan loaned</td></tr>
                             <tr><td>CU1EA</td><td>SDN</td><td>42K Re Management LLC</td><td>35.5h</td><td>$145</td><td style="color:#10b981;font-weight:bold">$5,148</td><td></td></tr>
-                            <tr style="background:rgba(16,185,129,0.25)"><td>CU16A ✅</td><td>SDN</td><td>Flying Orchard LLC</td><td>30.5h</td><td>$145</td><td style="color:#10b981;font-weight:bold">$4,422</td><td style="color:#10b981;font-size:0.75em;">Billing this week</td></tr>
-                            <tr><td>CU0VA</td><td>SDR</td><td>The Club at Centennial</td><td>21.5h</td><td>$145</td><td style="color:#10b981;font-weight:bold">$3,118</td><td style="color:#f59e0b;font-size:0.75em;">⚠️ Cited in audit</td></tr>
-                            <tr><td>CUPFA</td><td>SDN</td><td>Flying Orchard LLC</td><td>15.9h</td><td>$145</td><td style="color:#10b981;font-weight:bold">$2,306</td><td></td></tr>
-                            <tr><td>CU92A</td><td>SDN</td><td>Robbins Aviation</td><td>15.0h</td><td>$145</td><td style="color:#10b981;font-weight:bold">$2,175</td><td></td></tr>
+                            <tr style="background:rgba(16,185,129,0.25)"><td>CU97A âœ…</td><td>SDN</td><td>Flying Orchard LLC</td><td>26.0h</td><td>$145</td><td style="color:#10b981;font-weight:bold">$3,770</td><td style="color:#10b981;font-size:0.75em;">Billing this week</td></tr>
+                            <tr><td>CU0VA</td><td>SDR</td><td>Aspen Flying Club</td><td>35.5h</td><td>$145</td><td style="color:#10b981;font-weight:bold">$5,148</td><td style="color:#f59e0b;font-size:0.75em;">⚠️ Cited in audit</td></tr>
+                            <tr><td>CUPFA</td><td>SDN</td><td>Flying Orchard LLC</td><td>16.0h</td><td>$145</td><td style="color:#10b981;font-weight:bold">$2,320</td><td></td></tr>
+                            <tr><td>CUL2A</td><td>SDR</td><td>Peregrine</td><td>12.5h</td><td>$145</td><td style="color:#10b981;font-weight:bold">$1,812</td><td></td></tr>
                             <tr><td>CUL2A</td><td>SDR</td><td>Peregrine</td><td>12.5h</td><td>$145</td><td style="color:#10b981;font-weight:bold">$1,812</td><td></td></tr>
                             <tr><td>CU97A</td><td>SDN</td><td>Circadian Aviation LLC</td><td>12.0h</td><td>$145</td><td style="color:#10b981;font-weight:bold">$1,740</td><td></td></tr>
-                            <tr style="background:rgba(251,191,36,0.15)"><td>CV78A</td><td>SDV⭐</td><td>Primus Capital</td><td>8.0h</td><td style="color:#fbbf24">$70</td><td style="color:#fbbf24;font-weight:bold">$560</td><td></td></tr>
+                            <tr style="background:rgba(251,191,36,0.15)"><td>CV78A</td><td>SDV⭐</td><td>Primus Capital</td><td>8.0h</td><td style="color:#fbbf24">$70</td><td style="color:#fbbf24;font-weight:bold">$560</td><td></td></tr>
                             <tr style="background:rgba(16,185,129,0.2);font-weight:bold;font-size:1.1em;">
                                 <td colspan="5">TOTAL TOP 10 WIP</td>
                                 <td style="color:#10b981;font-size:1.2em;">$32,838</td>
@@ -1927,14 +1956,14 @@
                 </div>
                 <div style="background:#0f172a;padding:10px;border-radius:6px;margin-top:10px;font-size:0.8em;color:#94a3b8;">
                     <strong style="color:#4ade80;">🤖 AUTO-DETECT LOGIC:</strong><br>
-                    1️⃣ Time Sold report → Get all hours by WO<br>
-                    2️⃣ Anchor report (01/27/26) → Filter OPEN WOs only (71 WOs)<br>
-                    3️⃣ Billed report → EXCLUDE already billed WOs (41 WOs)<br>
-                    4️⃣ Sort by WIP value → Show top 10<br>
-                    <span style="color:#4ade80;">✅ Last verified: 01/28/26 | Excluded: CUS4A, DTBLA, DUL0A, DUXFA (not in Anchor - closed/billed)</span>
+                    1ï¸âƒ£ Time Sold report â†’ Get all hours by WO<br>
+                    2ï¸âƒ£ Anchor report (01/27/26) â†’ Filter OPEN WOs only (71 WOs)<br>
+                    3ï¸âƒ£ Billed report â†’ EXCLUDE already billed WOs (41 WOs)<br>
+                    4ï¸âƒ£ Sort by WIP value â†’ Show top 10<br>
+                    <span style="color:#4ade80;">âœ… Last verified: 01/28/26 | Excluded: CUS4A, DTBLA, DUL0A, DUXFA (not in Anchor - closed/billed)</span>
                 </div>
                 <div style="background:#1e293b;padding:10px;border-radius:6px;margin-top:10px;font-size:0.85em;color:#e2e8f0;">
-                    <span style="color:#fbbf24;">⭐ SDV</span> = Special WIP @ $70/hr | <span style="color:#a855f7;">📍 NJ</span> = Loaned hours (no billing control) | <span style="color:#f59e0b;">⚠️ Audit</span> = Cited in Jan audit
+                    <span style="color:#fbbf24;">⭐ SDV</span> = Special WIP @ $70/hr | <span style="color:#a855f7;">🔍 NJ</span> = Loaned hours (no billing control) | <span style="color:#f59e0b;">⚠️ Audit</span> = Cited in Jan audit
                 </div>
             </div>
             
@@ -1945,10 +1974,10 @@
                 </div>
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:15px;">
                     <div style="background:rgba(16,185,129,0.15);padding:15px;border-radius:8px;border:1px solid #10b981;">
-                        <div style="font-weight:bold;color:#10b981;margin-bottom:8px;">✅ To Increase Revenue:</div>
+                        <div style="font-weight:bold;color:#10b981;margin-bottom:8px;">âœ… To Increase Revenue:</div>
                         <div style="color:#e2e8f0;font-size:0.9em;">
                             1. Review open WOs with high WIP<br>
-                            2. Bill completed work → WIP becomes revenue<br>
+                            2. Bill completed work â†’ WIP becomes revenue<br>
                             3. Push WOs stuck in "Part Ord" or "Tentative"
                         </div>
                     </div>
@@ -1971,18 +2000,18 @@
                 <div style="font-family:monospace;background:#0f172a;padding:20px;border-radius:8px;font-size:1em;line-height:1.8;">
                     <div style="color:#94a3b8;">WIP Calculation:</div>
                     <div style="margin-left:20px;">
-                        <span style="color:#60a5fa;">Hours on open WO</span> × <span style="color:#f59e0b;">WIP Rate</span> = <span style="color:#10b981;">WIP Value</span>
+                        <span style="color:#60a5fa;">Hours on open WO</span> Ã— <span style="color:#f59e0b;">WIP Rate</span> = <span style="color:#10b981;">WIP Value</span>
                     </div>
                     <div style="margin-top:15px;color:#94a3b8;">Example (SDN):</div>
                     <div style="margin-left:20px;">
-                        <span style="color:#60a5fa;">35.5 hours</span> × <span style="color:#f59e0b;">$145</span> = <span style="color:#10b981;">$5,148 WIP</span>
+                        <span style="color:#60a5fa;">35.5 hours</span> Ã— <span style="color:#f59e0b;">$145</span> = <span style="color:#10b981;">$5,148 WIP</span>
                     </div>
                     <div style="margin-top:10px;color:#94a3b8;">Example (SDV - Special):</div>
                     <div style="margin-left:20px;">
-                        <span style="color:#60a5fa;">24.5 hours</span> × <span style="color:#fbbf24;">$70</span> = <span style="color:#fbbf24;">$1,715 WIP</span>
+                        <span style="color:#60a5fa;">24.5 hours</span> Ã— <span style="color:#fbbf24;">$70</span> = <span style="color:#fbbf24;">$1,715 WIP</span>
                     </div>
                     <div style="margin-top:15px;border-top:1px solid #334155;padding-top:15px;">
-                        <span style="color:#94a3b8;">When WO bills → </span><span style="color:#10b981;">WIP becomes Revenue ✓</span>
+                        <span style="color:#94a3b8;">When WO bills â†’ </span><span style="color:#10b981;">WIP becomes Revenue ✔</span>
                     </div>
                 </div>
                 <div style="margin-top:15px;display:grid;grid-template-columns:repeat(4,1fr);gap:10px;text-align:center;">
@@ -1991,7 +2020,7 @@
                         <div style="color:white;font-size:1.2em;">$145</div>
                     </div>
                     <div style="background:#1e293b;padding:12px;border-radius:6px;border:2px solid #fbbf24;">
-                        <div style="color:#fbbf24;font-weight:bold;">SDV ⭐</div>
+                        <div style="color:#fbbf24;font-weight:bold;">SDV ⭐</div>
                         <div style="color:#fbbf24;font-size:1.2em;">$70</div>
                     </div>
                     <div style="background:#1e293b;padding:12px;border-radius:6px;">
@@ -2004,296 +2033,7 @@
                     </div>
                 </div>
                 <div style="margin-top:15px;background:#451a03;padding:10px;border-radius:6px;font-size:0.85em;color:#fef3c7;">
-                    <strong style="color:#fbbf24;">⭐ SDV Special:</strong> $70/hr rate, 15% margin. Email WOs >10hrs to Matt last week of month. Exclude shop WO (DT39A).
-                </div>
-            </div>
-        </div>
-        
-        <!-- NQA TAB -->
-        <div class="content" id="nqa">
-            <!-- NQA OVERVIEW -->
-            <div class="card">
-                <div class="card-header">
-                    <span class="card-title">📋 NQA Flat Rate Analysis - Service Shops</span>
-                    <span class="badge badge-green">Updated 01/30/26</span>
-                </div>
-                <div style="color:#94a3b8;font-size:0.9em;margin-bottom:15px;">
-                    <strong>NQA (Non-Quoted Agreement)</strong> = Flat rate pricing for standard service jobs. Goal: Track if we're making or losing money on flat rate vs actual hours worked.
-                </div>
-                
-                <!-- SUMMARY METRICS -->
-                <div class="card-grid" style="margin-bottom:20px;">
-                    <div class="metric">
-                        <div class="metric-value" style="color:#10b981;">6/9</div>
-                        <div class="metric-label">Win Rate</div>
-                        <div class="metric-sub">Jobs at/under flat rate</div>
-                    </div>
-                    <div class="metric">
-                        <div class="metric-value" style="color:#10b981;">-5.8h</div>
-                        <div class="metric-label">Hours Variance</div>
-                        <div class="metric-sub">Under flat rate = PROFIT</div>
-                    </div>
-                    <div class="metric">
-                        <div class="metric-value" style="color:#10b981;">+$1,264</div>
-                        <div class="metric-label">Margin Saved</div>
-                        <div class="metric-sub">@ $218/hr NQA rate</div>
-                    </div>
-                    <div class="metric">
-                        <div class="metric-value" style="color:#f59e0b;">9</div>
-                        <div class="metric-label">T&M Jobs</div>
-                        <div class="metric-sub">No flat rate (billed hourly)</div>
-                    </div>
-                </div>
-                
-                <!-- DECISION INDICATOR -->
-                <div style="background:rgba(16,185,129,0.2);border:2px solid #10b981;border-radius:10px;padding:15px;text-align:center;margin-bottom:20px;">
-                    <div style="font-size:1.5em;font-weight:bold;color:#10b981;">✅ NQA PROFITABLE THIS MONTH</div>
-                    <div style="color:#a7f3d0;margin-top:5px;">Net -5.8h under flat rate = Keep NQA system</div>
-                </div>
-            </div>
-            
-            <!-- NQA JOBS TABLE -->
-            <div class="card">
-                <div class="card-header">
-                    <span class="card-title">🎯 NQA Flat Rate Jobs (SDN/SDR/SHC)</span>
-                    <span class="badge badge-blue">9 Jobs</span>
-                </div>
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>WO#</th>
-                                <th>Reg</th>
-                                <th>Shop</th>
-                                <th>Squawk</th>
-                                <th style="text-align:right;">Actual</th>
-                                <th style="text-align:right;">Flat Rate</th>
-                                <th style="text-align:right;">Variance</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr style="background:rgba(16,185,129,0.1);">
-                                <td>CU0VA</td>
-                                <td>N84RJ</td>
-                                <td>SDR</td>
-                                <td>91.411 & 91.413 (Cessna 172S)</td>
-                                <td style="text-align:right;">4.0h</td>
-                                <td style="text-align:right;">18.6h</td>
-                                <td style="text-align:right;color:#10b981;font-weight:bold;">-14.6h</td>
-                                <td><span class="badge badge-green">✅ WIN</span></td>
-                            </tr>
-                            <tr style="background:rgba(16,185,129,0.1);">
-                                <td>CU1EA</td>
-                                <td>N505RR</td>
-                                <td>SDN</td>
-                                <td>Autopilot troubleshooting</td>
-                                <td style="text-align:right;">4.5h</td>
-                                <td style="text-align:right;">8.0h</td>
-                                <td style="text-align:right;color:#10b981;font-weight:bold;">-3.5h</td>
-                                <td><span class="badge badge-green">✅ WIN</span></td>
-                            </tr>
-                            <tr style="background:rgba(16,185,129,0.1);">
-                                <td>CU92A</td>
-                                <td>N331MW</td>
-                                <td>SDN</td>
-                                <td>Troubleshoot Autopilot</td>
-                                <td style="text-align:right;">4.0h</td>
-                                <td style="text-align:right;">8.0h</td>
-                                <td style="text-align:right;color:#10b981;font-weight:bold;">-4.0h</td>
-                                <td><span class="badge badge-green">✅ WIN</span></td>
-                            </tr>
-                            <tr style="background:rgba(16,185,129,0.1);">
-                                <td>CU92A</td>
-                                <td>N331MW</td>
-                                <td>SDN</td>
-                                <td>Perform ULB Test</td>
-                                <td style="text-align:right;">2.0h</td>
-                                <td style="text-align:right;">2.0h</td>
-                                <td style="text-align:right;color:#10b981;font-weight:bold;">0.0h</td>
-                                <td><span class="badge badge-green">✅ WIN</span></td>
-                            </tr>
-                            <tr style="background:rgba(239,68,68,0.15);">
-                                <td>CUC9A</td>
-                                <td>N3278</td>
-                                <td>SHC</td>
-                                <td>Overhaul Main Ship Battery</td>
-                                <td style="text-align:right;">12.0h</td>
-                                <td style="text-align:right;">3.0h</td>
-                                <td style="text-align:right;color:#ef4444;font-weight:bold;">+9.0h</td>
-                                <td><span class="badge badge-red">❌ LOSS</span></td>
-                            </tr>
-                            <tr style="background:rgba(239,68,68,0.15);">
-                                <td>CUL2A</td>
-                                <td>N5203U</td>
-                                <td>SDR</td>
-                                <td>KT74 inoperative (transponder)</td>
-                                <td style="text-align:right;">12.5h</td>
-                                <td style="text-align:right;">4.0h</td>
-                                <td style="text-align:right;color:#ef4444;font-weight:bold;">+8.5h</td>
-                                <td><span class="badge badge-red">❌ LOSS</span></td>
-                            </tr>
-                            <tr style="background:rgba(239,68,68,0.1);">
-                                <td>CUPFA</td>
-                                <td>N176MG</td>
-                                <td>SDN</td>
-                                <td>Replace #2 ADC due to red X</td>
-                                <td style="text-align:right;">9.9h</td>
-                                <td style="text-align:right;">8.0h</td>
-                                <td style="text-align:right;color:#f59e0b;font-weight:bold;">+1.9h</td>
-                                <td><span class="badge badge-amber">⚠️ OVER</span></td>
-                            </tr>
-                            <tr style="background:rgba(16,185,129,0.1);">
-                                <td>CUSDA</td>
-                                <td>N7701A</td>
-                                <td>SDR</td>
-                                <td>91.411 & 91.413 (Piper PA-44)</td>
-                                <td style="text-align:right;">4.9h</td>
-                                <td style="text-align:right;">6.0h</td>
-                                <td style="text-align:right;color:#10b981;font-weight:bold;">-1.1h</td>
-                                <td><span class="badge badge-green">✅ WIN</span></td>
-                            </tr>
-                            <tr style="background:rgba(16,185,129,0.1);">
-                                <td>DUYYA</td>
-                                <td>N219JG</td>
-                                <td>SDN</td>
-                                <td>Exchange Vertical Gyro</td>
-                                <td style="text-align:right;">2.0h</td>
-                                <td style="text-align:right;">4.0h</td>
-                                <td style="text-align:right;color:#10b981;font-weight:bold;">-2.0h</td>
-                                <td><span class="badge badge-green">✅ WIN</span></td>
-                            </tr>
-                            <tr style="font-weight:bold;background:rgba(255,255,255,0.1);">
-                                <td colspan="4">TOTAL NQA</td>
-                                <td style="text-align:right;">55.8h</td>
-                                <td style="text-align:right;">61.6h</td>
-                                <td style="text-align:right;color:#10b981;">-5.8h</td>
-                                <td><span class="badge badge-green">NET WIN</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            
-            <!-- PROBLEM JOBS -->
-            <div class="card" style="border:2px solid #ef4444;">
-                <div class="card-header">
-                    <span class="card-title" style="color:#ef4444;">⚠️ Problem Jobs - Review for NQA Adjustment</span>
-                </div>
-                <div style="color:#fca5a5;font-size:0.9em;margin-bottom:15px;">
-                    These jobs exceeded flat rate hours. Consider: adjusting NQA price, switching to T&M, or reviewing tech efficiency.
-                </div>
-                <div style="display:grid;gap:10px;">
-                    <div style="background:rgba(239,68,68,0.15);padding:15px;border-radius:8px;border-left:4px solid #ef4444;">
-                        <div style="display:flex;justify-content:space-between;align-items:center;">
-                            <div>
-                                <span style="font-weight:bold;color:#fca5a5;">CUC9A - Battery Overhaul (SHC)</span>
-                                <div style="color:#94a3b8;font-size:0.85em;">N3278 | Overhaul Main Ship Battery 405CH10</div>
-                            </div>
-                            <div style="text-align:right;">
-                                <div style="color:#ef4444;font-weight:bold;font-size:1.2em;">+9.0h over</div>
-                                <div style="color:#fca5a5;font-size:0.9em;">~$1,962 margin loss</div>
-                            </div>
-                        </div>
-                        <div style="margin-top:10px;color:#fde68a;font-size:0.85em;">💡 Recommend: Update battery overhaul NQA from 3h to 10-12h or quote T&M</div>
-                    </div>
-                    <div style="background:rgba(239,68,68,0.15);padding:15px;border-radius:8px;border-left:4px solid #ef4444;">
-                        <div style="display:flex;justify-content:space-between;align-items:center;">
-                            <div>
-                                <span style="font-weight:bold;color:#fca5a5;">CUL2A - Transponder Troubleshoot (SDR)</span>
-                                <div style="color:#94a3b8;font-size:0.85em;">N5203U | KT74 inoperative - Cessna 206</div>
-                            </div>
-                            <div style="text-align:right;">
-                                <div style="color:#ef4444;font-weight:bold;font-size:1.2em;">+8.5h over</div>
-                                <div style="color:#fca5a5;font-size:0.9em;">~$1,853 margin loss</div>
-                            </div>
-                        </div>
-                        <div style="margin-top:10px;color:#fde68a;font-size:0.85em;">💡 Recommend: Complex transponder issues → Quote T&M upfront</div>
-                    </div>
-                    <div style="background:rgba(251,191,36,0.15);padding:15px;border-radius:8px;border-left:4px solid #f59e0b;">
-                        <div style="display:flex;justify-content:space-between;align-items:center;">
-                            <div>
-                                <span style="font-weight:bold;color:#fde68a;">CUPFA - ADC Replacement (SDN)</span>
-                                <div style="color:#94a3b8;font-size:0.85em;">N176MG | Replace #2 ADC - G-IV</div>
-                            </div>
-                            <div style="text-align:right;">
-                                <div style="color:#f59e0b;font-weight:bold;font-size:1.2em;">+1.9h over</div>
-                                <div style="color:#fde68a;font-size:0.9em;">~$414 margin loss</div>
-                            </div>
-                        </div>
-                        <div style="margin-top:10px;color:#a7f3d0;font-size:0.85em;">✓ Minor variance - within acceptable range for complex aircraft</div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- T&M JOBS -->
-            <div class="card">
-                <div class="card-header">
-                    <span class="card-title">🔧 T&M Jobs (No NQA Match)</span>
-                    <span class="badge badge-gray">9 Jobs | 72.5h</span>
-                </div>
-                <div style="color:#94a3b8;font-size:0.9em;margin-bottom:15px;">
-                    These jobs don't have a matching NQA flat rate - billed at actual hours worked (T&M).
-                </div>
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr><th>WO#</th><th>Reg</th><th>Shop</th><th>Squawk</th><th style="text-align:right;">Hours</th></tr>
-                        </thead>
-                        <tbody>
-                            <tr><td>CU0VA</td><td>N84RJ</td><td>SDR</td><td>GSU75 AHRS intermittent red x</td><td style="text-align:right;">31.5h</td></tr>
-                            <tr><td>CU1EA</td><td>N505RR</td><td>SDN</td><td>Tail Number Restrap</td><td style="text-align:right;">15.0h</td></tr>
-                            <tr><td>CU1EA</td><td>N505RR</td><td>SDN</td><td>SATCOM Restrap</td><td style="text-align:right;">5.0h</td></tr>
-                            <tr><td>CU1EA</td><td>N505RR</td><td>SDN</td><td>SVS troubleshooting</td><td style="text-align:right;">2.5h</td></tr>
-                            <tr><td>CU1EA</td><td>N505RR</td><td>SDN</td><td>Databases for NAV, and charts</td><td style="text-align:right;">2.0h</td></tr>
-                            <tr><td>CU1EA</td><td>N505RR</td><td>SDN</td><td>Travel to BJC</td><td style="text-align:right;">6.5h</td></tr>
-                            <tr><td>CUPFA</td><td>N176MG</td><td>SDN</td><td>Troubleshoot leaks on P/S system</td><td style="text-align:right;">7.0h</td></tr>
-                            <tr><td>CVLNA</td><td>N197GA</td><td>SDN</td><td>Travel Time</td><td style="text-align:right;">2.0h</td></tr>
-                            <tr><td>DVR0A</td><td>STOCK</td><td>SDN</td><td>Repair Servo</td><td style="text-align:right;">1.0h</td></tr>
-                            <tr style="font-weight:bold;background:rgba(255,255,255,0.1);">
-                                <td colspan="4">TOTAL T&M</td>
-                                <td style="text-align:right;">72.5h</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            
-            <!-- NQA SYSTEM INFO -->
-            <div class="card">
-                <div class="card-header">
-                    <span class="card-title">📝 NQA System Reference</span>
-                </div>
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:15px;">
-                    <div style="background:rgba(20,184,166,0.15);padding:15px;border-radius:8px;border:1px solid #14b8a6;">
-                        <div style="font-weight:bold;color:#14b8a6;margin-bottom:8px;">📋 NQA Applies To:</div>
-                        <div style="color:#e2e8f0;font-size:0.9em;">
-                            • SDN (Service)<br>
-                            • SDR (Service)<br>
-                            • SHC (Service/Hardware)<br>
-                            • Standard troubleshooting jobs<br>
-                            • Cert inspections (91.411/413)
-                        </div>
-                    </div>
-                    <div style="background:rgba(139,92,246,0.15);padding:15px;border-radius:8px;border:1px solid #8b5cf6;">
-                        <div style="font-weight:bold;color:#8b5cf6;margin-bottom:8px;">🚫 NOT NQA (Quote Separately):</div>
-                        <div style="color:#e2e8f0;font-size:0.9em;">
-                            • SDV (Installs) - Standard quotes<br>
-                            • Complex troubleshooting - T&M<br>
-                            • Custom/unusual work - T&M<br>
-                            • Travel time - T&M
-                        </div>
-                    </div>
-                </div>
-                <div style="margin-top:15px;background:#0f172a;padding:15px;border-radius:8px;">
-                    <div style="color:#94a3b8;font-size:0.9em;">
-                        <strong style="color:#14b8a6;">NQA Decision Rule:</strong><br>
-                        If monthly variance is consistently <span style="color:#ef4444;">POSITIVE (over flat rate)</span> → Adjust NQA prices or switch to T&M<br>
-                        If monthly variance is <span style="color:#10b981;">NEGATIVE (under flat rate)</span> → NQA system is profitable, keep it
-                    </div>
-                </div>
-                <div style="margin-top:10px;background:#1e1b4b;padding:10px;border-radius:6px;font-size:0.85em;color:#c4b5fd;">
-                    <strong>📊 Price Items Master:</strong> 160 NQA items loaded | Implied rate: ~$218/hr | Source: AS400 Price Item Search
+                    <strong style="color:#fbbf24;">⭐ SDV Special:</strong> $70/hr rate, 15% margin. Email WOs >10hrs to Matt last week of month. Exclude shop WO (DT39A).
                 </div>
             </div>
         </div>
@@ -2306,7 +2046,7 @@
                     <span class="badge badge-blue">Jan 30, 2026 (YTD)</span>
                 </div>
                 <p style="color:#94a3b8;margin-bottom:15px;font-size:0.9em;">
-                    <strong>A/B Ratio</strong> = Actual Billable Hours ÷ Bought (Paid) Hours | Measures labor efficiency
+                    <strong>A/B Ratio</strong> = Actual Billable Hours Ã· Bought (Paid) Hours | Measures labor efficiency
                 </p>
                 <div style="background:rgba(0,0,0,0.2);padding:10px;border-radius:8px;margin-bottom:15px;">
                     <strong>Network Average:</strong> 49.2% | <strong>Budget Target:</strong> 58.7%
@@ -2330,7 +2070,7 @@
                 <div class="rank-item"><div class="rank-num">16</div><div class="rank-shop">Manassas</div><div class="rank-value" style="color:#f59e0b">46.1%</div></div>
                 <div class="rank-item"><div class="rank-num">17</div><div class="rank-shop">St. Louis</div><div class="rank-value" style="color:#ef4444">42.2%</div></div>
                 <div class="rank-item"><div class="rank-num">18</div><div class="rank-shop">Austin</div><div class="rank-value" style="color:#ef4444">35.4%</div></div>
-                <div class="rank-item denver"><div class="rank-num" style="background:#f59e0b;color:#fff">19</div><div class="rank-shop"><strong>DENVER ↑</strong></div><div class="rank-value" style="color:#f59e0b">32.5%</div></div>
+                <div class="rank-item denver"><div class="rank-num" style="background:#f59e0b;color:#fff">19</div><div class="rank-shop"><strong>DENVER â†‘</strong></div><div class="rank-value" style="color:#f59e0b">32.5%</div></div>
                 <div class="rank-item"><div class="rank-num">20</div><div class="rank-shop">Kansas City</div><div class="rank-value" style="color:#ef4444">26.3%</div></div>
                 <div class="rank-item"><div class="rank-num">21</div><div class="rank-shop">Houston</div><div class="rank-value" style="color:#ef4444">20.0%</div></div>
             </div>
@@ -2397,7 +2137,7 @@
         function startAutoRotate() {
             isRotating = true;
             isPaused = false;
-            document.getElementById('rotateBtn').textContent = '⏸️ Stop';
+            document.getElementById('rotateBtn').textContent = 'â¸ï¸ Stop';
             document.getElementById('rotateBtn').style.background = '#ef4444';
             updateStatus();
             startSmoothScroll();
@@ -2408,7 +2148,7 @@
             isPaused = false;
             clearInterval(scrollInterval);
             clearTimeout(pauseTimeout);
-            document.getElementById('rotateBtn').textContent = '▶️ Auto';
+            document.getElementById('rotateBtn').textContent = '▶️ Auto';
             document.getElementById('rotateBtn').style.background = '#10b981';
             document.getElementById('statusIndicator').textContent = 'Ready';
             document.getElementById('statusIndicator').className = 'status-indicator';
@@ -2516,13 +2256,6 @@
         // NPS Tracking - HARDCODED DATA (persists across file reloads)
         // Claude updates this array when you report new surveys sent
         let npsSurveyData = [
-            // === 01/30/26 - NEW BATCH ===
-            {date: '01/30/26', customer: 'MHH Inc', email: 'BILL.BENTON@MHHINC.NET', wo: 'DSW4A', regNum: 'N7BD', status: 'Sent', score: null},
-            {date: '01/30/26', customer: 'Patrick Lee', email: 'patrick.e.lee@protonmail.com', wo: 'CU16A', regNum: 'N176MG', status: 'Sent', score: null},
-            {date: '01/30/26', customer: 'JC Consulting', email: 'JCCONS81@AOL.COM', wo: 'CV5SA', regNum: 'STOCK', status: 'Sent', score: null},
-            {date: '01/30/26', customer: 'Metro Aviation', email: 'sshrestha@metroaviation.com', wo: 'DT3DA', regNum: '', status: 'Sent', score: null},
-            {date: '01/30/26', customer: 'Solairus', email: 'cdesforges@solairus.aero', wo: 'DUNWA', regNum: 'N814PS', status: 'Sent', score: null},
-            // === 01/28/26 - PREVIOUS BATCH ===
             {date: '01/28/26', customer: 'Peregrine', email: 'ths@masd.metrea.aero', wo: 'DTBLA', regNum: '', status: 'Sent', score: null},
             {date: '01/28/26', customer: 'Bode Aviation', email: 'michelle.amezcua@flybode.com', wo: 'DSW5A', regNum: 'N328SF', status: 'Sent', score: null},
             {date: '01/28/26', customer: 'MIMG Transportation', email: 'n950kmmx@gmail.com', wo: 'CV3UA', regNum: 'STOCK', status: 'Sent', score: null},
@@ -2561,7 +2294,7 @@
                 renderCustomerTable();
                 // Show brief confirmation
                 const btn = event.target;
-                btn.textContent = '✓ Skipped';
+                btn.textContent = '✔ Skipped';
                 btn.style.background = '#475569';
                 setTimeout(() => renderCustomerTable(), 500);
             }
@@ -2588,7 +2321,7 @@
             const completed = surveys.filter(s => s.status === 'Completed').length;
             const pending = surveys.filter(s => s.status === 'Sent').length;
             const rate = sent > 0 ? Math.round((completed / sent) * 100) + '%' : '-';
-            const billedWOsTarget = 50;  // Total billed WOs from Billed WO report 01/30/26
+            const billedWOsTarget = 46;  // Total billed WOs from Billed WO report 01/29/26
             
             document.getElementById('statSent').textContent = sent + '/' + billedWOsTarget;
             document.getElementById('statCompleted').textContent = completed;
@@ -2598,10 +2331,10 @@
             // Update badge
             const badge = document.getElementById('npsBadge');
             if (completed >= 1) {
-                badge.textContent = `Jan: ${completed}/1 ✅`;
+                badge.textContent = `Jan: ${completed}/1 âœ…`;
                 badge.style.background = '#10b981';
             } else if (sent > 0) {
-                badge.textContent = `Jan: ${completed}/1 ⏳`;
+                badge.textContent = `Jan: ${completed}/1 â³`;
                 badge.style.background = '#f59e0b';
             } else {
                 badge.textContent = 'Jan: 0/1 ⚠️';
@@ -2663,8 +2396,8 @@
                     <td>${s.score || '-'}</td>
                     <td>
                         ${s.status === 'Sent' ? `
-                            <button onclick="completeNpsSurvey(${idx})" style="background:#10b981;color:white;border:none;padding:2px 6px;border-radius:3px;font-size:0.75em;cursor:pointer;margin-right:3px;">✓</button>
-                            <button onclick="noResponseNpsSurvey(${idx})" style="background:#ef4444;color:white;border:none;padding:2px 6px;border-radius:3px;font-size:0.75em;cursor:pointer;">✗</button>
+                            <button onclick="completeNpsSurvey(${idx})" style="background:#10b981;color:white;border:none;padding:2px 6px;border-radius:3px;font-size:0.75em;cursor:pointer;margin-right:3px;">✔</button>
+                            <button onclick="noResponseNpsSurvey(${idx})" style="background:#ef4444;color:white;border:none;padding:2px 6px;border-radius:3px;font-size:0.75em;cursor:pointer;">âœ—</button>
                         ` : ''}
                     </td>
                 </tr>
@@ -2816,21 +2549,15 @@ ${surveyUrl}`;
             };
         }
         
-        // Customer Database - AUTO-SYNCED from Billed WO Report 01/30/26 1:47PM + Customer Emails
-        // 50 Total Billed WOs | 46 with emails | 4 need lookup (154793, 101328, 158993, 116393)
-        // TODAY'S BILLING: CVLNA, CVJ0A, CUSDA, CP5EA = $4,004 total
+        // Customer Database - AUTO-SYNCED from Billed WO Report 01/30/26 + Customer Emails
+        // 46 Total Billed WOs | 40 with emails | 6 need lookup
         // WOs with empty email need lookup in AS400/customer records
         const customerDatabase = [
-            // === TODAY'S BILLING 01/30/26 ===
-            {name: 'Alpine Aviation', email: '', wo: 'CVLNA', reg: 'N197GA', shop: 'SDN', revenue: 1770, dateBilled: '01/30/26', custNum: 101328},
-            {name: 'SHC Battery Work', email: '', wo: 'CVJ0A', reg: 'STOCK', shop: 'SHC', revenue: 785, dateBilled: '01/30/26', custNum: 158993},
-            {name: 'Flights Inc', email: '', wo: 'CUSDA', reg: 'N7701A', shop: 'SDR', revenue: 669, dateBilled: '01/30/26', custNum: 142768},
-            {name: 'Bombardier SFI', email: '', wo: 'CP5EA', reg: 'N365CJ', shop: 'SFI', revenue: 780, dateBilled: '01/30/26', custNum: 116393},
             // === HIGH REVENUE (>$5K) - PRIORITY ===
             {name: 'MHH Inc', email: 'BILL.BENTON@MHHINC.NET', wo: 'DSW4A', reg: 'N7BD', shop: 'SDN', revenue: 65835, dateBilled: '01/26/26', custNum: 157998},
-            {name: 'Skyport Co', email: 'ryan.himango@skyportco.com', wo: 'DUSFA', reg: 'N65LR', shop: 'SDN', revenue: 42398, dateBilled: '01/29/26', custNum: 153916},
+            {name: 'NEED LOOKUP', email: '', wo: 'DUSFA', reg: 'N65LR', shop: 'SDN', revenue: 42398, dateBilled: '01/29/26', custNum: 153916},
             {name: 'Bode Aviation', email: 'michelle.amezcua@flybode.com', wo: 'DSW5A', reg: 'N328SF', shop: 'SDN', revenue: 34270, dateBilled: '01/08/26', custNum: 125945},
-            {name: 'Sierra Nevada Corp', email: 'colton.black@sncorp.com', wo: 'DUMXA', reg: '', shop: 'SDN', revenue: 13300, dateBilled: '01/14/26', custNum: 132595},
+            {name: 'NEED LOOKUP', email: '', wo: 'DUMXA', reg: '', shop: 'SDN', revenue: 13300, dateBilled: '01/14/26', custNum: 132595},
             {name: 'MIMG Transportation', email: 'n950kmmx@gmail.com', wo: 'CV3UA', reg: 'STOCK', shop: 'SHC', revenue: 9296, dateBilled: '01/23/26', custNum: 155665},
             {name: 'International Jet Aviation', email: 'heike@internationaljet.com', wo: 'CP69B', reg: 'N817EM', shop: 'SDN', revenue: 8300, dateBilled: '01/29/26', custNum: 109004},
             {name: 'Peregrine', email: 'ths@masd.metrea.aero', wo: 'DTBLA', reg: '', shop: 'SDV', revenue: 6856, dateBilled: '01/26/26', custNum: 144668},
@@ -2840,14 +2567,14 @@ ${surveyUrl}`;
             {name: 'Liberty Global', email: 'creynolds@libertyglobal.com', wo: 'CT8VA', reg: 'N250LG', shop: 'SDN', revenue: 4445, dateBilled: '01/23/26', custNum: 117171},
             {name: 'MIMG Transportation', email: 'n950kmmx@gmail.com', wo: 'CU56A', reg: 'N950KM', shop: 'SDN', revenue: 3620, dateBilled: '01/23/26', custNum: 155665},
             {name: 'Patrick Lee', email: 'patrick.e.lee@protonmail.com', wo: 'CUS4A', reg: 'N176MG', shop: 'SDV', revenue: 3470, dateBilled: '01/27/26', custNum: 154588},
-            {name: 'Sierra Nevada Corp', email: 'colton.black@sncorp.com', wo: 'DT56A', reg: 'STOCK', shop: 'SDN', revenue: 2574, dateBilled: '01/15/26', custNum: 132595},
+            {name: 'NEED LOOKUP', email: '', wo: 'DT56A', reg: 'STOCK', shop: 'SDN', revenue: 2574, dateBilled: '01/15/26', custNum: 132595},
             {name: 'M&N Aviation', email: 'tom@mandn.aero', wo: 'CT0VA', reg: 'N488RJ', shop: 'SDN', revenue: 2475, dateBilled: '01/05/26', custNum: 129186},
             {name: 'Arapahoe Aero', email: 'customercare@arapahoeaero.com', wo: 'CSAZA', reg: 'N426LM', shop: 'SDR', revenue: 2118, dateBilled: '01/14/26', custNum: 151065},
             {name: 'GMR', email: 'mihir.mirajkar@gmr.net', wo: 'CU44A', reg: 'N866MB', shop: 'SDR', revenue: 1942, dateBilled: '01/14/26', custNum: 113966},
             {name: 'M&N Aviation', email: 'tom@mandn.aero', wo: 'CTVWA', reg: 'N488RJ', shop: 'SDN', revenue: 1900, dateBilled: '01/05/26', custNum: 129186},
             {name: 'JC Consulting', email: 'JCCONS81@AOL.COM', wo: 'CV5SA', reg: 'STOCK', shop: 'SHC', revenue: 1831, dateBilled: '01/23/26', custNum: 137587},
-            {name: 'Sierra Nevada Corp', email: 'colton.black@sncorp.com', wo: 'DT99A', reg: '', shop: 'SDN', revenue: 1750, dateBilled: '01/14/26', custNum: 132595},
-            {name: 'Sierra Nevada Corp', email: 'colton.black@sncorp.com', wo: 'DT13A', reg: '', shop: 'SDN', revenue: 1750, dateBilled: '01/14/26', custNum: 132595},
+            {name: 'NEED LOOKUP', email: '', wo: 'DT99A', reg: '', shop: 'SDN', revenue: 1750, dateBilled: '01/14/26', custNum: 132595},
+            {name: 'NEED LOOKUP', email: '', wo: 'DT13A', reg: '', shop: 'SDN', revenue: 1750, dateBilled: '01/14/26', custNum: 132595},
             {name: 'Aspen Flying Club', email: 'accounting@aspenflyingclub.com', wo: 'CS1XA', reg: 'N331JK', shop: 'SDR', revenue: 1632, dateBilled: '01/05/26', custNum: 139695},
             {name: 'Flights Inc', email: 'ABAUER@FLIGHTS-INC.COM', wo: 'CRW3A', reg: 'N22265', shop: 'SDR', revenue: 1632, dateBilled: '01/05/26', custNum: 142768},
             {name: 'Bode Aviation', email: 'michelle.amezcua@flybode.com', wo: 'CUKYA', reg: 'N327SF', shop: 'SDN', revenue: 1569, dateBilled: '01/15/26', custNum: 125945},
@@ -2857,13 +2584,14 @@ ${surveyUrl}`;
             {name: 'Civil Air Patrol', email: 'capconsmx@capnhq.gov', wo: 'CSYQA', reg: 'N948CA', shop: 'SDR', revenue: 1267, dateBilled: '01/08/26', custNum: 137367},
             {name: 'NEED LOOKUP', email: '', wo: 'CV2GA', reg: 'N688MP', shop: 'SDN', revenue: 1234, dateBilled: '01/28/26', custNum: 154793},
             {name: 'Civil Air Patrol', email: 'capconsmx@capnhq.gov', wo: 'CSYLA', reg: 'N243CP', shop: 'SDR', revenue: 1056, dateBilled: '01/21/26', custNum: 137367},
-            {name: 'Alpine Aviation', email: '', wo: 'CVLNA', reg: 'N197GA', shop: 'SDN', revenue: 1770, dateBilled: '01/30/26', custNum: 101328},
+            // === NEWLY BILLED 01/30/26 ===
+            {name: 'NEED LOOKUP', email: '', wo: 'CVLNA', reg: 'N197GA', shop: 'SDN', revenue: 1770, dateBilled: '01/30/26', custNum: 101328},
             // === LOWER REVENUE (<$1K) ===
+            {name: 'NEED LOOKUP', email: '', wo: 'CVJ0A', reg: '', shop: 'SHC', revenue: 785, dateBilled: '01/30/26', custNum: 158993},
+            {name: 'Flights Inc', email: 'ABAUER@FLIGHTS-INC.COM', wo: 'CUSDA', reg: 'N7701A', shop: 'SDR', revenue: 669, dateBilled: '01/30/26', custNum: 142768},
             {name: 'Bode Aviation', email: 'michelle.amezcua@flybode.com', wo: 'CTYTA', reg: 'N327SF', shop: 'SDN', revenue: 950, dateBilled: '01/09/26', custNum: 125945},
             {name: 'M&N Aviation', email: 'tom@mandn.aero', wo: 'CU1CA', reg: 'N488RJ', shop: 'SDN', revenue: 950, dateBilled: '01/08/26', custNum: 129186},
             {name: 'AirMax', email: 'rong@airmaxonline.com', wo: 'CUCJA', reg: 'N137ZM', shop: 'SDN', revenue: 784, dateBilled: '01/15/26', custNum: 127007},
-            {name: 'NEED LOOKUP', email: '', wo: 'CVJ0A', reg: 'STOCK', shop: 'SHC', revenue: 785, dateBilled: '01/30/26', custNum: 158993},
-            {name: 'NEED LOOKUP', email: '', wo: 'CP5EA', reg: 'N365CJ', shop: 'SFI', revenue: 780, dateBilled: '01/30/26', custNum: 116393},
             {name: 'Aspen Flying Club', email: 'accounting@aspenflyingclub.com', wo: 'CV98A', reg: 'N621TK', shop: 'SDR', revenue: 739, dateBilled: '01/22/26', custNum: 139695},
             {name: 'Aspen Flying Club', email: 'accounting@aspenflyingclub.com', wo: 'CV8ZA', reg: 'N526LK', shop: 'SDR', revenue: 739, dateBilled: '01/23/26', custNum: 139695},
             {name: 'Metro Aviation', email: 'sshrestha@metroaviation.com', wo: 'DT3DA', reg: '', shop: 'SDV', revenue: 712, dateBilled: '01/27/26', custNum: 106755},
@@ -2871,7 +2599,6 @@ ${surveyUrl}`;
             {name: 'Aspen Flying Club', email: 'accounting@aspenflyingclub.com', wo: 'CUNPA', reg: 'N683SP', shop: 'SDR', revenue: 633, dateBilled: '01/14/26', custNum: 139695},
             {name: 'Aspen Flying Club', email: 'accounting@aspenflyingclub.com', wo: 'CUSQA', reg: 'N971GV', shop: 'SDR', revenue: 633, dateBilled: '01/19/26', custNum: 139695},
             {name: 'Aspen Flying Club', email: 'accounting@aspenflyingclub.com', wo: 'CVCHA', reg: 'N810AM', shop: 'SDR', revenue: 422, dateBilled: '01/26/26', custNum: 139695},
-            {name: 'Flights Inc', email: 'ABAUER@FLIGHTS-INC.COM', wo: 'CUSDA', reg: 'N7701A', shop: 'SDR', revenue: 669, dateBilled: '01/30/26', custNum: 142768},
             {name: 'Civil Air Patrol', email: 'capconsmx@capnhq.gov', wo: 'DV5KA', reg: 'N765CP', shop: 'SDR', revenue: 422, dateBilled: '01/22/26', custNum: 137367},
             {name: 'Solairus', email: 'cdesforges@solairus.aero', wo: 'DUNWA', reg: 'N814PS', shop: 'SDN', revenue: 420, dateBilled: '01/15/26', custNum: 154444},
             // === ZERO REVENUE (T&M / warranty) ===
@@ -2984,16 +2711,16 @@ ${surveyUrl}`;
                 // Action button based on status
                 let actionCell;
                 if (c.status === 'sent') {
-                    actionCell = '<span style="color:#10b981;font-size:0.8em;">✓ Sent</span>';
+                    actionCell = '<span style="color:#10b981;font-size:0.8em;">✔ Sent</span>';
                 } else if (c.status === 'skipped') {
-                    actionCell = `<span style="color:#64748b;font-size:0.75em;">⊘ Skipped</span> <button onclick="undoSkip('${c.wo}')" style="background:#475569;color:white;border:none;padding:2px 6px;border-radius:3px;font-size:0.7em;cursor:pointer;margin-left:4px;">Undo</button>`;
+                    actionCell = `<span style="color:#64748b;font-size:0.75em;">âŠ˜ Skipped</span> <button onclick="undoSkip('${c.wo}')" style="background:#475569;color:white;border:none;padding:2px 6px;border-radius:3px;font-size:0.7em;cursor:pointer;margin-left:4px;">Undo</button>`;
                 } else if (c.status === 'waived') {
-                    actionCell = `<span style="color:#a78bfa;font-size:0.75em;">↩️ Waived (dup)</span>`;
+                    actionCell = `<span style="color:#a78bfa;font-size:0.75em;">â†©ï¸ Waived (dup)</span>`;
                 } else if (c.status === 'lookup') {
                     actionCell = `<span style="color:#f87171;font-size:0.75em;">📋 Lookup</span>`;
                 } else {
                     const btnStyle = c.revenue > 0 ? 'background:#10b981;' : 'background:#475569;';
-                    actionCell = `<button onclick="fillNps('${c.name}','${c.email}','${c.wo}','${c.reg}')" style="${btnStyle}color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">✓ Use</button><button onclick="skipWO('${c.wo}','${c.name}')" style="background:#64748b;color:white;border:none;padding:4px 8px;border-radius:4px;font-size:0.75em;cursor:pointer;margin-left:4px;" title="Skip this customer">⊘</button>`;
+                    actionCell = `<button onclick="fillNps('${c.name}','${c.email}','${c.wo}','${c.reg}')" style="${btnStyle}color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">✔ Use</button><button onclick="skipWO('${c.wo}','${c.name}')" style="background:#64748b;color:white;border:none;padding:4px 8px;border-radius:4px;font-size:0.75em;cursor:pointer;margin-left:4px;" title="Skip this customer">âŠ˜</button>`;
                 }
                 
                 html += `<tr style="${rowStyle}">
@@ -3007,14 +2734,14 @@ ${surveyUrl}`;
             });
             
             if (html === '') {
-                html = '<tr><td colspan="6" style="color:#64748b;text-align:center;">All customers have been surveyed! ✅</td></tr>';
+                html = '<tr><td colspan="6" style="color:#64748b;text-align:center;">All customers have been surveyed! âœ…</td></tr>';
             }
             
             tbody.innerHTML = html;
             
             // Update summary with detailed breakdown
             if (readyCount === 0 && lookupCount === 0) {
-                summaryDiv.innerHTML = '✅ <strong>All ' + sentCount + ' surveys sent!</strong> Waiting for responses.';
+                summaryDiv.innerHTML = 'âœ… <strong>All ' + sentCount + ' surveys sent!</strong> Waiting for responses.';
                 summaryDiv.style.background = '#14532d';
                 summaryDiv.style.color = '#bbf7d0';
             } else {
