@@ -1378,6 +1378,56 @@
                     <strong>⚠️ Action Required:</strong> Contact Cassie/PDT to schedule dates for Juan.
                 </div>
             </div>
+            
+            <!-- MANDATORY LMS TRAINING -->
+            <div class="card" style="border:2px solid #f59e0b;">
+                <div class="card-header">
+                    <span class="card-title">📚 Mandatory LMS Training (Assigned 01/30/26)</span>
+                    <span class="badge badge-amber">Due Feb 28</span>
+                </div>
+                <div style="background:rgba(245,158,11,0.15);padding:12px;border-radius:8px;margin-bottom:15px;">
+                    <strong style="color:#fbbf24;">⚠️ NEW:</strong> <span style="color:#fef3c7;">3 mandatory training modules assigned via LMS - 30-day completion window</span>
+                </div>
+                
+                <!-- VI, QI, RTS Recurrent Training -->
+                <div style="margin-bottom:15px;">
+                    <div style="color:#60a5fa;font-weight:bold;margin-bottom:8px;">🔧 VI, QI, RTS Recurrent Training 2026 - Satellites</div>
+                    <div style="display:flex;flex-wrap:wrap;gap:8px;">
+                        <span style="background:#1e3a5f;padding:4px 10px;border-radius:4px;font-size:0.85em;">Edduyn Pita</span>
+                        <span style="background:#1e3a5f;padding:4px 10px;border-radius:4px;font-size:0.85em;">Jose Noris</span>
+                        <span style="background:#1e3a5f;padding:4px 10px;border-radius:4px;font-size:0.85em;">Armando Triana-Cruz</span>
+                        <span style="background:#1e3a5f;padding:4px 10px;border-radius:4px;font-size:0.85em;">Michael Huber</span>
+                        <span style="background:#1e3a5f;padding:4px 10px;border-radius:4px;font-size:0.85em;">Ken Smith</span>
+                        <span style="background:#1e3a5f;padding:4px 10px;border-radius:4px;font-size:0.85em;">Julia Langford</span>
+                        <span style="background:#1e3a5f;padding:4px 10px;border-radius:4px;font-size:0.85em;">John Watson</span>
+                        <span style="background:#1e3a5f;padding:4px 10px;border-radius:4px;font-size:0.85em;">Sean Macoomb</span>
+                        <span style="background:#1e3a5f;padding:4px 10px;border-radius:4px;font-size:0.85em;">Michael Hannas</span>
+                    </div>
+                </div>
+                
+                <!-- Brazil International Training -->
+                <div style="margin-bottom:15px;">
+                    <div style="color:#10b981;font-weight:bold;margin-bottom:8px;">🌎 GPP-0110 Brazil International Training</div>
+                    <div style="display:flex;flex-wrap:wrap;gap:8px;">
+                        <span style="background:#14532d;padding:4px 10px;border-radius:4px;font-size:0.85em;">Michael Huber</span>
+                        <span style="background:#14532d;padding:4px 10px;border-radius:4px;font-size:0.85em;">Armando Triana-Cruz</span>
+                        <span style="background:#14532d;padding:4px 10px;border-radius:4px;font-size:0.85em;">Ken Smith</span>
+                    </div>
+                </div>
+                
+                <!-- CMMC-CUI Security Training -->
+                <div style="margin-bottom:10px;">
+                    <div style="color:#a855f7;font-weight:bold;margin-bottom:8px;">🔒 CMMC-CUI & ISP-1402 Security Training</div>
+                    <div style="display:flex;flex-wrap:wrap;gap:8px;">
+                        <span style="background:#581c87;padding:4px 10px;border-radius:4px;font-size:0.85em;">John Watson</span>
+                        <span style="background:#581c87;padding:4px 10px;border-radius:4px;font-size:0.85em;">Jose Noris</span>
+                    </div>
+                </div>
+                
+                <div style="background:#0f172a;padding:10px;border-radius:6px;margin-top:10px;font-size:0.85em;color:#94a3b8;">
+                    💡 <strong>Reminder:</strong> Complete via LMS portal by Feb 28, 2026. Forward completion certificates to Mana Butt.
+                </div>
+            </div>
         </div>
         
         <!-- QUALITY TAB -->
@@ -2469,14 +2519,14 @@ ${surveyUrl}`;
         }
         
         // Customer Database - AUTO-SYNCED from Billed WO Report 01/30/26 + Customer Emails
-        // 46 Total Billed WOs | 40 with emails | 6 need lookup
+        // 46 Total Billed WOs | 45 with emails | 1 need lookup (154793)
         // WOs with empty email need lookup in AS400/customer records
         const customerDatabase = [
             // === HIGH REVENUE (>$5K) - PRIORITY ===
             {name: 'MHH Inc', email: 'BILL.BENTON@MHHINC.NET', wo: 'DSW4A', reg: 'N7BD', shop: 'SDN', revenue: 65835, dateBilled: '01/26/26', custNum: 157998},
-            {name: 'NEED LOOKUP', email: '', wo: 'DUSFA', reg: 'N65LR', shop: 'SDN', revenue: 42398, dateBilled: '01/29/26', custNum: 153916},
+            {name: 'Skyport Co', email: 'ryan.himango@skyportco.com', wo: 'DUSFA', reg: 'N65LR', shop: 'SDN', revenue: 42398, dateBilled: '01/29/26', custNum: 153916},
             {name: 'Bode Aviation', email: 'michelle.amezcua@flybode.com', wo: 'DSW5A', reg: 'N328SF', shop: 'SDN', revenue: 34270, dateBilled: '01/08/26', custNum: 125945},
-            {name: 'NEED LOOKUP', email: '', wo: 'DUMXA', reg: '', shop: 'SDN', revenue: 13300, dateBilled: '01/14/26', custNum: 132595},
+            {name: 'Sierra Nevada Corp', email: 'colton.black@sncorp.com', wo: 'DUMXA', reg: '', shop: 'SDN', revenue: 13300, dateBilled: '01/14/26', custNum: 132595},
             {name: 'MIMG Transportation', email: 'n950kmmx@gmail.com', wo: 'CV3UA', reg: 'STOCK', shop: 'SHC', revenue: 9296, dateBilled: '01/23/26', custNum: 155665},
             {name: 'International Jet Aviation', email: 'heike@internationaljet.com', wo: 'CP69B', reg: 'N817EM', shop: 'SDN', revenue: 8300, dateBilled: '01/29/26', custNum: 109004},
             {name: 'Peregrine', email: 'ths@masd.metrea.aero', wo: 'DTBLA', reg: '', shop: 'SDV', revenue: 6856, dateBilled: '01/26/26', custNum: 144668},
@@ -2486,14 +2536,14 @@ ${surveyUrl}`;
             {name: 'Liberty Global', email: 'creynolds@libertyglobal.com', wo: 'CT8VA', reg: 'N250LG', shop: 'SDN', revenue: 4445, dateBilled: '01/23/26', custNum: 117171},
             {name: 'MIMG Transportation', email: 'n950kmmx@gmail.com', wo: 'CU56A', reg: 'N950KM', shop: 'SDN', revenue: 3620, dateBilled: '01/23/26', custNum: 155665},
             {name: 'Patrick Lee', email: 'patrick.e.lee@protonmail.com', wo: 'CUS4A', reg: 'N176MG', shop: 'SDV', revenue: 3470, dateBilled: '01/27/26', custNum: 154588},
-            {name: 'NEED LOOKUP', email: '', wo: 'DT56A', reg: 'STOCK', shop: 'SDN', revenue: 2574, dateBilled: '01/15/26', custNum: 132595},
+            {name: 'Sierra Nevada Corp', email: 'colton.black@sncorp.com', wo: 'DT56A', reg: 'STOCK', shop: 'SDN', revenue: 2574, dateBilled: '01/15/26', custNum: 132595},
             {name: 'M&N Aviation', email: 'tom@mandn.aero', wo: 'CT0VA', reg: 'N488RJ', shop: 'SDN', revenue: 2475, dateBilled: '01/05/26', custNum: 129186},
             {name: 'Arapahoe Aero', email: 'customercare@arapahoeaero.com', wo: 'CSAZA', reg: 'N426LM', shop: 'SDR', revenue: 2118, dateBilled: '01/14/26', custNum: 151065},
             {name: 'GMR', email: 'mihir.mirajkar@gmr.net', wo: 'CU44A', reg: 'N866MB', shop: 'SDR', revenue: 1942, dateBilled: '01/14/26', custNum: 113966},
             {name: 'M&N Aviation', email: 'tom@mandn.aero', wo: 'CTVWA', reg: 'N488RJ', shop: 'SDN', revenue: 1900, dateBilled: '01/05/26', custNum: 129186},
             {name: 'JC Consulting', email: 'JCCONS81@AOL.COM', wo: 'CV5SA', reg: 'STOCK', shop: 'SHC', revenue: 1831, dateBilled: '01/23/26', custNum: 137587},
-            {name: 'NEED LOOKUP', email: '', wo: 'DT99A', reg: '', shop: 'SDN', revenue: 1750, dateBilled: '01/14/26', custNum: 132595},
-            {name: 'NEED LOOKUP', email: '', wo: 'DT13A', reg: '', shop: 'SDN', revenue: 1750, dateBilled: '01/14/26', custNum: 132595},
+            {name: 'Sierra Nevada Corp', email: 'colton.black@sncorp.com', wo: 'DT99A', reg: '', shop: 'SDN', revenue: 1750, dateBilled: '01/14/26', custNum: 132595},
+            {name: 'Sierra Nevada Corp', email: 'colton.black@sncorp.com', wo: 'DT13A', reg: '', shop: 'SDN', revenue: 1750, dateBilled: '01/14/26', custNum: 132595},
             {name: 'Aspen Flying Club', email: 'accounting@aspenflyingclub.com', wo: 'CS1XA', reg: 'N331JK', shop: 'SDR', revenue: 1632, dateBilled: '01/05/26', custNum: 139695},
             {name: 'Flights Inc', email: 'ABAUER@FLIGHTS-INC.COM', wo: 'CRW3A', reg: 'N22265', shop: 'SDR', revenue: 1632, dateBilled: '01/05/26', custNum: 142768},
             {name: 'Bode Aviation', email: 'michelle.amezcua@flybode.com', wo: 'CUKYA', reg: 'N327SF', shop: 'SDN', revenue: 1569, dateBilled: '01/15/26', custNum: 125945},
