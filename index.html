@@ -604,10 +604,10 @@
                 </div>
                 
                 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-                    <span style="color:#94a3b8;font-size:0.85em;">📊 Customer Email Database: <span id="customerDbCount">46</span> contacts from Billed WO (Updated 01/30 8:20AM)</span>
+                    <span style="color:#94a3b8;font-size:0.85em;">📊 Customer Email Database: <span id="customerDbCount">46</span> contacts (Updated 01/30 8:20AM) - <span style="color:#a78bfa;">1 per customer/month</span></span>
                     <label style="font-size:0.8em;color:#94a3b8;cursor:pointer;">
-                        <input type="checkbox" id="showSentCustomers" checked onchange="renderCustomerTable()" style="margin-right:5px;">
-                        Show sent/skipped
+                        <input type="checkbox" id="showSentCustomers" onchange="renderCustomerTable()" style="margin-right:5px;">
+                        Show all
                     </label>
                 </div>
                 <div class="table-container" style="max-height:300px;overflow-y:auto;">
@@ -2532,49 +2532,90 @@ ${surveyUrl}`;
             const tbody = document.getElementById('customerDbBody');
             const summaryDiv = document.getElementById('npsDbSummary');
             
-            let html = '';
-            let notSentCount = 0;
-            let sentCount = 0;
-            let skippedCount = 0;
-            let needEmailCount = 0;
-            let readyCount = 0;
+            // Track which customers already have a survey this month (by email or custNum)
+            const customerSurveyed = new Set();
+            const customerShown = new Set();
             
-            customerDatabase.forEach(c => {
+            // Add sent customers to surveyed set
+            surveys.forEach(s => {
+                const cust = customerDatabase.find(c => c.wo.toUpperCase() === s.wo.toUpperCase());
+                if (cust) {
+                    customerSurveyed.add(cust.email || cust.custNum.toString());
+                }
+            });
+            
+            // Categorize and sort customers
+            let readyList = [];
+            let lookupList = [];
+            let sentList = [];
+            let skippedList = [];
+            let waivedList = [];
+            
+            // Sort by revenue descending first to prioritize highest value WO per customer
+            const sortedDb = [...customerDatabase].sort((a, b) => b.revenue - a.revenue);
+            
+            sortedDb.forEach(c => {
                 const isSent = sentWOs.includes(c.wo.toUpperCase());
                 const isSkipped = skipped.includes(c.wo.toUpperCase());
                 const needsEmail = !c.email || c.name === 'NEED LOOKUP';
+                const customerKey = c.email || c.custNum.toString();
                 
-                if (isSent) sentCount++;
-                else if (isSkipped) skippedCount++;
-                else {
-                    notSentCount++;
-                    if (needsEmail) needEmailCount++;
-                    else readyCount++;
+                // Check if this customer already shown (duplicate)
+                const isDuplicate = customerShown.has(customerKey);
+                
+                if (isSent) {
+                    sentList.push({...c, status: 'sent'});
+                    customerSurveyed.add(customerKey);
+                } else if (isSkipped) {
+                    skippedList.push({...c, status: 'skipped'});
+                } else if (isDuplicate) {
+                    // This customer already has a higher-revenue WO shown - waive this one
+                    waivedList.push({...c, status: 'waived'});
+                } else if (needsEmail) {
+                    lookupList.push({...c, status: 'lookup'});
+                    customerShown.add(customerKey);
+                } else {
+                    readyList.push({...c, status: 'ready'});
+                    customerShown.add(customerKey);
                 }
-                
-                // Skip sent/skipped if checkbox unchecked
-                if (!showSent && (isSent || isSkipped)) return;
+            });
+            
+            // Combine in priority order: Ready > Lookup > Waived > Skipped > Sent
+            const orderedList = [...readyList, ...lookupList, ...waivedList, ...skippedList, ...sentList];
+            
+            let html = '';
+            let readyCount = readyList.length;
+            let lookupCount = lookupList.length;
+            let waivedCount = waivedList.length;
+            let skippedCount = skippedList.length;
+            let sentCount = sentList.length;
+            
+            orderedList.forEach(c => {
+                // Skip sent/skipped/waived if checkbox unchecked
+                if (!showSent && (c.status === 'sent' || c.status === 'skipped' || c.status === 'waived')) return;
                 
                 // Row styling based on status
                 let rowStyle = '';
-                if (isSent) {
+                if (c.status === 'sent') {
                     rowStyle = 'background:rgba(107,114,128,0.3);opacity:0.7;';
-                } else if (isSkipped) {
+                } else if (c.status === 'skipped') {
                     rowStyle = 'background:rgba(100,116,139,0.2);opacity:0.6;';
-                } else if (needsEmail) {
-                    rowStyle = 'background:rgba(239,68,68,0.15);'; // Red tint for needs email
+                } else if (c.status === 'waived') {
+                    rowStyle = 'background:rgba(139,92,246,0.15);opacity:0.7;';
+                } else if (c.status === 'lookup') {
+                    rowStyle = 'background:rgba(239,68,68,0.15);';
                 } else if (c.revenue > 5000) {
-                    rowStyle = 'background:rgba(16,185,129,0.2);'; // Green for high value ready
+                    rowStyle = 'background:rgba(16,185,129,0.2);';
                 }
                 
-                const woStyle = (isSent || isSkipped) ? 'color:#64748b;' : 'color:#60a5fa;font-weight:bold;';
+                const woStyle = (c.status === 'sent' || c.status === 'skipped' || c.status === 'waived') ? 'color:#64748b;' : 'color:#60a5fa;font-weight:bold;';
                 const revStyle = c.revenue === 0 ? 'color:#94a3b8;' : 'color:#10b981;';
                 const regDisplay = c.reg || '-';
                 const revDisplay = '$' + c.revenue.toLocaleString();
                 
                 // Name/Email display
                 let nameDisplay, emailDisplay;
-                if (needsEmail) {
+                if (c.status === 'lookup') {
                     nameDisplay = `<span style="color:#f87171;">⚠️ Cust# ${c.custNum}</span>`;
                     emailDisplay = `<span style="color:#ef4444;font-size:0.75em;">NEED EMAIL LOOKUP</span>`;
                 } else {
@@ -2582,13 +2623,15 @@ ${surveyUrl}`;
                     emailDisplay = `<span style="color:#fbbf24;font-family:monospace;font-size:0.8em;">${c.email}</span>`;
                 }
                 
-                // Action button
+                // Action button based on status
                 let actionCell;
-                if (isSent) {
+                if (c.status === 'sent') {
                     actionCell = '<span style="color:#10b981;font-size:0.8em;">✓ Sent</span>';
-                } else if (isSkipped) {
+                } else if (c.status === 'skipped') {
                     actionCell = `<span style="color:#64748b;font-size:0.75em;">⊘ Skipped</span> <button onclick="undoSkip('${c.wo}')" style="background:#475569;color:white;border:none;padding:2px 6px;border-radius:3px;font-size:0.7em;cursor:pointer;margin-left:4px;">Undo</button>`;
-                } else if (needsEmail) {
+                } else if (c.status === 'waived') {
+                    actionCell = `<span style="color:#a78bfa;font-size:0.75em;">↩️ Waived (dup)</span>`;
+                } else if (c.status === 'lookup') {
                     actionCell = `<span style="color:#f87171;font-size:0.75em;">📋 Lookup</span>`;
                 } else {
                     const btnStyle = c.revenue > 0 ? 'background:#10b981;' : 'background:#475569;';
@@ -2612,15 +2655,16 @@ ${surveyUrl}`;
             tbody.innerHTML = html;
             
             // Update summary with detailed breakdown
-            if (notSentCount === 0 && skippedCount === 0) {
+            if (readyCount === 0 && lookupCount === 0) {
                 summaryDiv.innerHTML = '✅ <strong>All ' + sentCount + ' surveys sent!</strong> Waiting for responses.';
                 summaryDiv.style.background = '#14532d';
                 summaryDiv.style.color = '#bbf7d0';
             } else {
-                let summaryText = `📊 <strong>${readyCount} ready</strong> | <span style="color:#f87171;">${needEmailCount} need email</span> | ${sentCount} sent`;
-                if (skippedCount > 0) {
-                    summaryText += ` | <span style="color:#94a3b8;">${skippedCount} skipped</span>`;
-                }
+                let summaryText = `📊 <strong style="color:#10b981;">${readyCount} ready</strong>`;
+                if (lookupCount > 0) summaryText += ` | <span style="color:#f87171;">${lookupCount} need email</span>`;
+                if (waivedCount > 0) summaryText += ` | <span style="color:#a78bfa;">${waivedCount} waived (dup)</span>`;
+                if (skippedCount > 0) summaryText += ` | <span style="color:#94a3b8;">${skippedCount} skipped</span>`;
+                summaryText += ` | ${sentCount} sent`;
                 summaryDiv.innerHTML = summaryText;
                 summaryDiv.style.background = '#1e3a5f';
                 summaryDiv.style.color = '#93c5fd';
