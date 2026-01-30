@@ -600,7 +600,7 @@
                 </div>
                 
                 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-                    <span style="color:#94a3b8;font-size:0.85em;">📊 Customer Email Database: <span id="customerDbCount">14</span> contacts with billed WO data (Updated 01/28)</span>
+                    <span style="color:#94a3b8;font-size:0.85em;">📊 Customer Email Database: <span id="customerDbCount">46</span> contacts from Billed WO (Updated 01/29 12:59PM)</span>
                     <label style="font-size:0.8em;color:#94a3b8;cursor:pointer;">
                         <input type="checkbox" id="showSentCustomers" checked onchange="renderCustomerTable()" style="margin-right:5px;">
                         Show sent
@@ -616,8 +616,8 @@
                         </tbody>
                     </table>
                 </div>
-                <div id="npsDbSummary" style="background:#14532d;padding:8px;border-radius:6px;margin-top:10px;font-size:0.8em;color:#bbf7d0;">
-                    ✅ <strong>All 14 surveys sent!</strong> Waiting for responses. Check "Show sent" to see full list.
+                <div id="npsDbSummary" style="background:#1e3a5f;padding:8px;border-radius:6px;margin-top:10px;font-size:0.8em;color:#93c5fd;">
+                    📊 Loading survey status...
                 </div>
                 <div style="background:#0f172a;padding:8px;border-radius:6px;margin-top:5px;font-size:0.75em;color:#94a3b8;">
                     ⚠️ <strong>Data Note:</strong> Billed WO report has multiple rows per WO (by Sqk Type). Using MAX revenue per WO to avoid duplicates.
@@ -673,7 +673,7 @@
             <div class="card">
                 <div class="card-header">
                     <span class="card-title">January 2026 Metrics</span>
-                    <span class="badge badge-blue">MTD - Updated 1:30 PM</span>
+                    <span class="badge badge-blue">MTD - Updated 3:45 PM</span>
                 </div>
                 <div class="card-grid">
                     <div class="metric">
@@ -687,14 +687,14 @@
                         <div class="metric-sub">Excl shop WO DT39A</div>
                     </div>
                     <div class="metric">
-                        <div class="metric-value">$239K</div>
+                        <div class="metric-value">$182K</div>
                         <div class="metric-label">Revenue MTD</div>
-                        <div class="metric-sub">34% of $694K goal</div>
+                        <div class="metric-sub">26% of $694K goal</div>
                     </div>
                     <div class="metric">
-                        <div class="metric-value">46</div>
+                        <div class="metric-value">42</div>
                         <div class="metric-label">Billed WOs</div>
-                        <div class="metric-sub">$89K GP | $183/hr ELR</div>
+                        <div class="metric-sub">$74.8K GP</div>
                     </div>
                 </div>
             </div>
@@ -792,7 +792,7 @@
                 <div class="metric-label">Total Open WOs</div>
                 </div>
                 <div class="metric">
-                <div class="metric-value">46</div>
+                <div class="metric-value">42</div>
                 <div class="metric-label">Billed WOs (Jan)</div>
                 </div>
                 <div class="metric">
@@ -837,7 +837,7 @@
                 </div>
                 <div style="background:#0f172a;padding:10px;border-radius:6px;font-size:0.85em;color:#94a3b8;">
                     💡 <strong>Expected Hours from Anchor:</strong> SDV dominates with 471h expected (Goal #4 tracking).<br>
-                    ⭐ <strong>SDV Special (for Matt) >10h:</strong> CV78A (400h/$28K), CVN0A (41h/$2.9K), CMJHA (24h/$1.7K) = <strong style="color:#fbbf24;">$32,550 total</strong>
+                    ⭐ <strong>SDV Special (for Matt) >10h:</strong> CVN0A (41h/$2.9K), CMJHA (24h/$1.7K) = <strong style="color:#fbbf24;">$4,550 Jan WIP</strong> | CV78A (400h/$28K) → Feb WIP
                 </div>
             </div>
             
@@ -1112,29 +1112,29 @@
                     <span class="badge badge-green">✅ System is PROFITABLE</span>
                 </div>
                 <div style="background:rgba(16,185,129,0.15);padding:10px;border-radius:6px;margin-bottom:15px;font-size:0.85em;color:#a7f3d0;">
-                    <strong style="color:#10b981;">📊 DATA SOURCE:</strong> Billed WO Report (AS400) | 46 WOs | $239K Revenue | Updated: 01/29/26 12:59 PM
+                    <strong style="color:#10b981;">📊 DATA SOURCE:</strong> Billed WO Report (AS400) | 42 WOs | $182K Revenue | Updated: 01/27/26 3:40 PM
                 </div>
                 
                 <!-- Profitability Summary Cards -->
                 <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:15px;">
                     <div style="background:linear-gradient(135deg,#065f46,#10b981);padding:12px;border-radius:8px;text-align:center;">
                         <div style="font-size:0.75em;color:#a7f3d0;">Total Labor Billed</div>
-                        <div style="font-size:1.5em;font-weight:bold;color:#fff;">$58,548</div>
-                        <div style="font-size:0.7em;color:#bbf7d0;">320.7 hours</div>
+                        <div style="font-size:1.5em;font-weight:bold;color:#fff;">$51,687</div>
+                        <div style="font-size:0.7em;color:#bbf7d0;">330.3 hours</div>
                     </div>
                     <div style="background:linear-gradient(135deg,#1e3a5f,#3b82f6);padding:12px;border-radius:8px;text-align:center;">
                         <div style="font-size:0.75em;color:#bfdbfe;">If Hourly @$145</div>
-                        <div style="font-size:1.5em;font-weight:bold;color:#fff;">$46,502</div>
+                        <div style="font-size:1.5em;font-weight:bold;color:#fff;">$47,894</div>
                         <div style="font-size:0.7em;color:#93c5fd;">Comparison baseline</div>
                     </div>
                     <div style="background:linear-gradient(135deg,#065f46,#22c55e);padding:12px;border-radius:8px;text-align:center;border:2px solid #4ade80;">
                         <div style="font-size:0.75em;color:#bbf7d0;">Net Variance</div>
-                        <div style="font-size:1.5em;font-weight:bold;color:#4ade80;">+$12,046</div>
+                        <div style="font-size:1.5em;font-weight:bold;color:#4ade80;">+$3,793</div>
                         <div style="font-size:0.7em;color:#86efac;">🟢 System profitable!</div>
                     </div>
                     <div style="background:linear-gradient(135deg,#581c87,#a855f7);padding:12px;border-radius:8px;text-align:center;">
                         <div style="font-size:0.75em;color:#e9d5ff;">Effective Rate</div>
-                        <div style="font-size:1.5em;font-weight:bold;color:#fff;">$183/hr</div>
+                        <div style="font-size:1.5em;font-weight:bold;color:#fff;">$156/hr</div>
                         <div style="font-size:0.7em;color:#d8b4fe;">vs $145 target</div>
                     </div>
                 </div>
@@ -1374,34 +1374,6 @@
                     <strong>⚠️ Action Required:</strong> Contact Cassie/PDT to schedule dates for Ken, John, and Juan.
                 </div>
             </div>
-            
-            <!-- NEW TRAINING ASSIGNMENTS (from LMS emails) -->
-            <div class="card" style="border:2px solid #a855f7;">
-                <div class="card-header">
-                    <span class="card-title">📧 New Training Assignments (LMS - Jan 29)</span>
-                    <span class="badge badge-green">4 Assigned</span>
-                </div>
-                <div style="background:rgba(168,85,247,0.15);padding:10px;border-radius:6px;margin-bottom:15px;font-size:0.85em;color:#e9d5ff;">
-                    <strong style="color:#a855f7;">🤖 AUTO-DETECTED:</strong> From forwarded LMS emails today. Denver 889 employees only.
-                </div>
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr><th>Employee</th><th>Course</th><th>Type</th><th>Status</th></tr>
-                        </thead>
-                        <tbody>
-                            <tr style="background:rgba(59,130,246,0.15)"><td>Michael Huber</td><td>GPP-0110 Brazil International Training</td><td>Required</td><td><span class="badge badge-blue">📧 Assigned</span></td></tr>
-                            <tr style="background:rgba(59,130,246,0.15)"><td>Armando Triana-Cruz</td><td>GPP-0110 Brazil International Training</td><td>Required</td><td><span class="badge badge-blue">📧 Assigned</span></td></tr>
-                            <tr style="background:rgba(59,130,246,0.15)"><td>Kenneth Smith</td><td>GPP-0110 Brazil International Training</td><td>Required</td><td><span class="badge badge-blue">📧 Assigned</span></td></tr>
-                            <tr style="background:rgba(245,158,11,0.15)"><td>John Watson</td><td>CMMC-CUI & ISP-1402 Training</td><td>Security</td><td><span class="badge badge-amber">📧 Assigned</span></td></tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div style="background:#0f172a;padding:10px;border-radius:6px;margin-top:10px;font-size:0.85em;color:#94a3b8;">
-                    💡 <strong>GPP-0110:</strong> Brazil International Training - 3 techs assigned<br>
-                    🔒 <strong>CMMC-CUI:</strong> Controlled Unclassified Information security training - John Watson
-                </div>
-            </div>
         </div>
         
         <!-- QUALITY TAB -->
@@ -1630,6 +1602,88 @@
         
         <!-- WIP TAB -->
         <div class="content" id="wip">
+            <!-- WIP EXPLAINED - THE THREE WIP FIGURES -->
+            <div class="card" style="border:2px solid #60a5fa;">
+                <div class="card-header">
+                    <span class="card-title">📖 Understanding WIP: Three Different Figures</span>
+                    <span class="badge badge-blue">Know Your Numbers</span>
+                </div>
+                
+                <div style="background:#0f172a;padding:20px;border-radius:12px;margin-bottom:20px;">
+                    <div style="color:#93c5fd;font-size:1.1em;font-weight:bold;margin-bottom:15px;">Denver tracks THREE different WIP figures — don't confuse them:</div>
+                    
+                    <!-- Three WIP Types Grid -->
+                    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-bottom:20px;">
+                        
+                        <!-- WIP Account -->
+                        <div style="background:linear-gradient(135deg,#7f1d1d,#991b1b);padding:20px;border-radius:12px;border:2px solid #ef4444;">
+                            <div style="color:#fca5a5;font-size:0.9em;font-weight:bold;margin-bottom:5px;">1️⃣ WIP ACCOUNT 0889.35015</div>
+                            <div style="color:#ef4444;font-size:2.2em;font-weight:bold;">-$8,600</div>
+                            <div style="color:#fecaca;font-size:0.85em;margin-top:8px;">Accounting ledger balance</div>
+                            <div style="color:#f87171;font-size:0.75em;margin-top:5px;font-style:italic;">⚠️ NEGATIVE = In the hole</div>
+                        </div>
+                        
+                        <!-- SDV Total WIP -->
+                        <div style="background:linear-gradient(135deg,#065f46,#047857);padding:20px;border-radius:12px;border:2px solid #10b981;">
+                            <div style="color:#6ee7b7;font-size:0.9em;font-weight:bold;margin-bottom:5px;">2️⃣ SDV TOTAL WIP</div>
+                            <div style="color:#10b981;font-size:2.2em;font-weight:bold;">$32,977</div>
+                            <div style="color:#a7f3d0;font-size:0.85em;margin-top:8px;">All open SDV WOs × $70/hr</div>
+                            <div style="color:#34d399;font-size:0.75em;margin-top:5px;">471.1 hours total</div>
+                        </div>
+                        
+                        <!-- SDV Special WIP -->
+                        <div style="background:linear-gradient(135deg,#78350f,#92400e);padding:20px;border-radius:12px;border:2px solid #f59e0b;">
+                            <div style="color:#fcd34d;font-size:0.9em;font-weight:bold;margin-bottom:5px;">3️⃣ SDV SPECIAL WIP (Matt) - JAN</div>
+                            <div style="color:#fbbf24;font-size:2.2em;font-weight:bold;">$4,550</div>
+                            <div style="color:#fde68a;font-size:0.85em;margin-top:8px;">WOs >10h × $70/hr (Jan only)</div>
+                            <div style="color:#fcd34d;font-size:0.75em;margin-top:5px;">65.0 hours | CV78A → Feb</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Explanation Text -->
+                    <div style="background:#1e293b;padding:15px;border-radius:8px;margin-bottom:15px;">
+                        <div style="color:#f8fafc;font-size:0.95em;line-height:1.7;">
+                            <strong style="color:#60a5fa;">What's the difference?</strong><br>
+                            • <strong>#2 SDV Total WIP</strong> = All open SDV WOs × $70 (based on actual sold hours)<br>
+                            • <strong>#3 SDV Special WIP</strong> = Only >10h WOs with hours sold in Jan (for Matt's report)<br>
+                            CV78A ($28K) excluded from Jan → work starts Feb 17
+                        </div>
+                    </div>
+                    
+                    <!-- KEY METHODOLOGY -->
+                    <div style="background:linear-gradient(135deg,#1e3a5f,#1e40af);padding:15px;border-radius:8px;border-left:4px solid #60a5fa;">
+                        <div style="color:#93c5fd;font-size:0.95em;font-weight:bold;margin-bottom:8px;">🔑 KEY: WIP = Hours Actually SOLD by Month End</div>
+                        <div style="color:#e0e7ff;font-size:0.9em;line-height:1.6;">
+                            WIP is based on <strong>actual hours charged</strong> to the WO by Jan 31, NOT expected hours.<br>
+                            Example: CV78A has 400h expected, but work starts Feb 17 → <strong>January WIP = $0</strong>, February WIP = $28K
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- THE CRITICAL INSIGHT: Budget Impact -->
+                <div style="background:linear-gradient(135deg,#450a0a,#7f1d1d);padding:20px;border-radius:12px;border-left:5px solid #ef4444;">
+                    <div style="color:#fca5a5;font-size:1.1em;font-weight:bold;margin-bottom:10px;">⚠️ CRITICAL: What Negative WIP Means for Your Budget</div>
+                    <div style="color:#fef2f2;font-size:1em;line-height:1.8;">
+                        The <strong style="color:#ef4444;">-$8,600 WIP Account</strong> is a <strong>deficit you're carrying forward</strong>.<br><br>
+                        <div style="background:#0f172a;padding:15px;border-radius:8px;margin:10px 0;">
+                            <div style="color:#94a3b8;font-size:0.9em;">Your math:</div>
+                            <div style="font-family:monospace;color:#f8fafc;margin-top:8px;">
+                                Budget Target = <span style="color:#60a5fa;">X</span><br>
+                                WIP Account = <span style="color:#ef4444;">-$8,600</span> (in the hole)<br>
+                                <span style="border-top:1px solid #475569;display:block;margin:8px 0;padding-top:8px;">
+                                To be <strong style="color:#10b981;">truly even</strong> = <span style="color:#60a5fa;">X</span> + <span style="color:#fbbf24;">$8,600</span>
+                                </span>
+                            </div>
+                        </div>
+                        Think of it like a credit card balance — hitting your monthly savings goal doesn't mean much if you're also carrying debt. <strong style="color:#fbbf24;">You need to cover both.</strong>
+                    </div>
+                    <div style="background:#1e293b;padding:12px;border-radius:8px;margin-top:15px;text-align:center;">
+                        <span style="color:#94a3b8;">Your REAL January target to be "whole" = </span>
+                        <span style="color:#fbbf24;font-size:1.2em;font-weight:bold;">Budget + $8,600</span>
+                    </div>
+                </div>
+            </div>
+            
             <!-- THE BIG NUMBER -->
             <div class="card">
                 <div class="card-header">
@@ -1683,30 +1737,33 @@
                             <tr><th>WO#</th><th>Customer</th><th>Exp Hrs</th><th>WIP @ $70</th><th>Notes</th></tr>
                         </thead>
                         <tbody>
-                            <tr style="background:rgba(16,185,129,0.2)"><td><strong>CV78A</strong> 🔥</td><td>Primus Capital (N303JJ)</td><td style="color:#10b981;font-weight:bold;">400.0h</td><td style="color:#10b981;font-weight:bold">$28,000</td><td style="font-size:0.8em;">Gogo Avance L3 - AC Out 03/06/26</td></tr>
+                            <tr style="background:rgba(59,130,246,0.2)"><td><strong>CV78A</strong> 📅</td><td>Primus Capital (N303JJ)</td><td style="color:#94a3b8;">400.0h exp</td><td style="color:#60a5fa;font-style:italic;">*See note</td><td style="font-size:0.8em;">Starts Feb 17 → FEB WIP</td></tr>
                             <tr><td><strong>CVN0A</strong></td><td>Stevens Aerospace (N4QL)</td><td>41.0h</td><td style="color:#fbbf24;font-weight:bold">$2,870</td><td style="font-size:0.8em;">ARTEX ELT Install</td></tr>
                             <tr><td><strong>CMJHA</strong></td><td>Business Aviators (N1870E)</td><td>24.0h</td><td style="color:#fbbf24;font-weight:bold">$1,680</td><td style="font-size:0.8em;">Ensemble Upgrade</td></tr>
                             <tr style="background:rgba(251,191,36,0.2);font-weight:bold;">
                                 <td colspan="2">TOTAL SDV SPECIAL WIP (>10h, OPEN only)</td>
-                                <td>465.0h</td>
-                                <td style="color:#fbbf24;">$32,550</td>
-                                <td></td>
+                                <td>65.0h</td>
+                                <td style="color:#fbbf24;">$4,550</td>
+                                <td style="font-size:0.75em;">*Jan only</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-                <div style="background:rgba(16,185,129,0.2);padding:10px;border-radius:6px;margin-top:10px;border:1px solid #10b981;">
-                    <strong style="color:#10b981;">🔥 BIG PIPELINE:</strong> <span style="color:#bbf7d0;">CV78A (Gogo L3 for Primus Capital) alone represents $28K - scheduled Feb 17 - Mar 6, 2026</span>
+                <div style="background:rgba(59,130,246,0.2);padding:10px;border-radius:6px;margin-top:10px;border:1px solid #60a5fa;">
+                    <strong style="color:#60a5fa;">📅 CV78A NOTE:</strong> <span style="color:#bfdbfe;">Work starts Feb 17 → WIP = only hours SOLD by Jan 31. Full 400h/$28K will be <strong>February WIP</strong>, not January.</span>
+                </div>
+                <div style="background:#14532d;padding:10px;border-radius:6px;margin-top:10px;border:1px solid #10b981;">
+                    <strong style="color:#10b981;">✅ ACTUAL JANUARY SDV SPECIAL WIP:</strong> <span style="color:#bbf7d0;">CVN0A ($2,870) + CMJHA ($1,680) = <strong>$4,550</strong></span>
                 </div>
                 <div style="background:#1e293b;padding:12px;border-radius:8px;margin-top:15px;">
-                    <strong style="color:#60a5fa;">📋 Email Template for Matt:</strong>
+                    <strong style="color:#60a5fa;">📋 Email Template for Matt (January WIP):</strong>
                     <div style="color:#e2e8f0;font-size:0.9em;margin-top:8px;font-family:monospace;background:#0f172a;padding:10px;border-radius:4px;">
                         Subject: Denver SDV Special WIP - January 2026<br><br>
                         Matt, here are the SDV WOs with >10 expected hours for special WIP @ $70/hr, 15% margin:<br><br>
-                        CV78A: 400.0h = $28,000 (Primus Capital - Gogo L3 Install)<br>
                         CVN0A: 41.0h = $2,870 (Stevens Aerospace - ARTEX ELT)<br>
                         CMJHA: 24.0h = $1,680 (Business Aviators - Ensemble Upgrade)<br><br>
-                        Total: 465.0h = $32,550
+                        Total: 65.0h = $4,550<br><br>
+                        Note: CV78A (Primus Capital - Gogo L3) starts Feb 17, so its 400h/$28K will be February WIP.
                     </div>
                 </div>
                 <div style="background:#0f172a;padding:10px;border-radius:6px;margin-top:10px;font-size:0.8em;color:#94a3b8;">
@@ -2153,7 +2210,7 @@
             const completed = surveys.filter(s => s.status === 'Completed').length;
             const pending = surveys.filter(s => s.status === 'Sent').length;
             const rate = sent > 0 ? Math.round((completed / sent) * 100) + '%' : '-';
-            const billedWOsTarget = 41;  // Total billed WOs in January (update with new Billed WO report)
+            const billedWOsTarget = 46;  // Total billed WOs from Billed WO report 01/29/26
             
             document.getElementById('statSent').textContent = sent + '/' + billedWOsTarget;
             document.getElementById('statCompleted').textContent = completed;
@@ -2381,22 +2438,60 @@ ${surveyUrl}`;
             };
         }
         
-        // Customer Database - Update when new Billed WO reports are processed
+        // Customer Database - AUTO-SYNCED from Billed WO Report 01/29/26 12:59PM
+        // 46 Total Billed WOs | Update this when new Billed WO report is processed
+        // WOs with empty email need lookup in AS400/customer records
         const customerDatabase = [
-            {name: 'Bode Aviation', email: 'michelle.amezcua@flybode.com', wo: 'DSW5A', reg: 'N328SF', revenue: 34270},
-            {name: 'MIMG Transportation', email: 'n950kmmx@gmail.com', wo: 'CV3UA', reg: 'STOCK', revenue: 9297},
-            {name: 'Peregrine', email: 'ths@masd.metrea.aero', wo: 'DTBLA', reg: '', revenue: 6856},
-            {name: 'Infinity Energia', email: 'EDUARDO@INFINITYENERGIAD.COM.BR', wo: 'CUGZA', reg: 'PR-BBD', revenue: 5444},
-            {name: 'Liberty Global', email: 'apdenver@libertyglobal.com', wo: 'CT8VA', reg: 'N250LG', revenue: 4445},
-            {name: 'M&N Aviation', email: 'accounting@mandn.aero', wo: 'CT0VA', reg: 'N488RJ', revenue: 2475},
-            {name: 'Arapahoe Aero', email: 'customercare@arapahoeaero.com', wo: 'CSAZA', reg: 'N426LM', revenue: 2118},
-            {name: 'GMR', email: 'parts-mtc@gmr.net', wo: 'CU44A', reg: 'N866MB', revenue: 1942},
-            {name: 'Aspen Flying Club', email: 'accounting@aspenflyingclub.com', wo: 'CS1XA', reg: 'N331JK', revenue: 1632},
-            {name: 'Flights Inc', email: 'ABAUER@FLIGHTS-INC.COM', wo: 'CRW3A', reg: 'N22265', revenue: 1632},
-            {name: 'Civil Air Patrol', email: 'capconsmx@capnhq.gov', wo: 'CSYNA', reg: 'N846CP', revenue: 1267},
-            {name: 'AirMax', email: 'rong@airmaxonline.com', wo: 'CUCJA', reg: 'N137ZM', revenue: 785},
-            {name: 'International Jet Aviation', email: 'heike@internationaljet.com', wo: 'CUX4A', reg: 'N219JG', revenue: 706},
-            {name: 'Pilot Service Provider', email: 'scott.j@pilotserviceprovider.com', wo: 'CQCAB', reg: 'N750JE', revenue: 0}
+            // === HIGH REVENUE (>$5K) - PRIORITY ===
+            {name: 'NEED LOOKUP', email: '', wo: 'DSW4A', reg: 'N7BD', shop: 'SDN', revenue: 65835, dateBilled: '01/26/26', custNum: 157998},
+            {name: 'NEED LOOKUP', email: '', wo: 'DUSFA', reg: 'N65LR', shop: 'SDN', revenue: 42398, dateBilled: '01/29/26', custNum: 153916},
+            {name: 'Bode Aviation', email: 'michelle.amezcua@flybode.com', wo: 'DSW5A', reg: 'N328SF', shop: 'SDN', revenue: 34270, dateBilled: '01/08/26', custNum: 125945},
+            {name: 'NEED LOOKUP', email: '', wo: 'DUMXA', reg: '', shop: 'SDN', revenue: 13300, dateBilled: '01/14/26', custNum: 132595},
+            {name: 'MIMG Transportation', email: 'n950kmmx@gmail.com', wo: 'CV3UA', reg: 'STOCK', shop: 'SHC', revenue: 9297, dateBilled: '01/23/26', custNum: 155665},
+            {name: 'NEED LOOKUP', email: '', wo: 'CP69B', reg: 'N817EM', shop: 'SDN', revenue: 8300, dateBilled: '01/29/26', custNum: 109004},
+            {name: 'Peregrine', email: 'ths@masd.metrea.aero', wo: 'DTBLA', reg: '', shop: 'SDV', revenue: 6856, dateBilled: '01/26/26', custNum: 144668},
+            {name: 'Infinity Energia', email: 'EDUARDO@INFINITYENERGIAD.COM.BR', wo: 'CUGZA', reg: 'PR-BBD', shop: 'SDN', revenue: 5444, dateBilled: '01/15/26', custNum: 157238},
+            {name: 'NEED LOOKUP', email: '', wo: 'CU16A', reg: 'N176MG', shop: 'SDN', revenue: 5190, dateBilled: '01/28/26', custNum: 154588},
+            // === MEDIUM REVENUE ($1K-$5K) ===
+            {name: 'Liberty Global', email: 'apdenver@libertyglobal.com', wo: 'CT8VA', reg: 'N250LG', shop: 'SDN', revenue: 4445, dateBilled: '01/23/26', custNum: 117171},
+            {name: 'NEED LOOKUP', email: '', wo: 'CU56A', reg: 'N950KM', shop: 'SDN', revenue: 3620, dateBilled: '01/23/26', custNum: 155665},
+            {name: 'NEED LOOKUP', email: '', wo: 'CUS4A', reg: 'N176MG', shop: 'SDV', revenue: 3470, dateBilled: '01/27/26', custNum: 154588},
+            {name: 'NEED LOOKUP', email: '', wo: 'DT56A', reg: 'STOCK', shop: 'SDN', revenue: 2574, dateBilled: '01/15/26', custNum: 132595},
+            {name: 'M&N Aviation', email: 'accounting@mandn.aero', wo: 'CT0VA', reg: 'N488RJ', shop: 'SDN', revenue: 2475, dateBilled: '01/05/26', custNum: 129186},
+            {name: 'Arapahoe Aero', email: 'customercare@arapahoeaero.com', wo: 'CSAZA', reg: 'N426LM', shop: 'SDR', revenue: 2118, dateBilled: '01/14/26', custNum: 151065},
+            {name: 'GMR', email: 'parts-mtc@gmr.net', wo: 'CU44A', reg: 'N866MB', shop: 'SDR', revenue: 1942, dateBilled: '01/14/26', custNum: 113966},
+            {name: 'NEED LOOKUP', email: '', wo: 'CTVWA', reg: 'N488RJ', shop: 'SDN', revenue: 1901, dateBilled: '01/05/26', custNum: 129186},
+            {name: 'NEED LOOKUP', email: '', wo: 'CV5SA', reg: 'STOCK', shop: 'SHC', revenue: 1831, dateBilled: '01/23/26', custNum: 137587},
+            {name: 'NEED LOOKUP', email: '', wo: 'DT13A', reg: '', shop: 'SDN', revenue: 1750, dateBilled: '01/14/26', custNum: 132595},
+            {name: 'NEED LOOKUP', email: '', wo: 'DT99A', reg: '', shop: 'SDN', revenue: 1750, dateBilled: '01/14/26', custNum: 132595},
+            {name: 'Aspen Flying Club', email: 'accounting@aspenflyingclub.com', wo: 'CS1XA', reg: 'N331JK', shop: 'SDR', revenue: 1632, dateBilled: '01/05/26', custNum: 139695},
+            {name: 'Flights Inc', email: 'ABAUER@FLIGHTS-INC.COM', wo: 'CRW3A', reg: 'N22265', shop: 'SDR', revenue: 1632, dateBilled: '01/05/26', custNum: 142768},
+            {name: 'NEED LOOKUP', email: '', wo: 'CUKYA', reg: 'N327SF', shop: 'SDN', revenue: 1570, dateBilled: '01/15/26', custNum: 125945},
+            {name: 'NEED LOOKUP', email: '', wo: 'CUCPA', reg: 'N944AL', shop: 'SDR', revenue: 1392, dateBilled: '01/14/26', custNum: 151065},
+            {name: 'NEED LOOKUP', email: '', wo: 'CUECA', reg: 'N862JM', shop: 'SDR', revenue: 1392, dateBilled: '01/14/26', custNum: 151065},
+            {name: 'Civil Air Patrol', email: 'capconsmx@capnhq.gov', wo: 'CSYNA', reg: 'N846CP', shop: 'SDR', revenue: 1267, dateBilled: '01/08/26', custNum: 137367},
+            {name: 'NEED LOOKUP', email: '', wo: 'CSYQA', reg: 'N948CA', shop: 'SDR', revenue: 1267, dateBilled: '01/08/26', custNum: 137367},
+            {name: 'NEED LOOKUP', email: '', wo: 'CV2GA', reg: 'N688MP', shop: 'SDN', revenue: 1235, dateBilled: '01/28/26', custNum: 154793},
+            {name: 'NEED LOOKUP', email: '', wo: 'CSYLA', reg: 'N243CP', shop: 'SDR', revenue: 1056, dateBilled: '01/21/26', custNum: 137367},
+            // === LOWER REVENUE (<$1K) ===
+            {name: 'NEED LOOKUP', email: '', wo: 'CTYTA', reg: 'N327SF', shop: 'SDN', revenue: 950, dateBilled: '01/09/26', custNum: 125945},
+            {name: 'NEED LOOKUP', email: '', wo: 'CU1CA', reg: 'N488RJ', shop: 'SDN', revenue: 950, dateBilled: '01/08/26', custNum: 129186},
+            {name: 'AirMax', email: 'rong@airmaxonline.com', wo: 'CUCJA', reg: 'N137ZM', shop: 'SDN', revenue: 785, dateBilled: '01/15/26', custNum: 127007},
+            {name: 'NEED LOOKUP', email: '', wo: 'CV8ZA', reg: 'N526LK', shop: 'SDR', revenue: 739, dateBilled: '01/23/26', custNum: 139695},
+            {name: 'NEED LOOKUP', email: '', wo: 'CV98A', reg: 'N621TK', shop: 'SDR', revenue: 739, dateBilled: '01/22/26', custNum: 139695},
+            {name: 'NEED LOOKUP', email: '', wo: 'DT3DA', reg: '', shop: 'SDV', revenue: 712, dateBilled: '01/27/26', custNum: 106755},
+            {name: 'International Jet Aviation', email: 'heike@internationaljet.com', wo: 'CUX4A', reg: 'N219JG', shop: 'SDN', revenue: 706, dateBilled: '01/19/26', custNum: 109004},
+            {name: 'NEED LOOKUP', email: '', wo: 'CUNPA', reg: 'N683SP', shop: 'SDR', revenue: 634, dateBilled: '01/14/26', custNum: 139695},
+            {name: 'NEED LOOKUP', email: '', wo: 'CUSQA', reg: 'N971GV', shop: 'SDR', revenue: 634, dateBilled: '01/19/26', custNum: 139695},
+            {name: 'NEED LOOKUP', email: '', wo: 'CVCHA', reg: 'N810AM', shop: 'SDR', revenue: 422, dateBilled: '01/26/26', custNum: 139695},
+            {name: 'NEED LOOKUP', email: '', wo: 'DV5KA', reg: 'N765CP', shop: 'SDR', revenue: 422, dateBilled: '01/22/26', custNum: 137367},
+            {name: 'NEED LOOKUP', email: '', wo: 'DUNWA', reg: 'N814PS', shop: 'SDN', revenue: 420, dateBilled: '01/15/26', custNum: 154444},
+            // === ZERO REVENUE (T&M / warranty) ===
+            {name: 'Pilot Service Provider', email: 'scott.j@pilotserviceprovider.com', wo: 'CQCAB', reg: 'N750JE', shop: 'SDV', revenue: 0, dateBilled: '01/09/26', custNum: 135888},
+            {name: 'NEED LOOKUP', email: '', wo: 'CQD8B', reg: 'N9630P', shop: 'SDV', revenue: 0, dateBilled: '01/13/26', custNum: 135888},
+            {name: 'NEED LOOKUP', email: '', wo: 'CV9LA', reg: 'N818LX', shop: 'SDN', revenue: 0, dateBilled: '01/22/26', custNum: 129186},
+            {name: 'NEED LOOKUP', email: '', wo: 'DN1KA', reg: 'N303JJ', shop: 'SDN', revenue: 0, dateBilled: '01/22/26', custNum: 109004},
+            {name: 'NEED LOOKUP', email: '', wo: 'DTEJA', reg: 'N95MJ', shop: 'SDN', revenue: 0, dateBilled: '01/09/26', custNum: 109004}
         ];
         
         function renderCustomerTable() {
@@ -2409,31 +2504,61 @@ ${surveyUrl}`;
             let html = '';
             let notSentCount = 0;
             let sentCount = 0;
+            let needEmailCount = 0;
+            let readyCount = 0;
             
             customerDatabase.forEach(c => {
                 const isSent = sentWOs.includes(c.wo.toUpperCase());
+                const needsEmail = !c.email || c.name === 'NEED LOOKUP';
+                
                 if (isSent) sentCount++;
-                else notSentCount++;
+                else {
+                    notSentCount++;
+                    if (needsEmail) needEmailCount++;
+                    else readyCount++;
+                }
                 
                 if (!showSent && isSent) return; // Skip sent if checkbox unchecked
                 
-                const rowStyle = isSent ? 'background:rgba(107,114,128,0.3);opacity:0.7;' : (c.revenue > 5000 ? 'background:rgba(16,185,129,0.2);' : '');
+                // Row styling based on status
+                let rowStyle = '';
+                if (isSent) {
+                    rowStyle = 'background:rgba(107,114,128,0.3);opacity:0.7;';
+                } else if (needsEmail) {
+                    rowStyle = 'background:rgba(239,68,68,0.15);'; // Red tint for needs email
+                } else if (c.revenue > 5000) {
+                    rowStyle = 'background:rgba(16,185,129,0.2);'; // Green for high value ready
+                }
+                
                 const woStyle = isSent ? 'color:#64748b;' : 'color:#60a5fa;font-weight:bold;';
                 const revStyle = c.revenue === 0 ? 'color:#94a3b8;' : 'color:#10b981;';
                 const regDisplay = c.reg || '-';
                 const revDisplay = '$' + c.revenue.toLocaleString();
                 
+                // Name/Email display
+                let nameDisplay, emailDisplay;
+                if (needsEmail) {
+                    nameDisplay = `<span style="color:#f87171;">⚠️ Cust# ${c.custNum}</span>`;
+                    emailDisplay = `<span style="color:#ef4444;font-size:0.75em;">NEED EMAIL LOOKUP</span>`;
+                } else {
+                    nameDisplay = c.name;
+                    emailDisplay = `<span style="color:#fbbf24;font-family:monospace;font-size:0.8em;">${c.email}</span>`;
+                }
+                
+                // Action button
                 let actionCell;
                 if (isSent) {
                     actionCell = '<span style="color:#10b981;font-size:0.8em;">✓ Sent</span>';
+                } else if (needsEmail) {
+                    actionCell = `<span style="color:#f87171;font-size:0.75em;">📋 Lookup</span>`;
                 } else {
                     const btnStyle = c.revenue > 0 ? 'background:#10b981;' : 'background:#475569;';
                     actionCell = `<button onclick="fillNps('${c.name}','${c.email}','${c.wo}','${c.reg}')" style="${btnStyle}color:white;border:none;padding:4px 10px;border-radius:4px;font-size:0.8em;cursor:pointer;">✓ Use</button>`;
                 }
                 
                 html += `<tr style="${rowStyle}">
-                    <td>${c.name}</td>
-                    <td style="color:#fbbf24;font-family:monospace;font-size:0.8em;">${c.email}</td>
+                    <td>${nameDisplay}</td>
+                    <td>${emailDisplay}</td>
                     <td style="${woStyle}">${c.wo}</td>
                     <td style="color:#94a3b8;">${regDisplay}</td>
                     <td style="${revStyle}">${revDisplay}</td>
@@ -2447,13 +2572,13 @@ ${surveyUrl}`;
             
             tbody.innerHTML = html;
             
-            // Update summary
+            // Update summary with detailed breakdown
             if (notSentCount === 0) {
                 summaryDiv.innerHTML = '✅ <strong>All ' + sentCount + ' surveys sent!</strong> Waiting for responses.';
                 summaryDiv.style.background = '#14532d';
                 summaryDiv.style.color = '#bbf7d0';
             } else {
-                summaryDiv.innerHTML = '📋 <strong>' + notSentCount + ' remaining</strong> | ' + sentCount + ' sent. Click "✓ Use" to auto-fill form.';
+                summaryDiv.innerHTML = `📊 <strong>${readyCount} ready to send</strong> | <span style="color:#f87171;">${needEmailCount} need email lookup</span> | ${sentCount} already sent`;
                 summaryDiv.style.background = '#1e3a5f';
                 summaryDiv.style.color = '#93c5fd';
             }
