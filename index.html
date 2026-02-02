@@ -640,42 +640,72 @@
             <!-- A/B COMPARISON CARD -->
             <div class="card">
                 <div class="card-header">
-                    <span class="card-title">📊 A/B Ratio — January 2026 Final</span>
-                    <span class="badge badge-red">Month Closed</span>
+                    <span class="card-title">📊 A/B Ratio — 2-Week Rolling Average</span>
+                    <span class="badge badge-amber">Feb Week 1</span>
                 </div>
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
-                    <div style="background:linear-gradient(135deg,#1e3a5f,#2563eb);padding:20px;border-radius:12px;text-align:center;">
-                        <div style="color:#93c5fd;font-size:0.9em;margin-bottom:5px;">🏢 ALL DEPT 889</div>
-                        <div style="font-size:2.8em;font-weight:bold;color:#ef4444;">22.7%</div>
-                        <div style="color:#bfdbfe;font-size:0.85em;margin-top:8px;">720.1h billable / 3,177h paid</div>
-                        <div style="color:#fca5a5;font-size:0.9em;margin-top:5px;">Gap: -35.8 pts vs 58.5% target</div>
+                    <!-- LEFT: Matt's Official Network A/B -->
+                    <div style="background:linear-gradient(135deg,#1e3a5f,#1e40af);padding:20px;border-radius:12px;">
+                        <div style="text-align:center;margin-bottom:12px;">
+                            <div style="color:#93c5fd;font-size:0.85em;text-transform:uppercase;letter-spacing:1px;">📡 Matt's Official (Network)</div>
+                            <div style="color:#60a5fa;font-size:0.75em;margin-top:2px;">2-Week Rolling Avg</div>
+                        </div>
+                        <div style="text-align:center;">
+                            <div style="font-size:3em;font-weight:bold;color:#f59e0b;">32.5%</div>
+                            <div style="color:#fca5a5;font-size:0.85em;margin-top:5px;">Gap: -26.0 pts vs 58.5%</div>
+                        </div>
+                        <div style="margin-top:15px;display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+                            <div style="background:rgba(0,0,0,0.25);padding:8px;border-radius:6px;text-align:center;">
+                                <div style="color:#93c5fd;font-size:0.75em;">Network Rank</div>
+                                <div style="color:#ef4444;font-weight:bold;font-size:1.1em;">19 / 21</div>
+                            </div>
+                            <div style="background:rgba(0,0,0,0.25);padding:8px;border-radius:6px;text-align:center;">
+                                <div style="color:#93c5fd;font-size:0.75em;">Network Avg</div>
+                                <div style="color:#f59e0b;font-weight:bold;font-size:1.1em;">49.2%</div>
+                            </div>
+                        </div>
+                        <div style="margin-top:10px;background:rgba(0,0,0,0.2);padding:8px;border-radius:6px;font-size:0.78em;color:#93c5fd;">
+                            📋 Source: Matt Nelson weekly email (1/30)<br>
+                            Uses network-level methodology
+                        </div>
                     </div>
-                    <div style="background:linear-gradient(135deg,#1e293b,#334155);padding:20px;border-radius:12px;text-align:center;">
-                        <div style="color:#cbd5e1;font-size:0.9em;margin-bottom:5px;">🔧 TECH ONLY</div>
-                        <div style="font-size:2.8em;font-weight:bold;color:#f59e0b;">24.5%</div>
-                        <div style="color:#94a3b8;font-size:0.85em;margin-top:8px;">658.0h billable / 2,691h paid</div>
-                        <div style="color:#fca5a5;font-size:0.9em;margin-top:5px;">Gap: -34.0 pts vs 58.5% target</div>
+                    <!-- RIGHT: Local Calculated A/B -->
+                    <div style="background:linear-gradient(135deg,#14532d,#166534);padding:20px;border-radius:12px;">
+                        <div style="text-align:center;margin-bottom:12px;">
+                            <div style="color:#86efac;font-size:0.85em;text-transform:uppercase;letter-spacing:1px;">📊 Local Calculated (Daily Hrs)</div>
+                            <div style="color:#4ade80;font-size:0.75em;margin-top:2px;">2-Week Rolling Avg</div>
+                        </div>
+                        <div style="text-align:center;">
+                            <div style="font-size:3em;font-weight:bold;color:#ef4444;">22.7%</div>
+                            <div style="color:#fca5a5;font-size:0.85em;margin-top:5px;">Gap: -35.8 pts vs 58.5%</div>
+                        </div>
+                        <div style="margin-top:15px;display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+                            <div style="background:rgba(0,0,0,0.25);padding:8px;border-radius:6px;text-align:center;">
+                                <div style="color:#86efac;font-size:0.75em;">All Dept 889</div>
+                                <div style="color:#ef4444;font-weight:bold;font-size:1.1em;">22.7%</div>
+                                <div style="color:#6ee7b7;font-size:0.7em;">720.1h / 3,177h</div>
+                            </div>
+                            <div style="background:rgba(0,0,0,0.25);padding:8px;border-radius:6px;text-align:center;">
+                                <div style="color:#86efac;font-size:0.75em;">Tech Only</div>
+                                <div style="color:#f59e0b;font-weight:bold;font-size:1.1em;">24.5%</div>
+                                <div style="color:#6ee7b7;font-size:0.7em;">658.0h / 2,691h</div>
+                            </div>
+                        </div>
+                        <div style="margin-top:10px;background:rgba(0,0,0,0.2);padding:8px;border-radius:6px;font-size:0.78em;color:#86efac;">
+                            📋 Source: Time Sold + Paid Hours reports<br>
+                            A = Non-Shop WO sold hrs | B = Total Paid hrs
+                        </div>
                     </div>
                 </div>
-                <div style="margin-top:15px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;text-align:center;">
-                    <div style="background:#1e293b;padding:10px;border-radius:6px;">
-                        <div style="color:#94a3b8;font-size:0.8em;">Network Rank</div>
-                        <div style="color:#ef4444;font-weight:bold;">19 of 21</div>
-                    </div>
-                    <div style="background:#1e293b;padding:10px;border-radius:6px;">
-                        <div style="color:#94a3b8;font-size:0.8em;">Matt's Report</div>
-                        <div style="color:#f59e0b;font-weight:bold;">32.5%</div>
-                    </div>
-                    <div style="background:#1e293b;padding:10px;border-radius:6px;">
-                        <div style="color:#94a3b8;font-size:0.8em;">Network Avg</div>
-                        <div style="color:#f59e0b;font-weight:bold;">49.2%</div>
-                    </div>
-                </div>
-                <div style="background:#1e293b;padding:10px;border-radius:6px;margin-top:10px;font-size:0.85em;color:#94a3b8;">
-                    📋 <strong>Method:</strong> A = Non-Shop WO sold hours (Component, Aircraft, Billing/Sales, Customer Assist) | B = Total Paid Hours (all pay types). Matt's 32.5% uses network-level methodology through 1/30.
+                <!-- WHY THEY DIFFER -->
+                <div style="background:#1e293b;padding:12px;border-radius:6px;margin-top:12px;font-size:0.85em;color:#94a3b8;">
+                    <strong style="color:#60a5fa;">📐 Why the gap?</strong> Matt's network figure (32.5%) uses a different methodology than local calc (22.7%). Local uses strict Non-Shop WO sold hours ÷ total paid hours from daily reports. Both are valid — network for ranking, local for internal tracking.
                 </div>
                 <div style="background:#451a03;padding:10px;border-radius:6px;margin-top:8px;font-size:0.85em;color:#fef3c7;">
-                    ⚠️ <strong>Shop Overhead:</strong> 1,460h non-billable (592h cleanup, 198h tech support, 160h WO review, 105h supervisor, 96h holiday, 94h PTO, 93h non-billable personnel, 32h training, 32h OJE, 31.5h sales support, 13h meetings, 11.5h shipping)
+                    ⚠️ <strong>Jan Shop Overhead:</strong> 1,460h non-billable (592h cleanup, 198h tech support, 160h WO review, 105h supervisor, 96h holiday, 94h PTO, 93h non-billable personnel, 32h training, 32h OJE, 31.5h sales support, 13h meetings, 11.5h shipping)
+                </div>
+                <div style="background:rgba(16,185,129,0.1);padding:10px;border-radius:6px;margin-top:8px;font-size:0.82em;color:#6ee7b7;">
+                    🔄 <strong>Rolling window:</strong> Currently showing January final (month closed). Will update to true 2-week rolling as daily February Time Sold reports are processed.
                 </div>
             </div>
             
