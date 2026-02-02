@@ -180,15 +180,15 @@
                     <div class="goal-header">
                         <span class="goal-title">#1 Financial Objectives (A/B Ratio + ELR)</span>
                         <div class="goal-progress">
-                            <span class="goal-pct" style="color:#f59e0b">56%</span>
-                            <span class="badge badge-amber">Improving</span>
+                            <span class="goal-pct" style="color:#ef4444">39%</span>
+                            <span class="badge badge-red">January Closed</span>
                         </div>
                     </div>
                     <div class="progress-container">
-                        <div class="progress-bar"><div class="progress-fill progress-amber" style="width:56%"></div></div>
+                        <div class="progress-bar"><div class="progress-fill" style="width:39%;background:linear-gradient(90deg,#ef4444,#f59e0b);"></div></div>
                     </div>
-                    <div>Current: 32.5% A/B | Target: 58.5% | Gap: -26.0 pts</div>
-                    <div class="goal-notes">📈 Up from 26.8% last week! 19th of 21 satellites (+1 rank). Keep momentum.</div>
+                    <div>January Final: 22.7% A/B (All) | 24.5% (Tech) | Target: 58.5% | Gap: -35.8 pts</div>
+                    <div class="goal-notes">📊 January closed. Corrected A/B uses Time Sold non-shop hours ÷ total paid hours. Network rank: 19th of 21.</div>
                 </div>
                 
                 <div class="goal-card" style="border:2px solid #a855f7;">
@@ -317,12 +317,12 @@
                                 <tr><th>Month</th><th>Target</th><th>Actual</th><th>Gap</th><th>Status</th></tr>
                             </thead>
                             <tbody>
-                                <tr style="background:rgba(251,191,36,0.2);">
+                                <tr style="background:rgba(239,68,68,0.2);">
                                     <td><strong>Jan</strong></td>
                                     <td>58.5%</td>
-                                    <td style="color:#f59e0b;font-weight:bold;">32.5%</td>
-                                    <td style="color:#f59e0b;">-26.0 pts</td>
-                                    <td><span style="color:#f59e0b;">🟡 In Progress (↑)</span></td>
+                                    <td style="color:#ef4444;font-weight:bold;">22.7%</td>
+                                    <td style="color:#ef4444;">-35.8 pts</td>
+                                    <td><span style="color:#ef4444;">❌ Not Met</span></td>
                                 </tr>
                                 <tr><td>Feb</td><td>58.5%</td><td style="color:#64748b;">--</td><td>--</td><td><span style="color:#64748b;">⏳ Upcoming</span></td></tr>
                                 <tr><td>Mar</td><td>58.5%</td><td style="color:#64748b;">--</td><td>--</td><td><span style="color:#64748b;">⏳ Upcoming</span></td></tr>
@@ -422,14 +422,14 @@
             <div class="card">
                 <div class="card-header">
                     <span class="card-title">🌙 End of Day Checklist</span>
-                    <span class="badge badge-green">01/28/26</span>
+                    <span class="badge badge-green">02/02/26</span>
                 </div>
                 <div class="action-item"><div class="action-check checked"></div><span class="action-text">Pull daily reports (Time Sold, Billed, Anchor)</span><span style="color:#10b981;font-size:0.8em;margin-left:auto;">✓ All pulled</span></div>
                 <div class="action-item"><div class="action-check checked"></div><span class="action-text">Upload to Claude for analysis</span><span style="color:#10b981;font-size:0.8em;margin-left:auto;">✓ Dashboard updated</span></div>
                 <div class="action-item"><div class="action-check checked"></div><span class="action-text">Bill any completed WOs (within 1 week target)</span><span style="color:#10b981;font-size:0.8em;margin-left:auto;">✓ DTBLA, DSW4A billed</span></div>
                 <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">Plan tomorrow's assignments</span></div>
                 <div style="background:#0f172a;padding:8px;border-radius:6px;margin-top:10px;font-size:0.75em;color:#94a3b8;">
-                    📈 <strong>Today's results:</strong> A/B 25.2% | Billable 528h | Paid 2,093h | 71 open WOs
+                    📈 <strong>January Final:</strong> A/B 22.7% (All) / 24.5% (Tech) | Billable 720.1h | Paid 3,177h | 51 Billed WOs
                 </div>
             </div>
             
@@ -450,24 +450,24 @@
             <div class="card" style="border:2px solid #60a5fa;">
                 <div class="card-header">
                     <span class="card-title">📅 Weekly Goals</span>
-                    <span class="badge badge-blue">Week of 01/27</span>
+                    <span class="badge badge-blue">Week of 02/02</span>
                 </div>
                 
                 <!-- Goal 1: A/B Target -->
                 <div style="background:#1e293b;padding:12px;border-radius:8px;margin-bottom:10px;">
                     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-                        <span style="color:#e2e8f0;">📊 A/B Target: Get to 30%+ by Friday</span>
-                        <span id="weeklyABStatus" class="badge badge-amber">In Progress</span>
+                        <span style="color:#e2e8f0;">📊 A/B Target: Build February momentum</span>
+                        <span id="weeklyABStatus" class="badge badge-blue">New Month</span>
                     </div>
                     <div style="display:flex;align-items:center;gap:10px;">
                         <div class="progress-container" style="flex:1;margin:0;">
                             <div class="progress-bar">
-                                <div id="weeklyABBar" class="progress-fill" style="width:84%;background:linear-gradient(90deg,#f59e0b,#fbbf24);"></div>
+                                <div id="weeklyABBar" class="progress-fill" style="width:0%;background:linear-gradient(90deg,#3b82f6,#60a5fa);"></div>
                             </div>
                         </div>
-                        <span id="weeklyABText" style="color:#fbbf24;font-weight:bold;min-width:100px;text-align:right;">25.2% / 30%</span>
+                        <span id="weeklyABText" style="color:#60a5fa;font-weight:bold;min-width:100px;text-align:right;">0% / 58.5%</span>
                     </div>
-                    <div style="color:#94a3b8;font-size:0.8em;margin-top:5px;">Need +4.8 pts by Fri | Currently 19th rank</div>
+                    <div style="color:#94a3b8;font-size:0.8em;margin-top:5px;">February starts fresh | Jan closed at 22.7% (All) / 24.5% (Tech)</div>
                 </div>
                 
                 <!-- Goal 2: Aging WO Closures -->
@@ -634,63 +634,66 @@
         <!-- OVERVIEW TAB -->
         <div class="content" id="overview">
             <div class="alert-banner">
-                ⚠️ A/B RATIO: 32.5% vs 58.5% Target | Gap: -26.0 pts | Rank: 19th of 21 | +5.7 pts vs last week ✅
+                ⚠️ JANUARY A/B CLOSED: 22.7% (All Dept) / 24.5% (Tech Only) vs 58.5% Target | Gap: -35.8 pts | Network Rank: 19th of 21
             </div>
             
             <!-- A/B COMPARISON CARD -->
             <div class="card">
                 <div class="card-header">
-                    <span class="card-title">📊 A/B Ratio Comparison</span>
-                    <span class="badge badge-amber">Target: 58.5%</span>
+                    <span class="card-title">📊 A/B Ratio — January 2026 Final</span>
+                    <span class="badge badge-red">Month Closed</span>
                 </div>
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
                     <div style="background:linear-gradient(135deg,#1e3a5f,#2563eb);padding:20px;border-radius:12px;text-align:center;">
-                        <div style="color:#93c5fd;font-size:0.9em;margin-bottom:5px;">📧 MATT'S EMAIL (Official)</div>
-                        <div style="font-size:2.8em;font-weight:bold;color:#f59e0b;">32.5%</div>
-                        <div style="color:#bfdbfe;font-size:0.85em;margin-top:8px;">YTD thru Fri 1/30</div>
-                        <div style="color:#fca5a5;font-size:0.9em;margin-top:5px;">Gap: -26.0 pts | <span style="color:#4ade80;">+5.7 vs last wk</span></div>
+                        <div style="color:#93c5fd;font-size:0.9em;margin-bottom:5px;">🏢 ALL DEPT 889</div>
+                        <div style="font-size:2.8em;font-weight:bold;color:#ef4444;">22.7%</div>
+                        <div style="color:#bfdbfe;font-size:0.85em;margin-top:8px;">720.1h billable / 3,177h paid</div>
+                        <div style="color:#fca5a5;font-size:0.9em;margin-top:5px;">Gap: -35.8 pts vs 58.5% target</div>
                     </div>
                     <div style="background:linear-gradient(135deg,#1e293b,#334155);padding:20px;border-radius:12px;text-align:center;">
-                        <div style="color:#cbd5e1;font-size:0.9em;margin-bottom:5px;">🌐 NETWORK AVERAGE</div>
-                        <div style="font-size:2.8em;font-weight:bold;color:#f59e0b;">49.2%</div>
-                        <div style="color:#94a3b8;font-size:0.85em;margin-top:8px;">Budget: 58.7%</div>
-                        <div style="color:#fca5a5;font-size:0.9em;margin-top:5px;">Gap: -9.5 pts</div>
+                        <div style="color:#cbd5e1;font-size:0.9em;margin-bottom:5px;">🔧 TECH ONLY</div>
+                        <div style="font-size:2.8em;font-weight:bold;color:#f59e0b;">24.5%</div>
+                        <div style="color:#94a3b8;font-size:0.85em;margin-top:8px;">658.0h billable / 2,691h paid</div>
+                        <div style="color:#fca5a5;font-size:0.9em;margin-top:5px;">Gap: -34.0 pts vs 58.5% target</div>
                     </div>
                 </div>
                 <div style="margin-top:15px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;text-align:center;">
                     <div style="background:#1e293b;padding:10px;border-radius:6px;">
-                        <div style="color:#94a3b8;font-size:0.8em;">Denver Rank</div>
+                        <div style="color:#94a3b8;font-size:0.8em;">Network Rank</div>
                         <div style="color:#ef4444;font-weight:bold;">19 of 21</div>
                     </div>
                     <div style="background:#1e293b;padding:10px;border-radius:6px;">
-                        <div style="color:#94a3b8;font-size:0.8em;">vs Network</div>
-                        <div style="color:#ef4444;font-weight:bold;">-16.7 pts</div>
+                        <div style="color:#94a3b8;font-size:0.8em;">Matt's Report</div>
+                        <div style="color:#f59e0b;font-weight:bold;">32.5%</div>
                     </div>
                     <div style="background:#1e293b;padding:10px;border-radius:6px;">
-                        <div style="color:#94a3b8;font-size:0.8em;">Week Trend</div>
-                        <div style="color:#10b981;font-weight:bold;">📈 +5.7 pts</div>
+                        <div style="color:#94a3b8;font-size:0.8em;">Network Avg</div>
+                        <div style="color:#f59e0b;font-weight:bold;">49.2%</div>
                     </div>
                 </div>
-                <div style="background:#14532d;padding:10px;border-radius:6px;margin-top:10px;font-size:0.85em;color:#bbf7d0;">
-                    ✅ <strong>Improving!</strong> Up from 26.8% last week. Keep pushing billable hours.
+                <div style="background:#1e293b;padding:10px;border-radius:6px;margin-top:10px;font-size:0.85em;color:#94a3b8;">
+                    📋 <strong>Method:</strong> A = Non-Shop WO sold hours (Component, Aircraft, Billing/Sales, Customer Assist) | B = Total Paid Hours (all pay types). Matt's 32.5% uses network-level methodology through 1/30.
+                </div>
+                <div style="background:#451a03;padding:10px;border-radius:6px;margin-top:8px;font-size:0.85em;color:#fef3c7;">
+                    ⚠️ <strong>Shop Overhead:</strong> 1,460h non-billable (592h cleanup, 198h tech support, 160h WO review, 105h supervisor, 96h holiday, 94h PTO, 93h non-billable personnel, 32h training, 32h OJE, 31.5h sales support, 13h meetings, 11.5h shipping)
                 </div>
             </div>
             
             <div class="card">
                 <div class="card-header">
-                    <span class="card-title">January 2026 Metrics</span>
-                    <span class="badge badge-blue">Updated Fri 1/30 1:47 PM</span>
+                    <span class="card-title">January 2026 — Month Closed</span>
+                    <span class="badge badge-red">Final 02/02/26</span>
                 </div>
                 <div class="card-grid">
                     <div class="metric">
-                        <div class="metric-value">32.5%</div>
-                        <div class="metric-label">Official A/B</div>
-                        <div class="metric-sub">Matt's report 1/30</div>
+                        <div class="metric-value" style="color:#ef4444;">22.7%</div>
+                        <div class="metric-label">A/B (All Dept)</div>
+                        <div class="metric-sub">24.5% Tech Only</div>
                     </div>
                     <div class="metric">
                         <div class="metric-value">19/21</div>
                         <div class="metric-label">Network Rank</div>
-                        <div class="metric-sub">Up from 20th</div>
+                        <div class="metric-sub">Matt's: 32.5%</div>
                     </div>
                     <div class="metric">
                         <div class="metric-value">$246K</div>
@@ -698,7 +701,7 @@
                         <div class="metric-sub">35% of $694K goal</div>
                     </div>
                     <div class="metric">
-                        <div class="metric-value">50</div>
+                        <div class="metric-value">51</div>
                         <div class="metric-label">Billed WOs</div>
                         <div class="metric-sub">$94K GP (38.2%)</div>
                     </div>
@@ -739,26 +742,28 @@
             <div class="card">
                 <div class="card-header">
                     <span class="card-title">Employee Performance - A/B Efficiency</span>
-                    <span class="badge badge-amber">Target: 58.5% | Updated 02/02 9:00 AM</span>
+                    <span class="badge badge-red">January Final | Corrected 02/02/26</span>
                 </div>
                 <div class="table-container">
                     <table>
                         <thead>
-                            <tr><th>Rank</th><th>Employee</th><th>Billable</th><th>Paid YTD</th><th>A/B %</th><th>Status</th></tr>
+                            <tr><th>Rank</th><th>Employee</th><th>Billable</th><th>Paid</th><th>A/B %</th><th>Status</th></tr>
                         </thead>
                         <tbody>
-                            <tr style="background:rgba(16,185,129,0.2)"><td>1</td><td>Sean Macoomb</td><td>111.0h</td><td>160.0h</td><td>69%</td><td><span class="badge badge-green">Above Target</span></td></tr>
-                            <tr style="background:rgba(16,185,129,0.2)"><td>2</td><td>Juan Medina</td><td>110.5h</td><td>160.0h</td><td>69%</td><td><span class="badge badge-green">Above Target</span></td></tr>
-                            <tr><td>3</td><td>Julia Langford</td><td>72.5h</td><td>162.0h</td><td>45%</td><td><span class="badge badge-amber">Below Target</span></td></tr>
-                            <tr><td>4</td><td>Michael Huber</td><td>64.0h</td><td>162.0h</td><td>40%</td><td><span class="badge badge-amber">Below Target</span></td></tr>
-                            <tr><td>5</td><td>Kim Owen</td><td>58.2h</td><td>161.5h</td><td>36%</td><td><span class="badge badge-amber">Below Target</span></td></tr>
-                            <tr><td>6</td><td>Armando Triana-Cruz</td><td>54.5h</td><td>160.0h</td><td>34%</td><td><span class="badge badge-red">Critical</span></td></tr>
-                            <tr><td>7</td><td>Guillermo Tovar S.</td><td>49.0h</td><td>159.5h</td><td>31%</td><td><span class="badge badge-red">Critical</span></td></tr>
-                            <tr><td>8</td><td>Andrew Watson</td><td>40.5h</td><td>138.5h</td><td>29%</td><td><span class="badge badge-red">Critical</span></td></tr>
-                            <tr><td>9</td><td>Jose Noris</td><td>43.0h</td><td>158.0h</td><td>27%</td><td><span class="badge badge-red">Critical</span></td></tr>
-                            <tr><td>10</td><td>Ken Smith</td><td>37.0h</td><td>167.0h</td><td>22%</td><td><span class="badge badge-red">Critical</span></td></tr>
-                            <tr><td>11</td><td>John Watson</td><td>30.0h</td><td>138.5h</td><td>22%</td><td><span class="badge badge-red">Critical</span></td></tr>
-                            <tr><td>12</td><td>Douglas Riera Guzman</td><td>11.0h</td><td>160.0h</td><td>7%</td><td><span class="badge badge-red">Critical</span></td></tr>
+                            <tr style="background:rgba(16,185,129,0.2)"><td>1</td><td>Sean Macoomb</td><td>119.0h</td><td>241.0h</td><td>49.4%</td><td><span class="badge badge-amber">Below Target</span></td></tr>
+                            <tr style="background:rgba(16,185,129,0.2)"><td>2</td><td>Juan Medina</td><td>118.5h</td><td>273.0h</td><td>43.4%</td><td><span class="badge badge-amber">Below Target</span></td></tr>
+                            <tr><td>3</td><td>Kim Owen</td><td>62.1h</td><td>246.0h</td><td>25.2%</td><td><span class="badge badge-red">Critical</span></td></tr>
+                            <tr><td>4</td><td>Julia Langford</td><td>72.5h</td><td>242.0h</td><td>30.0%</td><td><span class="badge badge-red">Critical</span></td></tr>
+                            <tr><td>5</td><td>Michael Huber</td><td>70.0h</td><td>243.5h</td><td>28.7%</td><td><span class="badge badge-red">Critical</span></td></tr>
+                            <tr><td>6</td><td>Armando Triana-Cruz</td><td>58.5h</td><td>257.5h</td><td>22.7%</td><td><span class="badge badge-red">Critical</span></td></tr>
+                            <tr><td>7</td><td>Guillermo Tovar S.</td><td>49.0h</td><td>239.5h</td><td>20.5%</td><td><span class="badge badge-red">Critical</span></td></tr>
+                            <tr><td>8</td><td>Andrew Watson</td><td>42.5h</td><td>218.5h</td><td>19.5%</td><td><span class="badge badge-red">Critical</span></td></tr>
+                            <tr><td>9</td><td>Jose Noris</td><td>45.0h</td><td>240.0h</td><td>18.8%</td><td><span class="badge badge-red">Critical</span></td></tr>
+                            <tr><td>10</td><td>Ken Smith</td><td>39.0h</td><td>256.0h</td><td>15.2%</td><td><span class="badge badge-red">Critical</span></td></tr>
+                            <tr><td>11</td><td>John Watson</td><td>33.0h</td><td>240.0h</td><td>13.8%</td><td><span class="badge badge-red">Critical</span></td></tr>
+                            <tr><td>12</td><td>Douglas Riera Guzman</td><td>11.0h</td><td>240.0h</td><td>4.6%</td><td><span class="badge badge-red">Critical</span></td></tr>
+                            <tr style="background:rgba(100,116,139,0.2)"><td>—</td><td>Edduyn Pita (Mgr)</td><td>0h</td><td>240.0h</td><td>0%</td><td><span class="badge" style="background:#475569;">Manager</span></td></tr>
+                            <tr style="background:rgba(100,116,139,0.2)"><td>—</td><td>Michael Hannas</td><td>0h</td><td>0h</td><td>—</td><td><span class="badge" style="background:#475569;">On Leave</span></td></tr>
                         </tbody>
                     </table>
                 </div>
