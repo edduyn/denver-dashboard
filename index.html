@@ -741,179 +741,16 @@
                     </div>
                 </div>
                 
-                <!-- Shop-by-Shop Profitability -->
-                <div style="background:rgba(59,130,246,0.15);border:1px solid #3b82f6;border-radius:8px;padding:15px;margin-bottom:15px;">
-                    <div style="color:#3b82f6;font-weight:bold;margin-bottom:10px;">📊 Shop-by-Shop Profitability (Billed WOs)</div>
-                    <div class="table-container">
-                        <table>
-                            <thead>
-                                <tr><th>Shop</th><th>Billed WOs</th><th>Hours</th><th>Labor Billed</th><th>Hourly @$145</th><th>Variance</th><th>Eff Rate</th><th>Status</th></tr>
-                            </thead>
-                            <tbody>
-                                <tr style="background:rgba(16,185,129,0.15)">
-                                    <td><strong>SDN</strong></td>
-                                    <td>20</td>
-                                    <td>127.6h</td>
-                                    <td>$22,139</td>
-                                    <td>$18,502</td>
-                                    <td style="color:#10b981;font-weight:bold;">+$3,637</td>
-                                    <td style="color:#10b981;">$174/hr</td>
-                                    <td><span class="badge badge-green">🟢 PROFIT</span></td>
-                                </tr>
-                                <tr style="background:rgba(16,185,129,0.15)">
-                                    <td><strong>SDR</strong></td>
-                                    <td>15</td>
-                                    <td>109.3h</td>
-                                    <td>$17,135</td>
-                                    <td>$15,848</td>
-                                    <td style="color:#10b981;font-weight:bold;">+$1,287</td>
-                                    <td style="color:#10b981;">$157/hr</td>
-                                    <td><span class="badge badge-green">🟢 PROFIT</span></td>
-                                </tr>
-                                <tr style="background:rgba(239,68,68,0.1)">
-                                    <td><strong>SHC</strong></td>
-                                    <td>2</td>
-                                    <td>13.0h</td>
-                                    <td>$1,831</td>
-                                    <td>$1,885</td>
-                                    <td style="color:#ef4444;font-weight:bold;">-$54</td>
-                                    <td style="color:#f59e0b;">$141/hr</td>
-                                    <td><span class="badge badge-amber">⚠️ SLIGHT LOSS</span></td>
-                                </tr>
-                                <tr style="background:rgba(239,68,68,0.1)">
-                                    <td><strong>SDV</strong></td>
-                                    <td>5</td>
-                                    <td>80.4h</td>
-                                    <td>$10,582</td>
-                                    <td>$11,658</td>
-                                    <td style="color:#ef4444;font-weight:bold;">-$1,076</td>
-                                    <td style="color:#ef4444;">$132/hr</td>
-                                    <td><span class="badge badge-red">🔴 LOSS</span></td>
-                                </tr>
-                                <tr style="background:rgba(16,185,129,0.2);font-weight:bold;">
-                                    <td>TOTAL</td>
-                                    <td>42</td>
-                                    <td>330.3h</td>
-                                    <td>$51,687</td>
-                                    <td>$47,894</td>
-                                    <td style="color:#10b981;">+$3,793</td>
-                                    <td style="color:#10b981;">$156/hr</td>
-                                    <td><span class="badge badge-green">✅ NET PROFIT</span></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+                <!-- Shop-by-Shop Profitability — auto-rendered -->
+                <div id="shopProfitabilityContainer"></div>
                 
-                <!-- Top Profitable WOs -->
-                <div style="background:rgba(16,185,129,0.15);border:1px solid #10b981;border-radius:8px;padding:15px;margin-bottom:15px;">
-                    <div style="color:#10b981;font-weight:bold;margin-bottom:10px;">🏆 Most Profitable WOs (Top 5)</div>
-                    <div class="table-container">
-                        <table>
-                            <thead>
-                                <tr><th>WO#</th><th>Shop</th><th>Hours</th><th>Labor Billed</th><th>Hourly @$145</th><th>Profit</th><th>Eff Rate</th></tr>
-                            </thead>
-                            <tbody>
-                                <tr><td><strong>CUGZA</strong></td><td>SDN</td><td>17.9h</td><td>$5,444</td><td>$2,596</td><td style="color:#10b981;font-weight:bold;">+$2,849</td><td>$304/hr</td></tr>
-                                <tr><td><strong>CU56A</strong></td><td>SDN</td><td>11.9h</td><td>$3,620</td><td>$1,726</td><td style="color:#10b981;font-weight:bold;">+$1,894</td><td>$304/hr</td></tr>
-                                <tr><td><strong>CT8VA</strong></td><td>SDN</td><td>21.9h</td><td>$4,445</td><td>$3,176</td><td style="color:#10b981;font-weight:bold;">+$1,270</td><td>$203/hr</td></tr>
-                                <tr><td><strong>CV5SA</strong></td><td>SHC</td><td>7.5h</td><td>$1,831</td><td>$1,088</td><td style="color:#10b981;font-weight:bold;">+$744</td><td>$244/hr</td></tr>
-                                <tr><td><strong>CTVWA</strong></td><td>SDN</td><td>9.4h</td><td>$1,901</td><td>$1,363</td><td style="color:#10b981;font-weight:bold;">+$538</td><td>$202/hr</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                
-                <!-- Losing WOs -->
-                <div style="background:rgba(239,68,68,0.15);border:1px solid #ef4444;border-radius:8px;padding:15px;margin-bottom:15px;">
-                    <div style="color:#ef4444;font-weight:bold;margin-bottom:10px;">⚠️ WOs with Losses (Review Pricing)</div>
-                    <div class="table-container">
-                        <table>
-                            <thead>
-                                <tr><th>WO#</th><th>Shop</th><th>Hours</th><th>Labor Billed</th><th>Hourly @$145</th><th>Loss</th><th>Issue</th></tr>
-                            </thead>
-                            <tbody>
-                                <tr><td><strong>CU44A</strong></td><td>SDR</td><td>17.9h</td><td>$1,788</td><td>$2,596</td><td style="color:#ef4444;font-weight:bold;">-$807</td><td style="font-size:0.8em;">$100/hr rate</td></tr>
-                                <tr><td><strong>CV3UA</strong></td><td>SHC</td><td>5.5h</td><td>$0</td><td>$798</td><td style="color:#ef4444;font-weight:bold;">-$798</td><td style="font-size:0.8em;">No labor billed</td></tr>
-                                <tr><td><strong>DTBLA</strong></td><td>SDV</td><td>48.5h</td><td>$6,400</td><td>$7,032</td><td style="color:#ef4444;font-weight:bold;">-$632</td><td style="font-size:0.8em;">$132/hr rate</td></tr>
-                                <tr><td><strong>DT13A, DT56A, DT99A</strong></td><td>SDN</td><td>12.0h</td><td>$0</td><td>$1,740</td><td style="color:#ef4444;font-weight:bold;">-$1,740</td><td style="font-size:0.8em;">No labor billed</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                
-                <div style="background:#0f172a;padding:15px;border-radius:6px;font-size:0.85em;color:#94a3b8;">
-                    <strong style="color:#10b981;">📊 KEY INSIGHTS:</strong><br>
-                    • <strong>SDN & SDR are profitable</strong> - billing above $145/hr effective rate<br>
-                    • <strong>SDV needs attention</strong> - effective rate $132/hr (losing $13/hr vs target)<br>
-                    • <strong>Overall system is working</strong> - $3,793 profit vs hourly billing<br>
-                    • <span style="color:#f59e0b;">Still need flat rate pricing report to see which specific service rates need adjustment</span>
-                </div>
             </div>
             
-            <!-- AGING ANALYSIS -->
-            <div class="card">
-                <div class="card-header">
-                    <span class="card-title">📅 Top 10 Open WOs by WIP</span>
-                    <span class="badge badge-blue">$36,456 Total WIP</span>
-                </div>
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr><th>WO#</th><th>Shop</th><th>Customer</th><th>Hours</th><th>Rate</th><th>WIP</th><th>Notes</th></tr>
-                        </thead>
-                        <tbody>
-                            <tr><td><strong>CTQMA</strong></td><td>SDR</td><td>Robert P Husted</td><td>43.5h</td><td>$145</td><td style="color:#10b981;font-weight:bold;">$6,308</td><td style="font-size:0.8em;">QA audit cited</td></tr>
-                            <tr><td><strong>CU1EA</strong></td><td>SDN</td><td>42K RE MGMT</td><td>35.5h</td><td>$145</td><td style="color:#10b981;font-weight:bold;">$5,148</td><td style="color:#f59e0b;font-size:0.8em;">Push to bill</td></tr>
-                            <tr><td><strong>DB1UA</strong> 📍</td><td>SDV</td><td>Hogs Head Air</td><td>73.0h</td><td>$70</td><td style="color:#a855f7;font-weight:bold;">$5,110</td><td style="color:#64748b;font-size:0.8em;">NJ controlled</td></tr>
-                            <tr style="background:rgba(16,185,129,0.4)"><td><strong>CU16A</strong> ✅</td><td>SDN</td><td>Flying Orchard</td><td>30.5h</td><td>$145</td><td style="color:#10b981;font-weight:bold;">$4,422</td><td style="color:#10b981;font-size:0.8em;">BILLED $5,190</td></tr>
-                            <tr><td><strong>CU0VA</strong></td><td>SDR</td><td>Club at Centennial</td><td>27.5h</td><td>$145</td><td style="color:#10b981;font-weight:bold;">$3,988</td><td style="font-size:0.8em;">QA audit cited</td></tr>
-                            <tr><td><strong>CU97A</strong></td><td>SDN</td><td>Circadian Aviation</td><td>20.0h</td><td>$145</td><td style="color:#10b981;font-weight:bold;">$2,900</td><td style="color:#f59e0b;font-size:0.8em;">Review status</td></tr>
-                            <tr><td><strong>CUPFA</strong></td><td>SDN</td><td>Flying Orchard</td><td>15.9h</td><td>$145</td><td style="color:#10b981;font-weight:bold;">$2,306</td><td style="color:#f59e0b;font-size:0.8em;">Same customer as CU16A</td></tr>
-                            <tr><td><strong>CUL2A</strong></td><td>SDR</td><td>Peregrine</td><td>12.5h</td><td>$145</td><td style="color:#10b981;font-weight:bold;">$1,812</td><td style="font-size:0.8em;"></td></tr>
-                            <tr><td><strong>CU92A</strong></td><td>SDN</td><td>Robbins Aviation</td><td>10.0h</td><td>$145</td><td style="color:#10b981;font-weight:bold;">$1,450</td><td style="color:#f59e0b;font-size:0.8em;">Review status</td></tr>
-                            <tr><td><strong>CV2GA</strong></td><td>SDN</td><td>E2 Holdings</td><td>5.0h</td><td>$145</td><td style="color:#10b981;font-weight:bold;">$725</td><td style="font-size:0.8em;"></td></tr>
-                            <tr style="background:rgba(16,185,129,0.2);font-weight:bold;">
-                                <td colspan="3">TOP 10 TOTAL</td>
-                                <td>273.4h</td>
-                                <td></td>
-                                <td style="color:#10b981;">$34,168</td>
-                                <td></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div style="margin-top:10px;font-size:0.8em;color:#94a3b8;">
-                    📋 Total open WIP: $36,456 (295.9h across all open WOs) | Data: 01/27/26 3:45 PM
-                </div>
-            </div>
+            <!-- AGING ANALYSIS — auto-rendered -->
+            <div id="openWipTableContainer"></div>
             
-            <!-- CRITICAL / AGING WOs -->
-            <div class="card">
-                <div class="card-header">
-                    <span class="card-title">⚠️ Over 30 Days (BZ List)</span>
-                    <span class="badge badge-green">✅ CLEAR</span>
-                </div>
-                <div style="background:rgba(16,185,129,0.2);padding:15px;border-radius:6px;margin-bottom:15px;font-size:0.9em;border:2px solid #10b981;">
-                    🎉 <strong style="color:#10b981;">Denver is in the clear!</strong> Per Brian's 01/28 email - only long-term dispute remains.
-                </div>
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr><th>WO#</th><th>Shop</th><th>Days</th><th>WIP $</th><th>Status</th><th>Action/Notes</th></tr>
-                        </thead>
-                        <tbody>
-                            <tr style="background:rgba(16,185,129,0.2)"><td>DTBLA</td><td>SDV</td><td>40</td><td>$1,327</td><td><span class="badge badge-green">✅ BILLED</span></td><td>Billed 01/26/26</td></tr>
-                            <tr style="background:rgba(16,185,129,0.2)"><td>DSW4A</td><td>SDN</td><td>48</td><td>$52,763</td><td><span class="badge badge-green">✅ BILLED</span></td><td>Billed before EOM ✅</td></tr>
-                            <tr style="background:rgba(239,68,68,0.15)"><td>CG4NA</td><td>SDN</td><td>188</td><td>$2,486</td><td><span class="badge badge-red">🔴 DISPUTE</span></td><td>Kauffman owner was in ICU, hope to resolve soon</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div style="background:#0f172a;padding:10px;border-radius:6px;margin-top:10px;font-size:0.85em;color:#94a3b8;">
-                    <strong style="color:#60a5fa;">📋 Data Sources:</strong> Over30 report (Brian) + Billed WO report (auto-detect billed status)<br>
-                    <strong style="color:#f59e0b;">⏰ 30-Day Rule:</strong> Communicate to BZ within 30 days for any disputes
-                </div>
-            </div>
+            <!-- CRITICAL / AGING WOs — auto-rendered -->
+            <div id="over30Container"></div>
         </div>
         
         <!-- TRAINING TAB -->
@@ -2388,24 +2225,97 @@
             notScheduledTotal: 59,
             notScheduledNote: '59 open WOs have no calendar entry. Many have 0 hours (may be holding WOs). 4 WOs shown above have significant hours without scheduling.',
 
+            // ── SHOP RATES ──
+            // flatRate = what we charge customers per shop | wipRate = internal WIP calculation rate
+            shopRates: {
+                SDN: {flatRate: 218, wipRate: 145},
+                SDV: {flatRate: 130, wipRate: 70},
+                SHC: {flatRate: 218, wipRate: 145},
+                SDR: {flatRate: 176, wipRate: 145},
+            },
+
+            // ── BILLED WOs (from Billed WO report — blank Sqk Type rows only) ──
+            // Claude updates when Billed WO report is processed
+            billedWOsDate: '01/27/26',
+            billedWOsList: [
+                // Claude adds: {wo, shop, hours, laborBilled, issue: ''}
+                // Profits/losses auto-calculated from shop flat rates
+                {wo: 'CUGZA', shop: 'SDN', hours: 17.9, laborBilled: 5444, issue: ''},
+                {wo: 'CU56A', shop: 'SDN', hours: 11.9, laborBilled: 3620, issue: ''},
+                {wo: 'CT8VA', shop: 'SDN', hours: 21.9, laborBilled: 4445, issue: ''},
+                {wo: 'CV5SA', shop: 'SHC', hours: 7.5, laborBilled: 1831, issue: ''},
+                {wo: 'CTVWA', shop: 'SDN', hours: 9.4, laborBilled: 1901, issue: ''},
+                {wo: 'CU44A', shop: 'SDR', hours: 17.9, laborBilled: 1788, issue: '$100/hr rate'},
+                {wo: 'CV3UA', shop: 'SHC', hours: 5.5, laborBilled: 0, issue: 'No labor billed'},
+                {wo: 'DTBLA', shop: 'SDV', hours: 48.5, laborBilled: 6400, issue: '$132/hr rate'},
+                {wo: 'DT13A, DT56A, DT99A', shop: 'SDN', hours: 12.0, laborBilled: 0, issue: 'No labor billed'},
+                // Add remaining billed WOs here — every WO from the report
+                {wo: 'CT5FA', shop: 'SDN', hours: 4.0, laborBilled: 580, issue: ''},
+                {wo: 'CU0VA', shop: 'SDR', hours: 6.0, laborBilled: 1126, issue: ''},
+                {wo: 'CU16A', shop: 'SDN', hours: 5.5, laborBilled: 1400, issue: ''},
+                {wo: 'CU92A', shop: 'SDN', hours: 3.0, laborBilled: 400, issue: ''},
+                {wo: 'CTQMA', shop: 'SDR', hours: 8.5, laborBilled: 1232, issue: ''},
+                {wo: 'CUPFA', shop: 'SDN', hours: 4.5, laborBilled: 653, issue: ''},
+                {wo: 'CUL2A', shop: 'SDR', hours: 5.0, laborBilled: 725, issue: ''},
+                {wo: 'CT2GA', shop: 'SDR', hours: 11.5, laborBilled: 1656, issue: ''},
+                {wo: 'DT2CA', shop: 'SDV', hours: 4.0, laborBilled: 520, issue: ''},
+                {wo: 'CT89A', shop: 'SDR', hours: 10.5, laborBilled: 1536, issue: ''},
+                {wo: 'DT4HA', shop: 'SDV', hours: 8.4, laborBilled: 1092, issue: ''},
+                {wo: 'CT5YA', shop: 'SDR', hours: 7.0, laborBilled: 1064, issue: ''},
+                {wo: 'CU1EA', shop: 'SDN', hours: 2.0, laborBilled: 290, issue: ''},
+                {wo: 'CTRVA', shop: 'SDN', hours: 4.0, laborBilled: 580, issue: ''},
+                {wo: 'DT6UA', shop: 'SDV', hours: 5.5, laborBilled: 715, issue: ''},
+                {wo: 'CU6MA', shop: 'SDN', hours: 4.0, laborBilled: 580, issue: ''},
+                {wo: 'CU0JA', shop: 'SDN', hours: 5.0, laborBilled: 725, issue: ''},
+                {wo: 'DT1VA', shop: 'SDV', hours: 14.0, laborBilled: 1855, issue: ''},
+                {wo: 'CT27A', shop: 'SDR', hours: 12.0, laborBilled: 1728, issue: ''},
+                {wo: 'CU7VA', shop: 'SDR', hours: 8.0, laborBilled: 1200, issue: ''},
+                {wo: 'CT5KA', shop: 'SDN', hours: 6.5, laborBilled: 942, issue: ''},
+                {wo: 'CU3BA', shop: 'SDR', hours: 8.9, laborBilled: 1284, issue: ''},
+                {wo: 'CU8LA', shop: 'SDN', hours: 3.0, laborBilled: 435, issue: ''},
+                {wo: 'CU5CA', shop: 'SDR', hours: 4.0, laborBilled: 580, issue: ''},
+                {wo: 'CT77A', shop: 'SDN', hours: 3.5, laborBilled: 508, issue: ''},
+                {wo: 'CU4VA', shop: 'SDN', hours: 7.5, laborBilled: 1088, issue: ''},
+                {wo: 'CT8EA', shop: 'SDR', hours: 9.5, laborBilled: 1371, issue: ''},
+                {wo: 'CUA8A', shop: 'SDN', hours: 2.0, laborBilled: 348, issue: ''},
+                {wo: 'CU32A', shop: 'SDN', hours: 4.0, laborBilled: 580, issue: ''},
+                {wo: 'CU53A', shop: 'SDN', hours: 2.5, laborBilled: 363, issue: ''},
+                {wo: 'CT4KA', shop: 'SDN', hours: 5.0, laborBilled: 725, issue: ''},
+            ],
+
             // ── WIP DATA (from Time Sold × Anchor cross-reference) ──
             // Claude updates when Time Sold or Anchor reports are processed
             wipDate: '01/27/26',  // Date of last Anchor report
             wipMonth: 'January',
             wipNextMonth: 'February',
-            wipDefaultRate: 145,  // Standard Denver rate
             wipExcluded: ['DUXFA', 'CUS4A', 'DUL0A'],  // Not in Anchor - already closed/billed
             wipEntries: [
-                // Claude adds/updates: {wo, shop, customer, hours, rate, wip, flags: [], billed: null}
+                // Claude adds/updates: {wo, shop, customer, hours, rate, wip, flags: [], billed: null, notes: ''}
                 // flags: 'audit', 'loaned', 'billed' | billed: null or dollar amount
-                {wo: 'CTQMA', shop: 'SDR', customer: 'Robert P Husted', hours: 43.5, rate: 145, wip: 6308, flags: ['audit'], billed: null},
-                {wo: 'DB1UA', shop: 'SDV', customer: 'Hogs Head Air 1 LLC', hours: 75.0, rate: 70, wip: 5250, flags: ['loaned'], loanNote: 'NJ - Juan loaned', billed: null},
-                {wo: 'CU1EA', shop: 'SDN', customer: '42K Re Management LLC', hours: 35.5, rate: 145, wip: 5148, flags: [], billed: null},
-                {wo: 'CU16A', shop: 'SDN', customer: 'Flying Orchard LLC', hours: 30.5, rate: 145, wip: 4422, flags: ['billed'], billed: 5190},
-                {wo: 'CU0VA', shop: 'SDR', customer: 'The Club at Centennial', hours: 21.5, rate: 145, wip: 3118, flags: ['audit'], billed: null},
-                {wo: 'CUPFA', shop: 'SDN', customer: 'Flying Orchard LLC', hours: 15.9, rate: 145, wip: 2306, flags: [], billed: null},
-                {wo: 'CU92A', shop: 'SDN', customer: 'Robbins Aviation', hours: 15.0, rate: 145, wip: 2175, flags: [], billed: null},
-                {wo: 'CUL2A', shop: 'SDR', customer: 'Peregrine', hours: 12.5, rate: 145, wip: 1812, flags: [], billed: null},
+                {wo: 'CTQMA', shop: 'SDR', customer: 'Robert P Husted', hours: 43.5, rate: 145, wip: 6308, flags: ['audit'], billed: null, notes: 'QA audit cited'},
+                {wo: 'DB1UA', shop: 'SDV', customer: 'Hogs Head Air 1 LLC', hours: 75.0, rate: 70, wip: 5250, flags: ['loaned'], loanNote: 'NJ - Juan loaned', billed: null, notes: 'NJ controlled'},
+                {wo: 'CU1EA', shop: 'SDN', customer: '42K Re Management LLC', hours: 35.5, rate: 145, wip: 5148, flags: [], billed: null, notes: 'Push to bill'},
+                {wo: 'CU16A', shop: 'SDN', customer: 'Flying Orchard LLC', hours: 30.5, rate: 145, wip: 4422, flags: ['billed'], billed: 5190, notes: ''},
+                {wo: 'CU0VA', shop: 'SDR', customer: 'The Club at Centennial', hours: 27.5, rate: 145, wip: 3988, flags: ['audit'], billed: null, notes: 'QA audit cited'},
+                {wo: 'CU97A', shop: 'SDN', customer: 'Circadian Aviation', hours: 20.0, rate: 145, wip: 2900, flags: [], billed: null, notes: 'Review status'},
+                {wo: 'CUPFA', shop: 'SDN', customer: 'Flying Orchard LLC', hours: 15.9, rate: 145, wip: 2306, flags: [], billed: null, notes: 'Same customer as CU16A'},
+                {wo: 'CUL2A', shop: 'SDR', customer: 'Peregrine', hours: 12.5, rate: 145, wip: 1812, flags: [], billed: null, notes: ''},
+                {wo: 'CU92A', shop: 'SDN', customer: 'Robbins Aviation', hours: 10.0, rate: 145, wip: 1450, flags: [], billed: null, notes: 'Review status'},
+                {wo: 'CV2GA', shop: 'SDN', customer: 'E2 Holdings', hours: 5.0, rate: 145, wip: 725, flags: [], billed: null, notes: ''},
+            ],
+            wipTotalHours: 295.9,  // All open WOs (not just top 10)
+            wipTotalValue: 36456,  // All open WOs total
+
+            // ── OVER 30 DAYS (BZ List) ──
+            // Claude updates from Brian's Over30 report + Billed WO cross-reference
+            over30LastUpdated: '01/28/26',
+            over30Status: 'clear',  // 'clear', 'warning', 'critical'
+            over30StatusNote: "Per Brian's 01/28 email - only long-term dispute remains.",
+            over30Entries: [
+                // Claude adds: {wo, shop, days, wip, status: 'billed'|'dispute'|'open', notes}
+                {wo: 'DTBLA', shop: 'SDV', days: 40, wip: 1327, status: 'billed', notes: 'Billed 01/26/26'},
+                {wo: 'DSW4A', shop: 'SDN', days: 48, wip: 52763, status: 'billed', notes: 'Billed before EOM ✅'},
+                {wo: 'CG4NA', shop: 'SDN', days: 188, wip: 2486, status: 'dispute', notes: 'Kauffman owner was in ICU, hope to resolve soon'},
             ],
         };
 
@@ -3657,6 +3567,238 @@ ${surveyUrl}`;
         renderRankings();
         renderWipOverview();
         renderSdvExpectedHours();
+        renderShopProfitability();
+        renderOpenWipTable();
+        renderOver30();
+
+        // ═══════════════════════════════════════════════════════
+        // SHOP PROFITABILITY RENDERER — Auto-syncs from billedWOsList + shopRates
+        // ═══════════════════════════════════════════════════════
+        function renderShopProfitability() {
+            const container = document.getElementById('shopProfitabilityContainer');
+            if (!container) return;
+            const d = GOALS_DATA;
+            const rates = d.shopRates;
+            const wos = d.billedWOsList;
+
+            // Aggregate by shop
+            const shops = {};
+            wos.forEach(w => {
+                if (!shops[w.shop]) shops[w.shop] = {count: 0, hours: 0, laborBilled: 0};
+                shops[w.shop].count++;
+                shops[w.shop].hours += w.hours;
+                shops[w.shop].laborBilled += w.laborBilled;
+            });
+
+            // Calculate profitability per WO (using flat rates)
+            const woProfit = wos.map(w => {
+                const fr = rates[w.shop] ? rates[w.shop].flatRate : 145;
+                const expected = w.hours * fr;
+                const variance = w.laborBilled - expected;
+                const effRate = w.hours > 0 ? Math.round(w.laborBilled / w.hours) : 0;
+                return {...w, flatRate: fr, expected, variance, effRate};
+            });
+
+            // Shop summary rows
+            const shopOrder = ['SDN', 'SDR', 'SHC', 'SDV'];
+            let totalCount = 0, totalHours = 0, totalBilled = 0, totalExpected = 0;
+
+            let shopRows = '';
+            shopOrder.forEach(s => {
+                if (!shops[s]) return;
+                const sh = shops[s];
+                const fr = rates[s].flatRate;
+                const expected = sh.hours * fr;
+                const variance = sh.laborBilled - expected;
+                const effRate = sh.hours > 0 ? Math.round(sh.laborBilled / sh.hours) : 0;
+                const isProfit = variance >= 0;
+                const isSlightLoss = !isProfit && Math.abs(variance) < 200;
+                const rowBg = isProfit ? 'background:rgba(16,185,129,0.15)' : 'background:rgba(239,68,68,0.1)';
+                const varColor = isProfit ? '#10b981' : '#ef4444';
+                const effColor = effRate >= fr ? '#10b981' : effRate >= fr * 0.9 ? '#f59e0b' : '#ef4444';
+                const badge = isProfit ? '<span class="badge badge-green">🟢 PROFIT</span>' : isSlightLoss ? '<span class="badge badge-amber">⚠️ SLIGHT LOSS</span>' : '<span class="badge badge-red">🔴 LOSS</span>';
+
+                shopRows += `<tr style="${rowBg}"><td><strong>${s}</strong></td><td>${sh.count}</td><td>${sh.hours.toFixed(1)}h</td>
+                    <td>$${fr}/hr</td><td>$${sh.laborBilled.toLocaleString()}</td><td>$${Math.round(expected).toLocaleString()}</td>
+                    <td style="color:${varColor};font-weight:bold;">${isProfit ? '+' : ''}$${Math.round(variance).toLocaleString()}</td>
+                    <td style="color:${effColor};">$${effRate}/hr</td><td>${badge}</td></tr>`;
+
+                totalCount += sh.count; totalHours += sh.hours; totalBilled += sh.laborBilled; totalExpected += expected;
+            });
+            const totalVariance = totalBilled - totalExpected;
+            const totalEffRate = totalHours > 0 ? Math.round(totalBilled / totalHours) : 0;
+            const totalBadge = totalVariance >= 0 ? '<span class="badge badge-green">✅ NET PROFIT</span>' : '<span class="badge badge-red">🔴 NET LOSS</span>';
+
+            // Top 5 profitable + losing WOs
+            const sorted = [...woProfit].sort((a, b) => b.variance - a.variance);
+            const top5 = sorted.filter(w => w.variance > 0).slice(0, 5);
+            const losers = sorted.filter(w => w.variance < 0).sort((a, b) => a.variance - b.variance);
+
+            // Key insights auto-generated
+            const profitableShops = shopOrder.filter(s => shops[s] && (shops[s].laborBilled - shops[s].hours * rates[s].flatRate) >= 0);
+            const losingShops = shopOrder.filter(s => shops[s] && (shops[s].laborBilled - shops[s].hours * rates[s].flatRate) < 0);
+
+            let html = `
+                <div style="background:rgba(59,130,246,0.15);border:1px solid #3b82f6;border-radius:8px;padding:15px;margin-bottom:15px;">
+                    <div style="color:#3b82f6;font-weight:bold;margin-bottom:10px;">📊 Shop-by-Shop Profitability (Billed WOs) — Flat Rate Comparison</div>
+                    <div class="table-container"><table><thead>
+                        <tr><th>Shop</th><th>Billed WOs</th><th>Hours</th><th>Flat Rate</th><th>Labor Billed</th><th>Expected @FR</th><th>Variance</th><th>Eff Rate</th><th>Status</th></tr>
+                    </thead><tbody>
+                    ${shopRows}
+                    <tr style="background:rgba(16,185,129,0.2);font-weight:bold;">
+                        <td>TOTAL</td><td>${totalCount}</td><td>${totalHours.toFixed(1)}h</td><td>—</td>
+                        <td>$${totalBilled.toLocaleString()}</td><td>$${Math.round(totalExpected).toLocaleString()}</td>
+                        <td style="color:${totalVariance >= 0 ? '#10b981' : '#ef4444'};">${totalVariance >= 0 ? '+' : ''}$${Math.round(totalVariance).toLocaleString()}</td>
+                        <td style="color:${totalVariance >= 0 ? '#10b981' : '#ef4444'};">$${totalEffRate}/hr</td><td>${totalBadge}</td>
+                    </tr></tbody></table></div>
+                </div>`;
+
+            // Top 5 Profitable
+            if (top5.length > 0) {
+                html += `<div style="background:rgba(16,185,129,0.15);border:1px solid #10b981;border-radius:8px;padding:15px;margin-bottom:15px;">
+                    <div style="color:#10b981;font-weight:bold;margin-bottom:10px;">🏆 Most Profitable WOs (Top ${top5.length})</div>
+                    <div class="table-container"><table><thead>
+                        <tr><th>WO#</th><th>Shop</th><th>Hours</th><th>Labor Billed</th><th>Expected @FR</th><th>Profit</th><th>Eff Rate</th></tr>
+                    </thead><tbody>`;
+                top5.forEach(w => {
+                    html += `<tr><td><strong>${w.wo}</strong></td><td>${w.shop}</td><td>${w.hours}h</td>
+                        <td>$${w.laborBilled.toLocaleString()}</td><td>$${Math.round(w.expected).toLocaleString()}</td>
+                        <td style="color:#10b981;font-weight:bold;">+$${Math.round(w.variance).toLocaleString()}</td><td>$${w.effRate}/hr</td></tr>`;
+                });
+                html += `</tbody></table></div></div>`;
+            }
+
+            // Losing WOs
+            if (losers.length > 0) {
+                html += `<div style="background:rgba(239,68,68,0.15);border:1px solid #ef4444;border-radius:8px;padding:15px;margin-bottom:15px;">
+                    <div style="color:#ef4444;font-weight:bold;margin-bottom:10px;">⚠️ WOs with Losses (Review Pricing)</div>
+                    <div class="table-container"><table><thead>
+                        <tr><th>WO#</th><th>Shop</th><th>Hours</th><th>Labor Billed</th><th>Expected @FR</th><th>Loss</th><th>Issue</th></tr>
+                    </thead><tbody>`;
+                losers.forEach(w => {
+                    html += `<tr><td><strong>${w.wo}</strong></td><td>${w.shop}</td><td>${w.hours}h</td>
+                        <td>$${w.laborBilled.toLocaleString()}</td><td>$${Math.round(w.expected).toLocaleString()}</td>
+                        <td style="color:#ef4444;font-weight:bold;">-$${Math.abs(Math.round(w.variance)).toLocaleString()}</td>
+                        <td style="font-size:0.8em;">${w.issue || '$' + w.effRate + '/hr rate'}</td></tr>`;
+                });
+                html += `</tbody></table></div></div>`;
+            }
+
+            // Key insights
+            html += `<div style="background:#0f172a;padding:15px;border-radius:6px;font-size:0.85em;color:#94a3b8;">
+                <strong style="color:#10b981;">📊 KEY INSIGHTS (auto-generated from flat rates):</strong><br>`;
+            if (profitableShops.length > 0) html += `• <strong>${profitableShops.join(' & ')} profitable</strong> — billing above their flat rates<br>`;
+            losingShops.forEach(s => {
+                if (!shops[s]) return;
+                const effR = Math.round(shops[s].laborBilled / shops[s].hours);
+                const gap = rates[s].flatRate - effR;
+                html += `• <strong>${s} needs attention</strong> — effective rate $${effR}/hr vs $${rates[s].flatRate}/hr flat rate (losing $${gap}/hr)<br>`;
+            });
+            html += `• <strong>Overall:</strong> ${totalVariance >= 0 ? '$' + Math.round(totalVariance).toLocaleString() + ' profit' : '$' + Math.abs(Math.round(totalVariance)).toLocaleString() + ' loss'} vs flat rate billing<br>
+                • <span style="color:#60a5fa;">Flat rates: SDN $${rates.SDN.flatRate} | SDR $${rates.SDR.flatRate} | SDV $${rates.SDV.flatRate} | SHC $${rates.SHC.flatRate}</span>
+            </div>`;
+
+            container.innerHTML = html;
+        }
+
+        // ═══════════════════════════════════════════════════════
+        // OPEN WIP TABLE RENDERER — Auto-syncs from GOALS_DATA.wipEntries
+        // ═══════════════════════════════════════════════════════
+        function renderOpenWipTable() {
+            const container = document.getElementById('openWipTableContainer');
+            if (!container) return;
+            const d = GOALS_DATA;
+            const entries = [...d.wipEntries].sort((a, b) => b.wip - a.wip);
+            const topN = entries.slice(0, 10);
+            const topHours = topN.reduce((s, e) => s + e.hours, 0);
+            const topWip = topN.reduce((s, e) => s + e.wip, 0);
+
+            let html = `<div class="card">
+                <div class="card-header">
+                    <span class="card-title">📅 Top ${topN.length} Open WOs by WIP</span>
+                    <span class="badge badge-blue">$${d.wipTotalValue.toLocaleString()} Total WIP</span>
+                </div>
+                <div class="table-container"><table><thead>
+                    <tr><th>WO#</th><th>Shop</th><th>Customer</th><th>Hours</th><th>Rate</th><th>WIP</th><th>Notes</th></tr>
+                </thead><tbody>`;
+
+            topN.forEach(e => {
+                const isLoaned = e.flags.includes('loaned');
+                const isBilled = e.flags.includes('billed');
+                const rowStyle = isBilled ? 'style="background:rgba(16,185,129,0.4)"' : '';
+                const woLabel = `<strong>${e.wo}</strong>${isBilled ? ' ✅' : ''}${isLoaned ? ' 📍' : ''}`;
+                const valColor = isLoaned ? '#a855f7' : '#10b981';
+                const noteColor = isBilled ? '#10b981' : (e.notes && (e.notes.includes('Push') || e.notes.includes('Review') || e.notes.includes('Same')) ? '#f59e0b' : (isLoaned ? '#64748b' : ''));
+                const noteDisplay = isBilled ? 'BILLED $' + e.billed.toLocaleString() : (e.notes || '');
+
+                html += `<tr ${rowStyle}><td>${woLabel}</td><td>${e.shop}</td><td>${e.customer}</td>
+                    <td>${e.hours}h</td><td>$${e.rate}</td>
+                    <td style="color:${valColor};font-weight:bold;">$${e.wip.toLocaleString()}</td>
+                    <td style="color:${noteColor};font-size:0.8em;">${noteDisplay}</td></tr>`;
+            });
+
+            html += `<tr style="background:rgba(16,185,129,0.2);font-weight:bold;">
+                    <td colspan="3">TOP ${topN.length} TOTAL</td><td>${topHours.toFixed(1)}h</td><td></td>
+                    <td style="color:#10b981;">$${topWip.toLocaleString()}</td><td></td>
+                </tr></tbody></table></div>
+                <div style="margin-top:10px;font-size:0.8em;color:#94a3b8;">
+                    📋 Total open WIP: $${d.wipTotalValue.toLocaleString()} (${d.wipTotalHours}h across all open WOs) | Data: ${d.wipDate}
+                </div>
+            </div>`;
+
+            container.innerHTML = html;
+        }
+
+        // ═══════════════════════════════════════════════════════
+        // OVER 30 DAYS RENDERER — Auto-syncs from GOALS_DATA.over30Entries
+        // ═══════════════════════════════════════════════════════
+        function renderOver30() {
+            const container = document.getElementById('over30Container');
+            if (!container) return;
+            const d = GOALS_DATA;
+            const entries = d.over30Entries;
+            const openCount = entries.filter(e => e.status === 'open' || e.status === 'dispute').length;
+            const billedCount = entries.filter(e => e.status === 'billed').length;
+            const disputeCount = entries.filter(e => e.status === 'dispute').length;
+            const isClear = d.over30Status === 'clear';
+            const headerBadge = isClear
+                ? '<span class="badge badge-green">✅ CLEAR</span>'
+                : `<span class="badge badge-red">⚠️ ${openCount} OPEN</span>`;
+            const statusBg = isClear ? 'background:rgba(16,185,129,0.2);border:2px solid #10b981;' : 'background:rgba(239,68,68,0.2);border:2px solid #ef4444;';
+            const statusIcon = isClear ? '🎉' : '⚠️';
+            const statusColor = isClear ? '#10b981' : '#ef4444';
+            const statusMsg = isClear ? 'Denver is in the clear!' : openCount + ' WO(s) over 30 days require attention.';
+
+            let html = `<div class="card">
+                <div class="card-header">
+                    <span class="card-title">⚠️ Over 30 Days (BZ List)</span>
+                    ${headerBadge}
+                </div>
+                <div style="${statusBg}padding:15px;border-radius:6px;margin-bottom:15px;font-size:0.9em;">
+                    ${statusIcon} <strong style="color:${statusColor};">${statusMsg}</strong> ${d.over30StatusNote}
+                </div>
+                <div class="table-container"><table><thead>
+                    <tr><th>WO#</th><th>Shop</th><th>Days</th><th>WIP $</th><th>Status</th><th>Action/Notes</th></tr>
+                </thead><tbody>`;
+
+            entries.forEach(e => {
+                const rowBg = e.status === 'billed' ? 'background:rgba(16,185,129,0.2)' : e.status === 'dispute' ? 'background:rgba(239,68,68,0.15)' : 'background:rgba(245,158,11,0.15)';
+                const badge = e.status === 'billed' ? '<span class="badge badge-green">✅ BILLED</span>'
+                    : e.status === 'dispute' ? '<span class="badge badge-red">🔴 DISPUTE</span>'
+                    : '<span class="badge badge-amber">⚠️ OPEN</span>';
+                html += `<tr style="${rowBg}"><td>${e.wo}</td><td>${e.shop}</td><td>${e.days}</td>
+                    <td>$${e.wip.toLocaleString()}</td><td>${badge}</td><td>${e.notes}</td></tr>`;
+            });
+
+            html += `</tbody></table></div>
+                <div style="background:#0f172a;padding:10px;border-radius:6px;margin-top:10px;font-size:0.85em;color:#94a3b8;">
+                    <strong style="color:#60a5fa;">📋 Data Sources:</strong> Over30 report (Brian) + Billed WO report (auto-detect billed status)<br>
+                    <strong style="color:#f59e0b;">⏰ 30-Day Rule:</strong> Communicate to BZ within 30 days for any disputes
+                </div>
+            </div>`;
+
+            container.innerHTML = html;
+        }
         renderWorkStatus();
         
         // Initialize tracking table and customer table
@@ -3685,7 +3827,7 @@ ${surveyUrl}`;
             // Header: HARDCODED by Claude at file update time (not refresh time)
             // Claude updates this string each time index.html is modified
             const hdr = document.getElementById('headerTimestamp');
-            if (hdr) hdr.textContent = 'Last updated: Feb 3, 2026 \u00B7 2:38 PM MST';
+            if (hdr) hdr.textContent = 'Last updated: Feb 3, 2026 \u00B7 2:50 PM MST';
 
             // Customer DB: "Updated 02/03 10:00AM"
             const cdb = document.getElementById('customerDbTimestamp');
