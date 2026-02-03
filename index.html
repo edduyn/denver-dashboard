@@ -229,66 +229,9 @@
             <div class="card" style="border:2px solid #60a5fa;">
                 <div class="card-header">
                     <span class="card-title">📅 Weekly Goals</span>
-                    <span class="badge badge-blue">Week of 02/02</span>
+                    <span class="badge badge-blue" id="weeklyDateBadge">Loading...</span>
                 </div>
-                
-                <!-- Goal 1: A/B Target -->
-                <div style="background:#1e293b;padding:12px;border-radius:8px;margin-bottom:10px;">
-                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-                        <span style="color:#e2e8f0;">📊 A/B Target: Build February momentum</span>
-                        <span id="weeklyABStatus" class="badge badge-blue">New Month</span>
-                    </div>
-                    <div style="display:flex;align-items:center;gap:10px;">
-                        <div class="progress-container" style="flex:1;margin:0;">
-                            <div class="progress-bar">
-                                <div id="weeklyABBar" class="progress-fill" style="width:0%;background:linear-gradient(90deg,#3b82f6,#60a5fa);"></div>
-                            </div>
-                        </div>
-                        <span id="weeklyABText" style="color:#60a5fa;font-weight:bold;min-width:100px;text-align:right;">0% / 58.5%</span>
-                    </div>
-                    <div style="color:#94a3b8;font-size:0.8em;margin-top:5px;">February starts fresh | Jan closed at 22.7% (All) / 24.5% (Tech)</div>
-                </div>
-                
-                <!-- Goal 2: Aging WO Closures -->
-                <div style="background:#1e293b;padding:12px;border-radius:8px;margin-bottom:10px;">
-                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-                        <span style="color:#e2e8f0;">📋 Close 5+ WOs from 90+ day aging list</span>
-                        <span id="weeklyAgingStatus" class="badge badge-amber">2 / 5</span>
-                    </div>
-                    <div style="display:flex;gap:5px;flex-wrap:wrap;">
-                        <span style="background:#10b981;color:white;padding:2px 8px;border-radius:4px;font-size:0.8em;">✅ DTBLA</span>
-                        <span style="background:#10b981;color:white;padding:2px 8px;border-radius:4px;font-size:0.8em;">✅ DSW4A</span>
-                        <span style="background:#374151;color:#9ca3af;padding:2px 8px;border-radius:4px;font-size:0.8em;">⬜ 3 more needed</span>
-                    </div>
-                    <div style="color:#94a3b8;font-size:0.8em;margin-top:5px;">CG4NA (188 days) still in dispute</div>
-                </div>
-                
-                <!-- Goal 3: Rank Improvement -->
-                <div style="background:#1e293b;padding:12px;border-radius:8px;">
-                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-                        <span style="color:#e2e8f0;">🏆 Move up to 17th rank (pass Austin & St. Louis)</span>
-                        <span id="weeklyRankStatus" class="badge badge-amber">19th → 17th</span>
-                    </div>
-                    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;font-size:0.85em;">
-                        <div style="text-align:center;padding:5px;background:#0f172a;border-radius:4px;">
-                            <div style="color:#94a3b8;">17th St. Louis</div>
-                            <div style="color:#f59e0b;font-weight:bold;">42.2%</div>
-                        </div>
-                        <div style="text-align:center;padding:5px;background:#0f172a;border-radius:4px;">
-                            <div style="color:#94a3b8;">18th Austin</div>
-                            <div style="color:#f59e0b;font-weight:bold;">35.4%</div>
-                        </div>
-                        <div style="text-align:center;padding:5px;background:#0f172a;border-radius:4px;border:1px solid #f59e0b;">
-                            <div style="color:#f59e0b;">19th Denver ↑</div>
-                            <div style="color:#f59e0b;font-weight:bold;">32.5%</div>
-                        </div>
-                        <div style="text-align:center;padding:5px;background:#0f172a;border-radius:4px;">
-                            <div style="color:#94a3b8;">20th KC</div>
-                            <div style="color:#ef4444;font-weight:bold;">26.3%</div>
-                        </div>
-                    </div>
-                    <div style="color:#10b981;font-size:0.8em;margin-top:5px;">✅ Passed KC! Need +2.9 pts to pass Austin, +9.7 pts to pass St. Louis</div>
-                </div>
+                <div id="weeklyGoalsContainer"></div>
             </div>
             
             <!-- NPS SURVEY CANDIDATES -->
@@ -2311,40 +2254,7 @@
         
         <!-- RANKINGS TAB -->
         <div class="content" id="rankings">
-            <div class="card">
-                <div class="card-header">
-                    <span class="card-title">🏆 Duncan Aviation Satellite Network - A/B Ratio Rankings</span>
-                    <span class="badge badge-blue">Jan 30, 2026 (YTD)</span>
-                </div>
-                <p style="color:#94a3b8;margin-bottom:15px;font-size:0.9em;">
-                    <strong>A/B Ratio</strong> = Actual Billable Hours ÷ Bought (Paid) Hours | Measures labor efficiency
-                </p>
-                <div style="background:rgba(0,0,0,0.2);padding:10px;border-radius:8px;margin-bottom:15px;">
-                    <strong>Network Average:</strong> 49.2% | <strong>Budget Target:</strong> 58.7%
-                </div>
-                
-                <div class="rank-item"><div class="rank-num">1</div><div class="rank-shop">Sacramento</div><div class="rank-value" style="color:#10b981">77.4%</div></div>
-                <div class="rank-item"><div class="rank-num">2</div><div class="rank-shop">Las Vegas</div><div class="rank-value" style="color:#10b981">76.6%</div></div>
-                <div class="rank-item"><div class="rank-num">3</div><div class="rank-shop">Scottsdale</div><div class="rank-value" style="color:#10b981">74.9%</div></div>
-                <div class="rank-item"><div class="rank-num">4</div><div class="rank-shop">Portland</div><div class="rank-value" style="color:#10b981">73.4%</div></div>
-                <div class="rank-item"><div class="rank-num">5</div><div class="rank-shop">Ft. Lauderdale</div><div class="rank-value" style="color:#10b981">73.4%</div></div>
-                <div class="rank-item"><div class="rank-num">6</div><div class="rank-shop">St. Paul</div><div class="rank-value" style="color:#10b981">68.4%</div></div>
-                <div class="rank-item"><div class="rank-num">7</div><div class="rank-shop">Dallas</div><div class="rank-value" style="color:#10b981">63.1%</div></div>
-                <div class="rank-item"><div class="rank-num">8</div><div class="rank-shop">Nashville</div><div class="rank-value" style="color:#10b981">59.7%</div></div>
-                <div class="rank-item"><div class="rank-num">9</div><div class="rank-shop">Boston</div><div class="rank-value" style="color:#10b981">58.9%</div></div>
-                <div class="rank-item"><div class="rank-num">10</div><div class="rank-shop">Seattle</div><div class="rank-value" style="color:#f59e0b">57.5%</div></div>
-                <div class="rank-item"><div class="rank-num">11</div><div class="rank-shop">Teterboro</div><div class="rank-value" style="color:#f59e0b">57.0%</div></div>
-                <div class="rank-item"><div class="rank-num">12</div><div class="rank-shop">Long Island</div><div class="rank-value" style="color:#f59e0b">51.8%</div></div>
-                <div class="rank-item"><div class="rank-num">13</div><div class="rank-shop">Atlanta</div><div class="rank-value" style="color:#f59e0b">49.7%</div></div>
-                <div class="rank-item"><div class="rank-num">14</div><div class="rank-shop">Oxford</div><div class="rank-value" style="color:#f59e0b">48.7%</div></div>
-                <div class="rank-item"><div class="rank-num">15</div><div class="rank-shop">Van Nuys</div><div class="rank-value" style="color:#f59e0b">46.8%</div></div>
-                <div class="rank-item"><div class="rank-num">16</div><div class="rank-shop">Manassas</div><div class="rank-value" style="color:#f59e0b">46.1%</div></div>
-                <div class="rank-item"><div class="rank-num">17</div><div class="rank-shop">St. Louis</div><div class="rank-value" style="color:#ef4444">42.2%</div></div>
-                <div class="rank-item"><div class="rank-num">18</div><div class="rank-shop">Austin</div><div class="rank-value" style="color:#ef4444">35.4%</div></div>
-                <div class="rank-item denver"><div class="rank-num" style="background:#f59e0b;color:#fff">19</div><div class="rank-shop"><strong>DENVER ↑</strong></div><div class="rank-value" style="color:#f59e0b">32.5%</div></div>
-                <div class="rank-item"><div class="rank-num">20</div><div class="rank-shop">Kansas City</div><div class="rank-value" style="color:#ef4444">26.3%</div></div>
-                <div class="rank-item"><div class="rank-num">21</div><div class="rank-shop">Houston</div><div class="rank-value" style="color:#ef4444">20.0%</div></div>
-            </div>
+            <div id="rankingsContainer"></div>
         </div>
     </div>
     
@@ -2624,6 +2534,47 @@
                 items: [],
                 notes: '📋 Need to complete risk assessment documentation.',
             },
+
+            // ── NETWORK RANKINGS (from Matt's weekly email) ──
+            // Claude updates when Friday email arrives
+            rankingsDate: '01/30/26',
+            networkBudget: 58.7,
+            rankings: [
+                {rank: 1, shop: 'Sacramento', pct: 77.4},
+                {rank: 2, shop: 'Las Vegas', pct: 76.6},
+                {rank: 3, shop: 'Scottsdale', pct: 74.9},
+                {rank: 4, shop: 'Portland', pct: 73.4},
+                {rank: 5, shop: 'Ft. Lauderdale', pct: 73.4},
+                {rank: 6, shop: 'St. Paul', pct: 68.4},
+                {rank: 7, shop: 'Dallas', pct: 63.1},
+                {rank: 8, shop: 'Nashville', pct: 59.7},
+                {rank: 9, shop: 'Boston', pct: 58.9},
+                {rank: 10, shop: 'Seattle', pct: 57.5},
+                {rank: 11, shop: 'Teterboro', pct: 57.0},
+                {rank: 12, shop: 'Long Island', pct: 51.8},
+                {rank: 13, shop: 'Atlanta', pct: 49.7},
+                {rank: 14, shop: 'Oxford', pct: 48.7},
+                {rank: 15, shop: 'Van Nuys', pct: 46.8},
+                {rank: 16, shop: 'Manassas', pct: 46.1},
+                {rank: 17, shop: 'St. Louis', pct: 42.2},
+                {rank: 18, shop: 'Austin', pct: 35.4},
+                {rank: 19, shop: 'Denver', pct: 32.5, isDenver: true},
+                {rank: 20, shop: 'Kansas City', pct: 26.3},
+                {rank: 21, shop: 'Houston', pct: 20.0},
+            ],
+
+            // ── AGING WO CLOSURES (weekly goal) ──
+            // Claude updates: closed = WOs successfully closed from 90+ day list
+            agingTarget: 5,
+            agingClosed: [
+                {wo: 'DTBLA', date: '01/26/26'},
+                {wo: 'DSW4A', date: '01/26/26'},
+            ],
+            agingNotes: 'CG4NA still in dispute',
+
+            // ── CURRENT MONTH A/B (in-progress, before month closes) ──
+            // Claude updates from daily Time Sold reports during the month
+            currentMonthAB: null, // Set to number when first Time Sold report comes in for new month
         };
 
         // ═══════════════════════════════════════════════════════
@@ -3446,8 +3397,154 @@ ${surveyUrl}`;
             document.getElementById('customerDbCount').textContent = customerDatabase.length;
         }
         
+        // ═══════════════════════════════════════════════════════
+        // WEEKLY GOALS RENDERER — Auto-syncs from GOALS_DATA
+        // ═══════════════════════════════════════════════════════
+        function renderWeeklyGoals() {
+            const container = document.getElementById('weeklyGoalsContainer');
+            const dateBadge = document.getElementById('weeklyDateBadge');
+            if (!container) return;
+            const d = GOALS_DATA;
+            const latestAB = d.abMonthly[d.abMonthly.length - 1];
+            const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+            const now = new Date();
+            const currentMonth = months[now.getMonth()];
+            const prevMonth = months[(now.getMonth() + 11) % 12];
+
+            // Week of date (Monday of current week)
+            const dayOfWeek = now.getDay();
+            const mondayOffset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+            const monday = new Date(now);
+            monday.setDate(now.getDate() + mondayOffset);
+            const weekStr = (monday.getMonth()+1).toString().padStart(2,'0') + '/' + monday.getDate().toString().padStart(2,'0');
+            if (dateBadge) dateBadge.textContent = 'Week of ' + weekStr;
+
+            // ── A/B Target ──
+            const currentAB = d.currentMonthAB;
+            const hasCurrentData = currentAB !== null && currentAB !== undefined;
+            const abBarPct = hasCurrentData ? Math.min(Math.round((currentAB / d.abTarget) * 100), 100) : 0;
+            const abStatusBadge = hasCurrentData
+                ? (currentAB >= d.abTarget ? '<span class="badge badge-green">On Target ✅</span>' : '<span class="badge badge-amber">In Progress</span>')
+                : '<span class="badge badge-blue">New Month</span>';
+            const abSubtext = hasCurrentData
+                ? `${currentMonth} MTD: ${currentAB}% | ${prevMonth} closed at ${latestAB.mattOfficial}% (Matt)`
+                : `${currentMonth} starts fresh | ${prevMonth} closed at ${latestAB.mattOfficial}% (Matt) / ${latestAB.localCalc}% (Local)`;
+
+            let html = `<div style="background:#1e293b;padding:12px;border-radius:8px;margin-bottom:10px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                    <span style="color:#e2e8f0;">📊 A/B Target: Build ${currentMonth} momentum</span>
+                    ${abStatusBadge}
+                </div>
+                <div style="display:flex;align-items:center;gap:10px;">
+                    <div class="progress-container" style="flex:1;margin:0;">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width:${abBarPct}%;background:linear-gradient(90deg,#3b82f6,#60a5fa);"></div>
+                        </div>
+                    </div>
+                    <span style="color:#60a5fa;font-weight:bold;min-width:100px;text-align:right;">${hasCurrentData ? currentAB+'%' : '0%'} / ${d.abTarget}%</span>
+                </div>
+                <div style="color:#94a3b8;font-size:0.8em;margin-top:5px;">${abSubtext}</div>
+            </div>`;
+
+            // ── Aging WO Closures ──
+            const agClosed = d.agingClosed.length;
+            const agTarget = d.agingTarget;
+            const agRemaining = Math.max(agTarget - agClosed, 0);
+            const agBadgeClass = agClosed >= agTarget ? 'badge badge-green' : 'badge badge-amber';
+            html += `<div style="background:#1e293b;padding:12px;border-radius:8px;margin-bottom:10px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                    <span style="color:#e2e8f0;">📋 Close ${agTarget}+ WOs from 90+ day aging list</span>
+                    <span class="${agBadgeClass}">${agClosed} / ${agTarget}</span>
+                </div>
+                <div style="display:flex;gap:5px;flex-wrap:wrap;">
+                    ${d.agingClosed.map(a => `<span style="background:#10b981;color:white;padding:2px 8px;border-radius:4px;font-size:0.8em;">✅ ${a.wo}</span>`).join('')}
+                    ${agRemaining > 0 ? `<span style="background:#374151;color:#9ca3af;padding:2px 8px;border-radius:4px;font-size:0.8em;">⬜ ${agRemaining} more needed</span>` : ''}
+                </div>
+                ${d.agingNotes ? `<div style="color:#94a3b8;font-size:0.8em;margin-top:5px;">${d.agingNotes}</div>` : ''}
+            </div>`;
+
+            // ── Rank Improvement ──
+            const denver = d.rankings.find(r => r.isDenver);
+            if (denver) {
+                const denverIdx = d.rankings.indexOf(denver);
+                // Find neighbors: 2 above, 1 below (or adjust at edges)
+                const startIdx = Math.max(0, denverIdx - 2);
+                const endIdx = Math.min(d.rankings.length - 1, denverIdx + 1);
+                const neighbors = d.rankings.slice(startIdx, endIdx + 1);
+
+                // Find next target to pass
+                const above1 = denverIdx > 0 ? d.rankings[denverIdx - 1] : null;
+                const above2 = denverIdx > 1 ? d.rankings[denverIdx - 2] : null;
+                const below1 = denverIdx < d.rankings.length - 1 ? d.rankings[denverIdx + 1] : null;
+                const targetRank = above2 ? above2.rank : (above1 ? above1.rank : denver.rank);
+                const rankGoal = `${denver.rank}th → ${targetRank}th`;
+
+                // Build status messages
+                let statusNotes = [];
+                if (below1 && denver.pct > below1.pct) statusNotes.push(`✅ Passed ${below1.shop}!`);
+                if (above1) statusNotes.push(`Need +${(above1.pct - denver.pct).toFixed(1)} pts to pass ${above1.shop}`);
+                if (above2) statusNotes.push(`+${(above2.pct - denver.pct).toFixed(1)} pts to pass ${above2.shop}`);
+
+                html += `<div style="background:#1e293b;padding:12px;border-radius:8px;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                        <span style="color:#e2e8f0;">🏆 Move up to ${targetRank}th rank (pass ${above1 ? above1.shop : '—'}${above2 ? ' & ' + above2.shop : ''})</span>
+                        <span class="badge badge-amber">${rankGoal}</span>
+                    </div>
+                    <div style="display:grid;grid-template-columns:repeat(${neighbors.length},1fr);gap:8px;font-size:0.85em;">
+                        ${neighbors.map(n => {
+                            const isDen = n.isDenver;
+                            const color = isDen ? '#f59e0b' : (n.pct >= d.networkBudget ? '#10b981' : n.pct >= 40 ? '#f59e0b' : '#ef4444');
+                            return `<div style="text-align:center;padding:5px;background:#0f172a;border-radius:4px;${isDen ? 'border:1px solid #f59e0b;' : ''}">
+                                <div style="color:${isDen ? '#f59e0b' : '#94a3b8'};">${n.rank}th ${n.shop}${isDen ? ' ↑' : ''}</div>
+                                <div style="color:${color};font-weight:bold;">${n.pct}%</div>
+                            </div>`;
+                        }).join('')}
+                    </div>
+                    <div style="color:#10b981;font-size:0.8em;margin-top:5px;">${statusNotes.join(' | ')}</div>
+                </div>`;
+            }
+
+            container.innerHTML = html;
+        }
+
+        // ═══════════════════════════════════════════════════════
+        // RANKINGS TAB RENDERER — Auto-syncs from GOALS_DATA.rankings
+        // ═══════════════════════════════════════════════════════
+        function renderRankings() {
+            const container = document.getElementById('rankingsContainer');
+            if (!container) return;
+            const d = GOALS_DATA;
+            const networkAvg = (d.rankings.reduce((s,r) => s + r.pct, 0) / d.rankings.length).toFixed(1);
+
+            let html = `<div class="card">
+                <div class="card-header">
+                    <span class="card-title">🏆 Duncan Aviation Satellite Network - A/B Ratio Rankings</span>
+                    <span class="badge badge-blue">${d.rankingsDate} (YTD)</span>
+                </div>
+                <p style="color:#94a3b8;margin-bottom:15px;font-size:0.9em;">
+                    <strong>A/B Ratio</strong> = Actual Billable Hours ÷ Bought (Paid) Hours | Measures labor efficiency
+                </p>
+                <div style="background:rgba(0,0,0,0.2);padding:10px;border-radius:8px;margin-bottom:15px;">
+                    <strong>Network Average:</strong> ${networkAvg}% | <strong>Budget Target:</strong> ${d.networkBudget}%
+                </div>`;
+
+            d.rankings.forEach(r => {
+                const color = r.pct >= d.networkBudget ? '#10b981' : r.pct >= 40 ? '#f59e0b' : '#ef4444';
+                if (r.isDenver) {
+                    html += `<div class="rank-item denver"><div class="rank-num" style="background:#f59e0b;color:#fff">${r.rank}</div><div class="rank-shop"><strong>DENVER ↑</strong></div><div class="rank-value" style="color:#f59e0b">${r.pct}%</div></div>`;
+                } else {
+                    html += `<div class="rank-item"><div class="rank-num">${r.rank}</div><div class="rank-shop">${r.shop}</div><div class="rank-value" style="color:${color}">${r.pct}%</div></div>`;
+                }
+            });
+
+            html += `</div>`;
+            container.innerHTML = html;
+        }
+
         // Initialize goals tab (auto-synced from GOALS_DATA + npsSurveyData + customerDatabase)
         renderGoals();
+        renderWeeklyGoals();
+        renderRankings();
         
         // Initialize tracking table and customer table
         renderNpsTable();
@@ -3475,7 +3572,7 @@ ${surveyUrl}`;
             // Header: HARDCODED by Claude at file update time (not refresh time)
             // Claude updates this string each time index.html is modified
             const hdr = document.getElementById('headerTimestamp');
-            if (hdr) hdr.textContent = 'Last updated: Feb 3, 2026 \u00B7 12:02 PM MST';
+            if (hdr) hdr.textContent = 'Last updated: Feb 3, 2026 \u00B7 11:30 AM MST';
 
             // Customer DB: "Updated 02/03 10:00AM"
             const cdb = document.getElementById('customerDbTimestamp');
