@@ -2615,6 +2615,7 @@
             vendorDisputes: [
                 // Claude adds: {wo, vendor, dateIdentified, dateCommunicated, withinDeadline, notes}
                 {wo: 'CG4NA', vendor: 'BZ', dateIdentified: '12/22/25', dateCommunicated: '01/21/26', withinDeadline: true, notes: 'Communicated to BZ'},
+                {wo: 'CMJHA', vendor: 'BZ', dateIdentified: null, dateCommunicated: '02/03/26', withinDeadline: true, notes: 'Phone update — waiting on Honeywell + customer to finalize FOC installation agreement'},
             ],
 
             // ── GOAL #11: Risk Assessment ──
@@ -3474,7 +3475,7 @@ ${surveyUrl}`;
             // Header: HARDCODED by Claude at file update time (not refresh time)
             // Claude updates this string each time index.html is modified
             const hdr = document.getElementById('headerTimestamp');
-            if (hdr) hdr.textContent = 'Last updated: Feb 3, 2026 \u00B7 11:58 AM MST';
+            if (hdr) hdr.textContent = 'Last updated: Feb 3, 2026 \u00B7 12:02 PM MST';
 
             // Customer DB: "Updated 02/03 10:00AM"
             const cdb = document.getElementById('customerDbTimestamp');
