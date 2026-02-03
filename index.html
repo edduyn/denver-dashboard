@@ -485,7 +485,7 @@
                     <strong>🔬 Formula Reverse-Engineered:</strong> Matt's "Actual/Bought" = <strong>Non-Shop WO Hours ÷ Total WO Hours Sold</strong>. Both A and B come from the Time Sold report (AS400), NOT payroll. Numerator = Component + Aircraft + Billing/Sales + Customer Assist. Denominator = all of the above + Shop WOs (cleanup, tech support, WO review, PTB, holiday, training, etc.). Validated within ±1.3pt across Aug '25, Sep '25, and Jan '26 against Matt's published figures.
                 </div>
                 <div style="background:#451a03;padding:10px;border-radius:6px;margin-top:8px;font-size:0.82em;color:#fef3c7;">
-                    ⚠️ <strong>Why payroll A/B (24.5%) ≠ Matt's A/B (32.5%):</strong> Payroll includes 768.5h that are paid but never sold to any WO — 240h manager (Edduyn) + ~536h Hannas LOA (last AS400 entry: Oct 28, 2025 — dual knee replacement). Hannas LOA accounts for virtually 100% of the previously unexplained "tech gap." Active tech time-entry compliance is effectively on target.
+                    ⚠️ <strong>Why payroll A/B (24.5%) ≠ Matt's A/B (32.5%):</strong> Payroll-based A/B is lower because payroll includes 768.5h of paid-but-never-sold time (manager + Hannas LOA since 10/28/25, dual knee replacement). Matt's official formula correctly excludes these by using only Time Sold report data. Active tech time-entry compliance is effectively on target.
                 </div>
             </div>
             
@@ -3561,7 +3561,7 @@ ${surveyUrl}`;
             // Header: HARDCODED by Claude at file update time (not refresh time)
             // Claude updates this string each time index.html is modified
             const hdr = document.getElementById('headerTimestamp');
-            if (hdr) hdr.textContent = 'Last updated: Feb 3, 2026 \u00B7 2:20 PM MST';
+            if (hdr) hdr.textContent = 'Last updated: Feb 3, 2026 \u00B7 2:25 PM MST';
 
             // Customer DB: "Updated 02/03 10:00AM"
             const cdb = document.getElementById('customerDbTimestamp');
