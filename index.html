@@ -607,7 +607,7 @@
                 </div>
                 
                 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-                    <span style="color:#94a3b8;font-size:0.85em;">📊 Customer Email Database: <span id="customerDbCount">46</span> contacts (Updated 02/02 9:00AM) - <span style="color:#a78bfa;">1 per customer/month</span></span>
+                    <span style="color:#94a3b8;font-size:0.85em;">📊 Customer Email Database: <span id="customerDbCount">51</span> contacts (Updated 02/03 10:00AM) - <span style="color:#a78bfa;">1 per customer/month</span></span>
                     <label style="font-size:0.8em;color:#94a3b8;cursor:pointer;">
                         <input type="checkbox" id="showSentCustomers" onchange="renderCustomerTable()" style="margin-right:5px;">
                         Show all
@@ -3054,11 +3054,11 @@ ${surveyUrl}`;
         // WOs with empty email need lookup in AS400/customer records
         const customerDatabase = [
             // === BILLED 01/30/26 (NEW) ===
-            {name: 'Robbins Aviation', email: '', wo: 'CU92A', reg: 'N331MW', shop: 'SDN', revenue: 2530, dateBilled: '01/30/26', custNum: 153606},
+            {name: 'Robbins Aviation', email: 'jeff@robbins-aviation.com', wo: 'CU92A', reg: 'N331MW', shop: 'SDN', revenue: 2530, dateBilled: '01/30/26', custNum: 153606},
             // === BILLED 01/30/26 ===
-            {name: 'Alpine Aviation', email: '', wo: 'CVLNA', reg: 'N197GA', shop: 'SDN', revenue: 1770, dateBilled: '01/30/26', custNum: 101328},
-            {name: 'Sunset Aviation LLC', email: '', wo: 'CVJ0A', reg: 'STOCK', shop: 'SHC', revenue: 785, dateBilled: '01/30/26', custNum: 158993},
-            {name: 'NEED LOOKUP', email: '', wo: 'CP5EA', reg: 'N365CJ', shop: 'SFI', revenue: 780, dateBilled: '01/30/26', custNum: 116393},
+            {name: 'Alpine Aviation', email: 'lhan@alpine-air.com', wo: 'CVLNA', reg: 'N197GA', shop: 'SDN', revenue: 1770, dateBilled: '01/30/26', custNum: 101328},
+            {name: 'Sunset Aviation LLC', email: 'bfranklin@solairus.aero', wo: 'CVJ0A', reg: 'STOCK', shop: 'SHC', revenue: 785, dateBilled: '01/30/26', custNum: 158993},
+            {name: 'Jet Group BA', email: 'paul@jetgroupba.com', wo: 'CP5EA', reg: 'N365CJ', shop: 'SFI', revenue: 780, dateBilled: '01/30/26', custNum: 116393},
             // === HIGH REVENUE (>$5K) - PRIORITY ===
             {name: 'MHH Inc', email: 'BILL.BENTON@MHHINC.NET', wo: 'DSW4A', reg: 'N7BD', shop: 'SDN', revenue: 65835, dateBilled: '01/26/26', custNum: 157998},
             {name: 'Skyport Co', email: 'ryan.himango@skyportco.com', wo: 'DUSFA', reg: 'N65LR', shop: 'SDN', revenue: 42398, dateBilled: '01/29/26', custNum: 153916},
@@ -3088,15 +3088,12 @@ ${surveyUrl}`;
             {name: 'Arapahoe Aero', email: 'customercare@arapahoeaero.com', wo: 'CUCPA', reg: 'N944AL', shop: 'SDR', revenue: 1392, dateBilled: '01/14/26', custNum: 151065},
             {name: 'Civil Air Patrol', email: 'capconsmx@capnhq.gov', wo: 'CSYNA', reg: 'N846CP', shop: 'SDR', revenue: 1267, dateBilled: '01/08/26', custNum: 137367},
             {name: 'Civil Air Patrol', email: 'capconsmx@capnhq.gov', wo: 'CSYQA', reg: 'N948CA', shop: 'SDR', revenue: 1267, dateBilled: '01/08/26', custNum: 137367},
-            {name: 'NEED LOOKUP', email: '', wo: 'CV2GA', reg: 'N688MP', shop: 'SDN', revenue: 1234, dateBilled: '01/28/26', custNum: 154793},
+            {name: 'E2 Amusements', email: 'chris.c@e2amusements.com', wo: 'CV2GA', reg: 'N688MP', shop: 'SDN', revenue: 1234, dateBilled: '01/28/26', custNum: 154793},
             {name: 'Civil Air Patrol', email: 'capconsmx@capnhq.gov', wo: 'CSYLA', reg: 'N243CP', shop: 'SDR', revenue: 1056, dateBilled: '01/21/26', custNum: 137367},
-            {name: 'Alpine Aviation', email: '', wo: 'CVLNA', reg: 'N197GA', shop: 'SDN', revenue: 1770, dateBilled: '01/30/26', custNum: 101328},
             // === LOWER REVENUE (<$1K) ===
             {name: 'Bode Aviation', email: 'michelle.amezcua@flybode.com', wo: 'CTYTA', reg: 'N327SF', shop: 'SDN', revenue: 950, dateBilled: '01/09/26', custNum: 125945},
             {name: 'M&N Aviation', email: 'tom@mandn.aero', wo: 'CU1CA', reg: 'N488RJ', shop: 'SDN', revenue: 950, dateBilled: '01/08/26', custNum: 129186},
             {name: 'AirMax', email: 'rong@airmaxonline.com', wo: 'CUCJA', reg: 'N137ZM', shop: 'SDN', revenue: 784, dateBilled: '01/15/26', custNum: 127007},
-            {name: 'Sunset Aviation LLC', email: '', wo: 'CVJ0A', reg: 'STOCK', shop: 'SHC', revenue: 785, dateBilled: '01/30/26', custNum: 158993},
-            {name: 'NEED LOOKUP', email: '', wo: 'CP5EA', reg: 'N365CJ', shop: 'SFI', revenue: 780, dateBilled: '01/30/26', custNum: 116393},
             {name: 'Aspen Flying Club', email: 'accounting@aspenflyingclub.com', wo: 'CV98A', reg: 'N621TK', shop: 'SDR', revenue: 739, dateBilled: '01/22/26', custNum: 139695},
             {name: 'Aspen Flying Club', email: 'accounting@aspenflyingclub.com', wo: 'CV8ZA', reg: 'N526LK', shop: 'SDR', revenue: 739, dateBilled: '01/23/26', custNum: 139695},
             {name: 'Metro Aviation', email: 'sshrestha@metroaviation.com', wo: 'DT3DA', reg: '', shop: 'SDV', revenue: 712, dateBilled: '01/27/26', custNum: 106755},
