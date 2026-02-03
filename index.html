@@ -1532,323 +1532,11 @@
         
         <!-- NQA TAB -->
         <div class="content" id="nqa">
-            <!-- NQA OVERVIEW -->
-            <div class="card">
-                <div class="card-header">
-                    <span class="card-title">📋 NQA Flat Rate Analysis - Service Shops</span>
-                    <span class="badge badge-green" id="nqaBadgeTimestamp">Updated 02/03/26</span>
-                </div>
-                <div style="color:#94a3b8;font-size:0.9em;margin-bottom:15px;">
-                    <strong>NQA (Non-Quoted Agreement)</strong> = Flat rate pricing for standard service jobs. Goal: Track if we're making or losing money on flat rate vs actual hours worked.<br>
-                    <span style="color:#f59e0b;">💰 NQA Total = Flat Rate Labor + 20% Admin Fee (max $350)</span>
-                </div>
-                
-                <!-- SUMMARY METRICS -->
-                <div class="card-grid" style="margin-bottom:20px;">
-                    <div class="metric">
-                        <div class="metric-value" style="color:#10b981;">6/9</div>
-                        <div class="metric-label">Win Rate</div>
-                        <div class="metric-sub">Jobs at/under flat rate</div>
-                    </div>
-                    <div class="metric">
-                        <div class="metric-value" style="color:#10b981;">-5.8h</div>
-                        <div class="metric-label">Hours Variance</div>
-                        <div class="metric-sub">Under flat rate = PROFIT</div>
-                    </div>
-                    <div class="metric">
-                        <div class="metric-value" style="color:#10b981;">+$1,264</div>
-                        <div class="metric-label">Labor Margin</div>
-                        <div class="metric-sub">@ $218/hr + 20% admin</div>
-                    </div>
-                    <div class="metric">
-                        <div class="metric-value" style="color:#f59e0b;">9</div>
-                        <div class="metric-label">T&M Jobs</div>
-                        <div class="metric-sub">No flat rate (billed hourly)</div>
-                    </div>
-                </div>
-                
-                <!-- DECISION INDICATOR -->
-                <div style="background:rgba(16,185,129,0.2);border:2px solid #10b981;border-radius:10px;padding:15px;text-align:center;margin-bottom:20px;">
-                    <div style="font-size:1.5em;font-weight:bold;color:#10b981;">✅ NQA PROFITABLE THIS MONTH</div>
-                    <div style="color:#a7f3d0;margin-top:5px;">Net -5.8h under flat rate = Keep NQA system</div>
-                </div>
-            </div>
+            <!-- Dynamic NQA sections — auto-rendered from GOALS_DATA -->
+            <div id="nqaContainer"></div>
             
-            <!-- NQA JOBS TABLE -->
-            <div class="card">
-                <div class="card-header">
-                    <span class="card-title">🎯 NQA Flat Rate Jobs (SDN/SDR/SHC)</span>
-                    <span class="badge badge-blue">9 Jobs</span>
-                </div>
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>WO#</th>
-                                <th>Reg</th>
-                                <th>Shop</th>
-                                <th>Squawk</th>
-                                <th style="text-align:right;">Actual</th>
-                                <th style="text-align:right;">Flat Rate</th>
-                                <th style="text-align:right;">Variance</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr style="background:rgba(16,185,129,0.1);">
-                                <td>CU0VA</td>
-                                <td>N84RJ</td>
-                                <td>SDR</td>
-                                <td>91.411 & 91.413 (Cessna 172S)</td>
-                                <td style="text-align:right;">4.0h</td>
-                                <td style="text-align:right;">18.6h</td>
-                                <td style="text-align:right;color:#10b981;font-weight:bold;">-14.6h</td>
-                                <td><span class="badge badge-green">✅ WIN</span></td>
-                            </tr>
-                            <tr style="background:rgba(16,185,129,0.1);">
-                                <td>CU1EA</td>
-                                <td>N505RR</td>
-                                <td>SDN</td>
-                                <td>Autopilot troubleshooting</td>
-                                <td style="text-align:right;">4.5h</td>
-                                <td style="text-align:right;">8.0h</td>
-                                <td style="text-align:right;color:#10b981;font-weight:bold;">-3.5h</td>
-                                <td><span class="badge badge-green">✅ WIN</span></td>
-                            </tr>
-                            <tr style="background:rgba(16,185,129,0.1);">
-                                <td>CU92A</td>
-                                <td>N331MW</td>
-                                <td>SDN</td>
-                                <td>Troubleshoot Autopilot</td>
-                                <td style="text-align:right;">4.0h</td>
-                                <td style="text-align:right;">8.0h</td>
-                                <td style="text-align:right;color:#10b981;font-weight:bold;">-4.0h</td>
-                                <td><span class="badge badge-green">✅ WIN</span></td>
-                            </tr>
-                            <tr style="background:rgba(16,185,129,0.1);">
-                                <td>CU92A</td>
-                                <td>N331MW</td>
-                                <td>SDN</td>
-                                <td>Perform ULB Test</td>
-                                <td style="text-align:right;">2.0h</td>
-                                <td style="text-align:right;">2.0h</td>
-                                <td style="text-align:right;color:#10b981;font-weight:bold;">0.0h</td>
-                                <td><span class="badge badge-green">✅ WIN</span></td>
-                            </tr>
-                            <tr style="background:rgba(239,68,68,0.15);">
-                                <td>CUC9A</td>
-                                <td>N3278</td>
-                                <td>SHC</td>
-                                <td>Overhaul Main Ship Battery</td>
-                                <td style="text-align:right;">12.0h</td>
-                                <td style="text-align:right;">3.0h</td>
-                                <td style="text-align:right;color:#ef4444;font-weight:bold;">+9.0h</td>
-                                <td><span class="badge badge-red">❌ LOSS</span></td>
-                            </tr>
-                            <tr style="background:rgba(239,68,68,0.15);">
-                                <td>CUL2A</td>
-                                <td>N5203U</td>
-                                <td>SDR</td>
-                                <td>KT74 inoperative (transponder)</td>
-                                <td style="text-align:right;">12.5h</td>
-                                <td style="text-align:right;">4.0h</td>
-                                <td style="text-align:right;color:#ef4444;font-weight:bold;">+8.5h</td>
-                                <td><span class="badge badge-red">❌ LOSS</span></td>
-                            </tr>
-                            <tr style="background:rgba(239,68,68,0.1);">
-                                <td>CUPFA</td>
-                                <td>N176MG</td>
-                                <td>SDN</td>
-                                <td>Replace #2 ADC due to red X</td>
-                                <td style="text-align:right;">9.9h</td>
-                                <td style="text-align:right;">8.0h</td>
-                                <td style="text-align:right;color:#f59e0b;font-weight:bold;">+1.9h</td>
-                                <td><span class="badge badge-amber">⚠️ OVER</span></td>
-                            </tr>
-                            <tr style="background:rgba(16,185,129,0.1);">
-                                <td>CUSDA</td>
-                                <td>N7701A</td>
-                                <td>SDR</td>
-                                <td>91.411 & 91.413 (Piper PA-44)</td>
-                                <td style="text-align:right;">4.9h</td>
-                                <td style="text-align:right;">6.0h</td>
-                                <td style="text-align:right;color:#10b981;font-weight:bold;">-1.1h</td>
-                                <td><span class="badge badge-green">✅ WIN</span></td>
-                            </tr>
-                            <tr style="background:rgba(16,185,129,0.1);">
-                                <td>DUYYA</td>
-                                <td>N219JG</td>
-                                <td>SDN</td>
-                                <td>Exchange Vertical Gyro</td>
-                                <td style="text-align:right;">2.0h</td>
-                                <td style="text-align:right;">4.0h</td>
-                                <td style="text-align:right;color:#10b981;font-weight:bold;">-2.0h</td>
-                                <td><span class="badge badge-green">✅ WIN</span></td>
-                            </tr>
-                            <tr style="font-weight:bold;background:rgba(255,255,255,0.1);">
-                                <td colspan="4">TOTAL NQA</td>
-                                <td style="text-align:right;">55.8h</td>
-                                <td style="text-align:right;">61.6h</td>
-                                <td style="text-align:right;color:#10b981;">-5.8h</td>
-                                <td><span class="badge badge-green">NET WIN</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            
-            <!-- PROBLEM JOBS -->
-            <div class="card" style="border:2px solid #ef4444;">
-                <div class="card-header">
-                    <span class="card-title" style="color:#ef4444;">⚠️ Problem Jobs - Review for NQA Adjustment</span>
-                </div>
-                <div style="color:#fca5a5;font-size:0.9em;margin-bottom:15px;">
-                    These jobs exceeded flat rate hours. Consider: adjusting NQA price, switching to T&M, or reviewing tech efficiency.
-                </div>
-                <div style="display:grid;gap:10px;">
-                    <div style="background:rgba(239,68,68,0.15);padding:15px;border-radius:8px;border-left:4px solid #ef4444;">
-                        <div style="display:flex;justify-content:space-between;align-items:center;">
-                            <div>
-                                <span style="font-weight:bold;color:#fca5a5;">CUC9A - Battery Overhaul (SHC)</span>
-                                <div style="color:#94a3b8;font-size:0.85em;">N3278 | Overhaul Main Ship Battery 405CH10</div>
-                            </div>
-                            <div style="text-align:right;">
-                                <div style="color:#ef4444;font-weight:bold;font-size:1.2em;">+9.0h over</div>
-                                <div style="color:#fca5a5;font-size:0.9em;">~$1,962 margin loss</div>
-                            </div>
-                        </div>
-                        <div style="margin-top:10px;color:#fde68a;font-size:0.85em;">💡 Recommend: Update battery overhaul NQA from 3h to 10-12h or quote T&M</div>
-                    </div>
-                    <div style="background:rgba(239,68,68,0.15);padding:15px;border-radius:8px;border-left:4px solid #ef4444;">
-                        <div style="display:flex;justify-content:space-between;align-items:center;">
-                            <div>
-                                <span style="font-weight:bold;color:#fca5a5;">CUL2A - Transponder Troubleshoot (SDR)</span>
-                                <div style="color:#94a3b8;font-size:0.85em;">N5203U | KT74 inoperative - Cessna 206</div>
-                            </div>
-                            <div style="text-align:right;">
-                                <div style="color:#ef4444;font-weight:bold;font-size:1.2em;">+8.5h over</div>
-                                <div style="color:#fca5a5;font-size:0.9em;">~$1,853 margin loss</div>
-                            </div>
-                        </div>
-                        <div style="margin-top:10px;color:#fde68a;font-size:0.85em;">💡 Recommend: Complex transponder issues → Quote T&M upfront</div>
-                    </div>
-                    <div style="background:rgba(251,191,36,0.15);padding:15px;border-radius:8px;border-left:4px solid #f59e0b;">
-                        <div style="display:flex;justify-content:space-between;align-items:center;">
-                            <div>
-                                <span style="font-weight:bold;color:#fde68a;">CUPFA - ADC Replacement (SDN)</span>
-                                <div style="color:#94a3b8;font-size:0.85em;">N176MG | Replace #2 ADC - G-IV</div>
-                            </div>
-                            <div style="text-align:right;">
-                                <div style="color:#f59e0b;font-weight:bold;font-size:1.2em;">+1.9h over</div>
-                                <div style="color:#fde68a;font-size:0.9em;">~$414 margin loss</div>
-                            </div>
-                        </div>
-                        <div style="margin-top:10px;color:#a7f3d0;font-size:0.85em;">✓ Minor variance - within acceptable range for complex aircraft</div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- T&M JOBS -->
-            <div class="card">
-                <div class="card-header">
-                    <span class="card-title">🔧 T&M Jobs (No NQA Match)</span>
-                    <span class="badge badge-gray">9 Jobs | 72.5h</span>
-                </div>
-                <div style="color:#94a3b8;font-size:0.9em;margin-bottom:15px;">
-                    These jobs don't have a matching NQA flat rate - billed at actual hours worked (T&M).
-                </div>
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr><th>WO#</th><th>Reg</th><th>Shop</th><th>Squawk</th><th style="text-align:right;">Hours</th></tr>
-                        </thead>
-                        <tbody>
-                            <tr><td>CU0VA</td><td>N84RJ</td><td>SDR</td><td>GSU75 AHRS intermittent red x</td><td style="text-align:right;">31.5h</td></tr>
-                            <tr><td>CU1EA</td><td>N505RR</td><td>SDN</td><td>Tail Number Restrap</td><td style="text-align:right;">15.0h</td></tr>
-                            <tr><td>CU1EA</td><td>N505RR</td><td>SDN</td><td>SATCOM Restrap</td><td style="text-align:right;">5.0h</td></tr>
-                            <tr><td>CU1EA</td><td>N505RR</td><td>SDN</td><td>SVS troubleshooting</td><td style="text-align:right;">2.5h</td></tr>
-                            <tr><td>CU1EA</td><td>N505RR</td><td>SDN</td><td>Databases for NAV, and charts</td><td style="text-align:right;">2.0h</td></tr>
-                            <tr><td>CU1EA</td><td>N505RR</td><td>SDN</td><td>Travel to BJC</td><td style="text-align:right;">6.5h</td></tr>
-                            <tr><td>CUPFA</td><td>N176MG</td><td>SDN</td><td>Troubleshoot leaks on P/S system</td><td style="text-align:right;">7.0h</td></tr>
-                            <tr><td>CVLNA</td><td>N197GA</td><td>SDN</td><td>Travel Time</td><td style="text-align:right;">2.0h</td></tr>
-                            <tr><td>DVR0A</td><td>STOCK</td><td>SDN</td><td>Repair Servo</td><td style="text-align:right;">1.0h</td></tr>
-                            <tr style="font-weight:bold;background:rgba(255,255,255,0.1);">
-                                <td colspan="4">TOTAL T&M</td>
-                                <td style="text-align:right;">72.5h</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            
-            <!-- NQA SYSTEM INFO -->
-            <div class="card">
-                <div class="card-header">
-                    <span class="card-title">📝 NQA System Reference</span>
-                </div>
-                
-                <!-- NQA PRICING STRUCTURE -->
-                <div style="background:rgba(251,191,36,0.15);padding:15px;border-radius:8px;border:1px solid #f59e0b;margin-bottom:15px;">
-                    <div style="font-weight:bold;color:#f59e0b;margin-bottom:10px;">💰 NQA Pricing Structure</div>
-                    <div style="color:#e2e8f0;font-size:0.9em;">
-                        <table style="width:100%;font-size:0.95em;">
-                            <tr><td>Flat Rate Labor</td><td style="text-align:right;">From Price Items (~$218/hr)</td></tr>
-                            <tr><td><strong style="color:#f59e0b;">+ Admin Fee</strong></td><td style="text-align:right;color:#f59e0b;"><strong>20% of labor (max $350)</strong></td></tr>
-                            <tr style="border-top:1px solid #475569;"><td><strong>= Total to Customer</strong></td><td style="text-align:right;"><strong>NQA Quote Amount</strong></td></tr>
-                        </table>
-                    </div>
-                    <div style="margin-top:10px;font-size:0.85em;color:#fcd34d;">
-                        Example: $872 labor + $174.40 admin (20%) = <strong>$1,046.40 total NQA</strong>
-                    </div>
-                </div>
-                
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:15px;">
-                    <div style="background:rgba(20,184,166,0.15);padding:15px;border-radius:8px;border:1px solid #14b8a6;">
-                        <div style="font-weight:bold;color:#14b8a6;margin-bottom:8px;">📋 NQA Applies To:</div>
-                        <div style="color:#e2e8f0;font-size:0.9em;">
-                            • SDN (Service)<br>
-                            • SDR (Service)<br>
-                            • SHC (Service/Hardware)<br>
-                            • Standard troubleshooting jobs<br>
-                            • Cert inspections (91.411/413)
-                        </div>
-                    </div>
-                    <div style="background:rgba(139,92,246,0.15);padding:15px;border-radius:8px;border:1px solid #8b5cf6;">
-                        <div style="font-weight:bold;color:#8b5cf6;margin-bottom:8px;">🚫 NOT NQA (Quote Separately):</div>
-                        <div style="color:#e2e8f0;font-size:0.9em;">
-                            • SDV (Installs) - Standard quotes<br>
-                            • Complex troubleshooting - T&M<br>
-                            • Custom/unusual work - T&M<br>
-                            • Travel time - T&M
-                        </div>
-                    </div>
-                </div>
-                <div style="margin-top:15px;background:#0f172a;padding:15px;border-radius:8px;">
-                    <div style="color:#94a3b8;font-size:0.9em;">
-                        <strong style="color:#14b8a6;">NQA Decision Rule:</strong><br>
-                        If monthly variance is consistently <span style="color:#ef4444;">POSITIVE (over flat rate)</span> → Adjust NQA prices or switch to T&M<br>
-                        If monthly variance is <span style="color:#10b981;">NEGATIVE (under flat rate)</span> → NQA system is profitable, keep it
-                    </div>
-                </div>
-                <div style="margin-top:10px;background:#1e1b4b;padding:10px;border-radius:6px;font-size:0.85em;color:#c4b5fd;">
-                    <strong>📊 Price Items Master:</strong> 160 NQA items loaded | Implied rate: ~$218/hr | Source: AS400 Price Item Search
-                </div>
-                
-                <!-- FLAT RATE CODES -->
-                <div style="margin-top:15px;background:rgba(99,102,241,0.15);padding:15px;border-radius:8px;border:1px solid #6366f1;">
-                    <div style="font-weight:bold;color:#818cf8;margin-bottom:8px;">🏷️ Flat Rate Codes (from Hours per WO)</div>
-                    <div style="color:#e2e8f0;font-size:0.85em;display:grid;grid-template-columns:1fr 1fr;gap:5px;">
-                        <div><strong>L</strong> = Labor only</div>
-                        <div><strong>T</strong> = Labor + Parts together</div>
-                        <div><strong>V</strong> = Labor w/warranty</div>
-                        <div><strong>P</strong> = Parts only</div>
-                        <div><strong>W</strong> = Parts w/warranty</div>
-                        <div><strong>S</strong> = Parts + Labor separate</div>
-                        <div><strong>A</strong> = Labor+Parts+OS together</div>
-                        <div><strong>B-F, O, X</strong> = Other combos</div>
-                    </div>
-                </div>
-            </div>
+            <!-- NQA System Reference — auto-rendered from GOALS_DATA -->
+            <div id="nqaReferenceContainer"></div>
         </div>
         
         <!-- RANKINGS TAB -->
@@ -2322,6 +2010,53 @@
                 {wo: 'DTBLA', shop: 'SDV', days: 40, wip: 1327, status: 'billed', notes: 'Billed 01/26/26'},
                 {wo: 'DSW4A', shop: 'SDN', days: 48, wip: 52763, status: 'billed', notes: 'Billed before EOM ✅'},
                 {wo: 'CG4NA', shop: 'SDN', days: 188, wip: 2486, status: 'dispute', notes: 'Kauffman owner was in ICU, hope to resolve soon'},
+            ],
+
+            // ── NQA FLAT RATE ANALYSIS ──
+            // Claude updates when Billed WO report is processed — cross-reference squawks with Price Items
+            // AUTO-SYNC: nqaJobs + tmJobs should cover ALL squawks in billedWOsList
+            // Missing WOs flagged automatically by renderer
+            nqaAdminPct: 0.20,      // 20% admin fee
+            nqaAdminCap: 350,       // Max admin fee per job
+            nqaMonth: 'January',
+            nqaLastUpdated: '02/03/26',
+            nqaPriceItems: 160,     // Total NQA items in AS400
+            nqaImpliedRate: 218,    // Average implied rate from Price Items
+            flatRateCodes: [
+                {code: 'L', desc: 'Labor only'},
+                {code: 'T', desc: 'Labor + Parts together'},
+                {code: 'V', desc: 'Labor w/warranty'},
+                {code: 'P', desc: 'Parts only'},
+                {code: 'W', desc: 'Parts w/warranty'},
+                {code: 'S', desc: 'Parts + Labor separate'},
+                {code: 'A', desc: 'Labor+Parts+OS together'},
+                {code: 'B-F, O, X', desc: 'Other combos with OS/warranty'},
+            ],
+            nqaJobs: [
+                // Claude adds: {wo, reg, shop, squawk, actualHrs, flatRateHrs, recommend: ''}
+                // variance auto-calculated: actualHrs - flatRateHrs (negative = profit)
+                {wo: 'CU0VA', reg: 'N84RJ', shop: 'SDR', squawk: '91.411 & 91.413 (Cessna 172S)', actualHrs: 4.0, flatRateHrs: 18.6, recommend: ''},
+                {wo: 'CU1EA', reg: 'N505RR', shop: 'SDN', squawk: 'Autopilot troubleshooting', actualHrs: 4.5, flatRateHrs: 8.0, recommend: ''},
+                {wo: 'CU92A', reg: 'N331MW', shop: 'SDN', squawk: 'Troubleshoot Autopilot', actualHrs: 4.0, flatRateHrs: 8.0, recommend: ''},
+                {wo: 'CU92A', reg: 'N331MW', shop: 'SDN', squawk: 'Perform ULB Test', actualHrs: 2.0, flatRateHrs: 2.0, recommend: ''},
+                {wo: 'CUC9A', reg: 'N3278', shop: 'SHC', squawk: 'Overhaul Main Ship Battery 405CH10', actualHrs: 12.0, flatRateHrs: 3.0, recommend: 'Update battery overhaul NQA from 3h to 10-12h or quote T&M'},
+                {wo: 'CUL2A', reg: 'N5203U', shop: 'SDR', squawk: 'KT74 inoperative (transponder)', actualHrs: 12.5, flatRateHrs: 4.0, recommend: 'Complex transponder issues → Quote T&M upfront'},
+                {wo: 'CUPFA', reg: 'N176MG', shop: 'SDN', squawk: 'Replace #2 ADC due to red X', actualHrs: 9.9, flatRateHrs: 8.0, recommend: ''},
+                {wo: 'CUSDA', reg: 'N7701A', shop: 'SDR', squawk: '91.411 & 91.413 (Piper PA-44)', actualHrs: 4.9, flatRateHrs: 6.0, recommend: ''},
+                {wo: 'DUYYA', reg: 'N219JG', shop: 'SDN', squawk: 'Exchange Vertical Gyro', actualHrs: 2.0, flatRateHrs: 4.0, recommend: ''},
+            ],
+            tmJobs: [
+                // T&M jobs — no NQA flat rate match, billed hourly
+                // Claude adds: {wo, reg, shop, squawk, hours}
+                {wo: 'CU0VA', reg: 'N84RJ', shop: 'SDR', squawk: 'GSU75 AHRS intermittent red x', hours: 31.5},
+                {wo: 'CU1EA', reg: 'N505RR', shop: 'SDN', squawk: 'Tail Number Restrap', hours: 15.0},
+                {wo: 'CU1EA', reg: 'N505RR', shop: 'SDN', squawk: 'SATCOM Restrap', hours: 5.0},
+                {wo: 'CU1EA', reg: 'N505RR', shop: 'SDN', squawk: 'SVS troubleshooting', hours: 2.5},
+                {wo: 'CU1EA', reg: 'N505RR', shop: 'SDN', squawk: 'Databases for NAV, and charts', hours: 2.0},
+                {wo: 'CU1EA', reg: 'N505RR', shop: 'SDN', squawk: 'Travel to BJC', hours: 6.5},
+                {wo: 'CUPFA', reg: 'N176MG', shop: 'SDN', squawk: 'Troubleshoot leaks on P/S system', hours: 7.0},
+                {wo: 'CVLNA', reg: 'N197GA', shop: 'SDN', squawk: 'Travel Time', hours: 2.0},
+                {wo: 'DVR0A', reg: 'STOCK', shop: 'SDN', squawk: 'Repair Servo', hours: 1.0},
             ],
         };
 
@@ -3576,6 +3311,8 @@ ${surveyUrl}`;
         renderShopProfitability();
         renderOpenWipTable();
         renderOver30();
+        renderNqaReference();
+        renderNqa();
 
         // ═══════════════════════════════════════════════════════
         // SHOP PROFITABILITY RENDERER — Auto-syncs from billedWOsList + shopRates
@@ -3805,6 +3542,333 @@ ${surveyUrl}`;
 
             container.innerHTML = html;
         }
+
+        // ═══════════════════════════════════════════════════════
+        // NQA FLAT RATE ANALYSIS RENDERER — Auto-syncs from GOALS_DATA.nqaJobs + tmJobs + billedWOsList
+        // Cross-references billedWOsList to flag missing WOs, auto-calculates per-shop margins
+        // ═══════════════════════════════════════════════════════
+        function renderNqa() {
+            const container = document.getElementById('nqaContainer');
+            if (!container) return;
+            const d = GOALS_DATA;
+            const rates = d.shopRates;
+            const nqa = d.nqaJobs;
+            const tm = d.tmJobs;
+            const billed = d.billedWOsList;
+
+            // ── Auto-calculate all metrics from data ──
+            const enriched = nqa.map(j => {
+                const fr = rates[j.shop] ? rates[j.shop].flatRate : 218;
+                const variance = +(j.actualHrs - j.flatRateHrs).toFixed(1);
+                const isWin = variance <= 0;
+                const isOver = variance > 0 && variance <= 2;
+                const isLoss = variance > 2;
+                const marginLoss = variance > 0 ? Math.round(variance * fr) : 0;
+                const marginGain = variance < 0 ? Math.round(Math.abs(variance) * fr) : 0;
+                return {...j, flatRate: fr, variance, isWin, isOver, isLoss, marginLoss, marginGain};
+            });
+
+            const wins = enriched.filter(j => j.isWin);
+            const losses = enriched.filter(j => j.isLoss);
+            const overs = enriched.filter(j => j.isOver);
+            const totalActual = enriched.reduce((s, j) => s + j.actualHrs, 0);
+            const totalFlat = enriched.reduce((s, j) => s + j.flatRateHrs, 0);
+            const totalVariance = +(totalActual - totalFlat).toFixed(1);
+            const totalMarginGain = enriched.reduce((s, j) => s + j.marginGain, 0);
+            const totalMarginLoss = enriched.reduce((s, j) => s + j.marginLoss, 0);
+            const netMargin = totalMarginGain - totalMarginLoss;
+            const isProfitable = totalVariance <= 0;
+            const tmTotalHours = tm.reduce((s, j) => s + j.hours, 0);
+
+            // ── Cross-reference: billedWOsList vs nqa+tm coverage (service shops only) ──
+            const serviceWOs = billed.filter(b => ['SDN','SDR','SHC'].includes(b.shop));
+            const serviceHours = serviceWOs.reduce((s, w) => s + w.hours, 0);
+            const trackedHours = totalActual + tmTotalHours;
+            const coveragePct = serviceHours > 0 ? Math.round((trackedHours / serviceHours) * 100) : 100;
+
+            // ── Per-shop NQA breakdown ──
+            const shopBreakdown = {};
+            ['SDN','SDR','SHC'].forEach(s => {
+                const shopJobs = enriched.filter(j => j.shop === s);
+                const shopTm = tm.filter(j => j.shop === s);
+                if (shopJobs.length === 0 && shopTm.length === 0) return;
+                const shopVar = shopJobs.reduce((sum, j) => sum + j.variance, 0);
+                const shopGain = shopJobs.reduce((sum, j) => sum + j.marginGain, 0);
+                const shopLoss = shopJobs.reduce((sum, j) => sum + j.marginLoss, 0);
+                shopBreakdown[s] = {
+                    nqaCount: shopJobs.length,
+                    tmCount: shopTm.length,
+                    variance: +shopVar.toFixed(1),
+                    netMargin: shopGain - shopLoss,
+                    flatRate: rates[s] ? rates[s].flatRate : 218,
+                };
+            });
+
+            // ── OVERVIEW CARD ──
+            let html = `<div class="card">
+                <div class="card-header">
+                    <span class="card-title">📋 NQA Flat Rate Analysis - Service Shops</span>
+                    <span id="nqaBadgeTimestamp" class="badge badge-green">Updated ${d.nqaLastUpdated}</span>
+                </div>
+                <div style="background:#14532d;padding:8px;border-radius:6px;margin-bottom:10px;font-size:0.8em;color:#bbf7d0;">
+                    🤖 <strong>Auto-synced:</strong> ${enriched.length} NQA + ${tm.length} T&M = ${enriched.length + tm.length} tracked |
+                    Billed WOs (service): ${serviceWOs.length} | Coverage: ${trackedHours.toFixed(1)}h / ${serviceHours.toFixed(1)}h (${coveragePct}%)
+                    ${coveragePct < 95 ? ' <span style="color:#fca5a5;">⚠️ Some billed hours not classified</span>' : ' ✅'}
+                </div>
+                <div style="color:#94a3b8;font-size:0.9em;margin-bottom:15px;">
+                    <strong>NQA (Non-Quoted Agreement)</strong> = Flat rate pricing for standard service jobs. Goal: Track if we're making or losing money on flat rate vs actual hours worked.
+                    <span style="color:#f59e0b;">💰 NQA Total = Flat Rate Labor + ${Math.round(d.nqaAdminPct*100)}% Admin Fee (max $${d.nqaAdminCap})</span>
+                </div>
+                <div class="card-grid" style="margin-bottom:20px;">
+                    <div class="metric">
+                        <div class="metric-value" style="color:${wins.length >= enriched.length/2 ? '#10b981' : '#ef4444'};">${wins.length}/${enriched.length}</div>
+                        <div class="metric-label">Win Rate</div>
+                        <div class="metric-sub">Jobs at/under flat rate</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" style="color:${totalVariance <= 0 ? '#10b981' : '#ef4444'};">${totalVariance > 0 ? '+' : ''}${totalVariance}h</div>
+                        <div class="metric-label">Hours Variance</div>
+                        <div class="metric-sub">${totalVariance <= 0 ? 'Under flat rate = PROFIT' : 'Over flat rate = LOSS'}</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" style="color:${netMargin >= 0 ? '#10b981' : '#ef4444'};">${netMargin >= 0 ? '+' : ''}$${Math.abs(netMargin).toLocaleString()}</div>
+                        <div class="metric-label">Labor Margin</div>
+                        <div class="metric-sub">@ per-shop flat rates</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" style="color:#f59e0b;">${tm.length}</div>
+                        <div class="metric-label">T&M Jobs</div>
+                        <div class="metric-sub">No flat rate (billed hourly)</div>
+                    </div>
+                </div>
+                <div style="background:${isProfitable ? 'rgba(16,185,129,0.2);border:2px solid #10b981' : 'rgba(239,68,68,0.2);border:2px solid #ef4444'};border-radius:10px;padding:15px;text-align:center;margin-bottom:20px;">
+                    <div style="font-size:1.5em;font-weight:bold;color:${isProfitable ? '#10b981' : '#ef4444'};">${isProfitable ? '✅ NQA PROFITABLE THIS MONTH' : '❌ NQA LOSING THIS MONTH'}</div>
+                    <div style="color:${isProfitable ? '#a7f3d0' : '#fca5a5'};margin-top:5px;">Net ${totalVariance}h ${isProfitable ? 'under' : 'over'} flat rate = ${isProfitable ? 'Keep NQA system' : 'Review pricing urgently'}</div>
+                </div>`;
+
+            // ── Per-shop rate cards ──
+            const shopColors = {SDN: '#3b82f6', SDR: '#f97316', SHC: '#a855f7'};
+            html += `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px;">`;
+            ['SDN','SDR','SHC'].forEach(s => {
+                const sb = shopBreakdown[s] || {nqaCount:0, tmCount:0, variance:0, netMargin:0, flatRate: rates[s].flatRate};
+                const varColor = sb.variance <= 0 ? '#10b981' : '#ef4444';
+                html += `<div style="background:#1e293b;padding:12px;border-radius:8px;border-left:4px solid ${shopColors[s]};text-align:center;">
+                    <div style="color:${shopColors[s]};font-weight:bold;">${s}</div>
+                    <div style="color:white;font-size:1.1em;font-weight:bold;">$${sb.flatRate}/hr</div>
+                    <div style="font-size:0.8em;color:#94a3b8;">${sb.nqaCount} NQA | ${sb.tmCount} T&M</div>
+                    <div style="font-size:0.85em;color:${varColor};font-weight:bold;margin-top:4px;">${sb.variance <= 0 ? '' : '+'}${sb.variance}h | ${sb.netMargin >= 0 ? '+' : ''}$${Math.abs(sb.netMargin).toLocaleString()}</div>
+                </div>`;
+            });
+            html += `</div></div>`;
+
+            // ── NQA JOBS TABLE ──
+            html += `<div class="card">
+                <div class="card-header">
+                    <span class="card-title">🎯 NQA Flat Rate Jobs (SDN/SDR/SHC)</span>
+                    <span class="badge badge-blue">${enriched.length} Jobs</span>
+                </div>
+                <div class="table-container"><table><thead>
+                    <tr><th>WO#</th><th>Reg</th><th>Shop</th><th>Squawk</th><th style="text-align:right;">Actual</th><th style="text-align:right;">Flat Rate</th><th style="text-align:right;">Variance</th><th>Status</th></tr>
+                </thead><tbody>`;
+
+            // Sort: losses first (biggest), then overs, then wins (biggest savings first)
+            const sorted = [...enriched].sort((a, b) => {
+                if (a.isLoss && !b.isLoss) return -1;
+                if (!a.isLoss && b.isLoss) return 1;
+                if (a.isOver && !b.isOver && !b.isLoss) return -1;
+                if (!a.isOver && !a.isLoss && b.isOver) return 1;
+                return a.variance - b.variance;
+            });
+
+            sorted.forEach(j => {
+                const rowBg = j.isLoss ? 'background:rgba(239,68,68,0.15)' : j.isOver ? 'background:rgba(245,158,11,0.1)' : 'background:rgba(16,185,129,0.1)';
+                const varColor = j.variance <= 0 ? '#10b981' : j.isOver ? '#f59e0b' : '#ef4444';
+                const badge = j.isLoss ? '<span class="badge badge-red">❌ LOSS</span>'
+                    : j.isOver ? '<span class="badge badge-amber">⚠️ OVER</span>'
+                    : '<span class="badge badge-green">✅ WIN</span>';
+                const varSign = j.variance > 0 ? '+' : '';
+                html += `<tr style="${rowBg}"><td>${j.wo}</td><td>${j.reg}</td><td>${j.shop}</td>
+                    <td>${j.squawk}</td><td style="text-align:right;">${j.actualHrs}h</td>
+                    <td style="text-align:right;">${j.flatRateHrs}h</td>
+                    <td style="text-align:right;color:${varColor};font-weight:bold;">${varSign}${j.variance}h</td>
+                    <td>${badge}</td></tr>`;
+            });
+
+            html += `<tr style="font-weight:bold;background:rgba(255,255,255,0.1);">
+                <td colspan="4">TOTAL NQA</td>
+                <td style="text-align:right;">${totalActual.toFixed(1)}h</td>
+                <td style="text-align:right;">${totalFlat.toFixed(1)}h</td>
+                <td style="text-align:right;color:${totalVariance <= 0 ? '#10b981' : '#ef4444'};">${totalVariance > 0 ? '+' : ''}${totalVariance}h</td>
+                <td><span class="badge ${totalVariance <= 0 ? 'badge-green' : 'badge-red'}">${totalVariance <= 0 ? 'NET WIN' : 'NET LOSS'}</span></td>
+            </tr></tbody></table></div></div>`;
+
+            // ── PROBLEM JOBS (auto-generated from any variance > 0) ──
+            const problems = enriched.filter(j => j.variance > 0).sort((a, b) => b.variance - a.variance);
+            if (problems.length > 0) {
+                html += `<div class="card" style="border:2px solid #ef4444;">
+                    <div class="card-header">
+                        <span class="card-title" style="color:#ef4444;">⚠️ Problem Jobs - Review for NQA Adjustment</span>
+                    </div>
+                    <div style="color:#fca5a5;font-size:0.9em;margin-bottom:15px;">
+                        These jobs exceeded flat rate hours. Consider: adjusting NQA price, switching to T&M, or reviewing tech efficiency.
+                    </div>
+                    <div style="display:grid;gap:10px;">`;
+
+                problems.forEach(j => {
+                    const severity = j.variance > 5 ? '#ef4444' : j.variance > 2 ? '#f59e0b' : '#64748b';
+                    const borderColor = j.variance > 5 ? '#ef4444' : '#f59e0b';
+                    const bgRgb = j.variance > 5 ? '239,68,68' : '251,191,36';
+                    const bgAlpha = j.variance > 5 ? '0.15' : '0.1';
+                    const titleColor = j.variance > 5 ? '#fca5a5' : '#fde68a';
+                    html += `<div style="background:rgba(${bgRgb},${bgAlpha});padding:15px;border-radius:8px;border-left:4px solid ${borderColor};">
+                        <div style="display:flex;justify-content:space-between;align-items:center;">
+                            <div>
+                                <span style="font-weight:bold;color:${titleColor};">${j.wo} - ${j.squawk.split(' ').slice(0,4).join(' ')} (${j.shop})</span>
+                                <div style="color:#94a3b8;font-size:0.85em;">${j.reg} | ${j.squawk}</div>
+                            </div>
+                            <div style="text-align:right;">
+                                <div style="color:${severity};font-weight:bold;font-size:1.2em;">+${j.variance}h over</div>
+                                <div style="color:#fca5a5;font-size:0.9em;">~$${j.marginLoss.toLocaleString()} margin loss @ $${j.flatRate}/hr</div>
+                            </div>
+                        </div>
+                        ${j.recommend ? '<div style="margin-top:10px;color:#fde68a;font-size:0.85em;">💡 Recommend: ' + j.recommend + '</div>' :
+                            j.variance <= 2 ? '<div style="margin-top:10px;color:#a7f3d0;font-size:0.85em;">✓ Minor variance - within acceptable range for complex aircraft</div>' : ''}
+                    </div>`;
+                });
+                html += `</div></div>`;
+            }
+
+            // ── T&M JOBS TABLE ──
+            html += `<div class="card">
+                <div class="card-header">
+                    <span class="card-title">🔧 T&M Jobs (No NQA Match)</span>
+                    <span class="badge badge-gray">${tm.length} Jobs | ${tmTotalHours.toFixed(1)}h</span>
+                </div>
+                <div style="color:#94a3b8;font-size:0.9em;margin-bottom:15px;">
+                    These jobs don't have a matching NQA flat rate - billed at actual hours worked (T&M).
+                </div>
+                <div class="table-container"><table><thead>
+                    <tr><th>WO#</th><th>Reg</th><th>Shop</th><th>Squawk</th><th style="text-align:right;">Hours</th></tr>
+                </thead><tbody>`;
+
+            tm.forEach(j => {
+                html += `<tr><td>${j.wo}</td><td>${j.reg}</td><td>${j.shop}</td>
+                    <td>${j.squawk}</td><td style="text-align:right;">${j.hours}h</td></tr>`;
+            });
+
+            html += `<tr style="font-weight:bold;background:rgba(255,255,255,0.1);">
+                <td colspan="4">TOTAL T&M</td>
+                <td style="text-align:right;">${tmTotalHours.toFixed(1)}h</td>
+            </tr></tbody></table></div></div>`;
+
+            container.innerHTML = html;
+        }
+
+        // ═══════════════════════════════════════════════════════
+        // NQA REFERENCE RENDERER — Auto-syncs rates/codes from GOALS_DATA
+        // ═══════════════════════════════════════════════════════
+        function renderNqaReference() {
+            const container = document.getElementById('nqaReferenceContainer');
+            if (!container) return;
+            const d = GOALS_DATA;
+            const rates = d.shopRates;
+
+            // Example calc
+            const exHrs = 4;
+            const exRate = d.nqaImpliedRate;
+            const exLabor = exHrs * exRate;
+            const exAdmin = Math.min(exLabor * d.nqaAdminPct, d.nqaAdminCap);
+            const exTotal = exLabor + exAdmin;
+
+            let html = `<div class="card">
+                <div class="card-header"><span class="card-title">📝 NQA System Reference</span></div>
+
+                <div style="background:rgba(251,191,36,0.15);padding:15px;border-radius:8px;border:1px solid #f59e0b;margin-bottom:15px;">
+                    <div style="font-weight:bold;color:#f59e0b;margin-bottom:10px;">💰 NQA Pricing Structure</div>
+                    <div style="color:#e2e8f0;font-size:0.9em;">
+                        <table style="width:100%;font-size:0.95em;">
+                            <tr><td>Flat Rate Labor</td><td style="text-align:right;">From Price Items (~$${d.nqaImpliedRate}/hr)</td></tr>
+                            <tr><td><strong style="color:#f59e0b;">+ Admin Fee</strong></td><td style="text-align:right;color:#f59e0b;"><strong>${Math.round(d.nqaAdminPct*100)}% of labor (max $${d.nqaAdminCap})</strong></td></tr>
+                            <tr style="border-top:1px solid #475569;"><td><strong>= Total to Customer</strong></td><td style="text-align:right;"><strong>NQA Quote Amount</strong></td></tr>
+                        </table>
+                    </div>
+                    <div style="margin-top:10px;font-size:0.85em;color:#fcd34d;">
+                        Example: $${exLabor.toLocaleString()} labor + $${exAdmin.toFixed(2)} admin (${Math.round(d.nqaAdminPct*100)}%) = <strong>$${exTotal.toFixed(2)} total NQA</strong>
+                    </div>
+                </div>
+
+                <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:15px;">
+                    <div style="background:#1e293b;padding:12px;border-radius:6px;text-align:center;">
+                        <div style="color:#3b82f6;font-weight:bold;">SDN</div>
+                        <div style="color:white;font-size:1.1em;font-weight:bold;">$${rates.SDN.flatRate}/hr</div>
+                        <div style="font-size:0.75em;color:#10b981;">✅ NQA</div>
+                    </div>
+                    <div style="background:#1e293b;padding:12px;border-radius:6px;text-align:center;">
+                        <div style="color:#f97316;font-weight:bold;">SDR</div>
+                        <div style="color:white;font-size:1.1em;font-weight:bold;">$${rates.SDR.flatRate}/hr</div>
+                        <div style="font-size:0.75em;color:#10b981;">✅ NQA</div>
+                    </div>
+                    <div style="background:#1e293b;padding:12px;border-radius:6px;text-align:center;">
+                        <div style="color:#a855f7;font-weight:bold;">SHC</div>
+                        <div style="color:white;font-size:1.1em;font-weight:bold;">$${rates.SHC.flatRate}/hr</div>
+                        <div style="font-size:0.75em;color:#10b981;">✅ NQA</div>
+                    </div>
+                    <div style="background:#1e293b;padding:12px;border-radius:6px;text-align:center;border:2px solid #fbbf24;">
+                        <div style="color:#fbbf24;font-weight:bold;">SDV</div>
+                        <div style="color:#fbbf24;font-size:1.1em;font-weight:bold;">$${rates.SDV.flatRate}/hr</div>
+                        <div style="font-size:0.75em;color:#f59e0b;">🚫 Quoted</div>
+                    </div>
+                </div>
+
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:15px;">
+                    <div style="background:rgba(20,184,166,0.15);padding:15px;border-radius:8px;border:1px solid #14b8a6;">
+                        <div style="font-weight:bold;color:#14b8a6;margin-bottom:8px;">📋 NQA Applies To:</div>
+                        <div style="color:#e2e8f0;font-size:0.9em;">
+                            • SDN (Service) • SDR (Service)<br>
+                            • SHC (Service/Hardware)<br>
+                            • Standard troubleshooting jobs<br>
+                            • Cert inspections (91.411/413)
+                        </div>
+                    </div>
+                    <div style="background:rgba(139,92,246,0.15);padding:15px;border-radius:8px;border:1px solid #8b5cf6;">
+                        <div style="font-weight:bold;color:#8b5cf6;margin-bottom:8px;">🚫 NOT NQA (Quote Separately):</div>
+                        <div style="color:#e2e8f0;font-size:0.9em;">
+                            • SDV (Installs) - Standard quotes<br>
+                            • Complex troubleshooting - T&M<br>
+                            • Custom/unusual work - T&M<br>
+                            • Travel time - T&M
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top:15px;background:#0f172a;padding:15px;border-radius:8px;">
+                    <div style="color:#94a3b8;font-size:0.9em;">
+                        <strong style="color:#14b8a6;">NQA Decision Rule:</strong><br>
+                        If monthly variance is consistently <span style="color:#ef4444;">POSITIVE (over flat rate)</span> → Adjust NQA prices or switch to T&M<br>
+                        If monthly variance is <span style="color:#10b981;">NEGATIVE (under flat rate)</span> → NQA system is profitable, keep it
+                    </div>
+                </div>
+
+                <div style="margin-top:10px;background:#1e1b4b;padding:10px;border-radius:6px;font-size:0.85em;color:#c4b5fd;">
+                    <strong>📊 Price Items Master:</strong> ${d.nqaPriceItems} NQA items loaded | Implied rate: ~$${d.nqaImpliedRate}/hr | Source: AS400 Price Item Search
+                </div>
+
+                <div style="margin-top:15px;background:rgba(99,102,241,0.15);padding:15px;border-radius:8px;border:1px solid #6366f1;">
+                    <div style="font-weight:bold;color:#818cf8;margin-bottom:8px;">🏷️ Flat Rate Codes (from Hours per WO)</div>
+                    <div style="color:#e2e8f0;font-size:0.85em;display:grid;grid-template-columns:1fr 1fr;gap:5px;">
+                        ${d.flatRateCodes.map(c => '<div><strong>' + c.code + '</strong> = ' + c.desc + '</div>').join('')}
+                    </div>
+                </div>
+
+                <div style="margin-top:15px;background:#14532d;padding:10px;border-radius:6px;font-size:0.8em;color:#bbf7d0;">
+                    🤖 <strong>Auto-sync workflow:</strong> Billed WO report → Match squawks to Price Items → NQA jobs (flat rate) vs T&M (hourly) → Auto-calculate margins per shop flat rate
+                </div>
+            </div>`;
+
+            container.innerHTML = html;
+        }
+
+
         renderWorkStatus();
         
         // Initialize tracking table and customer table
@@ -3833,7 +3897,7 @@ ${surveyUrl}`;
             // Header: HARDCODED by Claude at file update time (not refresh time)
             // Claude updates this string each time index.html is modified
             const hdr = document.getElementById('headerTimestamp');
-            if (hdr) hdr.textContent = 'Last updated: Feb 3, 2026 \u00B7 3:00 PM MST';
+            if (hdr) hdr.textContent = 'Last updated: Feb 3, 2026 \u00B7 3:20 PM MST';
 
             // Customer DB: "Updated 02/03 10:00AM"
             const cdb = document.getElementById('customerDbTimestamp');
