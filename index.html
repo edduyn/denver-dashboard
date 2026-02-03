@@ -702,208 +702,10 @@
                 </div>
             </div>
             
-            <!-- WORK STATUS TRACKER - Calendar Correlation -->
-            <div class="card" style="border:2px solid #8b5cf6;">
-                <div class="card-header">
-                    <span class="card-title">📊 Work Status Tracker - Calendar Correlation</span>
-                    <span class="badge badge-purple">Days to Bill</span>
-                </div>
-                <div style="background:#14532d;padding:10px;border-radius:6px;margin-bottom:15px;font-size:0.85em;color:#bbf7d0;">
-                    <strong style="color:#4ade80;">🤖 AUTO-CORRELATION:</strong> Anchor WOs × Calendar Events (SDN/SDR Service) | Updated: 01/27/26 PM
-                </div>
-                
-                <!-- Status Summary -->
-                <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:15px;">
-                    <div style="background:linear-gradient(135deg,#1e40af,#3b82f6);padding:12px;border-radius:8px;text-align:center;">
-                        <div style="font-size:0.75em;color:#93c5fd;">🔧 In Progress</div>
-                        <div style="font-size:1.5em;font-weight:bold;color:#fff;">7</div>
-                        <div style="font-size:0.7em;color:#bfdbfe;">Being worked today</div>
-                    </div>
-                    <div style="background:linear-gradient(135deg,#065f46,#10b981);padding:12px;border-radius:8px;text-align:center;">
-                        <div style="font-size:0.75em;color:#a7f3d0;">✅ Worked On</div>
-                        <div style="font-size:1.5em;font-weight:bold;color:#fff;">4</div>
-                        <div style="font-size:0.7em;color:#bbf7d0;">Review for billing</div>
-                    </div>
-                    <div style="background:linear-gradient(135deg,#854d0e,#f59e0b);padding:12px;border-radius:8px;text-align:center;">
-                        <div style="font-size:0.75em;color:#fef3c7;">📅 Scheduled</div>
-                        <div style="font-size:1.5em;font-weight:bold;color:#fff;">1</div>
-                        <div style="font-size:0.7em;color:#fde68a;">Future work</div>
-                    </div>
-                    <div style="background:linear-gradient(135deg,#7f1d1d,#ef4444);padding:12px;border-radius:8px;text-align:center;">
-                        <div style="font-size:0.75em;color:#fecaca;">⚠️ Not Scheduled</div>
-                        <div style="font-size:1.5em;font-weight:bold;color:#fff;">59</div>
-                        <div style="font-size:0.7em;color:#fca5a5;">Need review</div>
-                    </div>
-                </div>
-                
-                <!-- BILLING PRIORITY - Worked On but still Open -->
-                <div style="background:rgba(16,185,129,0.15);border:1px solid #10b981;border-radius:8px;padding:15px;margin-bottom:15px;">
-                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-                        <span style="color:#10b981;font-weight:bold;">💰 BILLING PRIORITY - Open WOs with Hours (Review for Billing!)</span>
-                        <span style="font-size:0.75em;color:#86efac;">📊 Source: Job View 02/02/26 9:02 AM</span>
-                    </div>
-                    <div class="table-container">
-                        <table>
-                            <thead>
-                                <tr><th>WO#</th><th>Reg</th><th>Shop</th><th>Aircraft</th><th>Hours</th><th>WIP @$145</th><th>Status</th></tr>
-                            </thead>
-                            <tbody>
-                                <tr style="background:rgba(139,92,246,0.2)"><td><strong>CVN0A</strong></td><td>N4QL</td><td>SDV</td><td>B200</td><td>42.5h</td><td style="color:#a78bfa;font-weight:bold;">$6,163</td><td style="color:#a78bfa;">SDV Install (Matt WIP)</td></tr>
-                                <tr><td><strong>CU0VA</strong></td><td>N84RJ</td><td>SDR</td><td>Cessna 172S</td><td>38.5h</td><td style="color:#10b981;font-weight:bold;">$5,583</td><td style="color:#f59e0b;">Ready to bill?</td></tr>
-                                <tr><td><strong>CU97A</strong></td><td>N3278</td><td>SDN</td><td>Falcon 2000EX</td><td>38.0h</td><td style="color:#10b981;font-weight:bold;">$5,510</td><td style="color:#ef4444;">⬆️ Was 26h</td></tr>
-                                <tr><td><strong>CU1EA</strong></td><td>N505RR</td><td>SDN</td><td>Falcon 900EX</td><td>35.5h</td><td style="color:#10b981;font-weight:bold;">$5,148</td><td style="color:#f59e0b;">Ready to bill?</td></tr>
-                                <tr><td><strong>CUPFA</strong></td><td>N176MG</td><td>SDN</td><td>G-IV</td><td>16.9h</td><td style="color:#10b981;font-weight:bold;">$2,451</td><td style="color:#f59e0b;">Ready to bill?</td></tr>
-                                <tr><td><strong>CUL2A</strong></td><td>N5203U</td><td>SDN</td><td>Cessna 206</td><td>12.5h</td><td style="color:#10b981;font-weight:bold;">$1,813</td><td style="color:#f59e0b;">Ready to bill?</td></tr>
-                                <tr><td><strong>CUC9A</strong></td><td>-</td><td>SHC</td><td>-</td><td>12.0h</td><td style="color:#10b981;font-weight:bold;">$1,740</td><td style="color:#f59e0b;">Ready to bill?</td></tr>
-                                <tr><td><strong>CVWLA</strong></td><td>N707EL</td><td>SDV</td><td>Cessna 525A</td><td>6.0h</td><td style="color:#10b981;font-weight:bold;">$870</td><td style="color:#f59e0b;">⬆️ Was 3h</td></tr>
-                                <tr><td><strong>CV5EA</strong></td><td>N726DR</td><td>SDN</td><td>G200</td><td>4.5h</td><td style="color:#10b981;font-weight:bold;">$653</td><td style="color:#f59e0b;">Ready to bill?</td></tr>
-                                <tr style="color:#94a3b8;font-size:0.85em;"><td colspan="4" style="text-align:right;">+ 21 more WOs with hours...</td><td>47.5h</td><td>$6,888</td><td></td></tr>
-                                <tr style="background:rgba(16,185,129,0.25);font-weight:bold;">
-                                    <td colspan="4">TOTAL OPEN WIP (30 WOs)</td>
-                                    <td>254.4h</td>
-                                    <td style="color:#10b981;">$36,888</td>
-                                    <td style="color:#10b981;">Potential billing</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div style="margin-top:10px;font-size:0.85em;color:#86efac;">
-                        ✅ <strong>CU92A BILLED!</strong> ($2,530) | ⚠️ DB1UA, CV78A, CTQMA: In Anchor but no active hours in Job View
-                    </div>
-                </div>
-                
-                <!-- Currently In Progress - CALENDAR DRIVEN -->
-                <div style="background:rgba(59,130,246,0.15);border:1px solid #3b82f6;border-radius:8px;padding:15px;margin-bottom:15px;">
-                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-                        <span style="color:#3b82f6;font-weight:bold;">🔧 IN PROGRESS TODAY (Feb 2)</span>
-                        <span style="font-size:0.75em;color:#60a5fa;">📅 Source: SDN/SDR Calendars</span>
-                    </div>
-                    <div class="table-container">
-                        <table>
-                            <thead>
-                                <tr><th>WO#</th><th>Shop</th><th>Customer</th><th>Hours</th><th>Tech</th><th>End Date</th></tr>
-                            </thead>
-                            <tbody>
-                                <tr><td>CTQMA</td><td>SDR</td><td>Robert P Husted</td><td>54.0h</td><td>Macoomb</td><td>Jan 29</td></tr>
-                                <tr><td>CU0VA</td><td>SDR</td><td>Aspen Flying Club</td><td>35.5h</td><td>Macoomb</td><td>Jan 29</td></tr>
-                                <tr><td>CUSDA</td><td>SDR</td><td>Flights Inc</td><td>0.0h</td><td>Macoomb</td><td>Jan 29</td></tr>
-                                <tr><td>CU97A</td><td>SDN</td><td>Circadian Aviation</td><td>21.0h</td><td>CRUZA</td><td>Jan 30</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                
-                <!-- Not Scheduled Warning -->
-                <div style="background:rgba(239,68,68,0.15);border:1px solid #ef4444;border-radius:8px;padding:15px;">
-                    <div style="color:#ef4444;font-weight:bold;margin-bottom:10px;">⚠️ NOT SCHEDULED - Top WOs with Hours (Need Calendar Entry)</div>
-                    <div class="table-container">
-                        <table>
-                            <thead>
-                                <tr><th>WO#</th><th>Shop</th><th>Customer</th><th>Hours</th><th>WIP</th><th>Action Needed</th></tr>
-                            </thead>
-                            <tbody>
-                                <tr style="background:rgba(147,51,234,0.15)"><td>DB1UA 📍</td><td>SDV</td><td>Hogs Head Air 1 LLC</td><td>75.0h</td><td style="color:#a855f7;">$5,250</td><td style="color:#a855f7;font-size:0.8em;">NJ controlled - no action</td></tr>
-                                <tr><td>CUL2A</td><td>SDR</td><td>Peregrine</td><td>12.5h</td><td>$1,812</td><td style="color:#ef4444;font-size:0.8em;">Add to SDR calendar</td></tr>
-                                <tr><td>CV78A</td><td>SDV</td><td>Primus Capital</td><td>8.0h</td><td style="color:#fbbf24;">$560</td><td style="color:#ef4444;font-size:0.8em;">Add to SDV calendar</td></tr>
-                                <tr><td>CVN0A</td><td>SDV</td><td>Stevens Aerospace</td><td>5.0h</td><td style="color:#fbbf24;">$350</td><td style="color:#ef4444;font-size:0.8em;">Add to SDV calendar</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div style="margin-top:10px;font-size:0.8em;color:#fca5a5;">
-                        📌 59 open WOs have no calendar entry. Many have 0 hours (may be holding WOs). 4 WOs shown above have significant hours without scheduling.
-                    </div>
-                </div>
-                
-                <div style="background:#0f172a;padding:10px;border-radius:6px;margin-top:15px;font-size:0.8em;color:#94a3b8;">
-                    <strong style="color:#8b5cf6;">📊 DAYS TO BILL INSIGHT:</strong> 
-                    "Worked On" WOs (4) totaling <strong style="color:#10b981;">$9,556</strong> may be ready for billing review. 
-                    Calendar dates show work completed but WOs still open in Anchor.<br>
-                    <span style="color:#64748b;">Data sources: SDN Service Calendar + SDR Service Calendar → Anchor Report (01/27/26)</span>
-                </div>
-            </div>
+            <div id="workStatusContainer"></div>
             
             <!-- SDV EXPECTED HOURS TRACKER - Goal #4 -->
-            <div class="card" style="border:2px solid #a855f7;">
-                <div class="card-header">
-                    <span class="card-title">📊 SDV Expected Hours Tracker (Goal #4)</span>
-                    <span class="badge badge-amber">⚠️ 1/3 Have Estimates (33%)</span>
-                </div>
-                <div style="background:#14532d;padding:10px;border-radius:6px;margin-bottom:15px;font-size:0.85em;color:#bbf7d0;">
-                    <strong style="color:#4ade80;">🤖 DATA SOURCE:</strong> Job View Report | SDV Shop Only | Updated: 01/27/26 3:44 PM
-                </div>
-                
-                <!-- SDV Summary Cards -->
-                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:15px;">
-                    <div style="background:linear-gradient(135deg,#581c87,#a855f7);padding:12px;border-radius:8px;text-align:center;">
-                        <div style="font-size:0.75em;color:#e9d5ff;">SDV WOs with Hours</div>
-                        <div style="font-size:1.5em;font-weight:bold;color:#fff;">3</div>
-                        <div style="font-size:0.7em;color:#d8b4fe;">Active work</div>
-                    </div>
-                    <div style="background:linear-gradient(135deg,#7f1d1d,#ef4444);padding:12px;border-radius:8px;text-align:center;">
-                        <div style="font-size:0.75em;color:#fecaca;">⚠️ No Estimate</div>
-                        <div style="font-size:1.5em;font-weight:bold;color:#fff;">2</div>
-                        <div style="font-size:0.7em;color:#fca5a5;">Process gap!</div>
-                    </div>
-                    <div style="background:linear-gradient(135deg,#065f46,#10b981);padding:12px;border-radius:8px;text-align:center;">
-                        <div style="font-size:0.75em;color:#a7f3d0;">With Estimate</div>
-                        <div style="font-size:1.5em;font-weight:bold;color:#fff;">1</div>
-                        <div style="font-size:0.7em;color:#bbf7d0;">Target: 100%</div>
-                    </div>
-                </div>
-                
-                <!-- SDV WOs Detail -->
-                <div style="background:rgba(147,51,234,0.15);border:1px solid #a855f7;border-radius:8px;padding:15px;margin-bottom:15px;">
-                    <div style="color:#a855f7;font-weight:bold;margin-bottom:10px;">📋 SDV WOs - Expected Hours Status</div>
-                    <div class="table-container">
-                        <table>
-                            <thead>
-                                <tr><th>WO#</th><th>Customer</th><th>Actual Hrs</th><th>WIP @ $70</th><th>Exp Hrs</th><th>Status</th></tr>
-                            </thead>
-                            <tbody>
-                                <tr style="background:rgba(239,68,68,0.15)">
-                                    <td><strong>DB1UA</strong> 📍</td>
-                                    <td>Hogs Head Air 1 LLC</td>
-                                    <td>73.0h</td>
-                                    <td style="color:#a855f7;font-weight:bold;">$5,110</td>
-                                    <td style="color:#ef4444;">❌ Not Set</td>
-                                    <td style="color:#64748b;font-size:0.8em;">NJ controlled</td>
-                                </tr>
-                                <tr style="background:rgba(239,68,68,0.15)">
-                                    <td><strong>CV78A</strong></td>
-                                    <td>Primus Capital</td>
-                                    <td>8.0h</td>
-                                    <td style="color:#a855f7;font-weight:bold;">$560</td>
-                                    <td style="color:#ef4444;">❌ Not Set</td>
-                                    <td style="color:#ef4444;font-size:0.8em;">Add estimate</td>
-                                </tr>
-                                <tr style="background:rgba(16,185,129,0.15)">
-                                    <td><strong>CVN0A</strong></td>
-                                    <td>Stevens Aerospace</td>
-                                    <td>5.0h</td>
-                                    <td style="color:#a855f7;font-weight:bold;">$350</td>
-                                    <td style="color:#10b981;">✅ 41.0h</td>
-                                    <td style="color:#10b981;font-size:0.8em;">Under estimate!</td>
-                                </tr>
-                                <tr style="background:rgba(147,51,234,0.2);font-weight:bold;">
-                                    <td colspan="2">TOTAL SDV WIP</td>
-                                    <td>86.0h</td>
-                                    <td style="color:#a855f7;">$6,020</td>
-                                    <td colspan="2" style="color:#f59e0b;">33% with estimates</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div style="margin-top:10px;font-size:0.85em;color:#d8b4fe;">
-                        📋 <strong>Goal #4 requires expected hours tracking on SDV WOs.</strong> Currently 33% compliance - need estimates on DB1UA and CV78A.
-                    </div>
-                </div>
-                
-                <div style="background:#0f172a;padding:10px;border-radius:6px;font-size:0.8em;color:#94a3b8;">
-                    <strong style="color:#a855f7;">📊 SDV TRACKING:</strong> 
-                    SDV shop tracks Expected vs Actual hours to measure estimate accuracy. 
-                    <strong style="color:#f59e0b;">Current gap: 2/3 WOs missing estimates (DB1UA, CV78A).</strong>
-                </div>
-            </div>
+            <div id="sdvExpectedHoursContainer"></div>
             
             <!-- FLAT RATE PROFITABILITY ANALYSIS - Actual Billed Data -->
             <div class="card" style="border:2px solid #10b981;">
@@ -2532,6 +2334,60 @@
             // Claude updates from daily Time Sold reports during the month
             currentMonthAB: null, // Set to number when first Time Sold report comes in for new month
 
+            // ── SDV EXPECTED HOURS (Goal #4) ──
+            // Claude updates from Time Sold report (SDV WOs) and Job View report (expected hours)
+            sdvRate: 70,
+            sdvLastUpdated: '01/27/26 3:44 PM',
+            sdvWOs: [
+                // Claude adds/updates: {wo, customer, actualHrs, expectedHrs (null if not set), note, flags:[]}
+                // flags: 'loaned' for employee loans, 'completed' for finished WOs
+                {wo: 'DB1UA', customer: 'Hogs Head Air 1 LLC', actualHrs: 73.0, expectedHrs: null, note: 'NJ controlled', flags: ['loaned']},
+                {wo: 'CV78A', customer: 'Primus Capital', actualHrs: 8.0, expectedHrs: null, note: 'Add estimate', flags: []},
+                {wo: 'CVN0A', customer: 'Stevens Aerospace', actualHrs: 5.0, expectedHrs: 41.0, note: '', flags: []},
+            ],
+
+            // ── WORK STATUS TRACKER (Anchor × Calendar × Job View) ──
+            // Claude updates daily from reports
+            workStatusDate: '01/27/26 PM',    // Last Anchor correlation date
+            jobViewDate: '02/02/26 9:02 AM',  // Last Job View report date
+            workStatusCounts: {inProgress: 7, workedOn: 4, scheduled: 1, notScheduled: 59},
+
+            // Billing Priority WOs (from Job View - WOs with hours, sorted by WIP)
+            billingPriority: [
+                // status: 'sdv_install'|'ready'|'hours_up'|'billed'
+                {wo: 'CVN0A', reg: 'N4QL', shop: 'SDV', aircraft: 'B200', hours: 42.5, rate: 145, status: 'sdv_install', note: 'SDV Install (Matt WIP)'},
+                {wo: 'CU0VA', reg: 'N84RJ', shop: 'SDR', aircraft: 'Cessna 172S', hours: 38.5, rate: 145, status: 'ready', note: 'Ready to bill?'},
+                {wo: 'CU97A', reg: 'N3278', shop: 'SDN', aircraft: 'Falcon 2000EX', hours: 38.0, rate: 145, status: 'hours_up', note: '⬆️ Was 26h'},
+                {wo: 'CU1EA', reg: 'N505RR', shop: 'SDN', aircraft: 'Falcon 900EX', hours: 35.5, rate: 145, status: 'ready', note: 'Ready to bill?'},
+                {wo: 'CUPFA', reg: 'N176MG', shop: 'SDN', aircraft: 'G-IV', hours: 16.9, rate: 145, status: 'ready', note: 'Ready to bill?'},
+                {wo: 'CUL2A', reg: 'N5203U', shop: 'SDN', aircraft: 'Cessna 206', hours: 12.5, rate: 145, status: 'ready', note: 'Ready to bill?'},
+                {wo: 'CUC9A', reg: '-', shop: 'SHC', aircraft: '-', hours: 12.0, rate: 145, status: 'ready', note: 'Ready to bill?'},
+                {wo: 'CVWLA', reg: 'N707EL', shop: 'SDV', aircraft: 'Cessna 525A', hours: 6.0, rate: 145, status: 'hours_up', note: '⬆️ Was 3h'},
+                {wo: 'CV5EA', reg: 'N726DR', shop: 'SDN', aircraft: 'G200', hours: 4.5, rate: 145, status: 'ready', note: 'Ready to bill?'},
+            ],
+            billingOverflow: {count: 21, hours: 47.5, wip: 6888},
+            billingTotalWOs: 30,
+            billingNotes: '✅ CU92A BILLED! ($2,530) | ⚠️ DB1UA, CV78A, CTQMA: In Anchor but no active hours in Job View',
+
+            // In Progress Today (from SDN/SDR calendars)
+            inProgressToday: [
+                {wo: 'CTQMA', shop: 'SDR', customer: 'Robert P Husted', hours: 54.0, tech: 'Macoomb', endDate: 'Jan 29'},
+                {wo: 'CU0VA', shop: 'SDR', customer: 'Aspen Flying Club', hours: 35.5, tech: 'Macoomb', endDate: 'Jan 29'},
+                {wo: 'CUSDA', shop: 'SDR', customer: 'Flights Inc', hours: 0.0, tech: 'Macoomb', endDate: 'Jan 29'},
+                {wo: 'CU97A', shop: 'SDN', customer: 'Circadian Aviation', hours: 21.0, tech: 'CRUZA', endDate: 'Jan 30'},
+            ],
+            inProgressDate: 'Feb 2',
+
+            // Not Scheduled WOs (open in Anchor, have hours, no calendar entry)
+            notScheduledWOs: [
+                {wo: 'DB1UA', shop: 'SDV', customer: 'Hogs Head Air 1 LLC', hours: 75.0, wip: 5250, action: 'NJ controlled - no action', flags: ['loaned']},
+                {wo: 'CUL2A', shop: 'SDR', customer: 'Peregrine', hours: 12.5, wip: 1812, action: 'Add to SDR calendar', flags: []},
+                {wo: 'CV78A', shop: 'SDV', customer: 'Primus Capital', hours: 8.0, wip: 560, action: 'Add to SDV calendar', flags: []},
+                {wo: 'CVN0A', shop: 'SDV', customer: 'Stevens Aerospace', hours: 5.0, wip: 350, action: 'Add to SDV calendar', flags: []},
+            ],
+            notScheduledTotal: 59,
+            notScheduledNote: '59 open WOs have no calendar entry. Many have 0 hours (may be holding WOs). 4 WOs shown above have significant hours without scheduling.',
+
             // ── WIP DATA (from Time Sold × Anchor cross-reference) ──
             // Claude updates when Time Sold or Anchor reports are processed
             wipDate: '01/27/26',  // Date of last Anchor report
@@ -3580,11 +3436,228 @@ ${surveyUrl}`;
             container.innerHTML = html;
         }
 
+        // ═══════════════════════════════════════════════════════
+        // WORK STATUS TRACKER RENDERER — Auto-syncs from GOALS_DATA
+        // ═══════════════════════════════════════════════════════
+        function renderWorkStatus() {
+            const container = document.getElementById('workStatusContainer');
+            if (!container) return;
+            const d = GOALS_DATA;
+            const c = d.workStatusCounts;
+
+            // Calculate billing totals
+            const topWOs = d.billingPriority;
+            const topHours = topWOs.reduce((s, e) => s + e.hours, 0);
+            const topWip = topWOs.reduce((s, e) => s + Math.round(e.hours * e.rate), 0);
+            const totalHours = topHours + (d.billingOverflow ? d.billingOverflow.hours : 0);
+            const totalWip = topWip + (d.billingOverflow ? d.billingOverflow.wip : 0);
+            const workedOnWip = topWOs.filter(e => e.status === 'ready' || e.status === 'hours_up').reduce((s, e) => s + Math.round(e.hours * e.rate), 0);
+
+            let html = `<div class="card" style="border:2px solid #8b5cf6;">
+                <div class="card-header">
+                    <span class="card-title">📊 Work Status Tracker - Calendar Correlation</span>
+                    <span class="badge badge-purple">Days to Bill</span>
+                </div>
+                <div style="background:#14532d;padding:10px;border-radius:6px;margin-bottom:15px;font-size:0.85em;color:#bbf7d0;">
+                    <strong style="color:#4ade80;">🤖 AUTO-CORRELATION:</strong> Anchor WOs × Calendar Events (SDN/SDR Service) | Updated: ${d.workStatusDate}
+                </div>
+
+                <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:15px;">
+                    <div style="background:linear-gradient(135deg,#1e40af,#3b82f6);padding:12px;border-radius:8px;text-align:center;">
+                        <div style="font-size:0.75em;color:#93c5fd;">🔧 In Progress</div>
+                        <div style="font-size:1.5em;font-weight:bold;color:#fff;">${c.inProgress}</div>
+                        <div style="font-size:0.7em;color:#bfdbfe;">Being worked today</div>
+                    </div>
+                    <div style="background:linear-gradient(135deg,#065f46,#10b981);padding:12px;border-radius:8px;text-align:center;">
+                        <div style="font-size:0.75em;color:#a7f3d0;">✅ Worked On</div>
+                        <div style="font-size:1.5em;font-weight:bold;color:#fff;">${c.workedOn}</div>
+                        <div style="font-size:0.7em;color:#bbf7d0;">Review for billing</div>
+                    </div>
+                    <div style="background:linear-gradient(135deg,#854d0e,#f59e0b);padding:12px;border-radius:8px;text-align:center;">
+                        <div style="font-size:0.75em;color:#fef3c7;">📅 Scheduled</div>
+                        <div style="font-size:1.5em;font-weight:bold;color:#fff;">${c.scheduled}</div>
+                        <div style="font-size:0.7em;color:#fde68a;">Future work</div>
+                    </div>
+                    <div style="background:linear-gradient(135deg,#7f1d1d,#ef4444);padding:12px;border-radius:8px;text-align:center;">
+                        <div style="font-size:0.75em;color:#fecaca;">⚠️ Not Scheduled</div>
+                        <div style="font-size:1.5em;font-weight:bold;color:#fff;">${c.notScheduled}</div>
+                        <div style="font-size:0.7em;color:#fca5a5;">Need review</div>
+                    </div>
+                </div>`;
+
+            // ── BILLING PRIORITY TABLE ──
+            html += `<div style="background:rgba(16,185,129,0.15);border:1px solid #10b981;border-radius:8px;padding:15px;margin-bottom:15px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                    <span style="color:#10b981;font-weight:bold;">💰 BILLING PRIORITY - Open WOs with Hours (Review for Billing!)</span>
+                    <span style="font-size:0.75em;color:#86efac;">📊 Source: Job View ${d.jobViewDate}</span>
+                </div>
+                <div class="table-container"><table><thead>
+                    <tr><th>WO#</th><th>Reg</th><th>Shop</th><th>Aircraft</th><th>Hours</th><th>WIP @$145</th><th>Status</th></tr>
+                </thead><tbody>`;
+
+            topWOs.forEach(e => {
+                const wip = Math.round(e.hours * e.rate);
+                const isSdv = e.status === 'sdv_install';
+                const isUp = e.status === 'hours_up';
+                const rowStyle = isSdv ? 'background:rgba(139,92,246,0.2)' : '';
+                const wipColor = isSdv ? '#a78bfa' : '#10b981';
+                const noteColor = isSdv ? '#a78bfa' : isUp ? '#ef4444' : '#f59e0b';
+                html += `<tr style="${rowStyle}"><td><strong>${e.wo}</strong></td><td>${e.reg}</td><td>${e.shop}</td><td>${e.aircraft}</td><td>${e.hours}h</td><td style="color:${wipColor};font-weight:bold;">$${wip.toLocaleString()}</td><td style="color:${noteColor};">${e.note}</td></tr>`;
+            });
+
+            if (d.billingOverflow && d.billingOverflow.count > 0) {
+                html += `<tr style="color:#94a3b8;font-size:0.85em;"><td colspan="4" style="text-align:right;">+ ${d.billingOverflow.count} more WOs with hours...</td><td>${d.billingOverflow.hours}h</td><td>$${d.billingOverflow.wip.toLocaleString()}</td><td></td></tr>`;
+            }
+            html += `<tr style="background:rgba(16,185,129,0.25);font-weight:bold;">
+                <td colspan="4">TOTAL OPEN WIP (${d.billingTotalWOs} WOs)</td>
+                <td>${totalHours}h</td><td style="color:#10b981;">$${totalWip.toLocaleString()}</td><td style="color:#10b981;">Potential billing</td>
+            </tr></tbody></table></div>`;
+            if (d.billingNotes) html += `<div style="margin-top:10px;font-size:0.85em;color:#86efac;">${d.billingNotes}</div>`;
+            html += `</div>`;
+
+            // ── IN PROGRESS TODAY ──
+            if (d.inProgressToday.length > 0) {
+                html += `<div style="background:rgba(59,130,246,0.15);border:1px solid #3b82f6;border-radius:8px;padding:15px;margin-bottom:15px;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                        <span style="color:#3b82f6;font-weight:bold;">🔧 IN PROGRESS TODAY (${d.inProgressDate})</span>
+                        <span style="font-size:0.75em;color:#60a5fa;">📅 Source: SDN/SDR Calendars</span>
+                    </div>
+                    <div class="table-container"><table><thead>
+                        <tr><th>WO#</th><th>Shop</th><th>Customer</th><th>Hours</th><th>Tech</th><th>End Date</th></tr>
+                    </thead><tbody>`;
+                d.inProgressToday.forEach(e => {
+                    html += `<tr><td>${e.wo}</td><td>${e.shop}</td><td>${e.customer}</td><td>${e.hours}h</td><td>${e.tech}</td><td>${e.endDate}</td></tr>`;
+                });
+                html += `</tbody></table></div></div>`;
+            }
+
+            // ── NOT SCHEDULED ──
+            if (d.notScheduledWOs.length > 0) {
+                html += `<div style="background:rgba(239,68,68,0.15);border:1px solid #ef4444;border-radius:8px;padding:15px;">
+                    <div style="color:#ef4444;font-weight:bold;margin-bottom:10px;">⚠️ NOT SCHEDULED - Top WOs with Hours (Need Calendar Entry)</div>
+                    <div class="table-container"><table><thead>
+                        <tr><th>WO#</th><th>Shop</th><th>Customer</th><th>Hours</th><th>WIP</th><th>Action Needed</th></tr>
+                    </thead><tbody>`;
+                d.notScheduledWOs.forEach(e => {
+                    const isLoaned = e.flags && e.flags.includes('loaned');
+                    const rowStyle = isLoaned ? 'background:rgba(147,51,234,0.15)' : '';
+                    const wipColor = isLoaned ? '#a855f7' : (e.wip < 1000 ? '#fbbf24' : 'inherit');
+                    const actColor = isLoaned ? '#a855f7' : '#ef4444';
+                    html += `<tr style="${rowStyle}"><td>${e.wo}${isLoaned ? ' 📍' : ''}</td><td>${e.shop}</td><td>${e.customer}</td><td>${e.hours}h</td><td style="color:${wipColor};">$${e.wip.toLocaleString()}</td><td style="color:${actColor};font-size:0.8em;">${e.action}</td></tr>`;
+                });
+                html += `</tbody></table></div>`;
+                if (d.notScheduledNote) html += `<div style="margin-top:10px;font-size:0.8em;color:#fca5a5;">📌 ${d.notScheduledNote}</div>`;
+                html += `</div>`;
+            }
+
+            // ── DAYS TO BILL INSIGHT ──
+            html += `<div style="background:#0f172a;padding:10px;border-radius:6px;margin-top:15px;font-size:0.8em;color:#94a3b8;">
+                <strong style="color:#8b5cf6;">📊 DAYS TO BILL INSIGHT:</strong>
+                "Worked On" WOs (${c.workedOn}) totaling <strong style="color:#10b981;">$${workedOnWip.toLocaleString()}</strong> may be ready for billing review.
+                Calendar dates show work completed but WOs still open in Anchor.<br>
+                <span style="color:#64748b;">Data sources: SDN Service Calendar + SDR Service Calendar → Anchor Report (${d.workStatusDate})</span>
+            </div></div>`;
+
+            container.innerHTML = html;
+        }
+
+        // ═══════════════════════════════════════════════════════
+        // SDV EXPECTED HOURS RENDERER — Auto-syncs from GOALS_DATA.sdvWOs
+        // ═══════════════════════════════════════════════════════
+        function renderSdvExpectedHours() {
+            const container = document.getElementById('sdvExpectedHoursContainer');
+            if (!container) return;
+            const d = GOALS_DATA;
+            const wos = d.sdvWOs.filter(w => !w.flags.includes('completed'));
+            const rate = d.sdvRate;
+            const total = wos.length;
+            const withEst = wos.filter(w => w.expectedHrs !== null).length;
+            const noEst = total - withEst;
+            const pct = total > 0 ? Math.round((withEst / total) * 100) : 0;
+            const totalHrs = wos.reduce((s, w) => s + w.actualHrs, 0);
+            const totalWip = wos.reduce((s, w) => s + (w.actualHrs * rate), 0);
+            const missing = wos.filter(w => w.expectedHrs === null).map(w => w.wo);
+            const badgeClass = pct >= 75 ? 'badge badge-green' : pct >= 40 ? 'badge badge-amber' : 'badge badge-amber';
+            const badgeIcon = pct >= 75 ? '✅' : '⚠️';
+
+            let html = `<div class="card" style="border:2px solid #a855f7;">
+                <div class="card-header">
+                    <span class="card-title">📊 SDV Expected Hours Tracker (Goal #4)</span>
+                    <span class="${badgeClass}">${badgeIcon} ${withEst}/${total} Have Estimates (${pct}%)</span>
+                </div>
+                <div style="background:#14532d;padding:10px;border-radius:6px;margin-bottom:15px;font-size:0.85em;color:#bbf7d0;">
+                    <strong style="color:#4ade80;">🤖 DATA SOURCE:</strong> Job View Report | SDV Shop Only | Updated: ${d.sdvLastUpdated}
+                </div>
+                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:15px;">
+                    <div style="background:linear-gradient(135deg,#581c87,#a855f7);padding:12px;border-radius:8px;text-align:center;">
+                        <div style="font-size:0.75em;color:#e9d5ff;">SDV WOs with Hours</div>
+                        <div style="font-size:1.5em;font-weight:bold;color:#fff;">${total}</div>
+                        <div style="font-size:0.7em;color:#d8b4fe;">Active work</div>
+                    </div>
+                    <div style="background:linear-gradient(135deg,${noEst > 0 ? '#7f1d1d,#ef4444' : '#065f46,#10b981'});padding:12px;border-radius:8px;text-align:center;">
+                        <div style="font-size:0.75em;color:${noEst > 0 ? '#fecaca' : '#a7f3d0'};">${noEst > 0 ? '⚠️ No Estimate' : '✅ All Set'}</div>
+                        <div style="font-size:1.5em;font-weight:bold;color:#fff;">${noEst}</div>
+                        <div style="font-size:0.7em;color:${noEst > 0 ? '#fca5a5' : '#bbf7d0'};">${noEst > 0 ? 'Process gap!' : 'No gaps'}</div>
+                    </div>
+                    <div style="background:linear-gradient(135deg,#065f46,#10b981);padding:12px;border-radius:8px;text-align:center;">
+                        <div style="font-size:0.75em;color:#a7f3d0;">With Estimate</div>
+                        <div style="font-size:1.5em;font-weight:bold;color:#fff;">${withEst}</div>
+                        <div style="font-size:0.7em;color:#bbf7d0;">Target: 100%</div>
+                    </div>
+                </div>
+                <div style="background:rgba(147,51,234,0.15);border:1px solid #a855f7;border-radius:8px;padding:15px;margin-bottom:15px;">
+                    <div style="color:#a855f7;font-weight:bold;margin-bottom:10px;">📋 SDV WOs - Expected Hours Status</div>
+                    <div class="table-container"><table><thead>
+                        <tr><th>WO#</th><th>Customer</th><th>Actual Hrs</th><th>WIP @ $${rate}</th><th>Exp Hrs</th><th>Status</th></tr>
+                    </thead><tbody>`;
+
+            wos.forEach(w => {
+                const hasEst = w.expectedHrs !== null;
+                const isLoaned = w.flags.includes('loaned');
+                const wip = w.actualHrs * rate;
+                const rowBg = hasEst ? 'background:rgba(16,185,129,0.15)' : 'background:rgba(239,68,68,0.15)';
+                const woLabel = `<strong>${w.wo}</strong>${isLoaned ? ' 📍' : ''}`;
+
+                let expCol, statusCol;
+                if (hasEst) {
+                    const overUnder = w.actualHrs <= w.expectedHrs ? 'Under estimate!' : 'Over by ' + (w.actualHrs - w.expectedHrs).toFixed(1) + 'h';
+                    const statusColor = w.actualHrs <= w.expectedHrs ? '#10b981' : '#ef4444';
+                    expCol = `<td style="color:#10b981;">✅ ${w.expectedHrs}h</td>`;
+                    statusCol = `<td style="color:${statusColor};font-size:0.8em;">${overUnder}</td>`;
+                } else {
+                    expCol = `<td style="color:#ef4444;">❌ Not Set</td>`;
+                    statusCol = `<td style="color:${isLoaned ? '#64748b' : '#ef4444'};font-size:0.8em;">${w.note || 'Add estimate'}</td>`;
+                }
+
+                html += `<tr style="${rowBg}">${woLabel ? '<td>' + woLabel + '</td>' : ''}<td>${w.customer}</td>
+                    <td>${w.actualHrs}h</td><td style="color:#a855f7;font-weight:bold;">$${wip.toLocaleString()}</td>${expCol}${statusCol}</tr>`;
+            });
+
+            html += `<tr style="background:rgba(147,51,234,0.2);font-weight:bold;">
+                    <td colspan="2">TOTAL SDV WIP</td><td>${totalHrs}h</td>
+                    <td style="color:#a855f7;">$${totalWip.toLocaleString()}</td>
+                    <td colspan="2" style="color:${pct >= 75 ? '#10b981' : '#f59e0b'};">${pct}% with estimates</td>
+                </tr></tbody></table></div>
+                <div style="margin-top:10px;font-size:0.85em;color:#d8b4fe;">
+                    📋 <strong>Goal #4 requires expected hours tracking on SDV WOs.</strong> ${pct >= 100 ? 'All WOs have estimates! ✅' : 'Currently ' + pct + '% compliance — need estimates on ' + missing.join(' and ') + '.'}
+                </div></div>
+                <div style="background:#0f172a;padding:10px;border-radius:6px;font-size:0.8em;color:#94a3b8;">
+                    <strong style="color:#a855f7;">📊 SDV TRACKING:</strong>
+                    SDV shop tracks Expected vs Actual hours to measure estimate accuracy.
+                    ${noEst > 0 ? '<strong style="color:#f59e0b;">Current gap: ' + noEst + '/' + total + ' WOs missing estimates (' + missing.join(', ') + ').</strong>' : '<strong style="color:#10b981;">All WOs have estimates — on target! ✅</strong>'}
+                </div>
+            </div>`;
+
+            container.innerHTML = html;
+        }
+
         // Initialize all auto-synced sections
         renderGoals();
         renderWeeklyGoals();
         renderRankings();
         renderWipOverview();
+        renderSdvExpectedHours();
+        renderWorkStatus();
         
         // Initialize tracking table and customer table
         renderNpsTable();
@@ -3612,7 +3685,7 @@ ${surveyUrl}`;
             // Header: HARDCODED by Claude at file update time (not refresh time)
             // Claude updates this string each time index.html is modified
             const hdr = document.getElementById('headerTimestamp');
-            if (hdr) hdr.textContent = 'Last updated: Feb 3, 2026 \u00B7 2:30 PM MST';
+            if (hdr) hdr.textContent = 'Last updated: Feb 3, 2026 \u00B7 2:38 PM MST';
 
             // Customer DB: "Updated 02/03 10:00AM"
             const cdb = document.getElementById('customerDbTimestamp');
