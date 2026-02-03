@@ -2749,7 +2749,13 @@
         // NPS Tracking - HARDCODED DATA (persists across file reloads)
         // Claude updates this array when you report new surveys sent
         let npsSurveyData = [
-            // === 01/30/26 - NEW BATCH ===
+            // === 02/03/26 - NEW BATCH ===
+            {date: '02/03/26', customer: 'Skyport Co', email: 'ryan.himango@skyportco.com', wo: 'DUSFA', regNum: 'N65LR', status: 'Sent', score: null},
+            {date: '02/03/26', customer: 'Sierra Nevada Corp', email: 'colton.black@sncorp.com', wo: 'DUMXA', regNum: '', status: 'Sent', score: null},
+            {date: '02/03/26', customer: 'Robbins Aviation', email: 'jeff@robbins-aviation.com', wo: 'CU92A', regNum: 'N331MW', status: 'Sent', score: null},
+            {date: '02/03/26', customer: 'Alpine Aviation', email: 'lhan@alpine-air.com', wo: 'CVLNA', regNum: 'N197GA', status: 'Sent', score: null},
+            {date: '02/03/26', customer: 'E2 Amusements', email: 'chris.c@e2amusements.com', wo: 'CV2GA', regNum: 'N688MP', status: 'Sent', score: null},
+            // === 01/30/26 - PREVIOUS BATCH ===
             {date: '01/30/26', customer: 'MHH Inc', email: 'BILL.BENTON@MHHINC.NET', wo: 'DSW4A', regNum: 'N7BD', status: 'Sent', score: null},
             {date: '01/30/26', customer: 'Patrick Lee', email: 'patrick.e.lee@protonmail.com', wo: 'CU16A', regNum: 'N176MG', status: 'Sent', score: null},
             {date: '01/30/26', customer: 'JC Consulting', email: 'JCCONS81@AOL.COM', wo: 'CV5SA', regNum: 'STOCK', status: 'Sent', score: null},
@@ -2821,7 +2827,7 @@
             const completed = surveys.filter(s => s.status === 'Completed').length;
             const pending = surveys.filter(s => s.status === 'Sent').length;
             const rate = sent > 0 ? Math.round((completed / sent) * 100) + '%' : '-';
-            const billedWOsTarget = 50;  // Total billed WOs from Billed WO report 01/30/26
+            const billedWOsTarget = 51;  // Total billed WOs from Billed WO report 02/03/26
             
             document.getElementById('statSent').textContent = sent + '/' + billedWOsTarget;
             document.getElementById('statCompleted').textContent = completed;
@@ -2831,13 +2837,13 @@
             // Update badge
             const badge = document.getElementById('npsBadge');
             if (completed >= 1) {
-                badge.textContent = `Jan: ${completed}/1 ✅`;
+                badge.textContent = `Feb: ${completed}/1 ✅`;
                 badge.style.background = '#10b981';
             } else if (sent > 0) {
-                badge.textContent = `Jan: ${completed}/1 ⏳`;
+                badge.textContent = `Feb: ${completed}/1 ⏳`;
                 badge.style.background = '#f59e0b';
             } else {
-                badge.textContent = 'Jan: 0/1 ⚠️';
+                badge.textContent = 'Feb: 0/1 ⚠️';
                 badge.style.background = '#ef4444';
             }
             
