@@ -267,18 +267,18 @@
                     <div style="display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-bottom:10px;">
                         <div>
                             <label style="color:#c4b5fd;font-size:0.8em;display:block;margin-bottom:5px;">Customer Name *</label>
-                            <input type="text" id="npsCustomerName" placeholder="Peregrine" style="width:100%;padding:10px;border-radius:6px;border:none;background:#1e1b4b;color:white;font-size:1em;">
+                            <input type="text" id="npsCustomerName" placeholder="Customer name" style="width:100%;padding:10px;border-radius:6px;border:none;background:#1e1b4b;color:white;font-size:1em;">
                         </div>
                         <div>
                             <label style="color:#c4b5fd;font-size:0.8em;display:block;margin-bottom:5px;">WO# *</label>
-                            <input type="text" id="npsWO" placeholder="DTBLA" style="width:100%;padding:10px;border-radius:6px;border:none;background:#1e1b4b;color:white;font-size:1em;text-transform:uppercase;">
+                            <input type="text" id="npsWO" placeholder="WO number" style="width:100%;padding:10px;border-radius:6px;border:none;background:#1e1b4b;color:white;font-size:1em;text-transform:uppercase;">
                         </div>
                     </div>
                     
                     <div style="display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-bottom:15px;">
                         <div>
                             <label style="color:#c4b5fd;font-size:0.8em;display:block;margin-bottom:5px;">Customer Email *</label>
-                            <input type="email" id="npsCustomerEmail" placeholder="customer@email.com" style="width:100%;padding:10px;border-radius:6px;border:none;background:#1e1b4b;color:white;font-size:1em;">
+                            <input type="email" id="npsCustomerEmail" placeholder="email@company.com" style="width:100%;padding:10px;border-radius:6px;border:none;background:#1e1b4b;color:white;font-size:1em;">
                         </div>
                         <div>
                             <label style="color:#c4b5fd;font-size:0.8em;display:block;margin-bottom:5px;">Aircraft Registration (optional)</label>
@@ -314,16 +314,6 @@
                                 <tr><td colspan="6" style="color:#64748b;text-align:center;">No surveys logged yet</td></tr>
                             </tbody>
                         </table>
-                    </div>
-                </div>
-                
-                <div style="background:#1e293b;padding:12px;border-radius:8px;margin-bottom:15px;">
-                    <div style="color:#94a3b8;font-size:0.85em;margin-bottom:8px;">📋 <strong>January Candidate (Ready):</strong></div>
-                    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;">
-                        <div><span style="color:#64748b;">WO:</span> <span style="color:#fbbf24;">DTBLA</span></div>
-                        <div><span style="color:#64748b;">Customer:</span> <span style="color:white;">Peregrine</span></div>
-                        <div><span style="color:#64748b;">Amount:</span> <span style="color:#10b981;">$6,856</span></div>
-                        <button onclick="fillNps('Peregrine','ths@masd.metrea.aero','DTBLA','')" style="background:#10b981;color:white;border:none;padding:8px 15px;border-radius:4px;font-size:0.9em;cursor:pointer;font-weight:bold;">✓ Auto-Fill</button>
                     </div>
                 </div>
                 
@@ -3572,7 +3562,7 @@ ${surveyUrl}`;
             // Header: HARDCODED by Claude at file update time (not refresh time)
             // Claude updates this string each time index.html is modified
             const hdr = document.getElementById('headerTimestamp');
-            if (hdr) hdr.textContent = 'Last updated: Feb 3, 2026 \u00B7 11:30 AM MST';
+            if (hdr) hdr.textContent = 'Last updated: Feb 3, 2026 \u00B7 11:33 AM MST';
 
             // Customer DB: "Updated 02/03 10:00AM"
             const cdb = document.getElementById('customerDbTimestamp');
