@@ -662,40 +662,7 @@
             </div>
             
             <!-- TOP WIP WOs -->
-            <div class="card">
-                <div class="card-header">
-                    <span class="card-title">📋 January WIP - Top WOs by Value</span>
-                    <span class="badge badge-green">Open in Anchor (01/27/26)</span>
-                </div>
-                <div style="background:#14532d;padding:8px;border-radius:6px;margin-bottom:10px;font-size:0.8em;color:#bbf7d0;">
-                    🤖 <strong>Auto-detected:</strong> Time Sold × Anchor (OPEN) × Billed (excluded)
-                </div>
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr><th>WO#</th><th>Shop</th><th>Customer</th><th>Hours</th><th>Rate</th><th style="color:#10b981">WIP $</th></tr>
-                        </thead>
-                        <tbody>
-                            <tr><td>CTQMA</td><td>SDR</td><td>Robert P Husted <span style="color:#f59e0b;font-size:0.75em;">⚠️ audit</span></td><td>43.5h</td><td>$145</td><td style="color:#10b981;font-weight:bold">$6,308</td></tr>
-                            <tr style="background:rgba(147,51,234,0.15)"><td>DB1UA 📍</td><td>SDV</td><td>Hogs Head Air 1 LLC <span style="color:#a855f7;font-size:0.75em;">(NJ - Juan loaned)</span></td><td>75.0h</td><td style="color:#a855f7">$70</td><td style="color:#a855f7;font-weight:bold">$5,250</td></tr>
-                            <tr><td>CU1EA</td><td>SDN</td><td>42K Re Management LLC</td><td>35.5h</td><td>$145</td><td style="color:#10b981;font-weight:bold">$5,148</td></tr>
-                            <tr style="background:rgba(16,185,129,0.4)"><td>CU16A ✅</td><td>SDN</td><td>Flying Orchard LLC <span style="color:#10b981;font-size:0.75em;font-weight:bold;">(BILLED $5,190)</span></td><td>30.5h</td><td>$145</td><td style="color:#10b981;font-weight:bold">$4,422</td></tr>
-                            <tr><td>CU0VA</td><td>SDR</td><td>The Club at Centennial <span style="color:#f59e0b;font-size:0.75em;">⚠️ audit</span></td><td>21.5h</td><td>$145</td><td style="color:#10b981;font-weight:bold">$3,118</td></tr>
-                            <tr><td>CUPFA</td><td>SDN</td><td>Flying Orchard LLC</td><td>15.9h</td><td>$145</td><td style="color:#10b981;font-weight:bold">$2,306</td></tr>
-                            <tr><td>CU92A</td><td>SDN</td><td>Robbins Aviation</td><td>15.0h</td><td>$145</td><td style="color:#10b981;font-weight:bold">$2,175</td></tr>
-                            <tr><td>CUL2A</td><td>SDR</td><td>Peregrine</td><td>12.5h</td><td>$145</td><td style="color:#10b981;font-weight:bold">$1,812</td></tr>
-                            <tr style="background:rgba(16,185,129,0.2);font-weight:bold;font-size:1.1em;">
-                                <td colspan="4">TOP 8 WIP</td>
-                                <td>249h</td>
-                                <td style="color:#10b981">$30,539</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div style="background:#0f172a;padding:10px;border-radius:6px;margin-top:10px;font-size:0.85em;color:#94a3b8;">
-                    💡 <strong>WIP = Work that will carry to February</strong> (if not billed by Jan 31). Excluded: DUXFA, CUS4A, DUL0A (not in Anchor - already closed/billed).
-                </div>
-            </div>
+            <div id="wipOverviewContainer"></div>
             
             <!-- SCHEDULED INSTALLS -->
             <div class="card">
@@ -2564,6 +2531,26 @@
             // ── CURRENT MONTH A/B (in-progress, before month closes) ──
             // Claude updates from daily Time Sold reports during the month
             currentMonthAB: null, // Set to number when first Time Sold report comes in for new month
+
+            // ── WIP DATA (from Time Sold × Anchor cross-reference) ──
+            // Claude updates when Time Sold or Anchor reports are processed
+            wipDate: '01/27/26',  // Date of last Anchor report
+            wipMonth: 'January',
+            wipNextMonth: 'February',
+            wipDefaultRate: 145,  // Standard Denver rate
+            wipExcluded: ['DUXFA', 'CUS4A', 'DUL0A'],  // Not in Anchor - already closed/billed
+            wipEntries: [
+                // Claude adds/updates: {wo, shop, customer, hours, rate, wip, flags: [], billed: null}
+                // flags: 'audit', 'loaned', 'billed' | billed: null or dollar amount
+                {wo: 'CTQMA', shop: 'SDR', customer: 'Robert P Husted', hours: 43.5, rate: 145, wip: 6308, flags: ['audit'], billed: null},
+                {wo: 'DB1UA', shop: 'SDV', customer: 'Hogs Head Air 1 LLC', hours: 75.0, rate: 70, wip: 5250, flags: ['loaned'], loanNote: 'NJ - Juan loaned', billed: null},
+                {wo: 'CU1EA', shop: 'SDN', customer: '42K Re Management LLC', hours: 35.5, rate: 145, wip: 5148, flags: [], billed: null},
+                {wo: 'CU16A', shop: 'SDN', customer: 'Flying Orchard LLC', hours: 30.5, rate: 145, wip: 4422, flags: ['billed'], billed: 5190},
+                {wo: 'CU0VA', shop: 'SDR', customer: 'The Club at Centennial', hours: 21.5, rate: 145, wip: 3118, flags: ['audit'], billed: null},
+                {wo: 'CUPFA', shop: 'SDN', customer: 'Flying Orchard LLC', hours: 15.9, rate: 145, wip: 2306, flags: [], billed: null},
+                {wo: 'CU92A', shop: 'SDN', customer: 'Robbins Aviation', hours: 15.0, rate: 145, wip: 2175, flags: [], billed: null},
+                {wo: 'CUL2A', shop: 'SDR', customer: 'Peregrine', hours: 12.5, rate: 145, wip: 1812, flags: [], billed: null},
+            ],
         };
 
         // ═══════════════════════════════════════════════════════
@@ -3530,10 +3517,74 @@ ${surveyUrl}`;
             container.innerHTML = html;
         }
 
-        // Initialize goals tab (auto-synced from GOALS_DATA + npsSurveyData + customerDatabase)
+        // ═══════════════════════════════════════════════════════
+        // WIP OVERVIEW RENDERER — Auto-syncs from GOALS_DATA.wipEntries
+        // ═══════════════════════════════════════════════════════
+        function renderWipOverview() {
+            const container = document.getElementById('wipOverviewContainer');
+            if (!container) return;
+            const d = GOALS_DATA;
+            const entries = [...d.wipEntries].sort((a, b) => b.wip - a.wip);
+            const totalHours = entries.reduce((s, e) => s + e.hours, 0);
+            const totalWip = entries.reduce((s, e) => s + e.wip, 0);
+            const billedCount = entries.filter(e => e.flags.includes('billed')).length;
+            const auditCount = entries.filter(e => e.flags.includes('audit')).length;
+            const loanedCount = entries.filter(e => e.flags.includes('loaned')).length;
+            const openCount = entries.filter(e => !e.flags.includes('billed')).length;
+            const openWip = entries.filter(e => !e.flags.includes('billed')).reduce((s, e) => s + e.wip, 0);
+
+            let html = `<div class="card">
+                <div class="card-header">
+                    <span class="card-title">📋 ${d.wipMonth} WIP - Top WOs by Value</span>
+                    <span class="badge badge-green">Open in Anchor (${d.wipDate})</span>
+                </div>
+                <div style="background:#14532d;padding:8px;border-radius:6px;margin-bottom:10px;font-size:0.8em;color:#bbf7d0;">
+                    🤖 <strong>Auto-synced:</strong> ${entries.length} WOs | ${openCount} open ($${openWip.toLocaleString()}) | ${billedCount} billed${auditCount > 0 ? ' | ' + auditCount + ' audit ⚠️' : ''}${loanedCount > 0 ? ' | ' + loanedCount + ' loaned 📍' : ''}
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr><th>WO#</th><th>Shop</th><th>Customer</th><th>Hours</th><th>Rate</th><th style="color:#10b981">WIP $</th></tr>
+                        </thead>
+                        <tbody>`;
+
+            entries.forEach(e => {
+                const isLoaned = e.flags.includes('loaned');
+                const isBilled = e.flags.includes('billed');
+                const isAudit = e.flags.includes('audit');
+                const rowStyle = isBilled ? 'background:rgba(16,185,129,0.4)' : isLoaned ? 'background:rgba(147,51,234,0.15)' : '';
+                const woLabel = e.wo + (isBilled ? ' ✅' : '') + (isLoaned ? ' 📍' : '');
+                const valColor = isLoaned ? '#a855f7' : '#10b981';
+
+                let custLabel = e.customer;
+                if (isAudit) custLabel += ' <span style="color:#f59e0b;font-size:0.75em;">⚠️ audit</span>';
+                if (isBilled) custLabel += ` <span style="color:#10b981;font-size:0.75em;font-weight:bold;">(BILLED $${e.billed.toLocaleString()})</span>`;
+                if (isLoaned && e.loanNote) custLabel += ` <span style="color:#a855f7;font-size:0.75em;">(${e.loanNote})</span>`;
+
+                html += `<tr style="${rowStyle}">
+                    <td>${woLabel}</td><td>${e.shop}</td><td>${custLabel}</td>
+                    <td>${e.hours}h</td><td${isLoaned ? ' style="color:#a855f7"' : ''}>$${e.rate}</td>
+                    <td style="color:${valColor};font-weight:bold">$${e.wip.toLocaleString()}</td></tr>`;
+            });
+
+            html += `<tr style="background:rgba(16,185,129,0.2);font-weight:bold;font-size:1.1em;">
+                    <td colspan="3">TOP ${entries.length} WIP</td>
+                    <td>${totalHours}h</td><td></td>
+                    <td style="color:#10b981">$${totalWip.toLocaleString()}</td>
+                </tr></tbody></table></div>
+                <div style="background:#0f172a;padding:10px;border-radius:6px;margin-top:10px;font-size:0.85em;color:#94a3b8;">
+                    💡 <strong>WIP = Work that will carry to ${d.wipNextMonth}</strong> (if not billed by month end).${d.wipExcluded.length > 0 ? ' Excluded: ' + d.wipExcluded.join(', ') + ' (not in Anchor - already closed/billed).' : ''}
+                </div>
+            </div>`;
+
+            container.innerHTML = html;
+        }
+
+        // Initialize all auto-synced sections
         renderGoals();
         renderWeeklyGoals();
         renderRankings();
+        renderWipOverview();
         
         // Initialize tracking table and customer table
         renderNpsTable();
@@ -3561,7 +3612,7 @@ ${surveyUrl}`;
             // Header: HARDCODED by Claude at file update time (not refresh time)
             // Claude updates this string each time index.html is modified
             const hdr = document.getElementById('headerTimestamp');
-            if (hdr) hdr.textContent = 'Last updated: Feb 3, 2026 \u00B7 2:25 PM MST';
+            if (hdr) hdr.textContent = 'Last updated: Feb 3, 2026 \u00B7 2:30 PM MST';
 
             // Customer DB: "Updated 02/03 10:00AM"
             const cdb = document.getElementById('customerDbTimestamp');
