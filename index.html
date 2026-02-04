@@ -2226,7 +2226,7 @@
             const d = GOALS_DATA;
             const latestAB = d.abMonthly[d.abMonthly.length - 1];
             const abAvg = d.abMonthly.length > 0 ? (d.abMonthly.reduce((s,m) => s + (m.mattOfficial||0), 0) / d.abMonthly.length).toFixed(1) : 0;
-            const abPct = Math.round((abAvg / d.abTarget) * 100);
+            const abPct = Math.round((d.abMonthly.length / 12) * 100); // Time-based: months closed / 12
             const abGap = (latestAB.mattOfficial - d.abTarget).toFixed(1);
             const abGapStr = abGap > 0 ? '+' + abGap : abGap;
             const closedMonths = d.abMonthly.map(m => m.month).join(', ');
