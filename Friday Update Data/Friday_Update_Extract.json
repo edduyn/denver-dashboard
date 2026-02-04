@@ -1,0 +1,799 @@
+{
+  "extractionDate": "2026-01-19T22:20:47.169Z",
+  "extractionVersion": "2.0",
+  "recordCount": 4,
+  "records": [
+    {
+      "subject": "Fw: Friday Update",
+      "from": "Edduyn Pita <edduyn.pita@duncanaviation.com>",
+      "forwardedDate": "2026-01-19T19:08:56.000Z",
+      "originalFridayDate": "2026-01-02T07:00:00.000Z",
+      "extractedData": {
+        "customerQuotes": [],
+        "employeeRecognition": [
+          {
+            "name": "Jamie Wilson",
+            "context": "..., good knowledge, and he’s funny.” Stefan Andersson, N184BK “I would like to start with a strong thank you to Jamie Wilson, who was the Project Manager for the C check on SN105. Additionally, I’d l...",
+            "type": "thank_you"
+          },
+          {
+            "name": "Josh Droud",
+            "context": "..., Team Geist, Tyler Millsap, Frank Logsdon, Dan Gospodarski, and Ed Sabata found solutions. Special thanks to Josh Droud who handled the project with poise. After two years in Lincoln, the flight home...",
+            "type": "thank_you"
+          },
+          {
+            "name": "Duncan Aviation",
+            "context": "...y Mehl, Jessica Bengtsson, and Alicia Collins. All of them were very nice and professional with me. Thanks Duncan Aviation and see you again in 4 years on my 192 month.” Carlos Molck, PP-MLZ “I’m w...",
+            "type": "thank_you"
+          },
+          {
+            "name": "all for",
+            "context": "...?e=Qlserd>​​​ Deliver The Best: Brandon Day to Savannah McCarty, Drew Neuland, Ronald Stoutenburg “Thank you all for helping with cleanup around aircraft and wing walking for the big hangar dump.” D...",
+            "type": "thank_you"
+          },
+          {
+            "name": "so much",
+            "context": "... we have issues...and never complains! He is a rock star, and we appreciate him more than he knows. Thank you so much, Matt!” Deliver The Best: Jennifer Morrill to Erik Anderson, Trevor Bartlett, Jef...",
+            "type": "thank_you"
+          },
+          {
+            "name": "for your",
+            "context": "...ave worked on, have been crucial for maintaining quality and seeing the project through to the end. Thank you for your hard work and commitment!” Keep It Exceptional: Tom Willoughby to Megan Spain “G...",
+            "type": "thank_you"
+          },
+          {
+            "name": "for all",
+            "context": "...for payment. Nice work!” Make It Personal: Ali Conder to Cayden Bailey, Aisha Priego, Mae Angeles “Thank you for all your efforts with our NextGen events this year! Consistently hosting Lunch & Learn...",
+            "type": "thank_you"
+          },
+          {
+            "name": "again for",
+            "context": "...Achievement Bonus. In total, we paid out over $17.4M in bonus sharing for 2025! Congratulations and thanks again for everyone's hard work, dedication, and passion to Be The Difference! As a reminder,...",
+            "type": "thank_you"
+          },
+          {
+            "name": "Megan at",
+            "context": "... Thank you for your hard work and commitment!” Keep It Exceptional: Tom Willoughby to Megan Spain “Great job Megan at proactively addressing any needs that the customer could have on an invoice that ...",
+            "type": "thank_you"
+          },
+          {
+            "name": "Joe Stokey",
+            "context": "...Friday Update [cid:b97a0d9d-18c9-4c03-ba0f-f0df6cb55a37] Team Excellence & Customer Comments: “Joe Stokey is the best Project Manager you can have, with very quick response times, good knowledge,...",
+            "type": "praise"
+          },
+          {
+            "name": "you can",
+            "context": "...97a0d9d-18c9-4c03-ba0f-f0df6cb55a37] Team Excellence & Customer Comments: “Joe Stokey is the best Project Manager you can have, with very quick response times, good knowledge, and he’s funny.” Stefa...",
+            "type": "project_manager"
+          },
+          {
+            "name": "for the",
+            "context": "...an Andersson, N184BK “I would like to start with a strong thank you to Jamie Wilson, who was the Project Manager for the C check on SN105. Additionally, I’d like to thank the following key members ...",
+            "type": "project_manager"
+          }
+        ],
+        "metrics": {
+          "financial": [
+            {
+              "value": "$17",
+              "context": "...nal Achievement Bonus. In total, we paid out over $17.4M in bonus sharing for 2025! Congratulations ..."
+            }
+          ],
+          "hours": [
+            {
+              "value": "580,000",
+              "context": "...to close out 2025. In total they closed more than 580,000 hours of work in the 4th quarter compared ..."
+            },
+            {
+              "value": "423,000",
+              "context": "...,000 hours of work in the 4th quarter compared to 423,000 hours during the same time period a year a..."
+            },
+            {
+              "value": "580,000",
+              "context": "...hours during the same time period a year ago. The 580,000 hours closed represents one of our highest..."
+            }
+          ],
+          "percentages": [
+            {
+              "value": "96%",
+              "context": "... Backlog: 01/05 01/12 01/19 01/26 Lincoln 96% 97% 92% 89% Battle Creek 87% 96% 93% 9..."
+            },
+            {
+              "value": "97%",
+              "context": "...log: 01/05 01/12 01/19 01/26 Lincoln 96% 97% 92% 89% Battle Creek 87% 96% 93% 96% P..."
+            },
+            {
+              "value": "92%",
+              "context": "... 01/05 01/12 01/19 01/26 Lincoln 96% 97% 92% 89% Battle Creek 87% 96% 93% 96% Provo ..."
+            },
+            {
+              "value": "89%",
+              "context": ".../05 01/12 01/19 01/26 Lincoln 96% 97% 92% 89% Battle Creek 87% 96% 93% 96% Provo 102%..."
+            },
+            {
+              "value": "87%",
+              "context": "...01/26 Lincoln 96% 97% 92% 89% Battle Creek 87% 96% 93% 96% Provo 102% 100% 96% 85% T..."
+            },
+            {
+              "value": "96%",
+              "context": "... Lincoln 96% 97% 92% 89% Battle Creek 87% 96% 93% 96% Provo 102% 100% 96% 85% TOTAL ..."
+            },
+            {
+              "value": "93%",
+              "context": "...coln 96% 97% 92% 89% Battle Creek 87% 96% 93% 96% Provo 102% 100% 96% 85% TOTAL 94.6..."
+            },
+            {
+              "value": "96%",
+              "context": "... 96% 97% 92% 89% Battle Creek 87% 96% 93% 96% Provo 102% 100% 96% 85% TOTAL 94.6% 97..."
+            },
+            {
+              "value": "102%",
+              "context": "...2% 89% Battle Creek 87% 96% 93% 96% Provo 102% 100% 96% 85% TOTAL 94.6% 97.1% 92.9% ..."
+            },
+            {
+              "value": "100%",
+              "context": "...% Battle Creek 87% 96% 93% 96% Provo 102% 100% 96% 85% TOTAL 94.6% 97.1% 92.9% 90.3% ..."
+            },
+            {
+              "value": "96%",
+              "context": "...tle Creek 87% 96% 93% 96% Provo 102% 100% 96% 85% TOTAL 94.6% 97.1% 92.9% 90.3% Clos..."
+            },
+            {
+              "value": "85%",
+              "context": "...reek 87% 96% 93% 96% Provo 102% 100% 96% 85% TOTAL 94.6% 97.1% 92.9% 90.3% Closing C..."
+            },
+            {
+              "value": "94.6%",
+              "context": "...6% 93% 96% Provo 102% 100% 96% 85% TOTAL 94.6% 97.1% 92.9% 90.3% Closing Comments: Ha..."
+            },
+            {
+              "value": "97.1%",
+              "context": "... 96% Provo 102% 100% 96% 85% TOTAL 94.6% 97.1% 92.9% 90.3% Closing Comments: Happy New..."
+            },
+            {
+              "value": "92.9%",
+              "context": "...Provo 102% 100% 96% 85% TOTAL 94.6% 97.1% 92.9% 90.3% Closing Comments: Happy New Year!!..."
+            },
+            {
+              "value": "90.3%",
+              "context": "...102% 100% 96% 85% TOTAL 94.6% 97.1% 92.9% 90.3% Closing Comments: Happy New Year!!! Today..."
+            }
+          ],
+          "counts": [],
+          "dates": []
+        },
+        "satelliteMentions": [
+          {
+            "location": "Denver",
+            "count": 1,
+            "contexts": [
+              "...857-911f-544b58df949d]​ EDDUYN PITA SATELLITE MANAGER - DENVER, CO. DIRECT: +1 303-649-1790 | CELL: +1 404.227.9766..."
+            ],
+            "isDenver": true
+          },
+          {
+            "location": "Austin",
+            "count": 1,
+            "contexts": [
+              "...to Dale Carlson, Shawn Donald, Amber Garrett, Troy Gillian, Austin McDonald, Dean Williams, Matt Wright “Thank you for a..."
+            ],
+            "isDenver": false
+          },
+          {
+            "location": "Atlanta",
+            "count": 1,
+            "contexts": [
+              "..., PP-MLZ “I’m with Corporate Aviation Group out of KFTY (Atlanta Satellite), and we have three Beechjet and four Hawk..."
+            ],
+            "isDenver": false
+          }
+        ],
+        "sections": {
+          "teamExcellence": "“Joe Stokey is the best Project Manager you can have, with very quick response times, good knowledge, and he’s funny.” Stefan Andersson, N184BK “I would like to start with a strong thank you to Jamie Wilson, who was the Project Manager for the C check on SN105. Additionally, I’d like to thank the following key members for their tireless efforts: Riley Lewis, Joe Michinski, Darren Blaser and Rob Loy, Aaron Westfall, Nick Dahlberg, Michael Nguyen, John Spevak, Shane Mack, and Chad Bodfield. The following teams were also pivotal to this project: Team Steadman, Team Schultz, Team Schwisow, Team Christensen, Team Miller, and Team Grant. Coordination on this began over a year ago with key projects being the CMS (Cabin Management System) upgrade and landing-gear overhaul. Updates were continual and landing gear was a point of concern while being worked off-site. Once necessary parts were identified, sourcing and re-assembly was pushed 30 days to the right. Duncan Aviation did an outstanding job upon receipt of the gear to complete this project and establish a new date for delivery which was met. The test flight was uneventful and was an indication of the professionalism and dedication to quality that Duncan Aviation always delivers. Thank you again!” Brian Nelsen, N424U I was pleased with both the quality of work and the project coordination. We will definitely be returning to Duncan Aviation for future maintenance. David Arbon, C-FSDS “4101 was a unique project with many challenges from tooling to parts. Matt Gudgel, Jarrod McNamee, Team Schulz, Dan Clough, Foster Reckling, Chris Thoreson, Andy Carter, Team Geist, Tyler Millsap, Frank Logsdon, Dan Gospodarski, and Ed Sabata found solutions. Special thanks to Josh Droud who handled the project with poise. After two years in Lincoln, the flight home was just in time for Christmas and squawk-free! Paul Lewandowski & Project 4101 “Good Morning, I had a pleasure to meet and work during my 141 days at Duncan Aviation in Battle ",
+          "customerComments": "“Joe Stokey is the best Project Manager you can have, with very quick response times, good knowledge, and he’s funny.” Stefan Andersson, N184BK “I would like to start with a strong thank you to Jamie Wilson, who was the Project Manager for the C check on SN105. Additionally, I’d like to thank the following key members for their tireless efforts: Riley Lewis, Joe Michinski, Darren Blaser and Rob Loy, Aaron Westfall, Nick Dahlberg, Michael Nguyen, John Spevak, Shane Mack, and Chad Bodfield. The following teams were also pivotal to this project: Team Steadman, Team Schultz, Team Schwisow, Team Christensen, Team Miller, and Team Grant. Coordination on this began over a year ago with key projects being the CMS (Cabin Management System) upgrade and landing-gear overhaul. Updates were continual and landing gear was a point of concern while being worked off-site. Once necessary parts were identified, sourcing and re-assembly was pushed 30 days to the right. Duncan Aviation did an outstanding job upon receipt of the gear to complete this project and establish a new date for delivery which was met. The test flight was uneventful and was an indication of the professionalism and dedication to quality that Duncan Aviation always delivers. Thank you again!” Brian Nelsen, N424U I was pleased with both the quality of work and the project coordination. We will definitely be returning to Duncan Aviation for future maintenance. David Arbon, C-FSDS “4101 was a unique project with many challenges from tooling to parts. Matt Gudgel, Jarrod McNamee, Team Schulz, Dan Clough, Foster Reckling, Chris Thoreson, Andy Carter, Team Geist, Tyler Millsap, Frank Logsdon, Dan Gospodarski, and Ed Sabata found solutions. Special thanks to Josh Droud who handled the project with poise. After two years in Lincoln, the flight home was just in time for Christmas and squawk-free! Paul Lewandowski & Project 4101 “Good Morning, I had a pleasure to meet and work during my 141 days at Duncan Aviation in Battle ",
+          "satellites": "+1 303-649-1790 | CELL: +1 404.227.9766 www.DuncanAviation.aero<https://www.duncanaviation.aero/> ________________________________ From: Mike Minchow <mike.minchow@duncanaviation.com> Sent: Friday, January 2, 2026 1:59 PM To: Mike Minchow <mike.minchow@duncanaviation.com> Subject: Friday Update [cid:b97a0d9d-18c9-4c03-ba0f-f0df6cb55a37]"
+        },
+        "denverRelevant": {
+          "isDenverRelevant": true,
+          "denverMentions": 1,
+          "relevantQuotes": [],
+          "relevantEmployees": []
+        },
+        "summary": {
+          "totalQuotes": 0,
+          "positiveQuotes": 0,
+          "negativeQuotes": 0,
+          "employeesRecognized": 12,
+          "hasFinancialData": true,
+          "hasHoursData": true,
+          "hasPercentages": true
+        }
+      },
+      "fullBodyLength": 8373,
+      "bodyPreview": "\r\n\r\n\r\n[cid:7bc702f7-a0a0-4857-911f-544b58df949d]​\r\n\r\nEDDUYN PITA\r\nSATELLITE MANAGER - DENVER, CO.\r\nDIRECT: +1 303-649-1790 | CELL: +1 404.227.9766\r\nwww.DuncanAviation.aero<https://www.duncanaviation.aero/>\r\n\r\n\r\n________________________________\r\nFrom: Mike Minchow <mike.minchow@duncanaviation.com>\r\nSent: Friday, January 2, 2026 1:59 PM\r\nTo: Mike Minchow <mike.minchow@duncanaviation.com>\r\nSubject: Friday Update\r\n\r\n[cid:b97a0d9d-18c9-4c03-ba0f-f0df6cb55a37]\r\nTeam Excellence & Customer Comments:\r\n“Joe Stokey is the best Project Manager you can have, with very quick response times, good knowledge, and he’s funny.” Stefan Andersson, N184BK\r\n\r\n“I would like to start with a strong thank you to Jamie Wilson, who was the Project Manager for the C check on SN105. Additionally, I’d like to thank the following key members for their tireless efforts: Riley Lewis, Joe Michinski, Darren Blaser and Rob Loy, Aaron Westfall, Nick Dahlberg, Michael Nguyen, John Spevak, Shane Mack, and Chad Bodfield. The following teams were also pivotal to this project: Team Steadman, Team Schultz, Team Schwisow, Team Christensen, Team Miller, and Team Grant. Coordination on this began over a year ago with key projects being the CMS (Cabin Management System) upgrade and landing-gear overhaul. Updates were continual and landing gear was a point of concern while being worked off-site. Once necessary parts were identified, sourcing and re-assembly was pushed 30 days to the right. Duncan Aviation did an outstanding job upon receipt of the gear to complete this project and establish a new date for delivery which was met. The test flight was uneventful and was an indication of the professionalism and dedication to quality that Duncan Aviation always delivers. Thank you again!” Brian Nelsen, N424U\r\n\r\nI was pleased with both the quality of work and the project coordination. We will definitely be returning to Duncan Aviation for future maintenance. David Arbon, C-FSDS\r\n\r\n“4101 was a unique project with many challenges from tooling to parts. Matt Gudgel, Jarrod McNamee, Team Schulz, Dan Clough, Foster Reckling, Chris Thoreson, Andy Carter, Team Geist, Tyler Millsap, Frank Logsdon, Dan Gospodarski, and Ed Sabata found solutions. Special thanks to Josh Droud who handled the project with poise. After two years in Lincoln, the flight home was just in time for Christmas and squawk-free!  Paul Lewandowski & Project 4101\r\n\r\n“Good Morning, I had a pleasure to meet and work during my 141 days at Duncan Aviation in Battle Creek: Branden Hunt, Marco Marzigliano, Nick Greene, Steven Tedder, Troy Kirtley, and others. Also, Andy Mehl, Jessica Bengtsson, and Alicia Collins. All of them were very nice and professional with me. Thanks Duncan Aviation and see you again in 4 years on my 192 month.” Carlos Molck, PP-MLZ\r\n\r\n“I’m with Corporate Aviation Group out of KFTY (Atlanta Satellite), and we have three Beechjet and four Hawkers. I love the team that’s based here on the field. Any time we have an issue or a problem pop-up, your team comes together to resolve the problem or issue. Their names are Edwin Nunez, Larry Coffie, Larry Barboza, Ramon Cordova, Saul Naranjo, Victor Naranjo, Lucy Ruiz, Edwin Carrillo, and Argenis Barrios. They are considered family here at Corporate Aviation Group.” Daniel Long, N880HP\r\n\r\n\r\nBe The Difference: Team Members\r\nTotal Weekly Submissions: 15\r\n*View all submissions below or login into the Difference Makers app<https://duncanaviation.cooleaf.com/> today!\r\n​​​Be The Difference Recognitions (1.2).pdf<https://duncanaviation-my.sharepoint.com/:b:/p/alexa_french/IQCg_Xoq62HwR6lAgl1fSCFlAS_n46NpNfopCQwCWCiOuxI?e=Qlserd>​​​\r\nDeliver The Best: Brandon Day to Savannah McCarty, Drew Neuland, Ronald Stoutenburg “Thank you all for helping with cleanup around aircraft and wing walking for the big hangar dump.”\r\nDeliver The Best: Pam Orr to Matt Heller “The Travel Department would be lost without the help of Matt! He's always there to do updates on our travel software, or help us figure out what's going on when we have issues...and never complains! He is a rock star, and we appreciate him more than he knows. Thank you so much, Matt!”\r\nDeliver The Best: Jennifer Morrill to Erik Anderson, Trevor Bartlett, Jeff Regier, Tobyn Wattenbarger “Thank you, team, for your exceptional customer service during a critical moment for our long-time customers, Paul Roddy with N946RM and Robins and Morton Group. On a bitterly cold day, they stopped for fuel and discovered a failed RH engine alternator. Your quick response and expert opinions provided them with the peace of mind they needed to continue their journey to Bozeman, Montana, for a family vacation. We appreciate your dedication and willingness to support them by helping pull cowling off and on, cleaning up the cowling to prevent staining, and thoroughly evaluated the damage. Your friendly and efficient service truly makes a difference!”\r\nKeep It Exceptional: Jordec Cramer to Shawn Burke “Great work ethic.  Alwa"
+    },
+    {
+      "subject": "Fw: Friday Update",
+      "from": "Edduyn Pita <edduyn.pita@duncanaviation.com>",
+      "forwardedDate": "2026-01-19T21:59:53.000Z",
+      "originalFridayDate": "2026-01-02T07:00:00.000Z",
+      "extractedData": {
+        "customerQuotes": [],
+        "employeeRecognition": [
+          {
+            "name": "Jamie Wilson",
+            "context": "..., good knowledge, and he’s funny.” Stefan Andersson, N184BK “I would like to start with a strong thank you to Jamie Wilson, who was the Project Manager for the C check on SN105. Additionally, I’d l...",
+            "type": "thank_you"
+          },
+          {
+            "name": "Josh Droud",
+            "context": "..., Team Geist, Tyler Millsap, Frank Logsdon, Dan Gospodarski, and Ed Sabata found solutions. Special thanks to Josh Droud who handled the project with poise. After two years in Lincoln, the flight home...",
+            "type": "thank_you"
+          },
+          {
+            "name": "Duncan Aviation",
+            "context": "...y Mehl, Jessica Bengtsson, and Alicia Collins. All of them were very nice and professional with me. Thanks Duncan Aviation and see you again in 4 years on my 192 month.” Carlos Molck, PP-MLZ “I’m w...",
+            "type": "thank_you"
+          },
+          {
+            "name": "all for",
+            "context": "...?e=Qlserd>​​​ Deliver The Best: Brandon Day to Savannah McCarty, Drew Neuland, Ronald Stoutenburg “Thank you all for helping with cleanup around aircraft and wing walking for the big hangar dump.” D...",
+            "type": "thank_you"
+          },
+          {
+            "name": "so much",
+            "context": "... we have issues...and never complains! He is a rock star, and we appreciate him more than he knows. Thank you so much, Matt!” Deliver The Best: Jennifer Morrill to Erik Anderson, Trevor Bartlett, Jef...",
+            "type": "thank_you"
+          },
+          {
+            "name": "for your",
+            "context": "...ave worked on, have been crucial for maintaining quality and seeing the project through to the end. Thank you for your hard work and commitment!” Keep It Exceptional: Tom Willoughby to Megan Spain “G...",
+            "type": "thank_you"
+          },
+          {
+            "name": "for all",
+            "context": "...for payment. Nice work!” Make It Personal: Ali Conder to Cayden Bailey, Aisha Priego, Mae Angeles “Thank you for all your efforts with our NextGen events this year! Consistently hosting Lunch & Learn...",
+            "type": "thank_you"
+          },
+          {
+            "name": "again for",
+            "context": "...Achievement Bonus. In total, we paid out over $17.4M in bonus sharing for 2025! Congratulations and thanks again for everyone's hard work, dedication, and passion to Be The Difference! As a reminder,...",
+            "type": "thank_you"
+          },
+          {
+            "name": "Megan at",
+            "context": "... Thank you for your hard work and commitment!” Keep It Exceptional: Tom Willoughby to Megan Spain “Great job Megan at proactively addressing any needs that the customer could have on an invoice that ...",
+            "type": "thank_you"
+          },
+          {
+            "name": "Joe Stokey",
+            "context": "...Friday Update [cid:b97a0d9d-18c9-4c03-ba0f-f0df6cb55a37] Team Excellence & Customer Comments: “Joe Stokey is the best Project Manager you can have, with very quick response times, good knowledge,...",
+            "type": "praise"
+          },
+          {
+            "name": "you can",
+            "context": "...97a0d9d-18c9-4c03-ba0f-f0df6cb55a37] Team Excellence & Customer Comments: “Joe Stokey is the best Project Manager you can have, with very quick response times, good knowledge, and he’s funny.” Stefa...",
+            "type": "project_manager"
+          },
+          {
+            "name": "for the",
+            "context": "...an Andersson, N184BK “I would like to start with a strong thank you to Jamie Wilson, who was the Project Manager for the C check on SN105. Additionally, I’d like to thank the following key members ...",
+            "type": "project_manager"
+          }
+        ],
+        "metrics": {
+          "financial": [
+            {
+              "value": "$17",
+              "context": "...nal Achievement Bonus. In total, we paid out over $17.4M in bonus sharing for 2025! Congratulations ..."
+            }
+          ],
+          "hours": [
+            {
+              "value": "580,000",
+              "context": "...to close out 2025. In total they closed more than 580,000 hours of work in the 4th quarter compared ..."
+            },
+            {
+              "value": "423,000",
+              "context": "...,000 hours of work in the 4th quarter compared to 423,000 hours during the same time period a year a..."
+            },
+            {
+              "value": "580,000",
+              "context": "...hours during the same time period a year ago. The 580,000 hours closed represents one of our highest..."
+            }
+          ],
+          "percentages": [
+            {
+              "value": "96%",
+              "context": "... Backlog: 01/05 01/12 01/19 01/26 Lincoln 96% 97% 92% 89% Battle Creek 87% 96% 93% 9..."
+            },
+            {
+              "value": "97%",
+              "context": "...log: 01/05 01/12 01/19 01/26 Lincoln 96% 97% 92% 89% Battle Creek 87% 96% 93% 96% P..."
+            },
+            {
+              "value": "92%",
+              "context": "... 01/05 01/12 01/19 01/26 Lincoln 96% 97% 92% 89% Battle Creek 87% 96% 93% 96% Provo ..."
+            },
+            {
+              "value": "89%",
+              "context": ".../05 01/12 01/19 01/26 Lincoln 96% 97% 92% 89% Battle Creek 87% 96% 93% 96% Provo 102%..."
+            },
+            {
+              "value": "87%",
+              "context": "...01/26 Lincoln 96% 97% 92% 89% Battle Creek 87% 96% 93% 96% Provo 102% 100% 96% 85% T..."
+            },
+            {
+              "value": "96%",
+              "context": "... Lincoln 96% 97% 92% 89% Battle Creek 87% 96% 93% 96% Provo 102% 100% 96% 85% TOTAL ..."
+            },
+            {
+              "value": "93%",
+              "context": "...coln 96% 97% 92% 89% Battle Creek 87% 96% 93% 96% Provo 102% 100% 96% 85% TOTAL 94.6..."
+            },
+            {
+              "value": "96%",
+              "context": "... 96% 97% 92% 89% Battle Creek 87% 96% 93% 96% Provo 102% 100% 96% 85% TOTAL 94.6% 97..."
+            },
+            {
+              "value": "102%",
+              "context": "...2% 89% Battle Creek 87% 96% 93% 96% Provo 102% 100% 96% 85% TOTAL 94.6% 97.1% 92.9% ..."
+            },
+            {
+              "value": "100%",
+              "context": "...% Battle Creek 87% 96% 93% 96% Provo 102% 100% 96% 85% TOTAL 94.6% 97.1% 92.9% 90.3% ..."
+            },
+            {
+              "value": "96%",
+              "context": "...tle Creek 87% 96% 93% 96% Provo 102% 100% 96% 85% TOTAL 94.6% 97.1% 92.9% 90.3% Clos..."
+            },
+            {
+              "value": "85%",
+              "context": "...reek 87% 96% 93% 96% Provo 102% 100% 96% 85% TOTAL 94.6% 97.1% 92.9% 90.3% Closing C..."
+            },
+            {
+              "value": "94.6%",
+              "context": "...6% 93% 96% Provo 102% 100% 96% 85% TOTAL 94.6% 97.1% 92.9% 90.3% Closing Comments: Ha..."
+            },
+            {
+              "value": "97.1%",
+              "context": "... 96% Provo 102% 100% 96% 85% TOTAL 94.6% 97.1% 92.9% 90.3% Closing Comments: Happy New..."
+            },
+            {
+              "value": "92.9%",
+              "context": "...Provo 102% 100% 96% 85% TOTAL 94.6% 97.1% 92.9% 90.3% Closing Comments: Happy New Year!!..."
+            },
+            {
+              "value": "90.3%",
+              "context": "...102% 100% 96% 85% TOTAL 94.6% 97.1% 92.9% 90.3% Closing Comments: Happy New Year!!! Today..."
+            }
+          ],
+          "counts": [],
+          "dates": []
+        },
+        "satelliteMentions": [
+          {
+            "location": "Denver",
+            "count": 1,
+            "contexts": [
+              "...9f3-a492-2c9c7f50941a]​ EDDUYN PITA SATELLITE MANAGER - DENVER, CO. DIRECT: +1 303-649-1790 | CELL: +1 404.227.9766..."
+            ],
+            "isDenver": true
+          },
+          {
+            "location": "Austin",
+            "count": 1,
+            "contexts": [
+              "...to Dale Carlson, Shawn Donald, Amber Garrett, Troy Gillian, Austin McDonald, Dean Williams, Matt Wright “Thank you for a..."
+            ],
+            "isDenver": false
+          },
+          {
+            "location": "Atlanta",
+            "count": 1,
+            "contexts": [
+              "..., PP-MLZ “I’m with Corporate Aviation Group out of KFTY (Atlanta Satellite), and we have three Beechjet and four Hawk..."
+            ],
+            "isDenver": false
+          }
+        ],
+        "sections": {
+          "teamExcellence": "“Joe Stokey is the best Project Manager you can have, with very quick response times, good knowledge, and he’s funny.” Stefan Andersson, N184BK “I would like to start with a strong thank you to Jamie Wilson, who was the Project Manager for the C check on SN105. Additionally, I’d like to thank the following key members for their tireless efforts: Riley Lewis, Joe Michinski, Darren Blaser and Rob Loy, Aaron Westfall, Nick Dahlberg, Michael Nguyen, John Spevak, Shane Mack, and Chad Bodfield. The following teams were also pivotal to this project: Team Steadman, Team Schultz, Team Schwisow, Team Christensen, Team Miller, and Team Grant. Coordination on this began over a year ago with key projects being the CMS (Cabin Management System) upgrade and landing-gear overhaul. Updates were continual and landing gear was a point of concern while being worked off-site. Once necessary parts were identified, sourcing and re-assembly was pushed 30 days to the right. Duncan Aviation did an outstanding job upon receipt of the gear to complete this project and establish a new date for delivery which was met. The test flight was uneventful and was an indication of the professionalism and dedication to quality that Duncan Aviation always delivers. Thank you again!” Brian Nelsen, N424U I was pleased with both the quality of work and the project coordination. We will definitely be returning to Duncan Aviation for future maintenance. David Arbon, C-FSDS “4101 was a unique project with many challenges from tooling to parts. Matt Gudgel, Jarrod McNamee, Team Schulz, Dan Clough, Foster Reckling, Chris Thoreson, Andy Carter, Team Geist, Tyler Millsap, Frank Logsdon, Dan Gospodarski, and Ed Sabata found solutions. Special thanks to Josh Droud who handled the project with poise. After two years in Lincoln, the flight home was just in time for Christmas and squawk-free! Paul Lewandowski & Project 4101 “Good Morning, I had a pleasure to meet and work during my 141 days at Duncan Aviation in Battle ",
+          "customerComments": "“Joe Stokey is the best Project Manager you can have, with very quick response times, good knowledge, and he’s funny.” Stefan Andersson, N184BK “I would like to start with a strong thank you to Jamie Wilson, who was the Project Manager for the C check on SN105. Additionally, I’d like to thank the following key members for their tireless efforts: Riley Lewis, Joe Michinski, Darren Blaser and Rob Loy, Aaron Westfall, Nick Dahlberg, Michael Nguyen, John Spevak, Shane Mack, and Chad Bodfield. The following teams were also pivotal to this project: Team Steadman, Team Schultz, Team Schwisow, Team Christensen, Team Miller, and Team Grant. Coordination on this began over a year ago with key projects being the CMS (Cabin Management System) upgrade and landing-gear overhaul. Updates were continual and landing gear was a point of concern while being worked off-site. Once necessary parts were identified, sourcing and re-assembly was pushed 30 days to the right. Duncan Aviation did an outstanding job upon receipt of the gear to complete this project and establish a new date for delivery which was met. The test flight was uneventful and was an indication of the professionalism and dedication to quality that Duncan Aviation always delivers. Thank you again!” Brian Nelsen, N424U I was pleased with both the quality of work and the project coordination. We will definitely be returning to Duncan Aviation for future maintenance. David Arbon, C-FSDS “4101 was a unique project with many challenges from tooling to parts. Matt Gudgel, Jarrod McNamee, Team Schulz, Dan Clough, Foster Reckling, Chris Thoreson, Andy Carter, Team Geist, Tyler Millsap, Frank Logsdon, Dan Gospodarski, and Ed Sabata found solutions. Special thanks to Josh Droud who handled the project with poise. After two years in Lincoln, the flight home was just in time for Christmas and squawk-free! Paul Lewandowski & Project 4101 “Good Morning, I had a pleasure to meet and work during my 141 days at Duncan Aviation in Battle ",
+          "satellites": "+1 303-649-1790 | CELL: +1 404.227.9766 www.DuncanAviation.aero<https://www.duncanaviation.aero/> ________________________________ From: Mike Minchow <mike.minchow@duncanaviation.com> Sent: Friday, January 2, 2026 1:59 PM To: Mike Minchow <mike.minchow@duncanaviation.com> Subject: Friday Update [cid:b97a0d9d-18c9-4c03-ba0f-f0df6cb55a37]"
+        },
+        "denverRelevant": {
+          "isDenverRelevant": true,
+          "denverMentions": 1,
+          "relevantQuotes": [],
+          "relevantEmployees": []
+        },
+        "summary": {
+          "totalQuotes": 0,
+          "positiveQuotes": 0,
+          "negativeQuotes": 0,
+          "employeesRecognized": 12,
+          "hasFinancialData": true,
+          "hasHoursData": true,
+          "hasPercentages": true
+        }
+      },
+      "fullBodyLength": 8373,
+      "bodyPreview": "\r\n\r\n\r\n[cid:773074b0-d0cb-49f3-a492-2c9c7f50941a]​\r\n\r\nEDDUYN PITA\r\nSATELLITE MANAGER - DENVER, CO.\r\nDIRECT: +1 303-649-1790 | CELL: +1 404.227.9766\r\nwww.DuncanAviation.aero<https://www.duncanaviation.aero/>\r\n\r\n\r\n________________________________\r\nFrom: Mike Minchow <mike.minchow@duncanaviation.com>\r\nSent: Friday, January 2, 2026 1:59 PM\r\nTo: Mike Minchow <mike.minchow@duncanaviation.com>\r\nSubject: Friday Update\r\n\r\n[cid:b97a0d9d-18c9-4c03-ba0f-f0df6cb55a37]\r\nTeam Excellence & Customer Comments:\r\n“Joe Stokey is the best Project Manager you can have, with very quick response times, good knowledge, and he’s funny.” Stefan Andersson, N184BK\r\n\r\n“I would like to start with a strong thank you to Jamie Wilson, who was the Project Manager for the C check on SN105. Additionally, I’d like to thank the following key members for their tireless efforts: Riley Lewis, Joe Michinski, Darren Blaser and Rob Loy, Aaron Westfall, Nick Dahlberg, Michael Nguyen, John Spevak, Shane Mack, and Chad Bodfield. The following teams were also pivotal to this project: Team Steadman, Team Schultz, Team Schwisow, Team Christensen, Team Miller, and Team Grant. Coordination on this began over a year ago with key projects being the CMS (Cabin Management System) upgrade and landing-gear overhaul. Updates were continual and landing gear was a point of concern while being worked off-site. Once necessary parts were identified, sourcing and re-assembly was pushed 30 days to the right. Duncan Aviation did an outstanding job upon receipt of the gear to complete this project and establish a new date for delivery which was met. The test flight was uneventful and was an indication of the professionalism and dedication to quality that Duncan Aviation always delivers. Thank you again!” Brian Nelsen, N424U\r\n\r\nI was pleased with both the quality of work and the project coordination. We will definitely be returning to Duncan Aviation for future maintenance. David Arbon, C-FSDS\r\n\r\n“4101 was a unique project with many challenges from tooling to parts. Matt Gudgel, Jarrod McNamee, Team Schulz, Dan Clough, Foster Reckling, Chris Thoreson, Andy Carter, Team Geist, Tyler Millsap, Frank Logsdon, Dan Gospodarski, and Ed Sabata found solutions. Special thanks to Josh Droud who handled the project with poise. After two years in Lincoln, the flight home was just in time for Christmas and squawk-free!  Paul Lewandowski & Project 4101\r\n\r\n“Good Morning, I had a pleasure to meet and work during my 141 days at Duncan Aviation in Battle Creek: Branden Hunt, Marco Marzigliano, Nick Greene, Steven Tedder, Troy Kirtley, and others. Also, Andy Mehl, Jessica Bengtsson, and Alicia Collins. All of them were very nice and professional with me. Thanks Duncan Aviation and see you again in 4 years on my 192 month.” Carlos Molck, PP-MLZ\r\n\r\n“I’m with Corporate Aviation Group out of KFTY (Atlanta Satellite), and we have three Beechjet and four Hawkers. I love the team that’s based here on the field. Any time we have an issue or a problem pop-up, your team comes together to resolve the problem or issue. Their names are Edwin Nunez, Larry Coffie, Larry Barboza, Ramon Cordova, Saul Naranjo, Victor Naranjo, Lucy Ruiz, Edwin Carrillo, and Argenis Barrios. They are considered family here at Corporate Aviation Group.” Daniel Long, N880HP\r\n\r\n\r\nBe The Difference: Team Members\r\nTotal Weekly Submissions: 15\r\n*View all submissions below or login into the Difference Makers app<https://duncanaviation.cooleaf.com/> today!\r\n​​​Be The Difference Recognitions (1.2).pdf<https://duncanaviation-my.sharepoint.com/:b:/p/alexa_french/IQCg_Xoq62HwR6lAgl1fSCFlAS_n46NpNfopCQwCWCiOuxI?e=Qlserd>​​​\r\nDeliver The Best: Brandon Day to Savannah McCarty, Drew Neuland, Ronald Stoutenburg “Thank you all for helping with cleanup around aircraft and wing walking for the big hangar dump.”\r\nDeliver The Best: Pam Orr to Matt Heller “The Travel Department would be lost without the help of Matt! He's always there to do updates on our travel software, or help us figure out what's going on when we have issues...and never complains! He is a rock star, and we appreciate him more than he knows. Thank you so much, Matt!”\r\nDeliver The Best: Jennifer Morrill to Erik Anderson, Trevor Bartlett, Jeff Regier, Tobyn Wattenbarger “Thank you, team, for your exceptional customer service during a critical moment for our long-time customers, Paul Roddy with N946RM and Robins and Morton Group. On a bitterly cold day, they stopped for fuel and discovered a failed RH engine alternator. Your quick response and expert opinions provided them with the peace of mind they needed to continue their journey to Bozeman, Montana, for a family vacation. We appreciate your dedication and willingness to support them by helping pull cowling off and on, cleaning up the cowling to prevent staining, and thoroughly evaluated the damage. Your friendly and efficient service truly makes a difference!”\r\nKeep It Exceptional: Jordec Cramer to Shawn Burke “Great work ethic.  Alwa"
+    },
+    {
+      "subject": "Fw: Friday Update",
+      "from": "Edduyn Pita <edduyn.pita@duncanaviation.com>",
+      "forwardedDate": "2026-01-19T19:08:48.000Z",
+      "originalFridayDate": "2026-01-16T07:00:00.000Z",
+      "extractedData": {
+        "customerQuotes": [
+          {
+            "quote": "I am most impressed with the quality of support received as a second time user of your services and the service support provided by the key personnel including Branden Hunt, Dale Hawkins, Mike Morgan, and then the customer service ladies, Tracy Albert and Leanne Jones, Michelle Leskow, Tina Schrader and finally Jill Westra. This support is what brings us back. Thank you.",
+            "customerName": "Brian Rhodenizer",
+            "tailNumber": "N98YC",
+            "sentiment": "positive"
+          }
+        ],
+        "employeeRecognition": [
+          {
+            "name": "for the",
+            "context": "... “Very satisfied. Work was done quickly and professionally.” - Craig Dow, N377CH “I wanted to say thanks for the awesome last-minute support for our G550 N305AH today. It was nice to meet Monica Ga...",
+            "type": "thank_you"
+          },
+          {
+            "name": "again to",
+            "context": "... to Duncan Aviation in the future for additional scheduled or AOG support.” - Tom Schulke, N305AH “Thank you again to Duncan RRT SDL. They are a great resource to have for our Jet Linx SDL Base.” - B...",
+            "type": "thank_you"
+          },
+          {
+            "name": "for all",
+            "context": "...to work some squawks yet that night. Mark, I do notice your efforts and they do not go unnoticed. Thank you for all that you do, all the time. You've always done a great job as a lead on our projec...",
+            "type": "thank_you"
+          },
+          {
+            "name": "Helen and",
+            "context": "...not name).” Keep It Exceptional: Mark Kahle to Helen Manumbu and Bruce Snell “I want to give a big thank you to Helen and Bruce for going above and beyond to support N7JD. We found ourselves in a bin...",
+            "type": "thank_you"
+          },
+          {
+            "name": "with communicating",
+            "context": "...l with the quality of the workmanship or any of the employees that I dealt with; Tony Chipman did a great job with communicating and keeping me updated. I am sure the cabinets look better than they di...",
+            "type": "thank_you"
+          },
+          {
+            "name": "Mark Medina",
+            "context": "...u8?e=epWr35>​​​​ Deliver The Best: Janet Beazley to Mark Medina “I want to take some time to truly recognize Mark Medina for all of his efforts and that they do not go un-noticed. Mark just led a Le...",
+            "type": "thank_you"
+          },
+          {
+            "name": "all of",
+            "context": "... Gregory, Andrew Leskow, Scott Shimel, Red O'Leary, Rob Kemp, David Spoor, Ed Zarn “I would like to recognize all of those who submitted an idea last year that was ultimately completed. I am also very...",
+            "type": "thank_you"
+          },
+          {
+            "name": "James Peterson",
+            "context": "...a effort, outstanding job!” Make It Personal: Troy Nail to James Peterson I would like to formally recognize James Peterson for his outstanding commitment and dedication in supporting the successful ...",
+            "type": "thank_you"
+          },
+          {
+            "name": "Tony Chipman",
+            "context": "...ll. No issues at all with the quality of the workmanship or any of the employees that I dealt with; Tony Chipman did a great job with communicating and keeping me updated. I am sure the cabinets look ...",
+            "type": "praise"
+          },
+          {
+            "name": "in aviation",
+            "context": "...can Aviation performed flawlessly! The RTS documentation is excellent. Ryan Oestmann is the premier project manager in aviation. The technical team was knowledgeable, professional, and communicated ex...",
+            "type": "project_manager"
+          },
+          {
+            "name": "during our",
+            "context": "...ional” Make It Personal: Brian Rhodenizer (Lortie Aviation/N98YC) to Brandon Hunt “Brandon was our Project Manager during our last visit. I am extremely impressed with his professional attitude, and ...",
+            "type": "project_manager"
+          }
+        ],
+        "metrics": {
+          "financial": [],
+          "hours": [
+            {
+              "value": "4800",
+              "context": "...ey do not go un-noticed. Mark just led a Lear 45 4800 hour inspection and just a fantastic job. He..."
+            }
+          ],
+          "percentages": [
+            {
+              "value": "97%",
+              "context": "... Backlog: 01/19 01/26 02/02 02/09 Lincoln 97% 98% 98% 94% Battle Creek 95% 101% 102% ..."
+            },
+            {
+              "value": "98%",
+              "context": "...log: 01/19 01/26 02/02 02/09 Lincoln 97% 98% 98% 94% Battle Creek 95% 101% 102% 96% ..."
+            },
+            {
+              "value": "98%",
+              "context": "... 01/19 01/26 02/02 02/09 Lincoln 97% 98% 98% 94% Battle Creek 95% 101% 102% 96% Prov..."
+            },
+            {
+              "value": "94%",
+              "context": ".../19 01/26 02/02 02/09 Lincoln 97% 98% 98% 94% Battle Creek 95% 101% 102% 96% Provo 10..."
+            },
+            {
+              "value": "95%",
+              "context": "...02/09 Lincoln 97% 98% 98% 94% Battle Creek 95% 101% 102% 96% Provo 103% 93% 93% 86% ..."
+            },
+            {
+              "value": "101%",
+              "context": "... Lincoln 97% 98% 98% 94% Battle Creek 95% 101% 102% 96% Provo 103% 93% 93% 86% TOTAL..."
+            },
+            {
+              "value": "102%",
+              "context": "...oln 97% 98% 98% 94% Battle Creek 95% 101% 102% 96% Provo 103% 93% 93% 86% TOTAL 97.6..."
+            },
+            {
+              "value": "96%",
+              "context": "...7% 98% 98% 94% Battle Creek 95% 101% 102% 96% Provo 103% 93% 93% 86% TOTAL 97.6% 97...."
+            },
+            {
+              "value": "103%",
+              "context": "... 94% Battle Creek 95% 101% 102% 96% Provo 103% 93% 93% 86% TOTAL 97.6% 97.7% 98.0% 9..."
+            },
+            {
+              "value": "93%",
+              "context": "... Battle Creek 95% 101% 102% 96% Provo 103% 93% 93% 86% TOTAL 97.6% 97.7% 98.0% 93.2% ..."
+            },
+            {
+              "value": "93%",
+              "context": "...le Creek 95% 101% 102% 96% Provo 103% 93% 93% 86% TOTAL 97.6% 97.7% 98.0% 93.2% Clos..."
+            },
+            {
+              "value": "86%",
+              "context": "...eek 95% 101% 102% 96% Provo 103% 93% 93% 86% TOTAL 97.6% 97.7% 98.0% 93.2% Closing C..."
+            },
+            {
+              "value": "97.6%",
+              "context": "...1% 102% 96% Provo 103% 93% 93% 86% TOTAL 97.6% 97.7% 98.0% 93.2% Closing Comments: Te..."
+            },
+            {
+              "value": "97.7%",
+              "context": "...% 96% Provo 103% 93% 93% 86% TOTAL 97.6% 97.7% 98.0% 93.2% Closing Comments: Team Memb..."
+            },
+            {
+              "value": "98.0%",
+              "context": "... Provo 103% 93% 93% 86% TOTAL 97.6% 97.7% 98.0% 93.2% Closing Comments: Team Member Choi..."
+            },
+            {
+              "value": "93.2%",
+              "context": "... 103% 93% 93% 86% TOTAL 97.6% 97.7% 98.0% 93.2% Closing Comments: Team Member Choice Prog..."
+            },
+            {
+              "value": "24%",
+              "context": "...llenges, resulting in net income of approximately 24% of budget. Although December did not meet budg..."
+            }
+          ],
+          "counts": [],
+          "dates": []
+        },
+        "satelliteMentions": [
+          {
+            "location": "Denver",
+            "count": 1,
+            "contexts": [
+              "...b8d-955f-968c810bc88d]​ EDDUYN PITA SATELLITE MANAGER - DENVER, CO. DIRECT: +1 303-649-1790 | CELL: +1 404.227.9766..."
+            ],
+            "isDenver": true
+          }
+        ],
+        "sections": {
+          "teamExcellence": "“As always, we appreciated the quality of support your team provides!” - Sam Vega, N112GD “Everything went well just before the holidays! Thank you!” - Louis Ferrantino, N2766K “Always look forward to working with Tony Chipman and the team.” - William Anderson, C-FSDS “The cabinet project went very well. No issues at all with the quality of the workmanship or any of the employees that I dealt with; Tony Chipman did a great job with communicating and keeping me updated. I am sure the cabinets look better than they did new. Overall, very happy with the cabinet refinishing.” - Tony Pfaff, N223PW “Duncan Aviation has become our most reliable vendor for our engine inspections. I really appreciate the entire team and their desire to make sure the customer is always satisfied.” - Wade Mellick, N454N “From start to finish, Duncan Aviation performed flawlessly! The RTS documentation is excellent. Ryan Oestmann is the premier project manager in aviation. The technical team was knowledgeable, professional, and communicated extremely well.” - Jason Bell, N981FH “Very satisfied. Work was done quickly and professionally.” - Craig Dow, N377CH “I wanted to say thanks for the awesome last-minute support for our G550 N305AH today. It was nice to meet Monica Gaviria and Carlos Rivero Aguilar today; they are a great team. Their knowledge and dedication to getting the job done quickly was appreciated. I'll be reaching out to Duncan Aviation in the future for additional scheduled or AOG support.” - Tom Schulke, N305AH “Thank you again to Duncan RRT SDL. They are a great resource to have for our Jet Linx SDL Base.” - Brian Weathers, N848JS \"I am most impressed with the quality of support received as a second time user of your services and the service support provided by the key personnel including Branden Hunt, Dale Hawkins, Mike Morgan, and then the customer service ladies, Tracy Albert and Leanne Jones, Michelle Leskow, Tina Schrader and finally Jill Westra. This support is what brings ",
+          "customerComments": "“As always, we appreciated the quality of support your team provides!” - Sam Vega, N112GD “Everything went well just before the holidays! Thank you!” - Louis Ferrantino, N2766K “Always look forward to working with Tony Chipman and the team.” - William Anderson, C-FSDS “The cabinet project went very well. No issues at all with the quality of the workmanship or any of the employees that I dealt with; Tony Chipman did a great job with communicating and keeping me updated. I am sure the cabinets look better than they did new. Overall, very happy with the cabinet refinishing.” - Tony Pfaff, N223PW “Duncan Aviation has become our most reliable vendor for our engine inspections. I really appreciate the entire team and their desire to make sure the customer is always satisfied.” - Wade Mellick, N454N “From start to finish, Duncan Aviation performed flawlessly! The RTS documentation is excellent. Ryan Oestmann is the premier project manager in aviation. The technical team was knowledgeable, professional, and communicated extremely well.” - Jason Bell, N981FH “Very satisfied. Work was done quickly and professionally.” - Craig Dow, N377CH “I wanted to say thanks for the awesome last-minute support for our G550 N305AH today. It was nice to meet Monica Gaviria and Carlos Rivero Aguilar today; they are a great team. Their knowledge and dedication to getting the job done quickly was appreciated. I'll be reaching out to Duncan Aviation in the future for additional scheduled or AOG support.” - Tom Schulke, N305AH “Thank you again to Duncan RRT SDL. They are a great resource to have for our Jet Linx SDL Base.” - Brian Weathers, N848JS \"I am most impressed with the quality of support received as a second time user of your services and the service support provided by the key personnel including Branden Hunt, Dale Hawkins, Mike Morgan, and then the customer service ladies, Tracy Albert and Leanne Jones, Michelle Leskow, Tina Schrader and finally Jill Westra. This support is what brings ",
+          "safety": "*",
+          "satellites": "+1 303-649-1790 | CELL: +1 404.227.9766 www.DuncanAviation.aero<https://www.duncanaviation.aero/> ________________________________ From: Mike Minchow <mike.minchow@duncanaviation.com> Sent: Friday, January 16, 2026 12:17 PM To: Mike Minchow <mike.minchow@duncanaviation.com> Subject: Friday Update [cid:44b56968-0a41-416a-91b6-7dfcb34d9652]"
+        },
+        "denverRelevant": {
+          "isDenverRelevant": true,
+          "denverMentions": 1,
+          "relevantQuotes": [],
+          "relevantEmployees": []
+        },
+        "summary": {
+          "totalQuotes": 1,
+          "positiveQuotes": 1,
+          "negativeQuotes": 0,
+          "employeesRecognized": 11,
+          "hasFinancialData": false,
+          "hasHoursData": true,
+          "hasPercentages": true
+        }
+      },
+      "fullBodyLength": 14102,
+      "bodyPreview": "\r\n\r\n\r\n[cid:6661378e-0dba-4b8d-955f-968c810bc88d]​\r\n\r\nEDDUYN PITA\r\nSATELLITE MANAGER - DENVER, CO.\r\nDIRECT: +1 303-649-1790 | CELL: +1 404.227.9766\r\nwww.DuncanAviation.aero<https://www.duncanaviation.aero/>\r\n\r\n\r\n________________________________\r\nFrom: Mike Minchow <mike.minchow@duncanaviation.com>\r\nSent: Friday, January 16, 2026 12:17 PM\r\nTo: Mike Minchow <mike.minchow@duncanaviation.com>\r\nSubject: Friday Update\r\n\r\n[cid:44b56968-0a41-416a-91b6-7dfcb34d9652]\r\nTeam Excellence & Customer Comments:\r\n“As always, we appreciated the quality of support your team provides!” - Sam Vega, N112GD\r\n\r\n“Everything went well just before the holidays! Thank you!” - Louis Ferrantino, N2766K\r\n\r\n“Always look forward to working with Tony Chipman and the team.” - William Anderson, C-FSDS\r\n“The cabinet project went very well. No issues at all with the quality of the workmanship or any of the employees that I dealt with; Tony Chipman did a great job with communicating and keeping me updated. I am sure the cabinets look better than they did new. Overall, very happy with the cabinet refinishing.” - Tony Pfaff, N223PW\r\n“Duncan Aviation has become our most reliable vendor for our engine inspections. I really appreciate the entire team and their desire to make sure the customer is always satisfied.” -  Wade Mellick, N454N\r\n“From start to finish, Duncan Aviation performed flawlessly! The RTS documentation is excellent. Ryan Oestmann is the premier project manager in aviation. The technical team was knowledgeable, professional, and communicated extremely well.” - Jason Bell, N981FH \r\n\r\n“Very satisfied. Work was done quickly and professionally.” - Craig Dow, N377CH \r\n“I wanted to say thanks for the awesome last-minute support for our G550 N305AH today.  It was nice to meet Monica Gaviria and Carlos Rivero Aguilar today; they are a great team.  Their knowledge and dedication to getting the job done quickly was appreciated. I'll be reaching out to Duncan Aviation in the future for additional scheduled or AOG support.” - Tom Schulke, N305AH\r\n“Thank you again to Duncan RRT SDL. They are a great resource to have for our Jet Linx SDL Base.” - Brian Weathers, N848JS\r\n\r\n\"I am most impressed with the quality of support received as a second time user of your services and the service support provided by the key personnel including Branden Hunt, Dale Hawkins, Mike Morgan, and then the customer service ladies, Tracy Albert and Leanne Jones, Michelle Leskow, Tina Schrader and finally Jill Westra. This support is what brings us back. Thank you.\" - Brian Rhodenizer, N98YC\r\n\r\n“Chris Murray and his crew did an awesome job again this year. The facility is super accommodating and made the whole maintenance visit very comfortable. Chris Murray and Mike Lopez, his team lead, kept me updated the entire time and really made the process smooth. Overall, just a great experience and solid service from start to finish.” - John Most, N583TC\r\n\r\n Be The Difference: Team Members\r\nTotal Weekly Submissions: 24\r\n*View all submissions below or login into the Difference Makers app<https://duncanaviation.cooleaf.com/> today!\r\n​​​​[https://res.public.onecdn.static.microsoft/assets/fluentui-resources/1.1.0/app-min/assets/item-types/24_1.5x/pdf.png]Be The Difference Recognitions (1.16).pdf<https://duncanaviation-my.sharepoint.com/:b:/p/alexa_french/IQBuldTLVxSxS5JHQ8EjC14RAaYVsrWX6c5bBPj3vmiKfu8?e=epWr35>​​​​\r\nDeliver The Best: Janet Beazley to Mark Medina “I want to take some time to truly recognize Mark Medina for all of his efforts and that they do not go un-noticed.  Mark just led a Lear 45 4800 hour inspection and just a fantastic job.  He was extremely busy during this project with other projects as well, plus this was a fairly large event.  At the end of the project, he stayed late on a Friday to wait for customers to come back from a test flight and then stayed even later to work some squawks yet that night.  Mark, I do notice your efforts and they do not go unnoticed.  Thank you for all that you do, all the time.  You've always done a great job as a lead on our projects.  Way to go!”\r\nDeliver The Best: Kaela Paseka to Grace Farrall and Brian Ryba “Thank you, Grace and Brian!  I appreciate your willingness to help and attention to detail in switching out the Donald Duncan Conference Room graphics! Good work!”\r\nDeliver The Best: Dan Szymanski to Chris Peet, Angel Piela, Joe Stubelt, Kody Wrozek, Dave Mills, Brandon Gregory, Andrew Leskow, Scott Shimel, Red O'Leary, Rob Kemp, David Spoor, Ed Zarn “I would like to recognize all of those who submitted an idea last year that was ultimately completed. I am also very grateful for my fellow members of the BTL Airframe CI team that worked on these ideas, I could not lead the team without them. They are constantly working to improve the environment of the entire BTL Airframe Department. I also greatly appreciate everyone else who submitted an idea, even if they did not ultimately work out at this time. The fact that they took a step"
+    },
+    {
+      "subject": "Fw: Friday Update",
+      "from": "Edduyn Pita <edduyn.pita@duncanaviation.com>",
+      "forwardedDate": "2026-01-19T21:59:43.000Z",
+      "originalFridayDate": "2026-01-16T07:00:00.000Z",
+      "extractedData": {
+        "customerQuotes": [
+          {
+            "quote": "I am most impressed with the quality of support received as a second time user of your services and the service support provided by the key personnel including Branden Hunt, Dale Hawkins, Mike Morgan, and then the customer service ladies, Tracy Albert and Leanne Jones, Michelle Leskow, Tina Schrader and finally Jill Westra. This support is what brings us back. Thank you.",
+            "customerName": "Brian Rhodenizer",
+            "tailNumber": "N98YC",
+            "sentiment": "positive"
+          }
+        ],
+        "employeeRecognition": [
+          {
+            "name": "for the",
+            "context": "... “Very satisfied. Work was done quickly and professionally.” - Craig Dow, N377CH “I wanted to say thanks for the awesome last-minute support for our G550 N305AH today. It was nice to meet Monica Ga...",
+            "type": "thank_you"
+          },
+          {
+            "name": "again to",
+            "context": "... to Duncan Aviation in the future for additional scheduled or AOG support.” - Tom Schulke, N305AH “Thank you again to Duncan RRT SDL. They are a great resource to have for our Jet Linx SDL Base.” - B...",
+            "type": "thank_you"
+          },
+          {
+            "name": "for all",
+            "context": "...to work some squawks yet that night. Mark, I do notice your efforts and they do not go unnoticed. Thank you for all that you do, all the time. You've always done a great job as a lead on our projec...",
+            "type": "thank_you"
+          },
+          {
+            "name": "Helen and",
+            "context": "...not name).” Keep It Exceptional: Mark Kahle to Helen Manumbu and Bruce Snell “I want to give a big thank you to Helen and Bruce for going above and beyond to support N7JD. We found ourselves in a bin...",
+            "type": "thank_you"
+          },
+          {
+            "name": "with communicating",
+            "context": "...l with the quality of the workmanship or any of the employees that I dealt with; Tony Chipman did a great job with communicating and keeping me updated. I am sure the cabinets look better than they di...",
+            "type": "thank_you"
+          },
+          {
+            "name": "Mark Medina",
+            "context": "...u8?e=epWr35>​​​​ Deliver The Best: Janet Beazley to Mark Medina “I want to take some time to truly recognize Mark Medina for all of his efforts and that they do not go un-noticed. Mark just led a Le...",
+            "type": "thank_you"
+          },
+          {
+            "name": "all of",
+            "context": "... Gregory, Andrew Leskow, Scott Shimel, Red O'Leary, Rob Kemp, David Spoor, Ed Zarn “I would like to recognize all of those who submitted an idea last year that was ultimately completed. I am also very...",
+            "type": "thank_you"
+          },
+          {
+            "name": "James Peterson",
+            "context": "...a effort, outstanding job!” Make It Personal: Troy Nail to James Peterson I would like to formally recognize James Peterson for his outstanding commitment and dedication in supporting the successful ...",
+            "type": "thank_you"
+          },
+          {
+            "name": "Tony Chipman",
+            "context": "...ll. No issues at all with the quality of the workmanship or any of the employees that I dealt with; Tony Chipman did a great job with communicating and keeping me updated. I am sure the cabinets look ...",
+            "type": "praise"
+          },
+          {
+            "name": "in aviation",
+            "context": "...can Aviation performed flawlessly! The RTS documentation is excellent. Ryan Oestmann is the premier project manager in aviation. The technical team was knowledgeable, professional, and communicated ex...",
+            "type": "project_manager"
+          },
+          {
+            "name": "during our",
+            "context": "...ional” Make It Personal: Brian Rhodenizer (Lortie Aviation/N98YC) to Brandon Hunt “Brandon was our Project Manager during our last visit. I am extremely impressed with his professional attitude, and ...",
+            "type": "project_manager"
+          }
+        ],
+        "metrics": {
+          "financial": [],
+          "hours": [
+            {
+              "value": "4800",
+              "context": "...ey do not go un-noticed. Mark just led a Lear 45 4800 hour inspection and just a fantastic job. He..."
+            }
+          ],
+          "percentages": [
+            {
+              "value": "97%",
+              "context": "... Backlog: 01/19 01/26 02/02 02/09 Lincoln 97% 98% 98% 94% Battle Creek 95% 101% 102% ..."
+            },
+            {
+              "value": "98%",
+              "context": "...log: 01/19 01/26 02/02 02/09 Lincoln 97% 98% 98% 94% Battle Creek 95% 101% 102% 96% ..."
+            },
+            {
+              "value": "98%",
+              "context": "... 01/19 01/26 02/02 02/09 Lincoln 97% 98% 98% 94% Battle Creek 95% 101% 102% 96% Prov..."
+            },
+            {
+              "value": "94%",
+              "context": ".../19 01/26 02/02 02/09 Lincoln 97% 98% 98% 94% Battle Creek 95% 101% 102% 96% Provo 10..."
+            },
+            {
+              "value": "95%",
+              "context": "...02/09 Lincoln 97% 98% 98% 94% Battle Creek 95% 101% 102% 96% Provo 103% 93% 93% 86% ..."
+            },
+            {
+              "value": "101%",
+              "context": "... Lincoln 97% 98% 98% 94% Battle Creek 95% 101% 102% 96% Provo 103% 93% 93% 86% TOTAL..."
+            },
+            {
+              "value": "102%",
+              "context": "...oln 97% 98% 98% 94% Battle Creek 95% 101% 102% 96% Provo 103% 93% 93% 86% TOTAL 97.6..."
+            },
+            {
+              "value": "96%",
+              "context": "...7% 98% 98% 94% Battle Creek 95% 101% 102% 96% Provo 103% 93% 93% 86% TOTAL 97.6% 97...."
+            },
+            {
+              "value": "103%",
+              "context": "... 94% Battle Creek 95% 101% 102% 96% Provo 103% 93% 93% 86% TOTAL 97.6% 97.7% 98.0% 9..."
+            },
+            {
+              "value": "93%",
+              "context": "... Battle Creek 95% 101% 102% 96% Provo 103% 93% 93% 86% TOTAL 97.6% 97.7% 98.0% 93.2% ..."
+            },
+            {
+              "value": "93%",
+              "context": "...le Creek 95% 101% 102% 96% Provo 103% 93% 93% 86% TOTAL 97.6% 97.7% 98.0% 93.2% Clos..."
+            },
+            {
+              "value": "86%",
+              "context": "...eek 95% 101% 102% 96% Provo 103% 93% 93% 86% TOTAL 97.6% 97.7% 98.0% 93.2% Closing C..."
+            },
+            {
+              "value": "97.6%",
+              "context": "...1% 102% 96% Provo 103% 93% 93% 86% TOTAL 97.6% 97.7% 98.0% 93.2% Closing Comments: Te..."
+            },
+            {
+              "value": "97.7%",
+              "context": "...% 96% Provo 103% 93% 93% 86% TOTAL 97.6% 97.7% 98.0% 93.2% Closing Comments: Team Memb..."
+            },
+            {
+              "value": "98.0%",
+              "context": "... Provo 103% 93% 93% 86% TOTAL 97.6% 97.7% 98.0% 93.2% Closing Comments: Team Member Choi..."
+            },
+            {
+              "value": "93.2%",
+              "context": "... 103% 93% 93% 86% TOTAL 97.6% 97.7% 98.0% 93.2% Closing Comments: Team Member Choice Prog..."
+            },
+            {
+              "value": "24%",
+              "context": "...llenges, resulting in net income of approximately 24% of budget. Although December did not meet budg..."
+            }
+          ],
+          "counts": [],
+          "dates": []
+        },
+        "satelliteMentions": [
+          {
+            "location": "Denver",
+            "count": 1,
+            "contexts": [
+              "...788-9125-7a2936a2155c]​ EDDUYN PITA SATELLITE MANAGER - DENVER, CO. DIRECT: +1 303-649-1790 | CELL: +1 404.227.9766..."
+            ],
+            "isDenver": true
+          }
+        ],
+        "sections": {
+          "teamExcellence": "“As always, we appreciated the quality of support your team provides!” - Sam Vega, N112GD “Everything went well just before the holidays! Thank you!” - Louis Ferrantino, N2766K “Always look forward to working with Tony Chipman and the team.” - William Anderson, C-FSDS “The cabinet project went very well. No issues at all with the quality of the workmanship or any of the employees that I dealt with; Tony Chipman did a great job with communicating and keeping me updated. I am sure the cabinets look better than they did new. Overall, very happy with the cabinet refinishing.” - Tony Pfaff, N223PW “Duncan Aviation has become our most reliable vendor for our engine inspections. I really appreciate the entire team and their desire to make sure the customer is always satisfied.” - Wade Mellick, N454N “From start to finish, Duncan Aviation performed flawlessly! The RTS documentation is excellent. Ryan Oestmann is the premier project manager in aviation. The technical team was knowledgeable, professional, and communicated extremely well.” - Jason Bell, N981FH “Very satisfied. Work was done quickly and professionally.” - Craig Dow, N377CH “I wanted to say thanks for the awesome last-minute support for our G550 N305AH today. It was nice to meet Monica Gaviria and Carlos Rivero Aguilar today; they are a great team. Their knowledge and dedication to getting the job done quickly was appreciated. I'll be reaching out to Duncan Aviation in the future for additional scheduled or AOG support.” - Tom Schulke, N305AH “Thank you again to Duncan RRT SDL. They are a great resource to have for our Jet Linx SDL Base.” - Brian Weathers, N848JS \"I am most impressed with the quality of support received as a second time user of your services and the service support provided by the key personnel including Branden Hunt, Dale Hawkins, Mike Morgan, and then the customer service ladies, Tracy Albert and Leanne Jones, Michelle Leskow, Tina Schrader and finally Jill Westra. This support is what brings ",
+          "customerComments": "“As always, we appreciated the quality of support your team provides!” - Sam Vega, N112GD “Everything went well just before the holidays! Thank you!” - Louis Ferrantino, N2766K “Always look forward to working with Tony Chipman and the team.” - William Anderson, C-FSDS “The cabinet project went very well. No issues at all with the quality of the workmanship or any of the employees that I dealt with; Tony Chipman did a great job with communicating and keeping me updated. I am sure the cabinets look better than they did new. Overall, very happy with the cabinet refinishing.” - Tony Pfaff, N223PW “Duncan Aviation has become our most reliable vendor for our engine inspections. I really appreciate the entire team and their desire to make sure the customer is always satisfied.” - Wade Mellick, N454N “From start to finish, Duncan Aviation performed flawlessly! The RTS documentation is excellent. Ryan Oestmann is the premier project manager in aviation. The technical team was knowledgeable, professional, and communicated extremely well.” - Jason Bell, N981FH “Very satisfied. Work was done quickly and professionally.” - Craig Dow, N377CH “I wanted to say thanks for the awesome last-minute support for our G550 N305AH today. It was nice to meet Monica Gaviria and Carlos Rivero Aguilar today; they are a great team. Their knowledge and dedication to getting the job done quickly was appreciated. I'll be reaching out to Duncan Aviation in the future for additional scheduled or AOG support.” - Tom Schulke, N305AH “Thank you again to Duncan RRT SDL. They are a great resource to have for our Jet Linx SDL Base.” - Brian Weathers, N848JS \"I am most impressed with the quality of support received as a second time user of your services and the service support provided by the key personnel including Branden Hunt, Dale Hawkins, Mike Morgan, and then the customer service ladies, Tracy Albert and Leanne Jones, Michelle Leskow, Tina Schrader and finally Jill Westra. This support is what brings ",
+          "safety": "*",
+          "satellites": "+1 303-649-1790 | CELL: +1 404.227.9766 www.DuncanAviation.aero<https://www.duncanaviation.aero/> ________________________________ From: Mike Minchow <mike.minchow@duncanaviation.com> Sent: Friday, January 16, 2026 12:17 PM To: Mike Minchow <mike.minchow@duncanaviation.com> Subject: Friday Update [cid:44b56968-0a41-416a-91b6-7dfcb34d9652]"
+        },
+        "denverRelevant": {
+          "isDenverRelevant": true,
+          "denverMentions": 1,
+          "relevantQuotes": [],
+          "relevantEmployees": []
+        },
+        "summary": {
+          "totalQuotes": 1,
+          "positiveQuotes": 1,
+          "negativeQuotes": 0,
+          "employeesRecognized": 11,
+          "hasFinancialData": false,
+          "hasHoursData": true,
+          "hasPercentages": true
+        }
+      },
+      "fullBodyLength": 14102,
+      "bodyPreview": "\r\n\r\n\r\n[cid:c6fbe973-1197-4788-9125-7a2936a2155c]​\r\n\r\nEDDUYN PITA\r\nSATELLITE MANAGER - DENVER, CO.\r\nDIRECT: +1 303-649-1790 | CELL: +1 404.227.9766\r\nwww.DuncanAviation.aero<https://www.duncanaviation.aero/>\r\n\r\n\r\n________________________________\r\nFrom: Mike Minchow <mike.minchow@duncanaviation.com>\r\nSent: Friday, January 16, 2026 12:17 PM\r\nTo: Mike Minchow <mike.minchow@duncanaviation.com>\r\nSubject: Friday Update\r\n\r\n[cid:44b56968-0a41-416a-91b6-7dfcb34d9652]\r\nTeam Excellence & Customer Comments:\r\n“As always, we appreciated the quality of support your team provides!” - Sam Vega, N112GD\r\n\r\n“Everything went well just before the holidays! Thank you!” - Louis Ferrantino, N2766K\r\n\r\n“Always look forward to working with Tony Chipman and the team.” - William Anderson, C-FSDS\r\n“The cabinet project went very well. No issues at all with the quality of the workmanship or any of the employees that I dealt with; Tony Chipman did a great job with communicating and keeping me updated. I am sure the cabinets look better than they did new. Overall, very happy with the cabinet refinishing.” - Tony Pfaff, N223PW\r\n“Duncan Aviation has become our most reliable vendor for our engine inspections. I really appreciate the entire team and their desire to make sure the customer is always satisfied.” -  Wade Mellick, N454N\r\n“From start to finish, Duncan Aviation performed flawlessly! The RTS documentation is excellent. Ryan Oestmann is the premier project manager in aviation. The technical team was knowledgeable, professional, and communicated extremely well.” - Jason Bell, N981FH \r\n\r\n“Very satisfied. Work was done quickly and professionally.” - Craig Dow, N377CH \r\n“I wanted to say thanks for the awesome last-minute support for our G550 N305AH today.  It was nice to meet Monica Gaviria and Carlos Rivero Aguilar today; they are a great team.  Their knowledge and dedication to getting the job done quickly was appreciated. I'll be reaching out to Duncan Aviation in the future for additional scheduled or AOG support.” - Tom Schulke, N305AH\r\n“Thank you again to Duncan RRT SDL. They are a great resource to have for our Jet Linx SDL Base.” - Brian Weathers, N848JS\r\n\r\n\"I am most impressed with the quality of support received as a second time user of your services and the service support provided by the key personnel including Branden Hunt, Dale Hawkins, Mike Morgan, and then the customer service ladies, Tracy Albert and Leanne Jones, Michelle Leskow, Tina Schrader and finally Jill Westra. This support is what brings us back. Thank you.\" - Brian Rhodenizer, N98YC\r\n\r\n“Chris Murray and his crew did an awesome job again this year. The facility is super accommodating and made the whole maintenance visit very comfortable. Chris Murray and Mike Lopez, his team lead, kept me updated the entire time and really made the process smooth. Overall, just a great experience and solid service from start to finish.” - John Most, N583TC\r\n\r\n Be The Difference: Team Members\r\nTotal Weekly Submissions: 24\r\n*View all submissions below or login into the Difference Makers app<https://duncanaviation.cooleaf.com/> today!\r\n​​​​[https://res.public.onecdn.static.microsoft/assets/fluentui-resources/1.1.0/app-min/assets/item-types/24_1.5x/pdf.png]Be The Difference Recognitions (1.16).pdf<https://duncanaviation-my.sharepoint.com/:b:/p/alexa_french/IQBuldTLVxSxS5JHQ8EjC14RAaYVsrWX6c5bBPj3vmiKfu8?e=epWr35>​​​​\r\nDeliver The Best: Janet Beazley to Mark Medina “I want to take some time to truly recognize Mark Medina for all of his efforts and that they do not go un-noticed.  Mark just led a Lear 45 4800 hour inspection and just a fantastic job.  He was extremely busy during this project with other projects as well, plus this was a fairly large event.  At the end of the project, he stayed late on a Friday to wait for customers to come back from a test flight and then stayed even later to work some squawks yet that night.  Mark, I do notice your efforts and they do not go unnoticed.  Thank you for all that you do, all the time.  You've always done a great job as a lead on our projects.  Way to go!”\r\nDeliver The Best: Kaela Paseka to Grace Farrall and Brian Ryba “Thank you, Grace and Brian!  I appreciate your willingness to help and attention to detail in switching out the Donald Duncan Conference Room graphics! Good work!”\r\nDeliver The Best: Dan Szymanski to Chris Peet, Angel Piela, Joe Stubelt, Kody Wrozek, Dave Mills, Brandon Gregory, Andrew Leskow, Scott Shimel, Red O'Leary, Rob Kemp, David Spoor, Ed Zarn “I would like to recognize all of those who submitted an idea last year that was ultimately completed. I am also very grateful for my fellow members of the BTL Airframe CI team that worked on these ideas, I could not lead the team without them. They are constantly working to improve the environment of the entire BTL Airframe Department. I also greatly appreciate everyone else who submitted an idea, even if they did not ultimately work out at this time. The fact that they took a step"
+    }
+  ]
+}

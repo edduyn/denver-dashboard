@@ -1,0 +1,184 @@
+{
+  "metadata": {
+    "version": "1.1",
+    "last_updated": "2026-01-29",
+    "data_as_of": "2026-01-29",
+    "update_frequency": "Daily by Claude when reports provided",
+    "owner": "Edduyn Pita"
+  },
+  "current_performance": {
+    "ab_ratio": {
+      "current": 25.8,
+      "target": 58.5,
+      "variance": -32.7,
+      "trend": "tracking",
+      "rank": "20th of 21",
+      "last_updated": "2026-01-28"
+    },
+    "wip_account_0889_35015": {
+      "current_balance": -8600,
+      "status": "NEGATIVE",
+      "interpretation": "Overdrawn - labor costs exceed billable work",
+      "action_needed": true,
+      "last_updated": "2026-01-27"
+    },
+    "nps_surveys_sent": {
+      "count": 14,
+      "target": "100% of billed WOs",
+      "billed_wos": 41,
+      "coverage_percent": 34,
+      "system_status": "One-click email system operational",
+      "last_updated": "2026-01-28"
+    }
+  },
+  "anchor_snapshot": {
+    "as_of": "2026-01-29 9:18 AM",
+    "total_open_wos": 54,
+    "total_expected_hours": 560.5,
+    "aog_count": 3,
+    "aog_items": [
+      {"wo": "CG4NC", "tail": "N628EK", "status": "BillHold", "work": "FMS/NCU", "customer": "Kauffman Land"},
+      {"wo": "CU92B", "tail": "N331MW", "status": "Shipped to satellite", "work": "FMS/NCU", "customer": "Robbins Aviation"},
+      {"wo": "CU1EB", "tail": "N505RR", "status": "Shipped to satellite", "work": "ELT", "customer": "42K Re Management"}
+    ],
+    "by_shop": {
+      "SDV": {"open_wos": 8, "expected_hours": 471.1, "wip_at_70": 32977},
+      "SDN": {"open_wos": 41, "expected_hours": 0.4, "wip_at_145": 58},
+      "SDR": {"open_wos": 5, "expected_hours": 0.5, "wip_at_145": 73},
+      "SHC": {"open_wos": 3, "expected_hours": 0, "wip_at_145": 0},
+      "Repair": {"open_wos": 9, "expected_hours": 86.5, "note": "NAV/GY1/HSI/HYD/ELM shops"}
+    },
+    "sdv_special_wip_over_10h": [
+      {"wo": "CV78A", "customer": "Primus Capital", "tail": "N303JJ", "expected_hours": 400.0, "wip_at_70": 28000, "work": "Gogo Avance L3", "ac_out": "2026-03-06"},
+      {"wo": "CVN0A", "customer": "Stevens Aerospace", "tail": "N4QL", "expected_hours": 41.0, "wip_at_70": 2870, "work": "ARTEX ELT Install"},
+      {"wo": "CMJHA", "customer": "Business Aviators", "tail": "N1870E", "expected_hours": 24.0, "wip_at_70": 1680, "work": "Ensemble Upgrade"}
+    ],
+    "sdv_special_total": {"hours": 465.0, "wip": 32550}
+  },
+  "ytd_tracking": {
+    "total_revenue": 182000,
+    "billable_hours": 462,
+    "paid_hours": 1793,
+    "billed_wos": 42,
+    "gross_profit": 74800,
+    "note": "January MTD through 01/28"
+  },
+  "goal_progress": {
+    "goal_1_ab_ratio": {
+      "description": "Achieve 58.5% A/B Ratio",
+      "current": 25.8,
+      "target": 58.5,
+      "percent_complete": 44.1,
+      "monthly_target_met": "0/12"
+    },
+    "goal_2_nps": {
+      "description": "Send NPS survey to every customer",
+      "system_built": true,
+      "surveys_sent": 14,
+      "completed_responses": 0,
+      "january_target": 1,
+      "january_status": "Awaiting responses"
+    },
+    "goal_3_training": {
+      "description": "Training completion",
+      "technical_scheduled": "5/8",
+      "technical_percent": 63,
+      "need_dates": 3,
+      "need_dates_names": ["Ken Smith", "John Watson", "Juan Medina"],
+      "completed_sessions": 0
+    },
+    "goal_4_expected_hours": {
+      "description": "SDV Expected Hours tracking",
+      "applies_to": "SDV Install Shop only",
+      "wos_with_estimates": "1/3",
+      "estimate_percent": 33,
+      "status": "tracking"
+    },
+    "goal_5_vendor_disputes": {
+      "description": "Vendor dispute communication within 30 days",
+      "emails_sent_2026": 1,
+      "status": "On Track"
+    },
+    "goal_6_budget": {
+      "description": "Shop expenses within budget",
+      "status": "Awaiting data"
+    },
+    "goal_7_audits": {
+      "description": "Zero audit findings",
+      "findings_ytd": 5,
+      "repeat_findings": 1,
+      "last_audit": "2026-01-21",
+      "status": "At Risk"
+    },
+    "goal_8_monthly_ab": {
+      "description": "Monthly A/B budget performance",
+      "months_met": 0,
+      "target_months": 12
+    },
+    "goal_9_dealer_programs": {
+      "description": "Dealer programs utilization",
+      "completed_2026": 1,
+      "status": "On Track"
+    },
+    "goal_10_vendor_disputes_comm": {
+      "description": "Vendor dispute communication",
+      "status": "On Track"
+    },
+    "goal_11_risk_assessment": {
+      "description": "Risk assessment documentation",
+      "status": "Not Started"
+    },
+    "culture_audit": {
+      "description": "Team engagement activities",
+      "events_completed": [
+        {
+          "date": "2026-01-08",
+          "activity": "Team lunch with Ken, Hubber, and Armando",
+          "notes": "Hannas excluded - on leave"
+        }
+      ]
+    }
+  },
+  "training_schedule": {
+    "scheduled": [
+      {"name": "Armando Triana-Cruz", "course": "Honeywell Primus EPIC Line Maint", "location": "Dallas, TX", "dates": "Apr 27 - May 1"},
+      {"name": "Michael Huber", "course": "Virtual Garmin G3000/G5000", "location": "Virtual", "dates": "Jan 28-29"},
+      {"name": "Jose Noris", "course": "Virtual Garmin G1000 NXi", "location": "Virtual", "dates": "Feb 26-27"},
+      {"name": "Michael Hannas", "course": "Virtual Garmin G3000/G5000", "location": "Virtual", "dates": "Jun 17-18"},
+      {"name": "Julia Langford", "course": "Virtual Garmin G3000/G5000", "location": "Virtual", "dates": "Jan 28-29"}
+    ],
+    "need_dates": [
+      {"name": "Ken Smith", "course": "Virtual Gogo Dealer Training"},
+      {"name": "John Watson", "course": "aeroIT Certification"},
+      {"name": "Juan Medina", "course": "Composite Repair", "location": "Lincoln, NE"}
+    ]
+  },
+  "friday_update_data": {
+    "last_received": "2026-01-23",
+    "satellite_ab_rankings": {
+      "1": {"shop": "Scottsdale", "ab": 77.7},
+      "2": {"shop": "Seattle", "ab": 74.7},
+      "3": {"shop": "Sacramento", "ab": 74.0},
+      "20": {"shop": "Denver", "ab": 25.0},
+      "21": {"shop": "Houston", "ab": 14.3}
+    },
+    "network_average": 48.0,
+    "budget_target": 58.7,
+    "source": "Matt Nelson email"
+  },
+  "data_sources": {
+    "morning_report": {
+      "provides": ["Time Sold", "A Hours", "A/B Ratio snapshot"],
+      "timing": "Start of day"
+    },
+    "afternoon_report": {
+      "provides": ["Billed WOs", "Revenue", "Anchor data"],
+      "timing": "End of day"
+    },
+    "friday_updates": {
+      "email_1": "Matt Nelson - satellite A/B rankings, network data",
+      "email_2": "Senior team - company status"
+    }
+  },
+  "update_instructions": "When Edduyn provides new reports, Claude should: 1) Process ALL reports, 2) Update this file with latest numbers, 3) Update dashboard localStorage defaults, 4) Provide index.html immediately"
+}

@@ -1,0 +1,142 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "last_updated": "2026-01-28",
+    "owner": "Edduyn Pita",
+    "purpose": "Proprietary frameworks, processes, and intellectual property"
+  },
+  "operational_frameworks": {
+    "daily_tracking_workflow": {
+      "name": "Denver Daily Metrics Workflow",
+      "purpose": "Consistent daily tracking of key performance indicators",
+      "steps": {
+        "morning": {
+          "action": "Process Time Sold report",
+          "captures": ["Hours worked by shop", "A/B ratio snapshot", "Productivity indicators"],
+          "timing": "Start of business day"
+        },
+        "end_of_day": {
+          "action": "Process Billed WO + Anchor reports",
+          "captures": ["Revenue billed", "WOs closed", "Open WO status"],
+          "timing": "End of business day"
+        }
+      },
+      "automation": "When reports uploaded, Claude auto-processes ALL, updates dashboard, provides index.html without questions"
+    },
+    "sdv_wip_calculation_framework": {
+      "name": "SDV Special WIP for Matt",
+      "purpose": "Calculate unbilled work value for Install shop",
+      "steps": [
+        "Extract Time Sold data for SDV shop",
+        "Cross-reference with Anchor report",
+        "Filter for OPEN WOs only (critical - must verify open status)",
+        "Exclude any already-billed WOs",
+        "Filter for WOs with >10 hours",
+        "Calculate value: Hours × $70/hr",
+        "Apply 15% margin expectation"
+      ],
+      "critical_rule": "MUST verify WO is open before including"
+    },
+    "nps_one_click_system": {
+      "name": "NPS One-Click Email System",
+      "purpose": "Streamline customer satisfaction survey process",
+      "location": "Dashboard Goals tab",
+      "workflow": [
+        "Find customer WO in dashboard",
+        "Click NPS email button",
+        "Outlook Web opens with pre-filled email",
+        "Subject line includes registration number",
+        "Body ends at 'Best Regards,' (signature auto-appends)",
+        "Review and send"
+      ],
+      "design_principle": "Minimize friction to maximize survey sends"
+    },
+    "flat_rate_evaluation_framework": {
+      "name": "Flat Rate Profitability Analysis",
+      "purpose": "Determine if flat rate system is profitable by shop",
+      "applies_to": ["SDN", "SDR", "SHC"],
+      "methodology": {
+        "data_needed": [
+          "Flat rate amounts from billing",
+          "Actual hours worked per WO",
+          "Shop hourly cost"
+        ],
+        "calculation": "Flat rate revenue - (Actual hours × hourly cost) = Profit/Loss",
+        "evaluation_criteria": "Consistent profitability across WO types"
+      },
+      "status": "Framework defined, awaiting billing data"
+    }
+  },
+  "dashboard_frameworks": {
+    "github_pages_deployment": {
+      "requirement": "File MUST be named index.html",
+      "reason": "GitHub Pages serves index.html as default",
+      "never_do": "Never provide zip files - always index.html directly"
+    },
+    "local_storage_pattern": {
+      "purpose": "Persist data between dashboard sessions",
+      "update_method": "Claude updates localStorage default values when processing reports"
+    },
+    "auto_sync_script": {
+      "purpose": "Streamline dashboard updates",
+      "flow": "Downloads → repo → git push",
+      "troubleshooting": [
+        "git rebase --abort",
+        "git fetch origin",
+        "git reset --hard origin/main"
+      ]
+    }
+  },
+  "data_processing_rules": {
+    "report_processing": {
+      "trigger": "When Edduyn says 'update' with files",
+      "actions": [
+        "Process ALL reports without asking questions",
+        "Update dashboard localStorage defaults",
+        "Provide index.html immediately"
+      ],
+      "principle": "Execute, don't ask"
+    },
+    "new_data_check": {
+      "trigger": "When user says 'new data'",
+      "locations_to_check": [
+        "Drive folder 14gOCdRyggt5MrvgUrRfmSRSimzkxW-BP",
+        "Temporary holder folder"
+      ],
+      "files_to_look_for": [
+        "Time Sold",
+        "Paid Hours", 
+        "Billed WOs",
+        "SDV Install Schedule",
+        "OVER 30",
+        "Friday Update Data",
+        "Morning Report",
+        "Afternoon Report"
+      ]
+    }
+  },
+  "arduino_simulator_frameworks": {
+    "f16c_nose_gear_oled": {
+      "name": "F-16C Nose Gear Display Logic",
+      "status": "WORKING",
+      "whitelist": "0x447a",
+      "values": {
+        "8192": "OFF",
+        "24576": "Nose GREEN",
+        "57344": "All gears GREEN"
+      },
+      "rejection_rule": "Reject 8193 (master caution)",
+      "implementation": "Direct value matching"
+    },
+    "f16c_wow_arduino": {
+      "name": "F-16C Weight on Wheels System",
+      "issue": "Right gear (pin 8, 0x453a 0x2000) always ON",
+      "debug_status": "Debug tool works",
+      "troubleshooting": [
+        "Try pulling pin LOW in setup",
+        "Test different pin assignment",
+        "Isolate pin 8 issue"
+      ]
+    }
+  }
+}

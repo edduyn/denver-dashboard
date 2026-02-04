@@ -1,0 +1,22 @@
+# .cursorrules - Denver 889 Autonomous Protocols
+
+## 1. Core Directives
+- **Golden Rule:** NEVER modify `src/index.html` manually. Only `src/scripts/process_inbox.py` performs updates.
+- **Memory First:** Always read `system_memory.md` before processing actions.
+- **Inbox Protocol:**
+    1. Detect file type in `/inbox`.
+    2. Extract data.
+    3. Update `src/index.html`.
+    4. Update `system_memory.md`.
+    5. Move original file to `/processed`.
+
+## 2. Business Logic
+- **Targets:** Revenue $694k | A/B 58.5%.
+- **WIP:** Calculated from Current Month Sold Hours only.
+- **Personnel:** Exclude Michael Hannas (LOA). Juan Medina = Production only.
+
+## 3. Tech Stack
+- Frontend: Single-file HTML/JS (`src/index.html`).
+- Data Store: Embedded `GOALS_DATA` JSON object.
+- Backend: Python automation scripts (`src/scripts/`).
+- Auth: LocalStorage with session fallback (Browser security compliant).

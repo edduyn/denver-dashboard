@@ -1,0 +1,73 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "last_updated": "2026-01-28",
+    "owner": "Edduyn Pita",
+    "purpose": "Company context, market position, and Denver satellite's role"
+  },
+  "company_overview": {
+    "name": "Duncan Aviation",
+    "industry": "Business Aviation MRO (Maintenance, Repair, Overhaul)",
+    "service_types": [
+      "Aircraft maintenance",
+      "Avionics installation",
+      "Interior modifications",
+      "Paint services",
+      "Engine services"
+    ],
+    "market_position": "Premium full-service business aviation support"
+  },
+  "denver_satellite": {
+    "designation": "Department 889",
+    "location": "Denver, Colorado",
+    "facility_type": "Satellite location",
+    "distance_from_home": "3 miles",
+    "services": {
+      "sdv_install": "Avionics and equipment installation",
+      "sdn_service": "General maintenance and service",
+      "sdr_service": "Additional service capabilities",
+      "shc": "Specialized service"
+    },
+    "value_proposition": "Regional presence for convenient customer access in Denver/Rocky Mountain area"
+  },
+  "competitive_advantages": {
+    "network_scale": "Multiple satellite locations for customer convenience",
+    "service_breadth": "Full-service capabilities across maintenance spectrum",
+    "expertise": "FAA-certified technicians and processes",
+    "customer_focus": "NPS tracking, personalized service"
+  },
+  "regulatory_context": {
+    "primary_regulator": "FAA (Federal Aviation Administration)",
+    "compliance_areas": [
+      "Aircraft maintenance certification",
+      "Technician licensing",
+      "Documentation and records",
+      "Safety standards"
+    ],
+    "importance": "Non-negotiable - loss of certification = cannot operate"
+  },
+  "denver_positioning": {
+    "market_role": "Regional satellite serving Colorado/Rocky Mountain region",
+    "competitive_context": "Competing with other MRO facilities in area",
+    "differentiation": [
+      "Duncan Aviation brand reputation",
+      "Full corporate backing and resources",
+      "Standardized processes across network"
+    ],
+    "challenges": [
+      "Satellite overhead vs main facility economies",
+      "Maintaining efficiency metrics (A/B ratio)",
+      "Balancing customer convenience with profitability"
+    ]
+  },
+  "success_metrics_context": {
+    "why_ab_ratio_matters": "Satellites must prove efficiency to justify operating costs vs centralizing at main facilities",
+    "why_nps_matters": "Customer satisfaction justifies satellite presence - customers could travel to main facility otherwise",
+    "why_training_matters": "FAA compliance + service quality require ongoing technician development"
+  },
+  "culture_values": {
+    "team_engagement": "Culture audit goals - regular team activities",
+    "customer_focus": "Every customer interaction matters",
+    "operational_excellence": "Continuous improvement in efficiency and quality"
+  }
+}

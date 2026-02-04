@@ -1,0 +1,141 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "last_updated": "2026-01-28",
+    "owner": "Edduyn Pita",
+    "purpose": "2026 strategic goals and performance objectives"
+  },
+  "annual_theme": "Operational Excellence and Team Engagement",
+  "total_goals": 11,
+  "goals": {
+    "goal_1": {
+      "name": "A/B Ratio Target",
+      "description": "Achieve and maintain 58.5% A/B ratio",
+      "metric": "A/B Ratio",
+      "current": 29.7,
+      "target": 58.5,
+      "tracking_frequency": "Daily",
+      "data_sources": ["Time Sold Report", "Paid Hours Report"],
+      "status": "Active - significant gap to close"
+    },
+    "goal_2": {
+      "name": "NPS Survey Coverage",
+      "description": "Send NPS survey to every customer on billed work orders",
+      "metric": "Survey send rate",
+      "target": "100% of billed WOs",
+      "system": "One-click email via dashboard Goals tab",
+      "tracking_frequency": "Per WO billing",
+      "status": "System operational, tracking implementation"
+    },
+    "goal_3": {
+      "name": "Training Completion",
+      "description": "Ensure all required training is completed on time",
+      "metric": "Training completion rate",
+      "target": "100% on-time completion",
+      "data_sources": ["Training Due Report", "Training Transcript"],
+      "tracking_frequency": "Monthly",
+      "status": "Active"
+    },
+    "goal_4": {
+      "name": "SDV Expected Hours",
+      "description": "Track expected hours vs actual hours for SDV Install shop",
+      "applies_to": "SDV Install Shop only",
+      "metric": "Expected vs Actual hours variance",
+      "purpose": "Ensure accurate quoting and efficient execution",
+      "tracking_frequency": "Per WO",
+      "status": "Active"
+    },
+    "goal_5": {
+      "name": "Vendor Dispute Communication",
+      "description": "Timely and professional vendor dispute resolution",
+      "metric": "Dispute resolution time and quality",
+      "data_sources": ["WO Disputes folder"],
+      "tracking_frequency": "As needed",
+      "status": "Active"
+    },
+    "goal_6": {
+      "name": "Culture Audit - Team Engagement",
+      "description": "Regular team activities and engagement events",
+      "metric": "Number of team events conducted",
+      "completed_events": [
+        {
+          "date": "2026-01-08",
+          "event": "Team lunch with Ken, Hubber, and Armando",
+          "notes": "Hannas excluded - on leave"
+        }
+      ],
+      "tracking_frequency": "Monthly",
+      "status": "Active"
+    },
+    "goal_7": {
+      "name": "WIP Account Health",
+      "description": "Maintain positive WIP account balance",
+      "account": "0889.35015",
+      "current": -8600,
+      "target": "Positive balance",
+      "status": "NEEDS ATTENTION - currently negative"
+    },
+    "goal_8": {
+      "name": "Days to Bill Reduction",
+      "description": "Minimize time from WO completion to billing",
+      "metric": "Average days to bill",
+      "data_sources": ["Days to Bill Report"],
+      "status": "Active"
+    },
+    "goal_9": {
+      "name": "Over 30 Days Resolution",
+      "description": "Minimize work orders open longer than 30 days",
+      "metric": "Count of WOs over 30 days",
+      "data_sources": ["OVER 30 Report"],
+      "tracking_frequency": "Weekly",
+      "status": "Active"
+    },
+    "goal_10": {
+      "name": "Flat Rate Profitability Analysis",
+      "description": "Evaluate flat rate system profitability for SDN/SDR/SHC",
+      "applies_to": ["SDN", "SDR", "SHC"],
+      "current_status": "Gathering data - need flat rate amounts from billing",
+      "purpose": "Determine if flat rate system works or needs modification",
+      "status": "Data gathering phase"
+    },
+    "goal_11": {
+      "name": "Employee Loan Accounting",
+      "description": "Properly track and account for loaned employee work",
+      "issue": "Hours count toward Denver but billing controlled by other shop",
+      "tracking_frequency": "As occurrences happen",
+      "status": "Active monitoring"
+    }
+  },
+  "tracking_infrastructure": {
+    "dashboard": {
+      "name": "Denver 2026 Goals Dashboard",
+      "hosting": "GitHub Pages",
+      "filename": "index.html",
+      "features": [
+        "Goals tab with NPS one-click email system",
+        "Metrics tracking",
+        "localStorage for data persistence"
+      ],
+      "update_method": "Claude processes reports and provides updated index.html"
+    },
+    "git_workflow": {
+      "repo": "Existing user repo",
+      "tool": "GitHub Desktop",
+      "auto_sync": "Script moves from Downloads → repo → push",
+      "troubleshooting": "git rebase --abort; git fetch origin; git reset --hard origin/main"
+    }
+  },
+  "reporting_cadence": {
+    "daily": {
+      "morning": "Time Sold report for hours/A/B snapshot",
+      "end_of_day": "Billed WO + Anchor for revenue/billing"
+    },
+    "weekly": {
+      "friday": [
+        "Matt Nelson: Satellite A/B rankings and network data",
+        "Senior team: Company status"
+      ],
+      "action": "Forward both to Gmail for Claude to update dashboard"
+    }
+  }
+}

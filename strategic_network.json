@@ -1,0 +1,113 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "last_updated": "2026-01-28",
+    "owner": "Edduyn Pita",
+    "purpose": "Key contacts, relationships, and communication patterns"
+  },
+  "organizational_position": {
+    "name": "Edduyn Pita",
+    "title": "Satellite Manager",
+    "location": "Denver, Colorado",
+    "department": "889",
+    "company": "Duncan Aviation",
+    "shops_managed": ["SDV (Install)", "SDN (Service)", "SDR (Service)", "SHC"]
+  },
+  "key_contacts": {
+    "matt_nelson": {
+      "relationship": "Network/Regional contact",
+      "communication": "Weekly Friday emails",
+      "provides": ["Satellite A/B rankings", "Network comparison data"],
+      "special_requests": ["SDV Special WIP report"],
+      "contact_method": "Email"
+    },
+    "senior_team": {
+      "relationship": "Leadership",
+      "communication": "Weekly Friday emails",
+      "provides": ["Company status updates", "Strategic direction"],
+      "contact_method": "Email distribution"
+    },
+    "direct_reports": {
+      "team_members": {
+        "ken": {
+          "status": "Active",
+          "culture_audit_participant": true
+        },
+        "hubber": {
+          "status": "Active", 
+          "culture_audit_participant": true
+        },
+        "armando": {
+          "status": "Active",
+          "culture_audit_participant": true
+        },
+        "hannas": {
+          "status": "On leave",
+          "culture_audit_participant": false,
+          "note": "Excluded from Jan 8 team lunch due to leave"
+        }
+      }
+    }
+  },
+  "external_relationships": {
+    "vendors": {
+      "communication_priority": "Goal #5 - Vendor dispute communication",
+      "tracking": "WO Disputes folder"
+    },
+    "customers": {
+      "satisfaction_tracking": "NPS surveys",
+      "communication": "Post-service follow-up emails"
+    },
+    "faa": {
+      "relationship": "Regulatory compliance",
+      "importance": "Critical - maintain all certifications"
+    }
+  },
+  "facility_network": {
+    "denver_889": {
+      "type": "Satellite location",
+      "status": "Primary responsibility"
+    },
+    "other_satellites": {
+      "relationship": "Network peers",
+      "comparison": "Weekly A/B rankings from Matt Nelson",
+      "employee_sharing": "Loan techs between facilities as needed"
+    },
+    "main_facilities": {
+      "note": "Report to corporate through senior team"
+    }
+  },
+  "communication_patterns": {
+    "daily": {
+      "internal": "Shop floor management, tech coordination",
+      "reports": "Morning (Time Sold) and afternoon (Billed WO, Anchor)"
+    },
+    "weekly": {
+      "friday_external": [
+        "Receive Matt Nelson satellite rankings",
+        "Receive senior team company status"
+      ],
+      "friday_action": "Forward both to Gmail for Claude dashboard updates"
+    },
+    "as_needed": {
+      "vendor_disputes": "Resolution communication",
+      "customer_issues": "Escalation handling",
+      "employee_matters": "HR coordination"
+    }
+  },
+  "data_sharing": {
+    "google_drive_folder": "14gOCdRyggt5MrvgUrRfmSRSimzkxW-BP",
+    "shared_with_claude": true,
+    "files_to_check": [
+      "Time Sold",
+      "Paid Hours",
+      "Billed WOs",
+      "SDV Install Schedule",
+      "OVER 30",
+      "Friday Update Data",
+      "Morning Report",
+      "Afternoon Report"
+    ],
+    "temporary_holder": "Items to add to tracker - check when user says 'new data'"
+  }
+}

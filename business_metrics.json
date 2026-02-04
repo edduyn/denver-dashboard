@@ -1,0 +1,101 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "last_updated": "2026-01-28",
+    "owner": "Edduyn Pita",
+    "purpose": "Core business metrics definitions and calculation methods for Denver Satellite (889)"
+  },
+  "primary_metrics": {
+    "ab_ratio": {
+      "name": "A/B Ratio",
+      "definition": "Billable hours sold divided by paid hours worked",
+      "formula": "Time Sold (A Hours) / Paid Hours (B Hours) × 100",
+      "target_2026": 58.5,
+      "unit": "percentage",
+      "frequency": "daily",
+      "source_reports": ["Time Sold Report", "Paid Hours Report"],
+      "importance": "Primary efficiency metric - measures shop productivity",
+      "context": "Higher is better. Shows how efficiently paid labor converts to billable work."
+    },
+    "revenue": {
+      "name": "Daily/Monthly Revenue",
+      "definition": "Total billed revenue from closed work orders",
+      "source_reports": ["Billed WO Report", "Anchor Report"],
+      "unit": "USD",
+      "frequency": "daily"
+    },
+    "time_sold": {
+      "name": "Time Sold (A Hours)",
+      "definition": "Billable hours charged to customer work orders",
+      "source_reports": ["Time Sold Report", "Morning Report"],
+      "unit": "hours",
+      "frequency": "daily"
+    },
+    "paid_hours": {
+      "name": "Paid Hours (B Hours)",
+      "definition": "Total hours employees are paid for (including non-billable)",
+      "source_reports": ["Paid Hours Report"],
+      "unit": "hours",
+      "frequency": "daily"
+    }
+  },
+  "secondary_metrics": {
+    "nps": {
+      "name": "Net Promoter Score",
+      "definition": "Customer satisfaction metric from post-service surveys",
+      "target_2026": "Maintain high scores, track survey completion",
+      "goal": "Send NPS survey to every customer on billed WOs"
+    },
+    "wip_account": {
+      "name": "Work In Progress Account",
+      "account_number": "0889.35015",
+      "definition": "Unbilled labor value on open work orders",
+      "interpretation": {
+        "positive": "Good - represents unbilled work that will convert to revenue",
+        "negative": "Bad - overdrawn, labor costs exceed what can be billed"
+      },
+      "source": "AS400",
+      "sdv_rate": 70,
+      "margin_target": 0.15
+    },
+    "days_to_bill": {
+      "name": "Days to Bill",
+      "definition": "Average days from WO completion to customer billing",
+      "target": "Minimize - faster billing improves cash flow"
+    },
+    "over_30": {
+      "name": "Over 30 Days Report",
+      "definition": "Work orders open longer than 30 days",
+      "action": "Review and resolve or communicate delays"
+    }
+  },
+  "shop_specific_tracking": {
+    "SDV": {
+      "name": "SDV Install Shop",
+      "tracking_method": "Expected Hours",
+      "billing_model": "Time & Materials with expected hour targets",
+      "special_tracking": "Expected Hours vs Actual (Goal #4)"
+    },
+    "SDN": {
+      "name": "SDN Service Shop",
+      "tracking_method": "Flat Rate",
+      "billing_model": "Flat rate pricing system",
+      "evaluation_status": "Under review for profitability"
+    },
+    "SDR": {
+      "name": "SDR Service Shop",
+      "tracking_method": "Flat Rate",
+      "billing_model": "Flat rate pricing system",
+      "evaluation_status": "Under review for profitability"
+    },
+    "SHC": {
+      "name": "SHC Shop",
+      "tracking_method": "Flat Rate",
+      "billing_model": "Flat rate pricing system"
+    }
+  },
+  "calculation_notes": {
+    "employee_loans": "WOs from other shops (e.g., DB1UA from NJ) appear in Denver when techs are loaned out. Hours count toward Denver financials but billing controlled by originating shop.",
+    "sdv_wip_calculation": "SDV Special WIP for Matt: Filter Time Sold (SDV) → Cross-ref Anchor (OPEN WOs only) → Exclude billed → Filter >10hrs → Calculate @ $70/hr. MUST verify WO is open before including."
+  }
+}

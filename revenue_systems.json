@@ -1,0 +1,93 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "last_updated": "2026-01-28",
+    "owner": "Edduyn Pita",
+    "purpose": "Document revenue generation systems, billing models, and financial workflows"
+  },
+  "billing_models": {
+    "time_and_materials": {
+      "description": "Bill actual hours worked at shop rate",
+      "used_by": ["SDV Install"],
+      "rate_calculation": "Hours × Shop Hourly Rate",
+      "tracking": "Expected Hours vs Actual Hours"
+    },
+    "flat_rate": {
+      "description": "Pre-determined price for specific services regardless of actual time",
+      "used_by": ["SDN", "SDR", "SHC"],
+      "evaluation_status": "Currently evaluating profitability - need flat rate amounts from billing to compare profit/loss",
+      "risk": "If actual hours exceed flat rate hours, shop loses money",
+      "opportunity": "If actual hours less than flat rate, shop gains margin"
+    }
+  },
+  "wip_system": {
+    "account": "0889.35015",
+    "definition": "Work In Progress - value of unbilled labor on open work orders",
+    "mechanics": {
+      "labor_entry": "When techs log time, labor cost accumulates in WIP",
+      "billing": "When WO is billed, WIP converts to revenue",
+      "healthy_state": "Positive balance = unbilled work waiting to convert",
+      "unhealthy_state": "Negative balance = overdrawn, more labor than can be billed"
+    },
+    "sdv_specifics": {
+      "hourly_rate": 70,
+      "margin_target": "15%",
+      "wip_calculation": "Open WO hours × $70/hr"
+    },
+    "special_wip_report": {
+      "for": "Matt",
+      "steps": [
+        "Filter Time Sold report for SDV shop",
+        "Cross-reference with Anchor report (OPEN WOs only)",
+        "Exclude any WOs that are already billed",
+        "Filter for WOs with >10 hours",
+        "Calculate value at $70/hour"
+      ],
+      "critical_note": "MUST verify WO is open before including in calculation"
+    }
+  },
+  "revenue_workflow": {
+    "daily_cycle": {
+      "morning": {
+        "report": "Time Sold Report",
+        "data_captured": ["Hours worked", "A/B ratio", "Shop breakdown"],
+        "action": "Review productivity, identify issues"
+      },
+      "end_of_day": {
+        "reports": ["Billed WO Report", "Anchor Report"],
+        "data_captured": ["Revenue billed", "WOs closed", "Open WO status"],
+        "action": "Track revenue, update dashboard"
+      }
+    },
+    "weekly_cycle": {
+      "friday": {
+        "source_1": "Matt Nelson - Satellite A/B rankings and network data",
+        "source_2": "Senior team - Company status update",
+        "action": "Forward to Gmail, update dashboard comparisons"
+      }
+    }
+  },
+  "employee_loan_accounting": {
+    "scenario": "Techs from other facilities work at Denver temporarily",
+    "example": "DB1UA work order from New Jersey facility",
+    "denver_impact": {
+      "hours": "Count toward Denver paid hours (B hours)",
+      "billing": "Controlled by originating facility",
+      "ab_ratio_effect": "Can negatively impact Denver A/B if hours not matched by billing"
+    }
+  },
+  "nps_revenue_protection": {
+    "system": "One-click NPS email system",
+    "purpose": "Ensure customer satisfaction to protect repeat business",
+    "workflow": {
+      "trigger": "Every billed WO",
+      "action": "Send NPS survey via dashboard Goals tab",
+      "mechanism": "Click button → Outlook Web opens with pre-filled email",
+      "email_format": "Subject includes registration#, body ends at 'Best Regards,' (signature auto-appends)"
+    }
+  },
+  "pricing_reference": {
+    "satellite_hourly_rates_2026": "See /Satellite Hourly rates 2026 folder",
+    "dealer_programs": "See /Dealer Programs folder"
+  }
+}
