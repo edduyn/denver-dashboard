@@ -2,7 +2,7 @@
 
 ## 📊 Current State (Snapshot)
 - **Last Update:** 2026-02-04
-- **Revenue MTD:** $7,164 (1.0% of Target)
+- **Revenue MTD:** $29,278 (4.2% of Target)
 - **A/B Ratio:** 34.1% (Target: 58.5%)
 - **WIP Total:** $0 (Open WOs)
 
