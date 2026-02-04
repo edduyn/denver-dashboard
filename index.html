@@ -2128,24 +2128,21 @@
             wipExcluded: [],  // Jan WOs already billed/closed
             wipEntries: [
                 // Claude adds/updates: {wo, shop, customer, hours (CURRENT MONTH ONLY), rate (auto from shopRates.wipRate), wip (auto: hours×rate), flags: [], billed: null, notes: ''}
-                // ── FEBRUARY MTD (hours sold in Feb only) ──
+                // ── FEBRUARY MTD (hours sold in Feb only) — Billed WOs removed (they become revenue) ──
                 {wo: 'CVY8A', shop: 'SDN', customer: 'Stinson Aviation LLC', hours: 20.0, rate: 145, wip: 2900, flags: [], billed: null, notes: '91.411/413/RVSM — biggest Feb WO'},
                 {wo: 'CTQMA', shop: 'SDR', customer: 'Robert P Husted', hours: 11.0, rate: 145, wip: 1595, flags: ['audit'], billed: null, notes: 'Continuing from Jan — QA audit cited'},
                 {wo: 'CVRQA', shop: 'SDN', customer: 'Intl Jet Aviation Services', hours: 7.5, rate: 145, wip: 1088, flags: [], billed: null, notes: 'Replace Nic/Proc 4'},
                 {wo: 'CW5NA', shop: 'SDN', customer: 'KW Flight LLC', hours: 5.5, rate: 145, wip: 798, flags: [], billed: null, notes: 'Troubleshoot C1 intermittent — active in Job View'},
                 {wo: 'CU1EA', shop: 'SDN', customer: '42K Re Management LLC', hours: 5.0, rate: 145, wip: 725, flags: [], billed: null, notes: 'Continuing from Jan'},
-                {wo: 'CVSXA', shop: 'SDR', customer: 'HighWays LLC', hours: 4.4, rate: 145, wip: 638, flags: ['billed'], billed: 845, notes: 'Billed 02/03'},
-                {wo: 'CW65A', shop: 'SDN', customer: 'Intl Jet Aviation Services', hours: 3.4, rate: 145, wip: 493, flags: ['billed'], billed: 706, notes: 'Billed 02/03'},
-                {wo: 'CW2UA', shop: 'SDN', customer: 'Med-Trans Corp', hours: 5.9, rate: 145, wip: 856, flags: ['billed'], billed: 2950, notes: 'Billed 02/02 — Eurocopter'},
                 {wo: 'CW3EA', shop: 'SDR', customer: 'Denver Rock Island Railway', hours: 2.0, rate: 145, wip: 290, flags: [], billed: null, notes: 'GPS antenna doubler — active in Job View'},
-                {wo: 'CV78A', shop: 'SDV', customer: 'Primus Capital', hours: 2.0, rate: 70, wip: 140, flags: [], billed: null, notes: 'Gogo Avance L3 (400 ExpHrs)'},
                 {wo: 'DW1LA', shop: 'SDN', customer: 'Wingtip Aviation', hours: 2.0, rate: 145, wip: 290, flags: [], billed: null, notes: 'Assist with NAV Check'},
+                {wo: 'CV78A', shop: 'SDV', customer: 'Primus Capital', hours: 2.0, rate: 70, wip: 140, flags: [], billed: null, notes: 'Gogo Avance L3 (400 ExpHrs)'},
                 {wo: 'CVWLA', shop: 'SDV', customer: 'Silver Dollar Partner LLC', hours: 2.0, rate: 70, wip: 140, flags: [], billed: null, notes: 'Universal Upgrade'},
                 {wo: 'CW5MA', shop: 'SDN', customer: 'KW Flight LLC', hours: 1.5, rate: 145, wip: 218, flags: [], billed: null, notes: 'Update Databases — RTS complete'},
                 {wo: 'DB1UA', shop: 'SDV', customer: 'Hogs Head Air 1 LLC', hours: 0, rate: 70, wip: 0, flags: ['loaned'], loanNote: 'NJ controlled', billed: null, notes: 'No Feb hours yet'},
             ],
-            wipTotalHours: 81.9,  // All Feb component hours
-            wipTotalValue: 10429,  // All open WOs total
+            wipTotalHours: 58.5,  // Open WOs only (excludes billed)
+            wipTotalValue: 8184,  // Open WOs total
 
             // ── OVER 30 DAYS (BZ List) ──
             // Claude updates from Brian's Over30 report + Billed WO cross-reference
