@@ -2136,13 +2136,12 @@
                 {wo: 'CU1EA', shop: 'SDN', customer: '42K Re Management LLC', hours: 5.0, rate: 145, wip: 725, flags: [], billed: null, notes: 'Continuing from Jan'},
                 {wo: 'CW3EA', shop: 'SDR', customer: 'Denver Rock Island Railway', hours: 2.0, rate: 145, wip: 290, flags: [], billed: null, notes: 'GPS antenna doubler — active in Job View'},
                 {wo: 'DW1LA', shop: 'SDN', customer: 'Wingtip Aviation', hours: 2.0, rate: 145, wip: 290, flags: [], billed: null, notes: 'Assist with NAV Check'},
-                {wo: 'CV78A', shop: 'SDV', customer: 'Primus Capital', hours: 2.0, rate: 70, wip: 140, flags: [], billed: null, notes: 'Gogo Avance L3 (400 ExpHrs)'},
                 {wo: 'CVWLA', shop: 'SDV', customer: 'Silver Dollar Partner LLC', hours: 2.0, rate: 70, wip: 140, flags: [], billed: null, notes: 'Universal Upgrade'},
                 {wo: 'CW5MA', shop: 'SDN', customer: 'KW Flight LLC', hours: 1.5, rate: 145, wip: 218, flags: [], billed: null, notes: 'Update Databases — RTS complete'},
                 {wo: 'DB1UA', shop: 'SDV', customer: 'Hogs Head Air 1 LLC', hours: 0, rate: 70, wip: 0, flags: ['loaned'], loanNote: 'NJ controlled', billed: null, notes: 'No Feb hours yet'},
             ],
-            wipTotalHours: 58.5,  // Open WOs only (excludes billed)
-            wipTotalValue: 8184,  // Open WOs total
+            wipTotalHours: 56.5,  // Open WOs only (excl billed + CV78A not started)
+            wipTotalValue: 8044,  // CV78A removed — project starts Feb 17
 
             // ── OVER 30 DAYS (BZ List) ──
             // Claude updates from Brian's Over30 report + Billed WO cross-reference
@@ -2531,7 +2530,10 @@
         // NPS Tracking - HARDCODED DATA (persists across file reloads)
         // Claude updates this array when you report new surveys sent
         let npsSurveyData = [
-            // === 02/03/26 - NEW BATCH ===
+            // === 02/04/26 - NEW BATCH ===
+            {date: '02/04/26', customer: 'Sunset Aviation LLC', email: 'bfranklin@solairus.aero', wo: 'CVJ0A', regNum: 'STOCK', status: 'Sent', score: null},
+            {date: '02/04/26', customer: 'Jet Group BA', email: 'paul@jetgroupba.com', wo: 'CP5EA', regNum: 'N365CJ', status: 'Sent', score: null},
+            // === 02/03/26 - PREVIOUS BATCH ===
             {date: '02/03/26', customer: 'Skyport Co', email: 'ryan.himango@skyportco.com', wo: 'DUSFA', regNum: 'N65LR', status: 'Sent', score: null},
             {date: '02/03/26', customer: 'Sierra Nevada Corp', email: 'colton.black@sncorp.com', wo: 'DUMXA', regNum: '', status: 'Sent', score: null},
             {date: '02/03/26', customer: 'Robbins Aviation', email: 'jeff@robbins-aviation.com', wo: 'CU92A', regNum: 'N331MW', status: 'Sent', score: null},
