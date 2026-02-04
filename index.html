@@ -126,6 +126,75 @@
             .header h1 { font-size: 1.1em; }
             .metric-value { font-size: 1.5em; }
         }
+        /* ── TICKER BAR ── */
+        .ticker-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 38px;
+            background: linear-gradient(90deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+            border-top: 2px solid #334155;
+            display: flex;
+            align-items: center;
+            z-index: 1000;
+            overflow: hidden;
+            font-size: 0.82em;
+        }
+        .ticker-label {
+            flex-shrink: 0;
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            font-weight: bold;
+            padding: 4px 12px;
+            font-size: 0.85em;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            height: 100%;
+            z-index: 2;
+        }
+        .ticker-label-ok {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+        .ticker-track {
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+            height: 100%;
+            display: flex;
+            align-items: center;
+        }
+        .ticker-content {
+            display: flex;
+            white-space: nowrap;
+            animation: tickerScroll var(--ticker-duration, 60s) linear infinite;
+            gap: 0;
+        }
+        .ticker-content:hover { animation-play-state: paused; }
+        .ticker-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 0 24px;
+            color: #e2e8f0;
+            border-right: 1px solid #334155;
+            height: 38px;
+            flex-shrink: 0;
+        }
+        .ticker-item .t-icon { font-size: 1.1em; }
+        .ticker-item .t-label { color: #94a3b8; font-size: 0.85em; }
+        .ticker-item .t-value { font-weight: bold; }
+        .ticker-item .t-urgent { color: #fca5a5; }
+        .ticker-item .t-warn { color: #fde68a; }
+        .ticker-item .t-ok { color: #a7f3d0; }
+        @keyframes tickerScroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        /* pad bottom of dashboard so ticker doesn't cover content */
+        .dashboard { padding-bottom: 48px; }
     </style>
 </head>
 <body>
@@ -146,7 +215,7 @@
             <div class="header-left">
                 <img src="data:image/png;base64,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" class="logo" alt="Duncan Aviation">
                 <h1>Denver Satellite (889)</h1>
-                <span id="headerTimestamp" style="color:#64748b;font-size:0.72em;font-weight:400;">Last updated: Feb 3, 2026 · 10:00 AM MST</span>
+                <span id="headerTimestamp" style="color:#64748b;font-size:0.72em;font-weight:400;">Last updated: Feb 4, 2026 · 8:30 AM MST</span>
             </div>
             <div class="header-right">
                 <span class="status-indicator" id="statusIndicator">Ready</span>
@@ -167,6 +236,7 @@
             <div class="tab tab-wip" data-tab="wip">💰 WIP</div>
             <div class="tab tab-nqa" data-tab="nqa">📋 NQA</div>
             <div class="tab tab-rankings" data-tab="rankings">🏆 Rankings</div>
+            <div class="tab tab-reference" data-tab="reference">📖 Reference</div>
         </div>
         
         <!-- GOALS TAB -->
@@ -187,28 +257,28 @@
             <div class="card">
                 <div class="card-header">
                     <span class="card-title">☀️ Morning Checklist</span>
-                    <span class="badge badge-green">01/28/26</span>
+                    <span class="badge badge-green">02/04/26</span>
                 </div>
                 <div class="action-item"><div class="action-check checked"></div><span class="action-text">Review yesterday's Time Sold report</span><span style="color:#10b981;font-size:0.8em;margin-left:auto;">✓ Processed</span></div>
-                <div class="action-item"><div class="action-check checked"></div><span class="action-text">Check Anchor for WOs ready to bill</span><span style="color:#10b981;font-size:0.8em;margin-left:auto;">✓ 71 open, 3 AOG</span></div>
+                <div class="action-item"><div class="action-check checked"></div><span class="action-text">Check Anchor for WOs ready to bill</span><span style="color:#10b981;font-size:0.8em;margin-left:auto;">✓ 90 open, 2 AOG</span></div>
                 <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">Assign techs to billable customer work first</span></div>
-                <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">Touch base with low performers</span><span style="color:#f59e0b;font-size:0.8em;margin-left:auto;">Douglas, Ken, Jose</span></div>
+                <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">Andrew Watson — MidYear Review DUE TODAY</span><span class="action-priority priority-high">HIGH</span></div>
                 <div style="background:#0f172a;padding:8px;border-radius:6px;margin-top:10px;font-size:0.75em;color:#94a3b8;">
-                    📊 <strong>Reports processed:</strong> Anchor ✓ (01/29 10:32 AM) | Time Sold ✓ (10:32 AM) | Paid Hrs ✓ (12:27 PM)
+                    📊 <strong>Reports processed:</strong> Anchor ✓ (02/04 8:29 AM) | Time Sold ✓ (8:31 AM) | Paid Hrs ✓ (8:31 AM) | Billed WO ✓ (8:32 AM) | Job View ✓ (8:33 AM)
                 </div>
             </div>
             
             <div class="card">
                 <div class="card-header">
                     <span class="card-title">🌙 End of Day Checklist</span>
-                    <span class="badge badge-green">02/02/26</span>
+                    <span class="badge badge-green">02/04/26</span>
                 </div>
-                <div class="action-item"><div class="action-check checked"></div><span class="action-text">Pull daily reports (Time Sold, Billed, Anchor)</span><span style="color:#10b981;font-size:0.8em;margin-left:auto;">✓ All pulled</span></div>
+                <div class="action-item"><div class="action-check checked"></div><span class="action-text">Pull daily reports (Time Sold, Billed, Anchor, Job View, Paid Hrs)</span><span style="color:#10b981;font-size:0.8em;margin-left:auto;">✓ All pulled 8:29-8:33 AM</span></div>
                 <div class="action-item"><div class="action-check checked"></div><span class="action-text">Upload to Claude for analysis</span><span style="color:#10b981;font-size:0.8em;margin-left:auto;">✓ Dashboard updated</span></div>
-                <div class="action-item"><div class="action-check checked"></div><span class="action-text">Bill any completed WOs (within 1 week target)</span><span style="color:#10b981;font-size:0.8em;margin-left:auto;">✓ DTBLA, DSW4A billed</span></div>
+                <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">Bill any completed WOs (within 1 week target)</span></div>
                 <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">Plan tomorrow's assignments</span></div>
                 <div style="background:#0f172a;padding:8px;border-radius:6px;margin-top:10px;font-size:0.75em;color:#94a3b8;">
-                    📈 <strong>January Final:</strong> A/B 22.7% (All) / 24.5% (Tech) | Billable 720.1h | Paid 3,177h | 51 Billed WOs
+                    📈 <strong>Feb MTD (2 days):</strong> A/B 41.0% ✅ | 6 WOs Billed ($14,881 rev) | ELR $193/hr | 90 Open WOs | 2 AOG
                 </div>
             </div>
             
@@ -218,11 +288,12 @@
                     <span class="badge badge-red">Urgent</span>
                 </div>
                 <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">⭐ NPS Survey - One-Click in Goals tab - READY!</span><span class="action-priority priority-high">HIGH</span></div>
-                <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">Douglas Riera Guzman - improved to 8h billable (keep momentum)</span><span class="action-priority priority-high">HIGH</span></div>
-                <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">Guillermo Tovar S. - improved to 36% (good progress!)</span><span class="action-priority priority-high">HIGH</span></div>
-                <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">CG4NA - 188 days old, vendor dispute (Kauffman)</span><span class="action-priority priority-high">HIGH</span></div>
-                <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">Watson, Andrew - MidYear Review due Feb 4 (8 days)</span><span class="action-priority priority-high">HIGH</span></div>
-                <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">Guillermo Tovar S. - 90-Day Review due Feb 8 (12 days)</span><span class="action-priority priority-high">HIGH</span></div>
+                <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">Andrew Watson — MidYear Review DUE TODAY Feb 4</span><span class="action-priority priority-high">HIGH</span></div>
+                <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">Guillermo Tovar S. - 90-Day Review due Feb 8 (4 days)</span><span class="action-priority priority-high">HIGH</span></div>
+                <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">7 SDV WOs missing expected hours — Goal #4 compliance</span><span class="action-priority priority-high">HIGH</span></div>
+                <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">CG4NA - 188+ days old, vendor dispute (Kauffman)</span><span class="action-priority priority-high">HIGH</span></div>
+                <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">Michael Hannas — 0 hours all Jan pay periods (LOA status?)</span><span class="action-priority priority-med">MED</span></div>
+                <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">Juan Medina — 14% OT in Jan (33h). Monitor Feb</span><span class="action-priority priority-med">MED</span></div>
                 <div class="action-item"><div class="action-check checked" onclick="this.classList.toggle('checked')"></div><span class="action-text">✅ Reply to Brian Zitek Over 30 list with WO notes</span><span class="action-priority" style="background:#10b981;color:#fff">DONE</span></div>
             </div>
             
@@ -346,92 +417,90 @@
         <!-- OVERVIEW TAB -->
         <div class="content" id="overview">
             <div class="alert-banner">
-                ⚠️ JANUARY A/B CLOSED: 22.7% (All Dept) / 24.5% (Tech Only) vs 58.5% Target | Gap: -35.8 pts | Network Rank: 19th of 21
+                ⚠️ FEBRUARY MTD: A/B 41.0% (2 days) — UP 8.5 pts from Jan 32.5% | Target: 58.5% | 6 WOs Billed ($14,881 rev) | ELR $193/hr ✅
             </div>
             
             <!-- A/B COMPARISON CARD — FORMULA CRACKED -->
             <div class="card">
                 <div class="card-header">
-                    <span class="card-title">📊 A/B Ratio — January 2026 Final</span>
-                    <span class="badge badge-green">Formula Verified ✓</span>
+                    <span class="card-title">📊 A/B Ratio — February 2026 MTD</span>
+                    <span class="badge badge-green">Feb 4 Report ✓</span>
                 </div>
                 <!-- MAIN METRIC: Matched to Matt's methodology -->
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
-                    <!-- LEFT: Matt's Official -->
+                    <!-- LEFT: February MTD -->
                     <div style="background:linear-gradient(135deg,#1e3a5f,#1e40af);padding:20px;border-radius:12px;">
                         <div style="text-align:center;margin-bottom:8px;">
-                            <div style="color:#93c5fd;font-size:0.85em;text-transform:uppercase;letter-spacing:1px;">📡 Matt's Official</div>
+                            <div style="color:#93c5fd;font-size:0.85em;text-transform:uppercase;letter-spacing:1px;">📊 February MTD (2 days)</div>
                             <div style="color:#60a5fa;font-size:0.72em;margin-top:2px;">Non-Shop Sold ÷ Total Sold</div>
                         </div>
                         <div style="text-align:center;">
-                            <div style="font-size:3em;font-weight:bold;color:#f59e0b;">32.5%</div>
-                            <div style="color:#fca5a5;font-size:0.85em;margin-top:3px;">Budget: 58.5% | Gap: -26.0 pts</div>
+                            <div style="font-size:3em;font-weight:bold;color:#10b981;">41.0%</div>
+                            <div style="color:#86efac;font-size:0.85em;margin-top:3px;">Budget: 58.5% | Gap: -17.5 pts</div>
                         </div>
                         <div style="margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:8px;">
                             <div style="background:rgba(0,0,0,0.25);padding:8px;border-radius:6px;text-align:center;">
-                                <div style="color:#93c5fd;font-size:0.75em;">Network Rank</div>
-                                <div style="color:#ef4444;font-weight:bold;font-size:1.1em;">19 / 21</div>
+                                <div style="color:#93c5fd;font-size:0.75em;">Non-Shop (A)</div>
+                                <div style="color:#4ade80;font-weight:bold;font-size:1.0em;">81.9h</div>
                             </div>
                             <div style="background:rgba(0,0,0,0.25);padding:8px;border-radius:6px;text-align:center;">
-                                <div style="color:#93c5fd;font-size:0.75em;">Network Avg</div>
-                                <div style="color:#f59e0b;font-weight:bold;font-size:1.1em;">49.2%</div>
+                                <div style="color:#93c5fd;font-size:0.75em;">All Sold (B)</div>
+                                <div style="color:#4ade80;font-weight:bold;font-size:1.0em;">200.0h</div>
                             </div>
                         </div>
-                        <div style="margin-top:8px;background:rgba(0,0,0,0.2);padding:6px;border-radius:6px;font-size:0.75em;color:#93c5fd;text-align:center;">
-                            From Matt's 1/30 weekly email
+                        <div style="margin-top:8px;background:rgba(0,0,0,0.2);padding:6px;border-radius:6px;font-size:0.75em;color:#86efac;text-align:center;">
+                            ✅ UP 8.5 pts from Jan 32.5% — early but trending right
                         </div>
                     </div>
-                    <!-- RIGHT: Local Matched Calc -->
+                    <!-- RIGHT: January Final -->
                     <div style="background:linear-gradient(135deg,#14532d,#166534);padding:20px;border-radius:12px;">
                         <div style="text-align:center;margin-bottom:8px;">
-                            <div style="color:#86efac;font-size:0.85em;text-transform:uppercase;letter-spacing:1px;">📊 Local (Same Formula)</div>
-                            <div style="color:#4ade80;font-size:0.72em;margin-top:2px;">Non-Shop Sold ÷ Total Sold</div>
+                            <div style="color:#86efac;font-size:0.85em;text-transform:uppercase;letter-spacing:1px;">📡 January Final (Matt)</div>
+                            <div style="color:#4ade80;font-size:0.72em;margin-top:2px;">Month Closed</div>
                         </div>
                         <div style="text-align:center;">
-                            <div style="font-size:3em;font-weight:bold;color:#f59e0b;">33.2%</div>
+                            <div style="font-size:3em;font-weight:bold;color:#f59e0b;">32.5%</div>
                             <div style="color:#86efac;font-size:0.85em;margin-top:3px;">720.1h ÷ 2,168.5h sold</div>
                         </div>
                         <div style="margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:8px;">
                             <div style="background:rgba(0,0,0,0.25);padding:8px;border-radius:6px;text-align:center;">
-                                <div style="color:#86efac;font-size:0.75em;">Non-Shop (A)</div>
-                                <div style="color:#4ade80;font-weight:bold;font-size:1.0em;">720.1h</div>
-                                <div style="color:#6ee7b7;font-size:0.68em;">Comp+Aircraft+Bill+CustAsst</div>
+                                <div style="color:#86efac;font-size:0.75em;">Network Rank</div>
+                                <div style="color:#ef4444;font-weight:bold;font-size:1.1em;">19 / 21</div>
                             </div>
                             <div style="background:rgba(0,0,0,0.25);padding:8px;border-radius:6px;text-align:center;">
-                                <div style="color:#86efac;font-size:0.75em;">All Sold (B)</div>
-                                <div style="color:#4ade80;font-weight:bold;font-size:1.0em;">2,168.5h</div>
-                                <div style="color:#6ee7b7;font-size:0.68em;">Includes 1,448h shop WOs</div>
+                                <div style="color:#86efac;font-size:0.75em;">Network Avg</div>
+                                <div style="color:#f59e0b;font-weight:bold;font-size:1.1em;">49.2%</div>
                             </div>
                         </div>
                         <div style="margin-top:8px;background:rgba(0,0,0,0.2);padding:6px;border-radius:6px;font-size:0.75em;color:#86efac;text-align:center;">
-                            Δ +0.7pt vs Matt (AS400 timing)
+                            Paid Hrs: 3,177h | Billed WOs: 51
                         </div>
                     </div>
                 </div>
                 <!-- PAYROLL PERSPECTIVE -->
                 <div style="background:#1e293b;padding:12px;border-radius:8px;margin-top:12px;">
-                    <div style="color:#60a5fa;font-size:0.85em;font-weight:bold;margin-bottom:8px;">📋 Payroll Perspective (Stricter Standard)</div>
+                    <div style="color:#60a5fa;font-size:0.85em;font-weight:bold;margin-bottom:8px;">💰 February Billing Summary (Feb 1-4)</div>
                     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;text-align:center;">
                         <div style="background:rgba(0,0,0,0.25);padding:8px;border-radius:6px;">
-                            <div style="color:#94a3b8;font-size:0.75em;">Sold ÷ Paid (Excl Mgr)</div>
-                            <div style="color:#ef4444;font-weight:bold;font-size:1.2em;">24.5%</div>
-                            <div style="color:#64748b;font-size:0.7em;">720.1h / 2,937h</div>
+                            <div style="color:#94a3b8;font-size:0.75em;">WOs Billed</div>
+                            <div style="color:#10b981;font-weight:bold;font-size:1.2em;">6</div>
+                            <div style="color:#64748b;font-size:0.7em;">34.0h actual</div>
                         </div>
                         <div style="background:rgba(0,0,0,0.25);padding:8px;border-radius:6px;">
-                            <div style="color:#94a3b8;font-size:0.75em;">Unsold Paid Gap</div>
-                            <div style="color:#f59e0b;font-weight:bold;font-size:1.2em;">768.5h</div>
-                            <div style="color:#64748b;font-size:0.7em;">240h mgr + ~536h Hannas LOA</div>
+                            <div style="color:#94a3b8;font-size:0.75em;">Total Revenue</div>
+                            <div style="color:#10b981;font-weight:bold;font-size:1.2em;">$14,881</div>
+                            <div style="color:#64748b;font-size:0.7em;">GP: $9,752</div>
                         </div>
                         <div style="background:rgba(0,0,0,0.25);padding:8px;border-radius:6px;">
-                            <div style="color:#94a3b8;font-size:0.75em;">Sell Rate</div>
-                            <div style="color:#f59e0b;font-weight:bold;font-size:1.2em;">73.8%</div>
-                            <div style="color:#64748b;font-size:0.7em;">2,169h sold / 2,937h paid</div>
+                            <div style="color:#94a3b8;font-size:0.75em;">ELR (Blended)</div>
+                            <div style="color:#10b981;font-weight:bold;font-size:1.2em;">$193/hr</div>
+                            <div style="color:#64748b;font-size:0.7em;">Target: $140/hr ✅</div>
                         </div>
                     </div>
                 </div>
                 <!-- 6-MONTH TREND -->
                 <div style="background:#1e293b;padding:12px;border-radius:8px;margin-top:12px;">
-                    <div style="color:#60a5fa;font-size:0.85em;font-weight:bold;margin-bottom:10px;">📈 6-Month A/B Trend (Local Calc — Same Formula as Matt)</div>
+                    <div style="color:#60a5fa;font-size:0.85em;font-weight:bold;margin-bottom:10px;">📈 7-Month A/B Trend (Local Calc — Same Formula as Matt)</div>
                     <div style="display:flex;align-items:flex-end;gap:4px;height:120px;padding:0 5px;">
                         <!-- Aug -->
                         <div style="flex:1;display:flex;flex-direction:column;align-items:center;">
@@ -469,15 +538,21 @@
                             <div style="width:100%;background:linear-gradient(to top,#7f1d1d,#ef4444);border-radius:4px 4px 0 0;height:66.4px;"></div>
                             <div style="font-size:0.65em;color:#94a3b8;margin-top:4px;">Jan</div>
                         </div>
+                        <!-- Feb MTD -->
+                        <div style="flex:1;display:flex;flex-direction:column;align-items:center;">
+                            <div style="font-size:0.7em;color:#10b981;margin-bottom:4px;">41.0%</div>
+                            <div style="width:100%;background:linear-gradient(to top,#065f46,#10b981);border-radius:4px 4px 0 0;height:82.0px;border:2px dashed #34d399;"></div>
+                            <div style="font-size:0.65em;color:#10b981;margin-top:4px;font-weight:bold;">Feb*</div>
+                        </div>
                     </div>
                     <div style="display:flex;align-items:center;justify-content:center;gap:15px;margin-top:8px;font-size:0.7em;">
                         <span style="color:#64748b;">Budget target:</span>
                         <span style="color:#60a5fa;font-weight:bold;">58.5%</span>
                         <span style="color:#64748b;">|</span>
-                        <span style="color:#64748b;">6mo avg:</span>
+                        <span style="color:#64748b;">6mo avg (closed):</span>
                         <span style="color:#f59e0b;font-weight:bold;">36.1%</span>
                         <span style="color:#64748b;">|</span>
-                        <span style="color:#64748b;">Matt vs Local: ±1.3pt</span>
+                        <span style="color:#10b981;">*Feb MTD (2 days)</span>
                     </div>
                 </div>
                 <!-- FORMULA EXPLANATION -->
@@ -485,7 +560,7 @@
                     <strong>🔬 Formula Reverse-Engineered:</strong> Matt's "Actual/Bought" = <strong>Non-Shop WO Hours ÷ Total WO Hours Sold</strong>. Both A and B come from the Time Sold report (AS400), NOT payroll. Numerator = Component + Aircraft + Billing/Sales + Customer Assist. Denominator = all of the above + Shop WOs (cleanup, tech support, WO review, PTB, holiday, training, etc.). Validated within ±1.3pt across Aug '25, Sep '25, and Jan '26 against Matt's published figures.
                 </div>
                 <div style="background:#451a03;padding:10px;border-radius:6px;margin-top:8px;font-size:0.82em;color:#fef3c7;">
-                    ⚠️ <strong>Why payroll A/B (24.5%) ≠ Matt's A/B (32.5%):</strong> Payroll-based A/B is lower because payroll includes 768.5h of paid-but-never-sold time (manager + Hannas LOA since 10/28/25, dual knee replacement). Matt's official formula correctly excludes these by using only Time Sold report data. Active tech time-entry compliance is effectively on target.
+                    ⚠️ <strong>Why payroll A/B (24.5%) ≠ Matt's A/B (32.5%) in January:</strong> Payroll-based A/B is lower because payroll includes 768.5h of paid-but-never-sold time (manager + Hannas LOA since 10/28/25, dual knee replacement). Matt's official formula correctly excludes these by using only Time Sold report data. February MTD at 41.0% is encouraging — keep pushing billable hours.
                 </div>
             </div>
             
@@ -1543,6 +1618,9 @@
         <div class="content" id="rankings">
             <div id="rankingsContainer"></div>
         </div>
+        <div class="content" id="reference">
+            <div id="referenceContainer"></div>
+        </div>
     </div>
     
     <script>
@@ -1553,7 +1631,7 @@
         let scrollInterval;
         let pauseTimeout;
         let currentTab = 0;
-        const tabs = ['goals', 'actions', 'overview', 'employees', 'workorders', 'training', 'quality', 'wip', 'rankings'];
+        const tabs = ['goals', 'actions', 'overview', 'employees', 'workorders', 'training', 'quality', 'wip', 'rankings', 'reference'];
         
         // Auto-refresh every 10 minutes
         setTimeout(() => location.reload(), 600000);
@@ -1822,6 +1900,56 @@
                 notes: '📋 Need to complete risk assessment documentation.',
             },
 
+            // ── FINANCIAL REFERENCE (from CFC Satellite Financials training) ──
+            financialRef: {
+                source: 'Duncan Aviation CFC — Satellite Financials Training',
+                pnl: [
+                    {term: 'Revenue', aka: 'Sales / Top Line', def: 'What the customer was billed. Includes labor, parts, and other charges.'},
+                    {term: 'Cost of Sales (COS)', aka: 'Direct Costs', def: 'Direct labor and parts costs needed to produce the revenue.'},
+                    {term: 'Gross Profit (GP)', aka: 'GP Line', def: 'Total Revenue − Total Cost of Sales. Measures production profitability before overhead.'},
+                    {term: 'Gross Margin (GM)', aka: null, def: 'GP ÷ Total Revenue. Example: $12,161,042 ÷ $40,572,363 = 29.97%.'},
+                    {term: 'Expenses', aka: 'Overhead', def: 'Costs not tied directly to production: payroll (salaries), benefits, travel, maintenance of equipment, etc.'},
+                    {term: 'Net Income', aka: 'Bottom Line', def: 'GP − Total Expenses. The actual profit after all costs.'},
+                    {term: 'Net Margin', aka: null, def: 'Net Income ÷ Total Revenue. Example: $1,755,825 ÷ $40,572,363 = 4.3%.'},
+                    {term: 'Budget', aka: null, def: 'Annual plan and expectation for each P&L category. Set at department level Sep/Oct/Dec.'},
+                ],
+                metrics: [
+                    {term: 'A/B Ratio (Actual-to-Bought)', def: 'Actual Hours ÷ Bought Hours. Percentage of paid hours sold to customer WOs. Budgeted metric — higher is better. A 1% increase = 30,000 additional hours to sell ($2.4M company-wide).', formula: 'A/B = Actual Hrs / Bought Hrs'},
+                    {term: 'Effective Labor Rate (ELR)', def: 'Labor Revenue ÷ Number of Hours sold. The real blended rate we get paid per hour. Combines flat rates, retail/T&M, AOG rate, and overtime rate.', formula: 'ELR = Labor Rev / Hours Sold'},
+                    {term: 'Parts Margin (P/M)', def: 'Parts Profit ÷ Parts Sales. Percentage of profit compared to parts sales.', formula: 'P/M = Parts Profit / Parts Sales'},
+                    {term: 'Actual/Expected Hours', def: 'Hours sold vs. hours the install project should take. Generally applies to installs. Measures quoting/estimating accuracy.', formula: 'Actual / Expected'},
+                    {term: 'Billed/Actual Hours', def: 'Hours billed to customer WO vs. hours sold to shop WO. Generally applies to T&M (line work). Measures billing efficiency.', formula: 'Billed / Actual'},
+                ],
+                hours: [
+                    {term: 'Bought Hours', def: 'Hours purchased by the company from the team member (payroll hours).'},
+                    {term: 'Actual Hours', def: 'Hours sold by the team member to a customer work order.'},
+                    {term: 'Non-Chargeable Hours', def: 'Hours not billed to a customer WO. Must adhere to satellite standard squawks on the shop WO.'},
+                    {term: 'Main Non-Chargeable Squawks', def: 'PTB/Vacation/Holiday, Shop Clean-up, Repair Station Setup, OJE (Training), Technical Support, T/L Duties, Aircraft Movement, Meetings, Maintenance of Equipment.'},
+                ],
+                laborRates: [
+                    {term: 'Flat Rates', def: 'Predetermined price per job (NQA system). Used for standard/recurring work.'},
+                    {term: 'Retail Labor Rate (T&M)', def: 'Hourly rate billed for time & materials work. Used for custom/complex jobs.'},
+                    {term: 'AOG Rate', def: 'Premium rate for Aircraft-on-Ground emergency work.'},
+                    {term: 'Overtime Rate', def: 'Premium rate for work performed outside normal hours.'},
+                ],
+                elrFactors: [
+                    'The Marketplace (competitive rates)',
+                    'Reputation and quality',
+                    'Meeting or exceeding flat-rated hours',
+                    'Customer Expectations',
+                    'Suppressing hours on work orders',
+                    'Billing different rates for prep and travel',
+                ],
+                bigPictureExample: {
+                    boughtHrs: 3000000,
+                    actualHrs: 2350000,
+                    ab: 78.4,
+                    elr: 79.60,
+                    laborSales: 187060000,
+                    note: 'Company-wide example: 1% A/B increase = 30,000 hrs = $2.4M. $1 ELR increase = $2.35M profit.',
+                },
+            },
+
             // ── NETWORK RANKINGS (from Matt's weekly email) ──
             // Claude updates when Friday email arrives
             rankingsDate: '01/30/26',
@@ -1861,61 +1989,70 @@
 
             // ── CURRENT MONTH A/B (in-progress, before month closes) ──
             // Claude updates from daily Time Sold reports during the month
-            currentMonthAB: null, // Set to number when first Time Sold report comes in for new month
+            currentMonthAB: 41.0, // Feb MTD through 02/04 — 81.9h non-shop / 200h total
 
             // ── SDV EXPECTED HOURS (Goal #4) ──
             // Claude updates from Time Sold report (SDV WOs) and Job View report (expected hours)
             sdvRate: 70,
-            sdvLastUpdated: '01/27/26 3:44 PM',
+            sdvLastUpdated: '02/04/26 8:29 AM',
             sdvWOs: [
                 // Claude adds/updates: {wo, customer, actualHrs, expectedHrs (null if not set), note, flags:[]}
-                // flags: 'loaned' for employee loans, 'completed' for finished WOs
-                {wo: 'DB1UA', customer: 'Hogs Head Air 1 LLC', actualHrs: 73.0, expectedHrs: null, note: 'NJ controlled', flags: ['loaned']},
-                {wo: 'CV78A', customer: 'Primus Capital', actualHrs: 8.0, expectedHrs: null, note: 'Add estimate', flags: []},
-                {wo: 'CVN0A', customer: 'Stevens Aerospace', actualHrs: 5.0, expectedHrs: 41.0, note: '', flags: []},
+                {wo: 'DB1UA', customer: 'Hogs Head Air 1 LLC', actualHrs: 73.0, expectedHrs: null, note: 'NJ controlled — Rcds complete', flags: ['loaned']},
+                {wo: 'DFPJA', customer: 'Duncan Avionics-Dallas', actualHrs: 0, expectedHrs: null, note: 'Archangel PC-12 Survey — ⚠️ No estimate', flags: []},
+                {wo: 'CMJHA', customer: 'Business Aviators Inc', actualHrs: 0, expectedHrs: 24.0, note: 'Ensemble Upgrade — Parts on Order', flags: []},
+                {wo: 'DSGKA', customer: 'TBD', actualHrs: 0, expectedHrs: 6.0, note: 'Supply Stamped Wire', flags: []},
+                {wo: 'CS9XA', customer: 'TBD', actualHrs: 0, expectedHrs: null, note: 'Troubleshoot Transponder — ⚠️ No estimate', flags: []},
+                {wo: 'DRT6B', customer: 'TBD', actualHrs: 0, expectedHrs: null, note: 'Warranty work — ⚠️ No estimate', flags: []},
+                {wo: 'DRT6C', customer: 'TBD', actualHrs: 0, expectedHrs: 2.0, note: 'Paint touch up — RTS complete', flags: []},
+                {wo: 'CTTTA', customer: 'TBD', actualHrs: 0, expectedHrs: null, note: 'LX5 Install — ⚠️ No estimate', flags: []},
+                {wo: 'DUKZA', customer: 'TBD', actualHrs: 0, expectedHrs: null, note: 'Shop Maintenance — ⚠️ No estimate', flags: []},
+                {wo: 'CV78A', customer: 'Primus Capital', actualHrs: 10.0, expectedHrs: 400.0, note: 'Gogo Avance L3 — Parts on Order', flags: []},
+                {wo: 'CVN0A', customer: 'Stevens Aerospace', actualHrs: 5.0, expectedHrs: 41.0, note: 'ARTEX ELT — Parts on Order', flags: []},
+                {wo: 'CVWLA', customer: 'Silver Dollar Partner LLC', actualHrs: 8.0, expectedHrs: null, note: 'Universal Upgrade — ⚠️ No estimate, Parts on Order', flags: []},
             ],
 
             // ── WORK STATUS TRACKER (Anchor × Calendar × Job View) ──
             // Claude updates daily from reports
-            workStatusDate: '01/27/26 PM',    // Last Anchor correlation date
-            jobViewDate: '02/02/26 9:02 AM',  // Last Job View report date
-            workStatusCounts: {inProgress: 7, workedOn: 4, scheduled: 1, notScheduled: 59},
+            workStatusDate: '02/04/26 AM',    // Last Anchor correlation date
+            jobViewDate: '02/04/26 8:33 AM',  // Last Job View report date
+            workStatusCounts: {inProgress: 5, workedOn: 6, scheduled: 3, notScheduled: 76},
 
             // Billing Priority WOs (from Job View - WOs with hours, sorted by WIP)
             billingPriority: [
-                // status: 'sdv_install'|'ready'|'hours_up'|'billed'
-                {wo: 'CVN0A', reg: 'N4QL', shop: 'SDV', aircraft: 'B200', hours: 42.5, rate: 145, status: 'sdv_install', note: 'SDV Install (Matt WIP)'},
-                {wo: 'CU0VA', reg: 'N84RJ', shop: 'SDR', aircraft: 'Cessna 172S', hours: 38.5, rate: 145, status: 'ready', note: 'Ready to bill?'},
-                {wo: 'CU97A', reg: 'N3278', shop: 'SDN', aircraft: 'Falcon 2000EX', hours: 38.0, rate: 145, status: 'hours_up', note: '⬆️ Was 26h'},
-                {wo: 'CU1EA', reg: 'N505RR', shop: 'SDN', aircraft: 'Falcon 900EX', hours: 35.5, rate: 145, status: 'ready', note: 'Ready to bill?'},
-                {wo: 'CUPFA', reg: 'N176MG', shop: 'SDN', aircraft: 'G-IV', hours: 16.9, rate: 145, status: 'ready', note: 'Ready to bill?'},
-                {wo: 'CUL2A', reg: 'N5203U', shop: 'SDN', aircraft: 'Cessna 206', hours: 12.5, rate: 145, status: 'ready', note: 'Ready to bill?'},
-                {wo: 'CUC9A', reg: '-', shop: 'SHC', aircraft: '-', hours: 12.0, rate: 145, status: 'ready', note: 'Ready to bill?'},
-                {wo: 'CVWLA', reg: 'N707EL', shop: 'SDV', aircraft: 'Cessna 525A', hours: 6.0, rate: 145, status: 'hours_up', note: '⬆️ Was 3h'},
-                {wo: 'CV5EA', reg: 'N726DR', shop: 'SDN', aircraft: 'G200', hours: 4.5, rate: 145, status: 'ready', note: 'Ready to bill?'},
+                // status: 'sdv_install'|'ready'|'hours_up'|'billed'|'in_progress'
+                {wo: 'CVY8A', reg: 'N442FP', shop: 'SDN', aircraft: 'Challenger 605', hours: 20.0, rate: 145, status: 'in_progress', note: '91.411/413/RVSM — big Feb WO'},
+                {wo: 'CTQMA', reg: 'N5203U', shop: 'SDR', aircraft: 'Cessna', hours: 11.0, rate: 145, status: 'in_progress', note: 'Continuing from Jan (was 43.5h)'},
+                {wo: 'CVRQA', reg: 'N95MJ', shop: 'SDN', aircraft: 'GV-SP', hours: 7.5, rate: 145, status: 'in_progress', note: 'Replace Nic/Proc 4'},
+                {wo: 'CW5NA', reg: 'N218KF', shop: 'SDN', aircraft: 'BD-100', hours: 5.5, rate: 145, status: 'in_progress', note: 'Troubleshoot C1 intermittent'},
+                {wo: 'CU1EA', reg: 'N505RR', shop: 'SDN', aircraft: 'Falcon 900EX', hours: 5.0, rate: 145, status: 'hours_up', note: 'Continuing from Jan'},
+                {wo: 'CV78A', reg: 'N303JJ', shop: 'SDV', aircraft: 'Challenger', hours: 2.0, rate: 70, status: 'sdv_install', note: 'Gogo Avance L3 (ExpHrs: 400)'},
+                {wo: 'DW1LA', reg: 'N650GP', shop: 'SDN', aircraft: 'GV-SP', hours: 2.0, rate: 145, status: 'in_progress', note: 'Assist with NAV Check'},
+                {wo: 'CVWLA', reg: 'N707EL', shop: 'SDV', aircraft: 'Cessna 525A', hours: 2.0, rate: 70, status: 'sdv_install', note: 'Universal Upgrade'},
+                {wo: 'CW5MA', reg: 'N209CV', shop: 'SDN', aircraft: 'Cessna 560', hours: 1.5, rate: 145, status: 'ready', note: 'Update Databases — RTS complete'},
             ],
-            billingOverflow: {count: 21, hours: 47.5, wip: 6888},
-            billingTotalWOs: 30,
-            billingNotes: '✅ CU92A BILLED! ($2,530) | ⚠️ DB1UA, CV78A, CTQMA: In Anchor but no active hours in Job View',
+            billingOverflow: {count: 9, hours: 5.3, wip: 769},
+            billingTotalWOs: 18,
+            billingNotes: '✅ 6 WOs billed Feb 1-4 ($14,881 rev) | CVY8A biggest active WO (20h) | CW5NA Bombardier troubleshoot active',
 
             // In Progress Today (from SDN/SDR calendars)
             inProgressToday: [
-                {wo: 'CTQMA', shop: 'SDR', customer: 'Robert P Husted', hours: 54.0, tech: 'Macoomb', endDate: 'Jan 29'},
-                {wo: 'CU0VA', shop: 'SDR', customer: 'Aspen Flying Club', hours: 35.5, tech: 'Macoomb', endDate: 'Jan 29'},
-                {wo: 'CUSDA', shop: 'SDR', customer: 'Flights Inc', hours: 0.0, tech: 'Macoomb', endDate: 'Jan 29'},
-                {wo: 'CU97A', shop: 'SDN', customer: 'Circadian Aviation', hours: 21.0, tech: 'CRUZA', endDate: 'Jan 30'},
+                {wo: 'CW3EA', shop: 'SDR', customer: 'Denver Rock Island Railway', hours: 2.0, tech: 'Macoomb', endDate: 'Feb 3'},
+                {wo: 'CW5MA', shop: 'SDN', customer: 'KW Flight LLC', hours: 1.5, tech: 'Huber', endDate: 'Feb 4'},
+                {wo: 'CW5NA', shop: 'SDN', customer: 'KW Flight LLC', hours: 5.5, tech: 'TBD', endDate: 'Feb 4'},
+                {wo: 'DW11A', shop: 'SDN', customer: 'Gulfstream', hours: 0.0, tech: 'TBD', endDate: 'Feb 2'},
+                {wo: 'DW1BA', shop: 'SDN', customer: 'Beechcraft', hours: 0.0, tech: 'TBD', endDate: 'Feb 2'},
             ],
-            inProgressDate: 'Feb 2',
+            inProgressDate: 'Feb 4',
 
             // Not Scheduled WOs (open in Anchor, have hours, no calendar entry)
             notScheduledWOs: [
                 {wo: 'DB1UA', shop: 'SDV', customer: 'Hogs Head Air 1 LLC', hours: 75.0, wip: 5250, action: 'NJ controlled - no action', flags: ['loaned']},
-                {wo: 'CUL2A', shop: 'SDR', customer: 'Peregrine', hours: 12.5, wip: 1812, action: 'Add to SDR calendar', flags: []},
-                {wo: 'CV78A', shop: 'SDV', customer: 'Primus Capital', hours: 8.0, wip: 560, action: 'Add to SDV calendar', flags: []},
-                {wo: 'CVN0A', shop: 'SDV', customer: 'Stevens Aerospace', hours: 5.0, wip: 350, action: 'Add to SDV calendar', flags: []},
+                {wo: 'CV78A', shop: 'SDV', customer: 'Primus Capital', hours: 10.0, wip: 700, action: 'Gogo L3 — 400 ExpHrs, add to calendar', flags: []},
+                {wo: 'CVN0A', shop: 'SDV', customer: 'Stevens Aerospace', hours: 5.0, wip: 350, action: 'ARTEX ELT — 41 ExpHrs, add to calendar', flags: []},
+                {wo: 'CVWLA', shop: 'SDV', customer: 'Silver Dollar Partner LLC', hours: 8.0, wip: 560, action: 'Universal Upgrade — add estimate + calendar', flags: []},
             ],
-            notScheduledTotal: 59,
-            notScheduledNote: '59 open WOs have no calendar entry. Many have 0 hours (may be holding WOs). 4 WOs shown above have significant hours without scheduling.',
+            notScheduledTotal: 76,
+            notScheduledNote: '76 open WOs have no calendar entry. Many have 0 hours (holding WOs). 4 SDV WOs shown above have significant hours without scheduling.',
 
             // ── SHOP RATES ──
             // flatRate = what we charge customers per shop | wipRate = internal WIP calculation rate
@@ -1928,10 +2065,10 @@
 
             // ── BILLED WOs (from Billed WO report — blank Sqk Type rows only) ──
             // Claude updates when Billed WO report is processed
-            billedWOsDate: '01/27/26',
+            billedWOsDate: '02/04/26',
             billedWOsList: [
                 // Claude adds: {wo, shop, hours, laborBilled, issue: ''}
-                // Profits/losses auto-calculated from shop flat rates
+                // ── JANUARY BILLED ──
                 {wo: 'CUGZA', shop: 'SDN', hours: 17.9, laborBilled: 5444, issue: ''},
                 {wo: 'CU56A', shop: 'SDN', hours: 11.9, laborBilled: 3620, issue: ''},
                 {wo: 'CT8VA', shop: 'SDN', hours: 21.9, laborBilled: 4445, issue: ''},
@@ -1941,7 +2078,6 @@
                 {wo: 'CV3UA', shop: 'SHC', hours: 5.5, laborBilled: 0, issue: 'No labor billed'},
                 {wo: 'DTBLA', shop: 'SDV', hours: 48.5, laborBilled: 6400, issue: '$132/hr rate'},
                 {wo: 'DT13A, DT56A, DT99A', shop: 'SDN', hours: 12.0, laborBilled: 0, issue: 'No labor billed'},
-                // Add remaining billed WOs here — every WO from the report
                 {wo: 'CT5FA', shop: 'SDN', hours: 4.0, laborBilled: 580, issue: ''},
                 {wo: 'CU0VA', shop: 'SDR', hours: 6.0, laborBilled: 1126, issue: ''},
                 {wo: 'CU16A', shop: 'SDN', hours: 5.5, laborBilled: 1400, issue: ''},
@@ -1973,32 +2109,43 @@
                 {wo: 'CU32A', shop: 'SDN', hours: 4.0, laborBilled: 580, issue: ''},
                 {wo: 'CU53A', shop: 'SDN', hours: 2.5, laborBilled: 363, issue: ''},
                 {wo: 'CT4KA', shop: 'SDN', hours: 5.0, laborBilled: 725, issue: ''},
+                // ── FEBRUARY BILLED (Feb 1-4) ──
+                {wo: 'CW2UA', shop: 'SDN', hours: 6.9, laborBilled: 2950, issue: 'Eurocopter AS350B3 — great Bld/Act (13.5/6.9)'},
+                {wo: 'CW65A', shop: 'SDN', hours: 4.4, laborBilled: 706, issue: ''},
+                {wo: 'CVSXA', shop: 'SDR', hours: 4.9, laborBilled: 845, issue: 'Diamond DA40'},
+                {wo: 'CW27A', shop: 'SDR', hours: 8.4, laborBilled: 1440, issue: 'Cessna 172S'},
+                {wo: 'CVYQA', shop: 'SDR', hours: 3.9, laborBilled: 634, issue: 'P2006T'},
+                {wo: 'CVUAA', shop: 'SHC', hours: 5.5, laborBilled: 0, issue: 'Parts only — $8,307 parts rev, $4,540 GP'},
             ],
 
             // ── WIP DATA (from Time Sold × Anchor cross-reference) ──
             // Claude updates when Time Sold or Anchor reports are processed
             // CRITICAL: 'hours' = CURRENT MONTH hours sold only (not total WO hours!)
             // Hours from previous months were already WIP'd and don't carry again.
-            wipDate: '01/27/26',  // Date of last Anchor report
-            wipMonth: 'January',
-            wipNextMonth: 'February',
-            wipExcluded: ['DUXFA', 'CUS4A', 'DUL0A'],  // Not in Anchor - already closed/billed
+            wipDate: '02/04/26',  // Date of last Anchor report
+            wipMonth: 'February',
+            wipNextMonth: 'March',
+            wipExcluded: [],  // Jan WOs already billed/closed
             wipEntries: [
                 // Claude adds/updates: {wo, shop, customer, hours (CURRENT MONTH ONLY), rate (auto from shopRates.wipRate), wip (auto: hours×rate), flags: [], billed: null, notes: ''}
-                // flags: 'audit', 'loaned', 'billed' | billed: null or dollar amount
-                {wo: 'CTQMA', shop: 'SDR', customer: 'Robert P Husted', hours: 43.5, rate: 145, wip: 6308, flags: ['audit'], billed: null, notes: 'QA audit cited'},
-                {wo: 'DB1UA', shop: 'SDV', customer: 'Hogs Head Air 1 LLC', hours: 75.0, rate: 70, wip: 5250, flags: ['loaned'], loanNote: 'NJ - Juan loaned', billed: null, notes: 'NJ controlled'},
-                {wo: 'CU1EA', shop: 'SDN', customer: '42K Re Management LLC', hours: 35.5, rate: 145, wip: 5148, flags: [], billed: null, notes: 'Push to bill'},
-                {wo: 'CU16A', shop: 'SDN', customer: 'Flying Orchard LLC', hours: 30.5, rate: 145, wip: 4422, flags: ['billed'], billed: 5190, notes: ''},
-                {wo: 'CU0VA', shop: 'SDR', customer: 'The Club at Centennial', hours: 27.5, rate: 145, wip: 3988, flags: ['audit'], billed: null, notes: 'QA audit cited'},
-                {wo: 'CU97A', shop: 'SDN', customer: 'Circadian Aviation', hours: 20.0, rate: 145, wip: 2900, flags: [], billed: null, notes: 'Review status'},
-                {wo: 'CUPFA', shop: 'SDN', customer: 'Flying Orchard LLC', hours: 15.9, rate: 145, wip: 2306, flags: [], billed: null, notes: 'Same customer as CU16A'},
-                {wo: 'CUL2A', shop: 'SDR', customer: 'Peregrine', hours: 12.5, rate: 145, wip: 1812, flags: [], billed: null, notes: ''},
-                {wo: 'CU92A', shop: 'SDN', customer: 'Robbins Aviation', hours: 10.0, rate: 145, wip: 1450, flags: [], billed: null, notes: 'Review status'},
-                {wo: 'CV2GA', shop: 'SDN', customer: 'E2 Holdings', hours: 5.0, rate: 145, wip: 725, flags: [], billed: null, notes: ''},
+                // ── FEBRUARY MTD (hours sold in Feb only) ──
+                {wo: 'CVY8A', shop: 'SDN', customer: 'Stinson Aviation LLC', hours: 20.0, rate: 145, wip: 2900, flags: [], billed: null, notes: '91.411/413/RVSM — biggest Feb WO'},
+                {wo: 'CTQMA', shop: 'SDR', customer: 'Robert P Husted', hours: 11.0, rate: 145, wip: 1595, flags: ['audit'], billed: null, notes: 'Continuing from Jan — QA audit cited'},
+                {wo: 'CVRQA', shop: 'SDN', customer: 'Intl Jet Aviation Services', hours: 7.5, rate: 145, wip: 1088, flags: [], billed: null, notes: 'Replace Nic/Proc 4'},
+                {wo: 'CW5NA', shop: 'SDN', customer: 'KW Flight LLC', hours: 5.5, rate: 145, wip: 798, flags: [], billed: null, notes: 'Troubleshoot C1 intermittent — active in Job View'},
+                {wo: 'CU1EA', shop: 'SDN', customer: '42K Re Management LLC', hours: 5.0, rate: 145, wip: 725, flags: [], billed: null, notes: 'Continuing from Jan'},
+                {wo: 'CVSXA', shop: 'SDR', customer: 'HighWays LLC', hours: 4.4, rate: 145, wip: 638, flags: ['billed'], billed: 845, notes: 'Billed 02/03'},
+                {wo: 'CW65A', shop: 'SDN', customer: 'Intl Jet Aviation Services', hours: 3.4, rate: 145, wip: 493, flags: ['billed'], billed: 706, notes: 'Billed 02/03'},
+                {wo: 'CW2UA', shop: 'SDN', customer: 'Med-Trans Corp', hours: 5.9, rate: 145, wip: 856, flags: ['billed'], billed: 2950, notes: 'Billed 02/02 — Eurocopter'},
+                {wo: 'CW3EA', shop: 'SDR', customer: 'Denver Rock Island Railway', hours: 2.0, rate: 145, wip: 290, flags: [], billed: null, notes: 'GPS antenna doubler — active in Job View'},
+                {wo: 'CV78A', shop: 'SDV', customer: 'Primus Capital', hours: 2.0, rate: 70, wip: 140, flags: [], billed: null, notes: 'Gogo Avance L3 (400 ExpHrs)'},
+                {wo: 'DW1LA', shop: 'SDN', customer: 'Wingtip Aviation', hours: 2.0, rate: 145, wip: 290, flags: [], billed: null, notes: 'Assist with NAV Check'},
+                {wo: 'CVWLA', shop: 'SDV', customer: 'Silver Dollar Partner LLC', hours: 2.0, rate: 70, wip: 140, flags: [], billed: null, notes: 'Universal Upgrade'},
+                {wo: 'CW5MA', shop: 'SDN', customer: 'KW Flight LLC', hours: 1.5, rate: 145, wip: 218, flags: [], billed: null, notes: 'Update Databases — RTS complete'},
+                {wo: 'DB1UA', shop: 'SDV', customer: 'Hogs Head Air 1 LLC', hours: 0, rate: 70, wip: 0, flags: ['loaned'], loanNote: 'NJ controlled', billed: null, notes: 'No Feb hours yet'},
             ],
-            wipTotalHours: 295.9,  // All open WOs (not just top 10)
-            wipTotalValue: 36456,  // All open WOs total
+            wipTotalHours: 81.9,  // All Feb component hours
+            wipTotalValue: 10429,  // All open WOs total
 
             // ── OVER 30 DAYS (BZ List) ──
             // Claude updates from Brian's Over30 report + Billed WO cross-reference
@@ -3312,6 +3459,8 @@ ${surveyUrl}`;
         renderOpenWipTable();
         renderOver30();
         renderNqaReference();
+        renderTicker();
+        renderReference();
         renderNqa();
 
         // ═══════════════════════════════════════════════════════
@@ -3868,8 +4017,337 @@ ${surveyUrl}`;
             container.innerHTML = html;
         }
 
+        // ═══════════════════════════════════════════════════════
+        // REFERENCE TAB RENDERER — Financial Definitions from CFC Training
+        // Auto-renders from GOALS_DATA.financialRef + shopRates
+        // ═══════════════════════════════════════════════════════
+        function renderReference() {
+            const container = document.getElementById('referenceContainer');
+            if (!container) return;
+            const d = GOALS_DATA;
+            const ref = d.financialRef;
+            const rates = d.shopRates;
 
-        renderWorkStatus();
+            const makeTable = (items, cols) => {
+                const hdr = cols.map(c => `<th style="text-align:left;padding:8px 10px;background:#1e293b;color:#94a3b8;font-size:0.8em;text-transform:uppercase;">${c.label}</th>`).join('');
+                const rows = items.map(item => {
+                    const cells = cols.map(c => {
+                        let val = typeof c.fn === 'function' ? c.fn(item) : item[c.key] || '—';
+                        return `<td style="padding:8px 10px;border-bottom:1px solid #1e293b;${c.style||''}">${val}</td>`;
+                    }).join('');
+                    return `<tr>${cells}</tr>`;
+                }).join('');
+                return `<table style="width:100%;border-collapse:collapse;font-size:0.88em;">${hdr ? `<thead><tr>${hdr}</tr></thead>` : ''}<tbody>${rows}</tbody></table>`;
+            };
+
+            // P&L Definitions
+            const pnlTable = makeTable(ref.pnl, [
+                {label: 'Term', key: 'term', style: 'font-weight:bold;color:#f1f5f9;white-space:nowrap;width:180px;'},
+                {label: 'Also Known As', key: 'aka', style: 'color:#94a3b8;white-space:nowrap;width:140px;'},
+                {label: 'Definition', key: 'def', style: 'color:#cbd5e1;'},
+            ]);
+
+            // Monthly Financial Metrics
+            const metricsTable = makeTable(ref.metrics, [
+                {label: 'Metric', key: 'term', style: 'font-weight:bold;color:#f1f5f9;width:220px;'},
+                {label: 'Formula', key: 'formula', style: 'color:#60a5fa;font-family:monospace;white-space:nowrap;width:200px;'},
+                {label: 'Definition', key: 'def', style: 'color:#cbd5e1;'},
+            ]);
+
+            // Hours Definitions
+            const hoursTable = makeTable(ref.hours, [
+                {label: 'Type', key: 'term', style: 'font-weight:bold;color:#f1f5f9;width:240px;'},
+                {label: 'Definition', key: 'def', style: 'color:#cbd5e1;'},
+            ]);
+
+            // Labor Rates
+            const ratesTable = makeTable(ref.laborRates, [
+                {label: 'Rate Type', key: 'term', style: 'font-weight:bold;color:#f1f5f9;width:240px;'},
+                {label: 'Definition', key: 'def', style: 'color:#cbd5e1;'},
+            ]);
+
+            // Shop Rate Cards (from shopRates)
+            const shopCards = Object.entries(rates).map(([code, info]) => {
+                const colors = {SDN: '#3b82f6', SDR: '#f97316', SHC: '#a855f7', SDV: '#10b981'};
+                const border = colors[code] || '#64748b';
+                return `<div style="background:#0f172a;border:2px solid ${border};border-radius:8px;padding:12px;text-align:center;">
+                    <div style="font-weight:bold;color:${border};font-size:1.1em;margin-bottom:6px;">${code}</div>
+                    <div style="font-size:1.4em;font-weight:bold;color:#f1f5f9;">$${info.flatRate}/hr</div>
+                    <div style="color:#94a3b8;font-size:0.8em;margin-top:4px;">${info.type}</div>
+                </div>`;
+            }).join('');
+
+            // ELR Factors
+            const elrList = ref.elrFactors.map(f => `<span style="display:inline-block;background:#1e293b;border:1px solid #334155;border-radius:6px;padding:4px 10px;margin:3px;font-size:0.85em;color:#cbd5e1;">${f}</span>`).join('');
+
+            // Big Picture Example
+            const bp = ref.bigPictureExample;
+
+            const sectionStyle = 'background:#0f172a;border:1px solid #1e293b;border-radius:10px;padding:16px;margin-bottom:14px;';
+            const headStyle = 'font-size:1.05em;font-weight:bold;color:#f1f5f9;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid #1e293b;';
+
+            container.innerHTML = `
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">📖 Satellite Financial Reference</span>
+                        <span class="badge badge-blue">${ref.source}</span>
+                    </div>
+
+                    <div style="${sectionStyle}">
+                        <div style="${headStyle}">📊 Profit & Loss Statement (P&L)</div>
+                        <p style="color:#94a3b8;font-size:0.82em;margin-bottom:10px;">The P&L shows revenue, costs, and profit for a period. Understanding each line helps make better business and financial decisions.</p>
+                        ${pnlTable}
+                    </div>
+
+                    <div style="${sectionStyle}">
+                        <div style="${headStyle}">📈 Monthly Financial Metrics</div>
+                        <p style="color:#94a3b8;font-size:0.82em;margin-bottom:10px;">Key indicators showing the general health of the satellite business. Tracked monthly and reviewed in financial meetings.</p>
+                        ${metricsTable}
+                    </div>
+
+                    <div style="${sectionStyle}">
+                        <div style="${headStyle}">⏱️ Understanding Hours</div>
+                        <p style="color:#94a3b8;font-size:0.82em;margin-bottom:10px;">Hours are the core unit of satellite operations. The relationship between bought, actual, and non-chargeable hours drives the A/B ratio.</p>
+                        ${hoursTable}
+                        <div style="margin-top:10px;padding:10px;background:#1e293b;border-radius:6px;">
+                            <div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap;">
+                                <div style="text-align:center;flex:1;">
+                                    <div style="font-size:2em;color:#60a5fa;">78%</div>
+                                    <div style="color:#94a3b8;font-size:0.8em;">Actual (Billable)</div>
+                                </div>
+                                <div style="text-align:center;flex:1;">
+                                    <div style="font-size:2em;color:#1e3a5f;">22%</div>
+                                    <div style="color:#94a3b8;font-size:0.8em;">Non-Chargeable</div>
+                                </div>
+                                <div style="color:#64748b;font-size:0.75em;flex:2;">Typical satellite bought hours breakdown — 78% sold to customer WOs, 22% allocated to shop squawks (PTB, training, cleanup, etc.)</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="${sectionStyle}">
+                        <div style="${headStyle}">💲 Labor Rates</div>
+                        ${ratesTable}
+                        <div style="margin-top:12px;">
+                            <div style="font-weight:bold;color:#f1f5f9;font-size:0.9em;margin-bottom:8px;">Denver 889 Shop Rates (from dashboard):</div>
+                            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;">
+                                ${shopCards}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="${sectionStyle}">
+                        <div style="${headStyle}">🎯 ELR: What Factors Influence It?</div>
+                        <div style="display:flex;flex-wrap:wrap;gap:4px;">
+                            ${elrList}
+                        </div>
+                    </div>
+
+                    <div style="${sectionStyle}">
+                        <div style="${headStyle}">🌐 A/B & ELR: The Big Picture (Company-Wide Example)</div>
+                        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:12px;">
+                            <div style="text-align:center;background:#1e293b;border-radius:6px;padding:10px;">
+                                <div style="color:#94a3b8;font-size:0.75em;">Bought Hrs</div>
+                                <div style="font-size:1.1em;font-weight:bold;color:#f1f5f9;">${(bp.boughtHrs/1e6).toFixed(1)}M</div>
+                            </div>
+                            <div style="text-align:center;background:#1e293b;border-radius:6px;padding:10px;">
+                                <div style="color:#94a3b8;font-size:0.75em;">Actual Hrs</div>
+                                <div style="font-size:1.1em;font-weight:bold;color:#f1f5f9;">${(bp.actualHrs/1e6).toFixed(2)}M</div>
+                            </div>
+                            <div style="text-align:center;background:#1e293b;border-radius:6px;padding:10px;">
+                                <div style="color:#94a3b8;font-size:0.75em;">A/B</div>
+                                <div style="font-size:1.1em;font-weight:bold;color:#60a5fa;">${bp.ab}%</div>
+                            </div>
+                            <div style="text-align:center;background:#1e293b;border-radius:6px;padding:10px;">
+                                <div style="color:#94a3b8;font-size:0.75em;">ELR</div>
+                                <div style="font-size:1.1em;font-weight:bold;color:#10b981;">$${bp.elr}</div>
+                            </div>
+                            <div style="text-align:center;background:#1e293b;border-radius:6px;padding:10px;">
+                                <div style="color:#94a3b8;font-size:0.75em;">Labor Sales</div>
+                                <div style="font-size:1.1em;font-weight:bold;color:#f1f5f9;">$${(bp.laborSales/1e6).toFixed(1)}M</div>
+                            </div>
+                        </div>
+                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                            <div style="background:linear-gradient(135deg,#1e3a5f,#1e293b);border-radius:8px;padding:14px;text-align:center;">
+                                <div style="font-size:0.85em;color:#93c5fd;">📈 +1% A/B Improvement</div>
+                                <div style="font-size:1.6em;font-weight:bold;color:#60a5fa;">30,000 hrs</div>
+                                <div style="color:#93c5fd;font-size:0.85em;">= $2,400,000 additional revenue</div>
+                            </div>
+                            <div style="background:linear-gradient(135deg,#064e3b,#1e293b);border-radius:8px;padding:14px;text-align:center;">
+                                <div style="font-size:0.85em;color:#6ee7b7;">💲 +$1.00 ELR Improvement</div>
+                                <div style="font-size:1.6em;font-weight:bold;color:#10b981;">$2,350,000</div>
+                                <div style="color:#6ee7b7;font-size:0.85em;">additional profit for the company</div>
+                            </div>
+                        </div>
+                        <div style="color:#64748b;font-size:0.78em;margin-top:8px;text-align:center;">${bp.note}</div>
+                    </div>
+
+                    <div style="${sectionStyle}">
+                        <div style="${headStyle}">💡 Key Improvement Levers</div>
+                        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;">
+                            <div style="background:#1e293b;border-radius:6px;padding:12px;border-left:3px solid #3b82f6;">
+                                <div style="font-weight:bold;color:#60a5fa;font-size:0.9em;">Improve A/B</div>
+                                <div style="color:#94a3b8;font-size:0.82em;margin-top:4px;">1. Maintain a steady schedule<br>2. Control non-chargeables<br>3. Bill time for prep & travel</div>
+                            </div>
+                            <div style="background:#1e293b;border-radius:6px;padding:12px;border-left:3px solid #10b981;">
+                                <div style="font-weight:bold;color:#34d399;font-size:0.9em;">Improve ELR</div>
+                                <div style="color:#94a3b8;font-size:0.82em;margin-top:4px;">1. Meet/exceed flat-rate hours<br>2. Don't suppress WO hours<br>3. Bill appropriate rates</div>
+                            </div>
+                            <div style="background:#1e293b;border-radius:6px;padding:12px;border-left:3px solid #f97316;">
+                                <div style="font-weight:bold;color:#fb923c;font-size:0.9em;">Improve GP</div>
+                                <div style="color:#94a3b8;font-size:0.82em;margin-top:4px;">1. Maximize parts margin<br>2. Control COS (direct costs)<br>3. Accurate quoting & estimating</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+        }
+
+        // ═══════════════════════════════════════════════════════
+        // TICKER BAR RENDERER — Scans ALL GOALS_DATA for urgent actions
+        // Auto-generates scrolling items sorted by priority
+        // ═══════════════════════════════════════════════════════
+        function renderTicker() {
+            const bar = document.getElementById('tickerBar');
+            if (!bar) return;
+            const d = GOALS_DATA;
+            const rates = d.shopRates;
+            const items = []; // {icon, label, value, cls, priority}  cls: t-urgent | t-warn | t-ok
+
+            // ── 1. OVER 30 DAYS — open/dispute WOs ──
+            const o30open = d.over30Entries.filter(e => e.status === 'open');
+            const o30dispute = d.over30Entries.filter(e => e.status === 'dispute');
+            if (o30open.length > 0) {
+                o30open.forEach(e => items.push({icon:'🔴', label:'OVER 30', value:`${e.wo} (${e.days}d) — ${e.notes}`, cls:'t-urgent', priority:1}));
+            }
+            o30dispute.forEach(e => items.push({icon:'⚠️', label:'DISPUTE', value:`${e.wo} ${e.days}d — ${e.notes}`, cls:'t-warn', priority:2}));
+
+            // ── 2. WIP — unbilled high-value WOs needing action ──
+            const wipAction = d.wipEntries.filter(e => !e.flags.includes('billed') && !e.flags.includes('loaned') && e.notes && (e.notes.includes('Push') || e.notes.includes('Review')));
+            wipAction.forEach(e => items.push({icon:'💰', label:'WIP', value:`${e.wo} $${e.wip.toLocaleString()} — ${e.notes}`, cls:'t-warn', priority:3}));
+
+            // ── 3. WIP — audit-flagged WOs ──
+            const wipAudit = d.wipEntries.filter(e => e.flags.includes('audit') && !e.flags.includes('billed'));
+            if (wipAudit.length > 0) {
+                items.push({icon:'🔍', label:'AUDIT', value:`${wipAudit.length} WO(s) cited: ${wipAudit.map(e=>e.wo).join(', ')}`, cls:'t-warn', priority:4});
+            }
+
+            // ── 4. SDV Expected Hours — missing estimates ──
+            const sdvMissing = d.sdvWOs.filter(w => !w.flags.includes('completed') && (w.expectedHrs === null || w.expectedHrs === 0));
+            if (sdvMissing.length > 0) {
+                items.push({icon:'📋', label:'SDV ESTIMATES', value:`${sdvMissing.length} WO(s) missing: ${sdvMissing.map(w=>w.wo).join(', ')}`, cls:'t-warn', priority:5});
+            }
+
+            // ── 5. NQA Problem Jobs — big losses ──
+            const nqaLosses = d.nqaJobs.filter(j => {
+                const v = j.actualHrs - j.flatRateHrs;
+                return v > 2;
+            }).sort((a,b) => (b.actualHrs-b.flatRateHrs) - (a.actualHrs-a.flatRateHrs));
+            nqaLosses.forEach(j => {
+                const v = +(j.actualHrs - j.flatRateHrs).toFixed(1);
+                const fr = rates[j.shop] ? rates[j.shop].flatRate : 218;
+                items.push({icon:'📉', label:'NQA LOSS', value:`${j.wo} (${j.shop}) +${v}h over → ~$${Math.round(v*fr)} loss`, cls:'t-urgent', priority:6});
+            });
+
+            // ── 6. Aging WO Goal — progress ──
+            const agClosed = d.agingClosed.length;
+            const agTarget = d.agingTarget;
+            const agRemain = agTarget - agClosed;
+            if (agRemain > 0) {
+                items.push({icon:'📅', label:'AGING GOAL', value:`${agClosed}/${agTarget} closed this week — ${agRemain} remaining`, cls: agRemain <= 2 ? 't-warn' : 't-urgent', priority:7});
+            } else {
+                items.push({icon:'✅', label:'AGING GOAL', value:`${agTarget}/${agTarget} target met!`, cls:'t-ok', priority:20});
+            }
+
+            // ── 7. Training — upcoming/overdue ──
+            const now = new Date();
+            const trainUpcoming = d.training.techSchedule.filter(t => {
+                if (t.status === 'completed') return false;
+                if (t.status === 'tbd') return false;
+                // Check if within 14 days
+                const dateStr = t.dates.split(' - ')[0].replace(/(\w+)\s(\d+)/, '$1 $2, 2026');
+                const d2 = new Date(dateStr);
+                return !isNaN(d2) && d2 > now && (d2 - now) < 14 * 86400000;
+            });
+            trainUpcoming.forEach(t => {
+                items.push({icon:'🎓', label:'TRAINING', value:`${t.name} — ${t.course} (${t.dates})`, cls:'t-warn', priority:8});
+            });
+
+            // ── 8. LMS Pending ──
+            const lmsPending = d.training.lmsModules.filter(m => m.status === 'pending');
+            if (lmsPending.length > 0) {
+                items.push({icon:'📚', label:'LMS', value:`${lmsPending.length} module(s) pending: ${lmsPending.map(m=>m.name).join(', ')}`, cls:'t-warn', priority:9});
+            }
+
+            // ── 9. Vendor Disputes — active ──
+            const activeDisputes = d.vendorDisputes.filter(v => v.notes && !v.notes.toLowerCase().includes('resolved'));
+            if (activeDisputes.length > 0) {
+                activeDisputes.forEach(v => items.push({icon:'🏭', label:'VENDOR', value:`${v.wo} — ${v.notes}`, cls:'t-warn', priority:10}));
+            }
+
+            // ── 10. Audit findings — open ──
+            if (d.audits && d.audits.length > 0) {
+                const lastAudit = d.audits[d.audits.length - 1];
+                if (lastAudit.findings > 0 && lastAudit.closed < lastAudit.findings) {
+                    const open = lastAudit.findings - lastAudit.closed;
+                    items.push({icon:'🔎', label:'AUDIT', value:`${open} finding(s) open from ${lastAudit.date} ${lastAudit.type} audit${lastAudit.repeats > 0 ? ' ('+lastAudit.repeats+' REPEAT)' : ''}`, cls:'t-warn', priority:4});
+                }
+            }
+
+            // ── 11. A/B Ranking — position awareness ──
+            const denverRank = d.rankings.find(r => r.isDenver);
+            if (denverRank) {
+                const pos = d.rankings.filter(r => r.isDenver)[0];
+                const rankIdx = d.rankings.indexOf(pos) + 1;
+                const total = d.rankings.length;
+                const abCls = pos.pct >= d.networkBudget ? 't-ok' : pos.pct >= 40 ? 't-warn' : 't-urgent';
+                items.push({icon:'📊', label:'A/B RANK', value:`#${rankIdx}/${total} (${pos.pct}%) — Budget: ${d.networkBudget}%`, cls:abCls, priority:15});
+            }
+
+            // ── 12. WIP Total ──
+            const openWip = d.wipEntries.filter(e => !e.flags.includes('billed'));
+            const openWipTotal = openWip.reduce((s,e) => s+e.wip, 0);
+            items.push({icon:'💵', label:'OPEN WIP', value:`$${openWipTotal.toLocaleString()} across ${openWip.length} WOs`, cls: openWipTotal > 20000 ? 't-warn' : 't-ok', priority:16});
+
+            // ── 13. Stale data warnings ──
+            const parseDate = s => { const p = s.split('/'); return new Date(2000 + parseInt(p[2]), parseInt(p[0])-1, parseInt(p[1])); };
+            const daysSince = s => { try { return Math.floor((now - parseDate(s)) / 86400000); } catch(e) { return 0; } };
+
+            const wipAge = daysSince(d.wipDate);
+            if (wipAge > 3) items.push({icon:'⏰', label:'STALE DATA', value:`WIP data is ${wipAge} days old (${d.wipDate})`, cls:'t-urgent', priority:0});
+            const rankAge = daysSince(d.rankingsDate);
+            if (rankAge > 10) items.push({icon:'⏰', label:'STALE DATA', value:`Rankings data is ${rankAge} days old (${d.rankingsDate})`, cls:'t-warn', priority:0});
+            const nqaAge = daysSince(d.nqaLastUpdated);
+            if (nqaAge > 7) items.push({icon:'⏰', label:'STALE DATA', value:`NQA data is ${nqaAge} days old (${d.nqaLastUpdated})`, cls:'t-warn', priority:0});
+
+            // ── Sort by priority (lower = more urgent) ──
+            items.sort((a, b) => a.priority - b.priority);
+
+            // ── Determine overall status ──
+            const hasUrgent = items.some(i => i.cls === 't-urgent');
+            const hasWarn = items.some(i => i.cls === 't-warn');
+            const labelCls = hasUrgent ? '' : hasWarn ? '' : 'ticker-label-ok';
+            const labelText = hasUrgent ? '⚡ ACTION' : hasWarn ? '⚠️ ALERTS' : '✅ ALL CLEAR';
+            const urgentCount = items.filter(i => i.cls === 't-urgent').length;
+            const warnCount = items.filter(i => i.cls === 't-warn').length;
+            const countBadge = hasUrgent ? `<span style="background:#fca5a5;color:#7f1d1d;padding:1px 6px;border-radius:8px;font-size:0.8em;margin-left:4px;">${urgentCount}</span>` :
+                               hasWarn ? `<span style="background:#fde68a;color:#78350f;padding:1px 6px;border-radius:8px;font-size:0.8em;margin-left:4px;">${warnCount}</span>` : '';
+
+            // ── Build ticker HTML ──
+            // Duplicate items for seamless loop
+            const itemsHtml = items.map(i =>
+                `<div class="ticker-item"><span class="t-icon">${i.icon}</span><span class="t-label">${i.label}</span><span class="t-value ${i.cls}">${i.value}</span></div>`
+            ).join('');
+
+            // Adjust speed: ~3 seconds per item
+            const duration = Math.max(items.length * 3, 20);
+
+            bar.innerHTML = `
+                <div class="ticker-label ${labelCls}">${labelText}${countBadge}</div>
+                <div class="ticker-track">
+                    <div class="ticker-content" style="--ticker-duration:${duration}s">
+                        ${itemsHtml}${itemsHtml}
+                    </div>
+                </div>`;
+        }
         
         // Initialize tracking table and customer table
         renderNpsTable();
@@ -3897,7 +4375,7 @@ ${surveyUrl}`;
             // Header: HARDCODED by Claude at file update time (not refresh time)
             // Claude updates this string each time index.html is modified
             const hdr = document.getElementById('headerTimestamp');
-            if (hdr) hdr.textContent = 'Last updated: Feb 3, 2026 \u00B7 3:20 PM MST';
+            if (hdr) hdr.textContent = 'Last updated: Feb 3, 2026 \u00B7 3:30 PM MST';
 
             // Customer DB: "Updated 02/03 10:00AM"
             const cdb = document.getElementById('customerDbTimestamp');
@@ -3908,5 +4386,7 @@ ${surveyUrl}`;
             if (nqa) nqa.textContent = 'Updated ' + mmdd + '/' + yy;
         })();
     </script>
+    <!-- TICKER BAR — auto-rendered from GOALS_DATA -->
+    <div id="tickerBar" class="ticker-bar"></div>
 </body>
 </html>
