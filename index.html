@@ -315,20 +315,21 @@
                 <!-- Stats Banner -->
                 <div id="npsStats" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:15px;">
                     <div style="background:#1e293b;padding:10px;border-radius:8px;text-align:center;">
-                        <div style="color:#94a3b8;font-size:0.7em;">SENT / BILLED</div>
-                        <div id="statSent" style="color:#60a5fa;font-size:1.3em;font-weight:bold;">0/41</div>
+                        <div style="color:#94a3b8;font-size:0.7em;">THIS MONTH</div>
+                        <div id="statCompleted" style="color:#10b981;font-size:1.5em;font-weight:bold;">0</div>
+                        <div style="color:#64748b;font-size:0.65em;">of 1 needed</div>
                     </div>
                     <div style="background:#1e293b;padding:10px;border-radius:8px;text-align:center;">
-                        <div style="color:#94a3b8;font-size:0.7em;">COMPLETED</div>
-                        <div id="statCompleted" style="color:#10b981;font-size:1.5em;font-weight:bold;">0</div>
+                        <div style="color:#94a3b8;font-size:0.7em;">SENT</div>
+                        <div id="statSent" style="color:#60a5fa;font-size:1.5em;font-weight:bold;">0</div>
                     </div>
                     <div style="background:#1e293b;padding:10px;border-radius:8px;text-align:center;">
                         <div style="color:#94a3b8;font-size:0.7em;">PENDING</div>
                         <div id="statPending" style="color:#f59e0b;font-size:1.5em;font-weight:bold;">0</div>
                     </div>
                     <div style="background:#1e293b;padding:10px;border-radius:8px;text-align:center;">
-                        <div style="color:#94a3b8;font-size:0.7em;">RESPONSE RATE</div>
-                        <div id="statRate" style="color:#a855f7;font-size:1.5em;font-weight:bold;">-</div>
+                        <div style="color:#94a3b8;font-size:0.7em;">YTD COMPLETED</div>
+                        <div id="statRate" style="color:#a855f7;font-size:1.5em;font-weight:bold;">0/12</div>
                     </div>
                 </div>
                 
@@ -2071,7 +2072,7 @@
             billedWOsDate: '02/04/26',
             billedWOsList: [
                 // Claude adds: {wo, shop, hours, laborBilled, issue: ''}
-                // ── JANUARY BILLED ──
+                // ── JANUARY BILLED (verified against Billed WO reports + customerDatabase) ──
                 {wo: 'CUGZA', shop: 'SDN', hours: 17.9, laborBilled: 5444, issue: ''},
                 {wo: 'CU56A', shop: 'SDN', hours: 11.9, laborBilled: 3620, issue: ''},
                 {wo: 'CT8VA', shop: 'SDN', hours: 21.9, laborBilled: 4445, issue: ''},
@@ -2081,37 +2082,12 @@
                 {wo: 'CV3UA', shop: 'SHC', hours: 5.5, laborBilled: 0, issue: 'No labor billed'},
                 {wo: 'DTBLA', shop: 'SDV', hours: 48.5, laborBilled: 6400, issue: '$132/hr rate'},
                 {wo: 'DT13A, DT56A, DT99A', shop: 'SDN', hours: 12.0, laborBilled: 0, issue: 'No labor billed'},
-                {wo: 'CT5FA', shop: 'SDN', hours: 4.0, laborBilled: 580, issue: ''},
                 {wo: 'CU0VA', shop: 'SDR', hours: 6.0, laborBilled: 1126, issue: ''},
                 {wo: 'CU16A', shop: 'SDN', hours: 5.5, laborBilled: 1400, issue: ''},
                 {wo: 'CU92A', shop: 'SDN', hours: 3.0, laborBilled: 400, issue: ''},
                 {wo: 'CTQMA', shop: 'SDR', hours: 8.5, laborBilled: 1232, issue: ''},
                 {wo: 'CUPFA', shop: 'SDN', hours: 4.5, laborBilled: 653, issue: ''},
                 {wo: 'CUL2A', shop: 'SDR', hours: 5.0, laborBilled: 725, issue: ''},
-                {wo: 'CT2GA', shop: 'SDR', hours: 11.5, laborBilled: 1656, issue: ''},
-                {wo: 'DT2CA', shop: 'SDV', hours: 4.0, laborBilled: 520, issue: ''},
-                {wo: 'CT89A', shop: 'SDR', hours: 10.5, laborBilled: 1536, issue: ''},
-                {wo: 'DT4HA', shop: 'SDV', hours: 8.4, laborBilled: 1092, issue: ''},
-                {wo: 'CT5YA', shop: 'SDR', hours: 7.0, laborBilled: 1064, issue: ''},
-                {wo: 'CU1EA', shop: 'SDN', hours: 2.0, laborBilled: 290, issue: ''},
-                {wo: 'CTRVA', shop: 'SDN', hours: 4.0, laborBilled: 580, issue: ''},
-                {wo: 'DT6UA', shop: 'SDV', hours: 5.5, laborBilled: 715, issue: ''},
-                {wo: 'CU6MA', shop: 'SDN', hours: 4.0, laborBilled: 580, issue: ''},
-                {wo: 'CU0JA', shop: 'SDN', hours: 5.0, laborBilled: 725, issue: ''},
-                {wo: 'DT1VA', shop: 'SDV', hours: 14.0, laborBilled: 1855, issue: ''},
-                {wo: 'CT27A', shop: 'SDR', hours: 12.0, laborBilled: 1728, issue: ''},
-                {wo: 'CU7VA', shop: 'SDR', hours: 8.0, laborBilled: 1200, issue: ''},
-                {wo: 'CT5KA', shop: 'SDN', hours: 6.5, laborBilled: 942, issue: ''},
-                {wo: 'CU3BA', shop: 'SDR', hours: 8.9, laborBilled: 1284, issue: ''},
-                {wo: 'CU8LA', shop: 'SDN', hours: 3.0, laborBilled: 435, issue: ''},
-                {wo: 'CU5CA', shop: 'SDR', hours: 4.0, laborBilled: 580, issue: ''},
-                {wo: 'CT77A', shop: 'SDN', hours: 3.5, laborBilled: 508, issue: ''},
-                {wo: 'CU4VA', shop: 'SDN', hours: 7.5, laborBilled: 1088, issue: ''},
-                {wo: 'CT8EA', shop: 'SDR', hours: 9.5, laborBilled: 1371, issue: ''},
-                {wo: 'CUA8A', shop: 'SDN', hours: 2.0, laborBilled: 348, issue: ''},
-                {wo: 'CU32A', shop: 'SDN', hours: 4.0, laborBilled: 580, issue: ''},
-                {wo: 'CU53A', shop: 'SDN', hours: 2.5, laborBilled: 363, issue: ''},
-                {wo: 'CT4KA', shop: 'SDN', hours: 5.0, laborBilled: 725, issue: ''},
                 // ── FEBRUARY BILLED (Feb 1-4) ──
                 {wo: 'CW2UA', shop: 'SDN', hours: 6.9, laborBilled: 2950, issue: 'Eurocopter AS350B3 — great Bld/Act (13.5/6.9)'},
                 {wo: 'CW65A', shop: 'SDN', hours: 4.4, laborBilled: 706, issue: ''},
@@ -2216,8 +2192,6 @@
             const c = document.getElementById('goalsContainer');
             if (!c) return;
             const surveys = getNpsSurveys();
-            // Count unique WOs from billedWOsList (handles multi-WO entries like 'DT13A, DT56A')
-            const billedWOs = GOALS_DATA.billedWOsList.reduce((count, b) => count + b.wo.split(',').length, 0);
             let html = '';
 
             // Helper functions
@@ -2253,15 +2227,15 @@
                 <div class="goal-notes">${d.abNotes}</div>
             </div>`;
 
-            // ── GOAL #2: NPS (auto-sync from npsSurveyData + customerDatabase) ──
+            // ── GOAL #2: NPS (1 completed response per month = 12/year) ──
             const npsSent = surveys.length;
             const npsCompleted = surveys.filter(s => s.status === 'Completed').length;
             const npsPending = surveys.filter(s => s.status === 'Sent').length;
             const npsYearlyTarget = 12;
+            const monthsElapsed = new Date().getMonth() + 1; // Jan=1, Feb=2, etc.
             const npsCompPct = Math.round((npsCompleted / npsYearlyTarget) * 100);
-            const npsSentPct = Math.round((npsSent / billedWOs) * 100);
-            const npsStatus = npsCompleted >= 1 ? 'green' : npsSent > 0 ? 'amber' : 'red';
-            const npsLabel = npsCompleted >= 1 ? 'On Track' : npsSent > 0 ? 'Sent - Awaiting' : 'Action Needed!';
+            const npsStatus = npsCompleted >= monthsElapsed ? 'green' : npsCompleted >= 1 ? 'amber' : npsSent > 0 ? 'amber' : 'red';
+            const npsLabel = npsCompleted >= monthsElapsed ? 'On Track' : npsSent > 0 ? 'Awaiting Response' : 'Action Needed!';
             const currentMonth = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][new Date().getMonth()];
             html += `<div class="goal-card" style="border:2px solid #a855f7;">
                 <div class="goal-header">
@@ -2278,15 +2252,8 @@
                     </div>
                     <span id="npsCompletedCount" style="font-size:0.85em;color:#94a3b8;width:60px;">${npsCompleted} / ${npsYearlyTarget}</span>
                 </div>
-                <div style="display:flex;align-items:center;gap:10px;">
-                    <span style="font-size:0.85em;color:#a855f7;width:80px;">📧 Sent</span>
-                    <div class="progress-container" style="flex:1;margin:0;">
-                        <div class="progress-bar"><div id="npsSentBar" class="progress-fill" style="width:${Math.min(npsSentPct,100)}%;background:linear-gradient(90deg,#a855f7,#c084fc);"></div></div>
-                    </div>
-                    <span id="npsSentCount" style="font-size:0.85em;color:#94a3b8;width:70px;">${npsSent} / ${billedWOs}</span>
-                </div>
-                <div id="npsGoalSummary" style="margin-top:10px;">Target: 1/month (12/yr) | Sent vs Billed WOs: ${npsSent}/${billedWOs} (${npsSentPct}%)</div>
-                <div class="goal-notes">📧 ${currentMonth}: ${npsSent} surveys sent, ${npsCompleted} completed, ${npsPending} awaiting response.</div>
+                <div id="npsGoalSummary" style="margin-top:10px;">Goal: 1 completed response/month (12/yr) | ${currentMonth}: ${npsSent} sent, ${npsCompleted} completed, ${npsPending} pending</div>
+                <div class="goal-notes">📧 ${currentMonth}: ${npsSent} surveys sent across Jan-Feb billing cycles. Need 1 completed response to hit ${currentMonth} target.</div>
             </div>`;
 
             // ── GOAL #3: Training (auto-sync from training data) ──
@@ -2617,15 +2584,13 @@
             const sent = surveys.length;
             const completed = surveys.filter(s => s.status === 'Completed').length;
             const pending = surveys.filter(s => s.status === 'Sent').length;
-            const rate = sent > 0 ? Math.round((completed / sent) * 100) + '%' : '-';
-            const billedWOs = GOALS_DATA.billedWOsList.reduce((count, b) => count + b.wo.split(',').length, 0);
             const currentMonth = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][new Date().getMonth()];
             
             // Update Overview tab NPS stats
-            document.getElementById('statSent').textContent = sent + '/' + billedWOs;
             document.getElementById('statCompleted').textContent = completed;
+            document.getElementById('statSent').textContent = sent;
             document.getElementById('statPending').textContent = pending;
-            document.getElementById('statRate').textContent = rate;
+            document.getElementById('statRate').textContent = completed + '/12';
             
             // Update Overview tab badge
             const badge = document.getElementById('npsBadge');
