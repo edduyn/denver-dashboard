@@ -410,7 +410,7 @@
                     📊 Loading survey status...
                 </div>
                 <div style="background:#0f172a;padding:8px;border-radius:6px;margin-top:5px;font-size:0.75em;color:#94a3b8;">
-                    🔄 <strong>Auto-Sync:</strong> New billed WOs from billedWOsList auto-flag here if missing from customer database. 3 customers need email lookup (Cust# 106696, 136429, 159091).
+                    🔄 <strong>Auto-Sync:</strong> New billed WOs from billedWOsList auto-flag here if missing from customer database. All customer emails resolved ✅.
                 </div>
             </div>
         </div>
@@ -2779,13 +2779,13 @@ ${surveyUrl}`;
         // WOs with empty email need lookup in AS400/customer records
         const customerDatabase = [
             // === FEBRUARY BILLED (auto-add when new Billed WO report is processed) ===
-            {name: 'NEED LOOKUP', email: '', wo: 'CU97A', reg: 'N3278', shop: 'SDN', revenue: 6794, dateBilled: '02/04/26', custNum: 106696},
+            {name: 'Circadian Aviation', email: 'Circadianfinance@flyairshare.com', wo: 'CU97A', reg: 'N3278', shop: 'SDN', revenue: 6794, dateBilled: '02/04/26', custNum: 106696},
             {name: 'International Jet Aviation', email: 'heike@internationaljet.com', wo: 'DV26A', reg: 'N800NG', shop: 'SDN', revenue: 6000, dateBilled: '02/04/26', custNum: 109004},
             {name: 'International Jet Aviation', email: 'heike@internationaljet.com', wo: 'CVUAA', reg: '', shop: 'SHC', revenue: 8307, dateBilled: '02/03/26', custNum: 109004},
-            {name: 'NEED LOOKUP', email: '', wo: 'CW2UA', reg: 'N856MB', shop: 'SDN', revenue: 2950, dateBilled: '02/02/26', custNum: 136429},
+            {name: 'GMR Aero', email: 'jeff.carey@gmr.net', wo: 'CW2UA', reg: 'N856MB', shop: 'SDN', revenue: 2950, dateBilled: '02/02/26', custNum: 136429},
             {name: 'International Jet Aviation', email: 'heike@internationaljet.com', wo: 'DUYYA', reg: 'N219JG', shop: 'SDN', revenue: 2500, dateBilled: '02/04/26', custNum: 109004},
             {name: 'Aspen Flying Club', email: 'accounting@aspenflyingclub.com', wo: 'CW27A', reg: 'N156ME', shop: 'SDR', revenue: 1440, dateBilled: '02/03/26', custNum: 139695},
-            {name: 'NEED LOOKUP', email: '', wo: 'CVSXA', reg: 'N405MA', shop: 'SDR', revenue: 845, dateBilled: '02/03/26', custNum: 159091},
+            {name: 'Private Owner', email: 'viper8726@gmail.com', wo: 'CVSXA', reg: 'N405MA', shop: 'SDR', revenue: 845, dateBilled: '02/03/26', custNum: 159091},
             {name: 'International Jet Aviation', email: 'heike@internationaljet.com', wo: 'CW65A', reg: 'N800NG', shop: 'SDN', revenue: 706, dateBilled: '02/03/26', custNum: 109004},
             {name: 'Aspen Flying Club', email: 'accounting@aspenflyingclub.com', wo: 'CVYQA', reg: 'N972GV', shop: 'SDR', revenue: 634, dateBilled: '02/02/26', custNum: 139695},
             // === BILLED 01/30/26 (NEW) ===
