@@ -409,7 +409,7 @@
                     📊 Loading survey status...
                 </div>
                 <div style="background:#0f172a;padding:8px;border-radius:6px;margin-top:5px;font-size:0.75em;color:#94a3b8;">
-                    ⚠️ <strong>Data Note:</strong> Billed WO report has multiple rows per WO (by Sqk Type). Using MAX revenue per WO to avoid duplicates.
+                    🔄 <strong>Auto-Sync:</strong> New billed WOs from billedWOsList auto-flag here if missing from customer database. 3 customers need email lookup (Cust# 106696, 136429, 159091).
                 </div>
             </div>
         </div>
@@ -2216,7 +2216,8 @@
             const c = document.getElementById('goalsContainer');
             if (!c) return;
             const surveys = getNpsSurveys();
-            const billedWOs = customerDatabase.length;
+            // Count unique WOs from billedWOsList (handles multi-WO entries like 'DT13A, DT56A')
+            const billedWOs = GOALS_DATA.billedWOsList.reduce((count, b) => count + b.wo.split(',').length, 0);
             let html = '';
 
             // Helper functions
@@ -2617,7 +2618,7 @@
             const completed = surveys.filter(s => s.status === 'Completed').length;
             const pending = surveys.filter(s => s.status === 'Sent').length;
             const rate = sent > 0 ? Math.round((completed / sent) * 100) + '%' : '-';
-            const billedWOs = customerDatabase.length;
+            const billedWOs = GOALS_DATA.billedWOsList.reduce((count, b) => count + b.wo.split(',').length, 0);
             const currentMonth = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][new Date().getMonth()];
             
             // Update Overview tab NPS stats
@@ -2818,6 +2819,16 @@ ${surveyUrl}`;
         // 51 Total Billed WOs | Updated 02/03/26
         // WOs with empty email need lookup in AS400/customer records
         const customerDatabase = [
+            // === FEBRUARY BILLED (auto-add when new Billed WO report is processed) ===
+            {name: 'NEED LOOKUP', email: '', wo: 'CU97A', reg: 'N3278', shop: 'SDN', revenue: 6794, dateBilled: '02/04/26', custNum: 106696},
+            {name: 'International Jet Aviation', email: 'heike@internationaljet.com', wo: 'DV26A', reg: 'N800NG', shop: 'SDN', revenue: 6000, dateBilled: '02/04/26', custNum: 109004},
+            {name: 'International Jet Aviation', email: 'heike@internationaljet.com', wo: 'CVUAA', reg: '', shop: 'SHC', revenue: 8307, dateBilled: '02/03/26', custNum: 109004},
+            {name: 'NEED LOOKUP', email: '', wo: 'CW2UA', reg: 'N856MB', shop: 'SDN', revenue: 2950, dateBilled: '02/02/26', custNum: 136429},
+            {name: 'International Jet Aviation', email: 'heike@internationaljet.com', wo: 'DUYYA', reg: 'N219JG', shop: 'SDN', revenue: 2500, dateBilled: '02/04/26', custNum: 109004},
+            {name: 'Aspen Flying Club', email: 'accounting@aspenflyingclub.com', wo: 'CW27A', reg: 'N156ME', shop: 'SDR', revenue: 1440, dateBilled: '02/03/26', custNum: 139695},
+            {name: 'NEED LOOKUP', email: '', wo: 'CVSXA', reg: 'N405MA', shop: 'SDR', revenue: 845, dateBilled: '02/03/26', custNum: 159091},
+            {name: 'International Jet Aviation', email: 'heike@internationaljet.com', wo: 'CW65A', reg: 'N800NG', shop: 'SDN', revenue: 706, dateBilled: '02/03/26', custNum: 109004},
+            {name: 'Aspen Flying Club', email: 'accounting@aspenflyingclub.com', wo: 'CVYQA', reg: 'N972GV', shop: 'SDR', revenue: 634, dateBilled: '02/02/26', custNum: 139695},
             // === BILLED 01/30/26 (NEW) ===
             {name: 'Robbins Aviation', email: 'jeff@robbins-aviation.com', wo: 'CU92A', reg: 'N331MW', shop: 'SDN', revenue: 2530, dateBilled: '01/30/26', custNum: 153606},
             // === BILLED 01/30/26 ===
@@ -2876,6 +2887,23 @@ ${surveyUrl}`;
             {name: 'M&N Aviation', email: 'tom@mandn.aero', wo: 'CV9LA', reg: 'N818LX', shop: 'SDN', revenue: 0, dateBilled: '01/22/26', custNum: 129186},
             {name: 'International Jet Aviation', email: 'heike@internationaljet.com', wo: 'DTEJA', reg: 'N95MJ', shop: 'SDN', revenue: 0, dateBilled: '01/09/26', custNum: 109004}
         ];
+        
+        // ═══ AUTO-SYNC: Cross-reference billedWOsList vs customerDatabase ═══
+        // Flags any billed WOs not yet in customerDatabase so they auto-surface in NPS
+        function getBilledWOsNotInDatabase() {
+            const dbWOs = new Set(customerDatabase.map(c => c.wo.toUpperCase()));
+            const missing = [];
+            GOALS_DATA.billedWOsList.forEach(b => {
+                // Handle multi-WO entries like 'DT13A, DT56A, DT99A'
+                const wos = b.wo.split(',').map(w => w.trim().toUpperCase());
+                wos.forEach(wo => {
+                    if (!dbWOs.has(wo)) {
+                        missing.push({wo: wo, shop: b.shop, hours: b.hours, laborBilled: b.laborBilled, issue: b.issue || ''});
+                    }
+                });
+            });
+            return missing;
+        }
         
         function renderCustomerTable() {
             const surveys = getNpsSurveys();
@@ -2948,6 +2976,24 @@ ${surveyUrl}`;
             let skippedCount = skippedList.length;
             let sentCount = sentList.length;
             
+            // ═══ AUTO-SYNC: Show billed WOs not yet in customerDatabase ═══
+            const missingWOs = getBilledWOsNotInDatabase();
+            if (missingWOs.length > 0) {
+                html += `<tr style="background:rgba(239,68,68,0.25);"><td colspan="6" style="color:#fca5a5;font-weight:bold;text-align:center;padding:6px;">
+                    ⚠️ ${missingWOs.length} Billed WO(s) not in NPS database — add customer info to enable survey
+                </td></tr>`;
+                missingWOs.forEach(m => {
+                    html += `<tr style="background:rgba(239,68,68,0.1);">
+                        <td><span style="color:#f87171;">⚠️ NEW</span></td>
+                        <td><span style="color:#ef4444;font-size:0.75em;">NOT IN DATABASE</span></td>
+                        <td style="color:#f87171;font-weight:bold;">${m.wo}</td>
+                        <td style="color:#94a3b8;">${m.shop}</td>
+                        <td style="color:#fbbf24;">$${m.laborBilled.toLocaleString()}</td>
+                        <td><span style="color:#f87171;font-size:0.75em;">📋 Add to DB</span></td>
+                    </tr>`;
+                });
+            }
+            
             orderedList.forEach(c => {
                 // Skip sent/skipped/waived if checkbox unchecked
                 if (!showSent && (c.status === 'sent' || c.status === 'skipped' || c.status === 'waived')) return;
@@ -3013,12 +3059,14 @@ ${surveyUrl}`;
             tbody.innerHTML = html;
             
             // Update summary with detailed breakdown
-            if (readyCount === 0 && lookupCount === 0) {
+            if (readyCount === 0 && lookupCount === 0 && missingWOs.length === 0) {
                 summaryDiv.innerHTML = '✅ <strong>All ' + sentCount + ' surveys sent!</strong> Waiting for responses.';
                 summaryDiv.style.background = '#14532d';
                 summaryDiv.style.color = '#bbf7d0';
             } else {
-                let summaryText = `📊 <strong style="color:#10b981;">${readyCount} ready</strong>`;
+                let summaryText = '';
+                if (missingWOs.length > 0) summaryText += `<span style="color:#f87171;">⚠️ ${missingWOs.length} billed WOs missing from DB</span> | `;
+                summaryText += `<strong style="color:#10b981;">${readyCount} ready</strong>`;
                 if (lookupCount > 0) summaryText += ` | <span style="color:#f87171;">${lookupCount} need email</span>`;
                 if (waivedCount > 0) summaryText += ` | <span style="color:#a78bfa;">${waivedCount} waived (dup)</span>`;
                 if (skippedCount > 0) summaryText += ` | <span style="color:#94a3b8;">${skippedCount} skipped</span>`;
@@ -3028,8 +3076,11 @@ ${surveyUrl}`;
                 summaryDiv.style.color = '#93c5fd';
             }
             
-            // Update count in header
-            document.getElementById('customerDbCount').textContent = customerDatabase.length;
+            // Update count in header with sync status
+            const totalBilled = GOALS_DATA.billedWOsList.reduce((c, b) => c + b.wo.split(',').length, 0);
+            const missingCount = getBilledWOsNotInDatabase().length;
+            const syncStatus = missingCount > 0 ? ` <span style="color:#f87171;">(⚠️ ${missingCount} missing)</span>` : ' <span style="color:#10b981;">✅ synced</span>';
+            document.getElementById('customerDbCount').innerHTML = customerDatabase.length + ' contacts | ' + totalBilled + ' billed WOs' + syncStatus;
         }
         
         // ═══════════════════════════════════════════════════════
