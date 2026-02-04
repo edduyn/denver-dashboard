@@ -627,26 +627,29 @@
             <div class="card">
                 <div class="card-header">
                     <span class="card-title">Employee Performance - A/B Efficiency</span>
-                    <span class="badge badge-red">January Final | Corrected 02/02/26</span>
+                    <span class="badge badge-green">January Final | Corrected 02/04/26</span>
+                </div>
+                <div style="background:#14532d;padding:6px 10px;border-radius:6px;margin-bottom:8px;font-size:0.78em;color:#bbf7d0;">
+                    ✅ <strong>Formula:</strong> Non-Shop Sold ÷ Total Sold (matches Matt's A/B). Previous version incorrectly used Billable ÷ Paid Hours.
                 </div>
                 <div class="table-container">
                     <table>
                         <thead>
-                            <tr><th>Rank</th><th>Employee</th><th>Billable</th><th>Paid</th><th>A/B %</th><th>Status</th></tr>
+                            <tr><th>Rank</th><th>Employee</th><th>Non-Shop</th><th>Total Sold</th><th>A/B %</th><th>Status</th></tr>
                         </thead>
                         <tbody>
-                            <tr style="background:rgba(16,185,129,0.2)"><td>1</td><td>Sean Macoomb</td><td>119.0h</td><td>241.0h</td><td>49.4%</td><td><span class="badge badge-amber">Below Target</span></td></tr>
-                            <tr style="background:rgba(16,185,129,0.2)"><td>2</td><td>Juan Medina</td><td>118.5h</td><td>273.0h</td><td>43.4%</td><td><span class="badge badge-amber">Below Target</span></td></tr>
-                            <tr><td>3</td><td>Julia Langford</td><td>72.5h</td><td>242.0h</td><td>30.0%</td><td><span class="badge badge-red">Critical</span></td></tr>
-                            <tr><td>4</td><td>Michael Huber</td><td>70.0h</td><td>243.5h</td><td>28.7%</td><td><span class="badge badge-red">Critical</span></td></tr>
-                            <tr><td>5</td><td>Kim Owen</td><td>62.1h</td><td>246.0h</td><td>25.2%</td><td><span class="badge badge-red">Critical</span></td></tr>
-                            <tr><td>6</td><td>Armando Triana-Cruz</td><td>58.5h</td><td>257.5h</td><td>22.7%</td><td><span class="badge badge-red">Critical</span></td></tr>
-                            <tr><td>7</td><td>Guillermo Tovar S.</td><td>49.0h</td><td>239.5h</td><td>20.5%</td><td><span class="badge badge-red">Critical</span></td></tr>
-                            <tr><td>8</td><td>Andrew Watson</td><td>42.5h</td><td>218.5h</td><td>19.5%</td><td><span class="badge badge-red">Critical</span></td></tr>
-                            <tr><td>9</td><td>Jose Noris</td><td>45.0h</td><td>240.0h</td><td>18.8%</td><td><span class="badge badge-red">Critical</span></td></tr>
-                            <tr><td>10</td><td>John Watson</td><td>33.0h</td><td>192.0h</td><td>17.2%</td><td><span class="badge badge-red">Critical</span></td></tr>
-                            <tr><td>11</td><td>Ken Smith</td><td>39.0h</td><td>256.0h</td><td>15.2%</td><td><span class="badge badge-red">Critical</span></td></tr>
-                            <tr><td>12</td><td>Douglas Riera Guzman</td><td>11.0h</td><td>240.0h</td><td>4.6%</td><td><span class="badge badge-red">Critical</span></td></tr>
+                            <tr style="background:rgba(16,185,129,0.2)"><td>1</td><td>Sean Macoomb</td><td>119.0h</td><td>177.0h</td><td>67.2%</td><td><span class="badge badge-green">Above Target ✅</span></td></tr>
+                            <tr style="background:rgba(16,185,129,0.2)"><td>2</td><td>Juan Medina</td><td>118.5h</td><td>209.5h</td><td>56.6%</td><td><span class="badge badge-amber">Below Target</span></td></tr>
+                            <tr><td>3</td><td>Julia Langford</td><td>72.5h</td><td>176.0h</td><td>41.2%</td><td><span class="badge badge-red">Critical</span></td></tr>
+                            <tr><td>4</td><td>Michael Huber</td><td>70.0h</td><td>176.5h</td><td>39.7%</td><td><span class="badge badge-red">Critical</span></td></tr>
+                            <tr><td>5</td><td>Kim Owen</td><td>62.1h</td><td>180.5h</td><td>34.4%</td><td><span class="badge badge-red">Critical</span></td></tr>
+                            <tr><td>6</td><td>Armando Triana-Cruz</td><td>58.5h</td><td>176.0h</td><td>33.2%</td><td><span class="badge badge-red">Critical</span></td></tr>
+                            <tr><td>7</td><td>Guillermo Tovar S.</td><td>49.0h</td><td>175.5h</td><td>27.9%</td><td><span class="badge badge-red">Critical</span></td></tr>
+                            <tr><td>8</td><td>Jose Noris</td><td>45.0h</td><td>178.0h</td><td>25.3%</td><td><span class="badge badge-red">Critical</span></td></tr>
+                            <tr><td>9</td><td>Andrew Watson</td><td>42.5h</td><td>173.5h</td><td>24.5%</td><td><span class="badge badge-red">Critical</span></td></tr>
+                            <tr><td>10</td><td>Ken Smith</td><td>39.0h</td><td>194.0h</td><td>20.1%</td><td><span class="badge badge-red">Critical</span></td></tr>
+                            <tr><td>11</td><td>John Watson</td><td>33.0h</td><td>176.0h</td><td>18.8%</td><td><span class="badge badge-red">Critical</span></td></tr>
+                            <tr><td>12</td><td>Douglas Riera Guzman</td><td>11.0h</td><td>176.0h</td><td>6.2%</td><td><span class="badge badge-red">Critical</span></td></tr>
                             <tr style="background:rgba(100,116,139,0.2)"><td>—</td><td>Michael Hannas</td><td>0h</td><td>0h</td><td>—</td><td><span class="badge" style="background:#475569;">LOA since 10/28</span></td></tr>
                         </tbody>
                     </table>
