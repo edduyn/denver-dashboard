@@ -4374,10 +4374,20 @@ ${surveyUrl}`;
             const mmdd = (now.getMonth()+1).toString().padStart(2,'0') + '/' + day.toString().padStart(2,'0');
             const yy = year.toString().slice(-2);
 
-            // Header: HARDCODED by Claude at file update time (not refresh time)
-            // Claude updates this string each time index.html is modified
+            // Header: Auto-detect file's last modified date
             const hdr = document.getElementById('headerTimestamp');
-            if (hdr) hdr.textContent = 'Last updated: Feb 4, 2026 \u00B7 8:30 AM MST';
+            if (hdr) {
+                const mod = new Date(document.lastModified);
+                const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+                const mo = months[mod.getMonth()];
+                const dy = mod.getDate();
+                const yr = mod.getFullYear();
+                let hr = mod.getHours();
+                const mn = mod.getMinutes().toString().padStart(2,'0');
+                const ap = hr >= 12 ? 'PM' : 'AM';
+                hr = hr % 12 || 12;
+                hdr.textContent = 'Last updated: ' + mo + ' ' + dy + ', ' + yr + ' \u00B7 ' + hr + ':' + mn + ' ' + ap + ' MST';
+            }
 
             // Customer DB: "Updated 02/03 10:00AM"
             const cdb = document.getElementById('customerDbTimestamp');
