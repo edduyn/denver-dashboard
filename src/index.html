@@ -366,6 +366,7 @@
         // ═══════════════════════════════════════════════════════
 
         const GOALS_DATA= {
+
             // ── INJECTED FOR COMPATIBILITY ──
             monthlyTarget: 694000,
             revenueMTD: 199000,
@@ -376,6 +377,35 @@
             wipEntries:[],
             npsList:[],
             billedWOsList:[],
+            employeeStats: [], // For JS-based employee table rendering
+
+            // ── WO TAB DYNAMIC DATA ──
+            woSummary: {
+                openCount: 0, billedCount: 0, totalWIP: 0, expectedHours: 0, timestamp: ''
+            }
+
+            ,
+            wipByShop: {
+                SDN: {
+                    hours: 0, wip: 0, rate: 145
+                }
+
+                , SDR: {
+                    hours: 0, wip: 0, rate: 145
+                }
+
+                , SDV: {
+                    hours: 0, wip: 70, rate: 70
+                }
+
+                , SHC: {
+                    hours: 0, wip: 0, rate: 145
+                }
+            }
+
+            ,
+            shopProfitability: [],
+            sdvWOs: [],
             // ── GOAL #1: Financial A/B Ratio ──
             abTarget: 58.5,
             abMonthly: [ // Claude adds rows as months close: {month, mattOfficial, localCalc, nonShopHrs, totalSoldHrs, paidHrs, rank, networkTotal}
@@ -5713,4 +5743,219 @@
         }
 
         renderTechDiscrepancies();
+
+        // ═══════════════════════════════════════════════════════
+        // WORK ORDERS TAB DYNAMIC RENDERERS
+        // ═══════════════════════════════════════════════════════
+
+        function renderWOSummary() {
+            const d=GOALS_DATA.woSummary || {}
+
+            ;
+            const ab=GOALS_DATA.currentMonthAB || 0;
+            const elr=GOALS_DATA.currentELR || 0;
+            const billedCount=d.billedCount || 0;
+            const openCount=d.openCount || 0;
+            const totalWIP=d.totalWIP || 0;
+            const expectedHrs=d.expectedHours || 0;
+
+            // Update WO Summary badge
+            const badge=document.querySelector('#workorders .card:first-child .badge');
+
+            if (badge) badge.textContent=`$ {
+                openCount
+            }
+
+            Open WOs`;
+
+            // Update metric values - find all metrics in the WO Summary card
+            const woCard=document.querySelector('#workorders .card:first-child .card-grid');
+
+            if (woCard) {
+                const metrics=woCard.querySelectorAll('.metric');
+                if (metrics[0]) metrics[0].querySelector('.metric-value').textContent=openCount;
+
+                if (metrics[1]) {
+                    metrics[1].querySelector('.metric-value').textContent=ab + '%';
+                }
+
+                if (metrics[2]) {
+                    const elrEl=document.getElementById('elrDisplay');
+                    if (elrEl) elrEl.textContent='$' + elr + '/hr';
+                }
+
+                if (metrics[3]) {
+                    metrics[3].querySelector('.metric-value').textContent=billedCount;
+                    metrics[3].querySelector('.metric-label').textContent='Billed WOs (MTD)';
+                }
+
+                if (metrics[4]) {
+                    metrics[4].querySelector('.metric-value').textContent='$' + totalWIP.toLocaleString();
+                    const sub=metrics[4].querySelector('.metric-sub');
+                    if (sub) sub.textContent='💰 ' + expectedHrs + 'h expected';
+                }
+
+                if (metrics[5]) {
+                    metrics[5].querySelector('.metric-value').textContent=expectedHrs + 'h';
+                }
+            }
+        }
+
+        function renderWIPByShop() {
+            const d=GOALS_DATA.wipByShop || {}
+
+            ;
+            const timestamp=GOALS_DATA.woSummary?.timestamp || '';
+
+            // Find the WIP by Shop card and update the timestamp badge
+            const wipCard=document.querySelector('#workorders .card:nth-child(2)');
+
+            if (wipCard) {
+                const badge=wipCard.querySelector('.badge');
+                if (badge && timestamp) badge.textContent=timestamp;
+
+                // Update shop cards
+                const grid=wipCard.querySelector('div[style*="grid-template-columns"]');
+
+                if (grid) {
+                    const shopCards=grid.children;
+
+                    // SDN
+                    if (shopCards[0] && d.SDN) {
+                        shopCards[0].children[1].textContent='$' + d.SDN.wip.toLocaleString();
+                        shopCards[0].children[2].textContent=d.SDN.hours + 'h × $' + d.SDN.rate;
+                    }
+
+                    // SDV
+                    if (shopCards[1] && d.SDV) {
+                        shopCards[1].children[1].textContent='$' + d.SDV.wip.toLocaleString();
+                        shopCards[1].children[2].textContent=d.SDV.hours + 'h × $' + d.SDV.rate;
+                    }
+
+                    // SDR
+                    if (shopCards[2] && d.SDR) {
+                        shopCards[2].children[1].textContent='$' + d.SDR.wip.toLocaleString();
+                        shopCards[2].children[2].textContent=d.SDR.hours + 'h × $' + d.SDR.rate;
+                    }
+
+                    // SHC
+                    if (shopCards[3] && d.SHC) {
+                        shopCards[3].children[1].textContent='$' + d.SHC.wip.toLocaleString();
+                        shopCards[3].children[2].textContent=d.SHC.hours + 'h × $' + d.SHC.rate;
+                    }
+                }
+
+                // Update total WIP footer
+                const footer=wipCard.querySelector('div[style*="background:#0f172a"]');
+
+                if (footer) {
+                    const totalHrs=(d.SDN?.hours || 0) + (d.SDV?.hours || 0) + (d.SDR?.hours || 0) + (d.SHC?.hours || 0);
+                    const totalWIP=(d.SDN?.wip || 0) + (d.SDV?.wip || 0) + (d.SDR?.wip || 0) + (d.SHC?.wip || 0);
+                    footer.innerHTML='💡 <strong>Total WIP:</strong> $' + totalWIP.toLocaleString() + ' (' + totalHrs.toFixed(1) + 'h sold on OPEN WOs) | SDV @ $70/hr, others @ $145/hr';
+                }
+            }
+        }
+
+        // Call WO renderers on load
+        renderWOSummary();
+        renderWIPByShop();
+
+        // ═══════════════════════════════════════════════════════
+        // ALERT BANNER & OVERVIEW DYNAMIC RENDERERS
+        // ═══════════════════════════════════════════════════════
+
+        function renderAlertBanner() {
+            const banner=document.querySelector('.alert-banner');
+
+            if (banner && GOALS_DATA.alertBannerText) {
+                banner.textContent=GOALS_DATA.alertBannerText;
+            }
+        }
+
+        function renderOverviewMetrics() {
+            const ab=GOALS_DATA.currentMonthAB || 0;
+            const elr=GOALS_DATA.currentELR || 0;
+            const rev=GOALS_DATA.revenueMTD || 0;
+            const target=GOALS_DATA.targetAB || 58.5;
+            const monthlyTarget=GOALS_DATA.monthlyTarget || 694000;
+
+            // Update A/B Ratio main metric in Overview tab
+            const overviewTab=document.getElementById('overview');
+
+            if (overviewTab) {
+                // Find the first card (A/B ratio card) and update metrics
+                const abCard=overviewTab.querySelector('.card');
+
+                if (abCard) {
+                    // Update card title with current month
+                    const months=['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+                    const currentMonth=months[new Date().getMonth()];
+                    const cardTitle=abCard.querySelector('.card-title');
+                    if (cardTitle) cardTitle.textContent='📊 A/B Ratio — ' + currentMonth + ' 2026 MTD';
+
+                    // Update main A/B percentage if there's a big number display
+                    const bigNum=abCard.querySelector('.metric-value, [style*="font-size:3"]');
+                    if (bigNum) bigNum.textContent=ab + '%';
+                }
+
+                // Update ELR display if exists
+                const elrEl=document.getElementById('elrDisplay');
+                if (elrEl) elrEl.textContent='$' + elr + '/hr';
+            }
+        }
+
+        function renderEmployeeTable() {
+            // Employee table is already rendered via generate_employee_html in Python
+            // This function can enhance with additional dynamic features if needed
+            const tbody=document.getElementById('employeeTableBody');
+            if ( !tbody || !GOALS_DATA.employeeStats) return;
+
+            // If employeeStats is injected, use it
+            const stats=GOALS_DATA.employeeStats || [];
+            if (stats.length===0) return;
+
+            // Sort by A/B ratio descending
+            stats.sort((a, b)=> b.ab - a.ab);
+
+            tbody.innerHTML=stats.map((emp, i)=> {
+                    const status=emp.ab >=58.5 ? 'Above Target ✅' : emp.ab >=40 ? 'Below Target' : 'Critical';
+                    const badgeClass=emp.ab >=58.5 ? 'badge badge-green' : emp.ab >=40 ? 'badge badge-amber' : 'badge badge-red';
+                    const rowBg=emp.ab >=58.5 ? 'style="background:rgba(16,185,129,0.2)"' : '';
+
+                    return `<tr $ {
+                        rowBg
+                    }
+
+                    ><td>$ {
+                        i+1
+                    }
+
+                    </td><td>$ {
+                        emp.name
+                    }
+
+                    </td><td>$ {
+                        emp.nonShop
+                    }
+
+                    h</td><td>$ {
+                        emp.total
+                    }
+
+                    h</td><td>$ {
+                        emp.ab
+                    }
+
+                    %</td><td><span class="${badgeClass}" >$ {
+                        status
+                    }
+
+                    </span></td></tr>`;
+                }).join('');
+        }
+
+        // Call alert and overview renderers on load
+        renderAlertBanner();
+        renderOverviewMetrics();
+
         </script> < !-- TICKER BAR — auto-rendered from GOALS_DATA --> <div id="tickerBar" class="ticker-bar" ></div> </body> </html>

@@ -1075,6 +1075,11 @@ def update_html(metrics):
     html = inject_goals_data(html, 'npsList', metrics['nps_list'])
     html = inject_goals_data(html, 'sdvWOs', metrics['sdv_list'])
     
+    # Inject WO Summary and WIP by Shop
+    html = inject_goals_data(html, 'woSummary', metrics.get('wo_summary', {}))
+    html = inject_goals_data(html, 'wipByShop', metrics.get('wip_by_shop', {}))
+    html = inject_goals_data(html, 'shopProfitability', metrics.get('shop_profitability', []))
+    
     # Inject training schedule
     html = inject_goals_data(html, 'techSchedule', metrics.get('training_schedule', []))
     
@@ -1306,28 +1311,84 @@ def get_metrics(inbox_files):
                 'note': item['work'], 'flags': ['loaned'] if 'NJ ' in item['work'] else []
             })
 
-    # Placeholder values for new metrics, as their calculation logic was not provided
-    ab_val = global_ab # Using existing global_ab
-    elr_val = global_elr # Using existing global_elr
-    rev_val = sum(b['laborBilled'] for b in billed_list) # Using existing revenue_total
-    wip_rev = sum(item['wip'] for item in wip_list) # Calculate WIP revenue
-    billed_rev = rev_val # Billed revenue is the same as total revenue from billed_list
-    open_wip = wip_list # Using existing wip_list
-    wip_by_shop = {} # Placeholder, needs actual calculation
-    nps_candidates = nps_list # Using existing nps_list
-    days_to_bill_summary = {} # Placeholder, needs actual calculation
+    # === Calculate WIP by Shop ===
+    wip_by_shop = {shop: {'hours': 0.0, 'wip': 0, 'rate': SHOP_RATES[shop]['wip']} for shop in SHOP_CODES}
+    for item in wip_list:
+        shop = item.get('shop', 'Unknown')
+        if shop in wip_by_shop:
+            wip_by_shop[shop]['hours'] += item['hours']
+            wip_by_shop[shop]['wip'] += item['wip']
+    # Round hours
+    for shop in wip_by_shop:
+        wip_by_shop[shop]['hours'] = round(wip_by_shop[shop]['hours'], 1)
+
+    # === Calculate Shop Profitability from Billed WOs ===
+    shop_profitability = []
+    shop_billed = {shop: {'wos': 0, 'hours': 0.0, 'laborBilled': 0} for shop in SHOP_CODES}
+    for b in billed_list:
+        shop = b.get('shop', 'Unknown')
+        if shop in shop_billed:
+            shop_billed[shop]['wos'] += 1
+            shop_billed[shop]['hours'] += b.get('hours', 0)
+            shop_billed[shop]['laborBilled'] += b.get('laborBilled', 0)
+    
+    for shop in SHOP_CODES:
+        data = shop_billed[shop]
+        flat_rate = SHOP_RATES[shop]['flat']
+        expected_at_flat = int(data['hours'] * flat_rate)
+        eff_rate = int(data['laborBilled'] / data['hours']) if data['hours'] > 0 else 0
+        variance = data['laborBilled'] - expected_at_flat
+        shop_profitability.append({
+            'shop': shop,
+            'woCount': data['wos'],
+            'hours': round(data['hours'], 1),
+            'flatRate': flat_rate,
+            'laborBilled': data['laborBilled'],
+            'expectedAtFlat': expected_at_flat,
+            'variance': variance,
+            'effRate': eff_rate,
+            'status': 'profit' if variance >= 0 else 'loss'
+        })
+
+    # === WO Summary Metrics ===
+    open_wo_count = len(anchor_data['items'])
+    billed_count = len(billed_list)
+    total_wip = sum(item['wip'] for item in wip_list)
+    total_expected_hours = sum(item.get('expected_hours', 0) for item in anchor_data['items'])
+    
+    wo_summary = {
+        'openCount': open_wo_count,
+        'billedCount': billed_count,
+        'totalWIP': total_wip,
+        'expectedHours': round(total_expected_hours, 1),
+        'timestamp': datetime.datetime.now().strftime('%m/%d/%y %I:%M %p')
+    }
+
+    # Calculate global values
+    ab_val = global_ab
+    elr_val = global_elr
+    rev_val = sum(b['laborBilled'] for b in billed_list)
+    wip_rev = total_wip
+    nps_candidates = nps_list
     
     return {
         'ab_ratio': ab_val,
         'effective_rate': elr_val,
         'revenue_total': rev_val,
         'revenue_wip': wip_rev,
-        'revenue_billed': billed_rev,
-        'wip_list': open_wip,
+        'revenue_billed': rev_val,
+        'wip_list': wip_list,
         'wip_by_shop': wip_by_shop,
-        'billed_list': billed_list, # Changed from billed_data['billed_wos'] to billed_list
+        'shop_profitability': shop_profitability,
+        'wo_summary': wo_summary,
+        'billed_list': billed_list,
         'nps_candidates': nps_candidates,
-        'days_to_bill': days_to_bill_summary,
+        'sdv_list': sdv_list,
+        'global_ab': global_ab,
+        'global_elr': global_elr,
+        'billed_count': billed_count,
+        'emp_stats': final_emp_stats,
+        'nps_list': nps_list,
         'training_schedule': json.load(open(TRAINING_FILE)) if os.path.exists(TRAINING_FILE) else [],
         'quality_discrepancies': json.load(open(QUALITY_FILE)) if os.path.exists(QUALITY_FILE) else []
     }
