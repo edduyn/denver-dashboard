@@ -4420,7 +4420,7 @@ ${surveyUrl}`;
                 <div class="table-container">
                     <table>
                         <thead>
-                            <tr><th>WO#</th><th>Shop</th><th>Customer</th><th>Hrs (This Mo)</th><th>Rate</th><th style="color:#10b981">WIP $</th></tr>
+                            <tr><th>WO#</th><th>Shop</th><th>Customer</th><th>Hrs (This Mo)</th><th>Rate</th><th style="color:#10b981">WIP $</th><th>Notes</th></tr>
                         </thead>
                         <tbody>`;
 
@@ -4440,13 +4440,14 @@ ${surveyUrl}`;
                 html += `<tr style="${rowStyle}">
                     <td>${woLabel}</td><td>${e.shop}</td><td>${custLabel}</td>
                     <td>${e.hours}h</td><td${isLoaned ? ' style="color:#a855f7"' : ''}>$${e.rate}</td>
-                    <td style="color:${valColor};font-weight:bold">$${e.wip.toLocaleString()}</td></tr>`;
+                    <td style="color:${valColor};font-weight:bold">$${e.wip.toLocaleString()}</td>
+                    <td style="font-size:0.85em;color:#94a3b8;">${e.notes || ''}</td></tr>`;
             });
 
             html += `<tr style="background:rgba(16,185,129,0.2);font-weight:bold;font-size:1.1em;">
                     <td colspan="3">TOP ${entries.length} WIP</td>
                     <td>${totalHours}h</td><td></td>
-                    <td style="color:#10b981">$${totalWip.toLocaleString()}</td>
+                    <td style="color:#10b981">$${totalWip.toLocaleString()}</td><td></td>
                 </tr></tbody></table></div>
                 <div style="background:#0f172a;padding:10px;border-radius:6px;margin-top:10px;font-size:0.85em;color:#94a3b8;">
                     💡 <strong>WIP = Current month hours SOLD on open WOs</strong> that may carry to ${d.wipNextMonth}. Previous months' hours already WIP'd — not counted again.${d.wipExcluded.length > 0 ? ' Excluded: ' + d.wipExcluded.join(', ') + ' (not in Anchor).' : ''}
