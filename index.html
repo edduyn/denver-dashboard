@@ -4400,14 +4400,14 @@ ${surveyUrl}`;
             const container = document.getElementById('wipOverviewContainer');
             if (!container) return;
             const d = GOALS_DATA;
-            const entries = [...d.wipEntries].sort((a, b) => b.wip - a.wip);
+            // Filter out billed WOs - they're no longer WIP
+            const entries = [...d.wipEntries]
+                .filter(e => !e.flags.includes('billed'))
+                .sort((a, b) => b.wip - a.wip);
             const totalHours = entries.reduce((s, e) => s + e.hours, 0);
             const totalWip = entries.reduce((s, e) => s + e.wip, 0);
-            const billedCount = entries.filter(e => e.flags.includes('billed')).length;
             const auditCount = entries.filter(e => e.flags.includes('audit')).length;
             const loanedCount = entries.filter(e => e.flags.includes('loaned')).length;
-            const openCount = entries.filter(e => !e.flags.includes('billed')).length;
-            const openWip = entries.filter(e => !e.flags.includes('billed')).reduce((s, e) => s + e.wip, 0);
 
             let html = `<div class="card">
                 <div class="card-header">
@@ -4415,7 +4415,7 @@ ${surveyUrl}`;
                     <span class="badge badge-green">Open in Anchor (${d.wipDate})</span>
                 </div>
                 <div style="background:#14532d;padding:8px;border-radius:6px;margin-bottom:10px;font-size:0.8em;color:#bbf7d0;">
-                    🤖 <strong>Auto-synced:</strong> ${entries.length} WOs | ${openCount} open ($${openWip.toLocaleString()}) | ${billedCount} billed${auditCount > 0 ? ' | ' + auditCount + ' audit ⚠️' : ''}${loanedCount > 0 ? ' | ' + loanedCount + ' loaned 📍' : ''}
+                    🤖 <strong>Auto-synced:</strong> ${entries.length} open WOs ($${totalWip.toLocaleString()})${auditCount > 0 ? ' | ' + auditCount + ' audit ⚠️' : ''}${loanedCount > 0 ? ' | ' + loanedCount + ' loaned 📍' : ''}
                 </div>
                 <div class="table-container">
                     <table>
