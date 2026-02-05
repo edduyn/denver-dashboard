@@ -15,7 +15,14 @@
 - **WIP:** Calculated from Current Month Sold Hours only.
 - **Personnel:** Exclude Michael Hannas (LOA). Juan Medina = Production only.
 
-## 3. Tech Stack
+## 3. Auto-Sync Data Displays
+- **ALWAYS make data displays auto-sync** from source data instead of maintaining separate arrays.
+- When adding new dashboard sections, calculate/derive data dynamically from existing data structures.
+- Example: Aging WOs auto-calc from wipEntries (using openDate), not a separate agingAtRiskWOs array.
+- This reduces maintenance burden and ensures data consistency.
+
+
+## 4. Tech Stack
 - Frontend: Single-file HTML/JS (`src/index.html`).
 - Data Store: Embedded `GOALS_DATA` JSON object.
 - Backend: Python automation scripts (`src/scripts/`).
