@@ -3195,18 +3195,19 @@
             wipNextMonth: 'March',
             wipExcluded: [],  // Jan WOs already billed/closed
             wipEntries: [
-                // Claude adds/updates: {wo, shop, customer, hours (CURRENT MONTH ONLY), rate (auto from shopRates.wipRate), wip (auto: hours×rate), flags: [], billed: null, notes: ''}
+                // Claude adds/updates: {wo, shop, customer, openDate, hours (CURRENT MONTH ONLY), rate (auto from shopRates.wipRate), wip (auto: hours×rate), flags: [], billed: null, notes: ''}
                 // ── FEBRUARY MTD (hours sold in Feb only) — Billed WOs removed (they become revenue) ──
-                { wo: 'CVY8A', shop: 'SDN', customer: 'Stinson Aviation LLC', hours: 20.0, rate: 145, wip: 2900, flags: [], billed: null, notes: '91.411/413/RVSM — biggest Feb WO' },
-                { wo: 'CTQMA', shop: 'SDR', customer: 'Robert P Husted', hours: 11.0, rate: 145, wip: 1595, flags: ['audit'], billed: null, notes: 'Continuing from Jan — QA audit cited' },
-                { wo: 'CVRQA', shop: 'SDN', customer: 'Intl Jet Aviation Services', hours: 7.5, rate: 145, wip: 1088, flags: [], billed: null, notes: 'Replace Nic/Proc 4' },
-                { wo: 'CW5NA', shop: 'SDN', customer: 'KW Flight LLC', hours: 5.5, rate: 145, wip: 798, flags: [], billed: null, notes: 'Troubleshoot C1 intermittent — active in Job View' },
-                { wo: 'CU1EA', shop: 'SDN', customer: '42K Re Management LLC', hours: 5.0, rate: 145, wip: 725, flags: [], billed: null, notes: 'Continuing from Jan' },
-                { wo: 'CW3EA', shop: 'SDR', customer: 'Denver Rock Island Railway', hours: 2.0, rate: 145, wip: 290, flags: [], billed: null, notes: 'GPS antenna doubler — active in Job View' },
-                { wo: 'DW1LA', shop: 'SDN', customer: 'Wingtip Aviation', hours: 2.0, rate: 145, wip: 290, flags: [], billed: null, notes: 'Assist with NAV Check' },
-                { wo: 'CVWLA', shop: 'SDV', customer: 'Silver Dollar Partner LLC', hours: 2.0, rate: 70, wip: 140, flags: [], billed: null, notes: 'Universal Upgrade' },
-                { wo: 'CW5MA', shop: 'SDN', customer: 'KW Flight LLC', hours: 1.5, rate: 145, wip: 218, flags: [], billed: null, notes: 'Update Databases — RTS complete' },
-                { wo: 'DB1UA', shop: 'SDV', customer: 'Hogs Head Air 1 LLC', hours: 0, rate: 70, wip: 0, flags: ['loaned'], loanNote: 'NJ controlled', billed: null, notes: 'No Feb hours yet' },
+                { wo: 'CVY8A', shop: 'SDN', customer: 'Stinson Aviation LLC', openDate: '01/15/26', hours: 20.0, rate: 145, wip: 2900, flags: [], billed: null, notes: '91.411/413/RVSM — biggest Feb WO' },
+                { wo: 'CTQMA', shop: 'SDR', customer: 'Robert P Husted', openDate: '12/15/25', hours: 11.0, rate: 145, wip: 1595, flags: ['audit'], billed: null, notes: 'Continuing from Jan — QA audit cited' },
+                { wo: 'CVRQA', shop: 'SDN', customer: 'Intl Jet Aviation Services', openDate: '01/28/26', hours: 7.5, rate: 145, wip: 1088, flags: [], billed: null, notes: 'Replace Nic/Proc 4' },
+                { wo: 'CW5NA', shop: 'SDN', customer: 'KW Flight LLC', openDate: '02/03/26', hours: 5.5, rate: 145, wip: 798, flags: [], billed: null, notes: 'Troubleshoot C1 intermittent — active in Job View' },
+                { wo: 'CU1EA', shop: 'SDN', customer: '42K Re Management LLC', openDate: '01/08/26', hours: 5.0, rate: 145, wip: 725, flags: [], billed: null, notes: 'Continuing from Jan' },
+                { wo: 'CW3EA', shop: 'SDR', customer: 'Denver Rock Island Railway', openDate: '02/01/26', hours: 2.0, rate: 145, wip: 290, flags: [], billed: null, notes: 'GPS antenna doubler — active in Job View' },
+                { wo: 'DW1LA', shop: 'SDN', customer: 'Wingtip Aviation', openDate: '02/04/26', hours: 2.0, rate: 145, wip: 290, flags: [], billed: null, notes: 'Assist with NAV Check' },
+                { wo: 'CVWLA', shop: 'SDV', customer: 'Silver Dollar Partner LLC', openDate: '01/20/26', hours: 2.0, rate: 70, wip: 140, flags: [], billed: null, notes: 'Universal Upgrade' },
+                { wo: 'CW5MA', shop: 'SDN', customer: 'KW Flight LLC', openDate: '02/03/26', hours: 1.5, rate: 145, wip: 218, flags: [], billed: null, notes: 'Update Databases — RTS complete' },
+                { wo: 'DB1UA', shop: 'SDV', customer: 'Hogs Head Air 1 LLC', openDate: '01/25/26', hours: 0, rate: 70, wip: 0, flags: ['loaned'], loanNote: 'NJ controlled', billed: null, notes: 'No Feb hours yet' },
+                { wo: 'CU0VA', shop: 'SDR', customer: 'The Club at Centennial', openDate: '01/06/26', hours: 0, rate: 145, wip: 3118, flags: ['audit'], billed: null, notes: 'QA audit cited — longstanding WO' },
             ],
             wipTotalHours: 56.5,  // Open WOs only (excl billed + CV78A not started)
             wipTotalValue: 8044,  // CV78A removed — project starts Feb 17
@@ -3223,19 +3224,10 @@
                 { wo: 'CG4NA', shop: 'SDN', days: 188, wip: 2486, status: 'dispute', notes: 'Kauffman owner was in ICU, hope to resolve soon' },
             ],
 
-            // ── AGING AT-RISK WOs (Will be 30+ days by EOM) ──
-            // Claude updates: WOs opened before Jan 30 that are still open will be 30+ days by Feb 28
-            // Rule: openDate <= (EOM - 30 days) AND status = 'open'
-            agingAtRiskDate: '02/05/26',
-            agingEOM: 'Feb 28',  // End of month for calculation
-            agingAtRiskWOs: [
-                // Claude adds: {wo, shop, customer, openDate, daysOpen, daysByEOM, wip, status: 'at-risk'|'critical'|'resolved', notes}
-                // Critical = already 30+ days, At-Risk = will be 30+ by EOM
-                { wo: 'CTQMA', shop: 'SDR', customer: 'Robert P Husted', openDate: '12/15/25', daysOpen: 52, daysByEOM: 75, wip: 1595, status: 'critical', notes: 'QA audit cited — needs billing priority' },
-                { wo: 'CU0VA', shop: 'SDR', customer: 'The Club at Centennial', openDate: '01/06/26', daysOpen: 30, daysByEOM: 53, wip: 3118, status: 'critical', notes: 'QA audit cited — review status' },
-                { wo: 'CU1EA', shop: 'SDN', customer: '42K Re Management LLC', openDate: '01/08/26', daysOpen: 28, daysByEOM: 51, wip: 725, status: 'at-risk', notes: 'Continuing from Jan — push to close' },
-                { wo: 'CVY8A', shop: 'SDN', customer: 'Stinson Aviation LLC', openDate: '01/15/26', daysOpen: 21, daysByEOM: 44, wip: 2900, status: 'at-risk', notes: '91.411/413/RVSM — biggest Feb WO' },
-            ],
+            // ── AGING AT-RISK WOs — AUTO-CALCULATED from wipEntries ──
+            // Renderer auto-calculates: filters wipEntries where daysByEOM >= 30
+            // No separate data to maintain — just update wipEntries with openDate
+            agingEOM: '02/28/26',  // End of month date for calculation (MM/DD/YY format)
 
             // Claude updates when Billed WO report is processed — cross-reference squawks with Price Items
             // AUTO-SYNC: nqaJobs + tmJobs should cover ALL squawks in billedWOsList
@@ -4301,9 +4293,50 @@ ${surveyUrl}`;
             const container = document.getElementById('agingAtRiskContainer');
             if (!container) return;
             const d = GOALS_DATA;
-            const entries = d.agingAtRiskWOs || [];
+
+            // Parse end of month date for calculations
+            const parseDate = (dateStr) => {
+                if (!dateStr) return null;
+                const parts = dateStr.split('/');
+                if (parts.length !== 3) return null;
+                const month = parseInt(parts[0]) - 1;
+                const day = parseInt(parts[1]);
+                const year = 2000 + parseInt(parts[2]);
+                return new Date(year, month, day);
+            };
+
+            const today = new Date();
+            const eomDate = parseDate(d.agingEOM);
+            if (!eomDate) {
+                container.innerHTML = '<div class="card"><div style="color:#ef4444;padding:15px;">⚠️ Invalid agingEOM date format</div></div>';
+                return;
+            }
+
+            // Calculate days between two dates
+            const daysBetween = (d1, d2) => Math.floor((d2 - d1) / (1000 * 60 * 60 * 24));
+
+            // Auto-calculate aging from wipEntries
+            const entries = (d.wipEntries || [])
+                .filter(e => e.openDate && !e.flags.includes('billed'))  // Must have openDate and not billed
+                .map(e => {
+                    const openDate = parseDate(e.openDate);
+                    if (!openDate) return null;
+                    const daysOpen = daysBetween(openDate, today);
+                    const daysByEOM = daysBetween(openDate, eomDate);
+                    const status = daysOpen >= 30 ? 'critical' : daysByEOM >= 30 ? 'at-risk' : 'ok';
+                    return { ...e, daysOpen, daysByEOM, status };
+                })
+                .filter(e => e && e.daysByEOM >= 30)  // Only show WOs that will be 30+ by EOM
+                .sort((a, b) => b.daysByEOM - a.daysByEOM);
+
             if (entries.length === 0) {
-                container.innerHTML = '';
+                container.innerHTML = `<div class="card" style="border:2px solid #10b981;">
+                    <div class="card-header">
+                        <span class="card-title">⏰ Aging WOs At-Risk (30+ days by ${d.agingEOM.replace(/(\d+)\/(\d+)\/(\d+)/, (m, mm, dd, yy) => ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][mm - 1] + ' ' + dd)})</span>
+                        <span class="badge badge-green">✅ All Clear</span>
+                    </div>
+                    <div style="padding:15px;color:#10b981;">No open WOs will reach 30 days by end of month. 🎉</div>
+                </div>`;
                 return;
             }
 
@@ -4312,16 +4345,17 @@ ${surveyUrl}`;
             const totalWip = entries.reduce((s, e) => s + (e.wip || 0), 0);
             const badgeClass = criticalCount > 0 ? 'badge-red' : atRiskCount > 0 ? 'badge-amber' : 'badge-green';
             const badgeText = criticalCount > 0 ? `🔴 ${criticalCount} Critical` : atRiskCount > 0 ? `⚠️ ${atRiskCount} At-Risk` : '✅ Clear';
+            const eomLabel = d.agingEOM.replace(/(\d+)\/(\d+)\/(\d+)/, (m, mm, dd, yy) => ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][parseInt(mm) - 1] + ' ' + dd);
 
             let html = `<div class="card" style="border:2px solid ${criticalCount > 0 ? '#ef4444' : '#f59e0b'};">
                 <div class="card-header">
-                    <span class="card-title">⏰ Aging WOs At-Risk (30+ days by ${d.agingEOM})</span>
+                    <span class="card-title">⏰ Aging WOs At-Risk (30+ days by ${eomLabel})</span>
                     <span class="badge ${badgeClass}">${badgeText}</span>
                 </div>
-                <div style="background:rgba(239,68,68,0.1);padding:10px;border-radius:6px;margin-bottom:12px;font-size:0.85em;color:#fca5a5;">
-                    <strong>📊 Tracking:</strong> WOs currently open that will hit 30+ days by end of month | 
-                    <strong>Total WIP at risk:</strong> $${totalWip.toLocaleString()} | 
-                    Updated: ${d.agingAtRiskDate}
+                <div style="background:rgba(16,185,129,0.15);padding:10px;border-radius:6px;margin-bottom:12px;font-size:0.85em;color:#86efac;">
+                    🤖 <strong>AUTO-SYNC:</strong> Calculated from wipEntries | ${entries.length} WOs at risk | 
+                    <strong>WIP at risk:</strong> $${totalWip.toLocaleString()} | 
+                    <strong>Today:</strong> ${today.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                 </div>
                 <div class="table-container"><table>
                     <thead>
@@ -4329,7 +4363,7 @@ ${surveyUrl}`;
                     </thead>
                     <tbody>`;
 
-            entries.sort((a, b) => b.daysByEOM - a.daysByEOM).forEach(e => {
+            entries.forEach(e => {
                 const statusBadge = e.status === 'critical'
                     ? '<span class="badge badge-red">🔴 30+ NOW</span>'
                     : e.status === 'at-risk'
@@ -4352,7 +4386,7 @@ ${surveyUrl}`;
 
             html += `</tbody></table></div>
                 <div style="background:#0f172a;padding:10px;border-radius:6px;margin-top:10px;font-size:0.85em;color:#94a3b8;">
-                    <strong style="color:#f59e0b;">📋 Action Required:</strong> Prioritize billing these WOs before ${d.agingEOM} to avoid the Over 30 list. Critical WOs already on Brian's radar.
+                    <strong style="color:#f59e0b;">📋 Action Required:</strong> Prioritize billing these WOs before ${eomLabel} to avoid the Over 30 list. Critical WOs already on Brian's radar.
                 </div>
             </div>`;
 
