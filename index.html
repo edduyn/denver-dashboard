@@ -3371,6 +3371,25 @@
                 </div>
                 <div>Technical: ${techCompleted} completed, ${techScheduled}/${t.techSchedule.length} scheduled (${Math.round(techScheduled / t.techSchedule.length * 100)}%) | LMS: ${lmsCompleted}/${lmsTotal}</div>
                 ${needDates > 0 ? `<div style="color:#f59e0b;">⚠️ ${needDates} tech(s) still need training dates</div>` : ''}
+                
+                <!-- Detailed Training Schedule -->
+                <div class="table-container" style="max-height:150px;overflow-y:auto;margin:8px 0;">
+                    <table style="font-size:0.8em;">
+                        <thead><tr><th>Tech</th><th>Course</th><th>Dates</th><th>Status</th></tr></thead>
+                        <tbody>${t.techSchedule.map(s => {
+                const statusColor = s.status === 'completed' ? '#10b981' : s.status === 'scheduled' ? '#f59e0b' : s.status === 'registered' ? '#3b82f6' : '#ef4444';
+                const statusIcon = s.status === 'completed' ? '✅' : s.status === 'scheduled' ? '🗓️' : s.status === 'registered' ? '📝' : '❓';
+                const statusLabel = s.status.charAt(0).toUpperCase() + s.status.slice(1);
+                return `<tr style="background:${s.status === 'completed' ? 'rgba(16,185,129,0.1)' : ''}">
+                                <td><strong>${s.name}</strong></td>
+                                <td>${s.course}</td>
+                                <td>${s.dates}</td>
+                                <td><span style="color:${statusColor}">${statusIcon} ${statusLabel}</span></td>
+                            </tr>`;
+            }).join('')}</tbody>
+                    </table>
+                </div>
+
                 <div class="goal-notes">${t.notes}</div>
             </div>`;
 
