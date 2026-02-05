@@ -2913,7 +2913,6 @@
                     // status: 'completed', 'scheduled', 'registered', 'tbd'
                     { name: 'Armando Triana-Cruz', course: 'Honeywell Primus EPIC Line Maint', dates: 'Apr 27 - May 1', status: 'scheduled' },
                     { name: 'Michael Huber', course: 'Virtual Garmin G3000/G5000', dates: 'Jan 28-29', status: 'completed' },
-                    { name: 'Michael Huber', course: 'GPP-0110 San Marino International', dates: 'Due Mar 7', status: 'scheduled' },
                     { name: 'Jose Noris', course: 'Virtual Garmin G1000 NXi', dates: 'Feb 26-27', status: 'scheduled' },
                     { name: 'Michael Hannas', course: 'Virtual Garmin G3000/G5000', dates: 'Jun 17-18', status: 'scheduled' },
                     { name: 'Julia Langford', course: 'Virtual Garmin G3000/G5000', dates: 'Jan 28-29', status: 'completed' },
@@ -2922,10 +2921,49 @@
                     { name: 'Juan Medina', course: 'Composite Repair', dates: 'TBD', status: 'tbd' },
                 ],
                 lmsModules: [
-                    // status: 'completed', 'pending'
-                    { name: 'GPP-0110 (3 sessions)', status: 'completed', count: 3 },
-                    { name: 'VI/QI/RTS Recurrent 2026', status: 'pending', count: 1 },
-                    { name: 'CMMC-CUI Security Awareness', status: 'pending', count: 1 },
+                    {
+                        name: 'VI/QI/RTS Recurrent 2026',
+                        status: 'pending',
+                        dueDate: 'Feb 28',
+                        assignees: [
+                            { name: 'Edduyn Pita', status: 'pending' },
+                            { name: 'Jose Noris', status: 'pending' },
+                            { name: 'Armando Triana-Cruz', status: 'pending' },
+                            { name: 'Michael Huber', status: 'pending' },
+                            { name: 'Ken Smith', status: 'pending' },
+                            { name: 'Julia Langford', status: 'pending' },
+                            { name: 'John Watson', status: 'pending' },
+                            { name: 'Sean Macoomb', status: 'pending' },
+                            { name: 'Michael Hannas', status: 'pending' }
+                        ]
+                    },
+                    {
+                        name: 'GPP-0110 Brazil International',
+                        status: 'completed',
+                        dueDate: 'Completed',
+                        assignees: [
+                            { name: 'Michael Huber', status: 'completed' },
+                            { name: 'Armando Triana-Cruz', status: 'completed' },
+                            { name: 'Ken Smith', status: 'completed' }
+                        ]
+                    },
+                    {
+                        name: 'GPP-0110 San Marino International',
+                        status: 'pending',
+                        dueDate: 'Due Mar 7',
+                        assignees: [
+                            { name: 'Michael Huber', status: 'pending' }
+                        ]
+                    },
+                    {
+                        name: 'CMMC-CUI & ISP-1402 Security',
+                        status: 'pending',
+                        dueDate: 'Feb 28',
+                        assignees: [
+                            { name: 'John Watson', status: 'pending' },
+                            { name: 'Jose Noris', status: 'pending' }
+                        ]
+                    }
                 ],
                 totalAvailable: 14,
                 notes: '⏳ Watson registered Apr 13-17. Only Juan needs dates for Composite Repair.',
@@ -3353,17 +3391,18 @@
             const t = d.training;
             const techCompleted = t.techSchedule.filter(s => s.status === 'completed').length;
             const techScheduled = t.techSchedule.filter(s => s.status !== 'tbd').length;
-            const lmsCompleted = t.lmsModules.filter(m => m.status === 'completed').reduce((s, m) => s + m.count, 0);
-            const lmsTotal = t.lmsModules.reduce((s, m) => s + m.count, 0);
+            const lmsCompleted = t.lmsModules.reduce((s, m) => s + (m.assignees ? m.assignees.filter(a => a.status === 'completed').length : m.count || 0), 0);
+            const lmsTotal = t.lmsModules.reduce((s, m) => s + (m.assignees ? m.assignees.length : m.count || 0), 0);
             const totalCompleted = techCompleted + lmsCompleted;
-            const trainPct = Math.round((totalCompleted / t.totalAvailable) * 100);
+            const grandTotal = t.techSchedule.length + lmsTotal;
+            const trainPct = grandTotal > 0 ? Math.round((totalCompleted / grandTotal) * 100) : 0;
             const needDates = t.techSchedule.filter(s => s.status === 'tbd').length;
             html += `<div class="goal-card">
                 <div class="goal-header">
                     <span class="goal-title">#3 Training Completion</span>
                     <div class="goal-progress">
                         <span class="goal-pct" style="color:${pctColor(trainPct)}">${trainPct}%</span>
-                        <span class="${badgeClass(trainPct >= 75 ? 'green' : trainPct > 0 ? 'amber' : 'red')}">${totalCompleted}/${t.totalAvailable} Done</span>
+                        <span class="${badgeClass(trainPct >= 75 ? 'green' : trainPct > 0 ? 'amber' : 'red')}">${totalCompleted}/${grandTotal} Done</span>
                     </div>
                 </div>
                 <div class="progress-container">
@@ -3389,6 +3428,29 @@
             }).join('')}</tbody>
                     </table>
                 </div>
+
+                <!-- Detailed LMS Modules -->
+                ${t.lmsModules[0].assignees ? `<div style="margin-top:10px;border-top:1px solid #334155;padding-top:5px;">
+                    <div style="font-weight:bold;color:#f59e0b;font-size:0.9em;margin-bottom:5px;">📚 Mandatory LMS Modules</div>
+                    ${t.lmsModules.map(m => {
+                const mCompleted = m.assignees.filter(a => a.status === 'completed').length;
+                const mTotal = m.assignees.length;
+                const mPct = Math.round((mCompleted / mTotal) * 100);
+                const mColor = mPct === 100 ? '#10b981' : mPct > 0 ? '#f59e0b' : '#ef4444';
+                return `<div style="margin-bottom:8px;background:rgba(30,41,59,0.5);padding:5px;border-radius:4px;">
+                            <div style="display:flex;justify-content:space-between;font-size:0.85em;">
+                                <span style="font-weight:bold;">${m.name}</span>
+                                <span style="color:${mColor}">${mCompleted}/${mTotal} (${mPct}%)</span>
+                            </div>
+                            <div style="font-size:0.8em;color:#94a3b8;margin-bottom:3px;">Due: ${m.dueDate}</div>
+                            <div style="display:flex;flex-wrap:wrap;gap:3px;">
+                                ${m.assignees.map(a => `<span style="font-size:0.75em;padding:1px 5px;border-radius:3px;background:${a.status === 'completed' ? 'rgba(16,185,129,0.2)' : 'rgba(239,68,68,0.2)'};color:${a.status === 'completed' ? '#86efac' : '#fca5a5'};">
+                                    ${a.status === 'completed' ? '✅' : '⏳'} ${a.name}
+                                </span>`).join('')}
+                            </div>
+                        </div>`;
+            }).join('')}
+                </div>` : ''}
 
                 <div class="goal-notes">${t.notes}</div>
             </div>`;
