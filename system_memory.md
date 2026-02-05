@@ -1,13 +1,27 @@
 # System Memory - Denver 889 Dashboard
 
+## 📚 Reference Documentation
+- [NQ System Flowchart](doc/references/NQ_System_Flowchart.pdf) (Scanned Flowchart)
+- [Company General Information](doc/references/Company_General_Info.pdf) (Scanned Info)
+- [GL 121 Cheat Sheet](doc/financials/GL_121_Cheat_Sheet.docx) (Work In Process 1210-000)
+- [GL 220 Cheat Sheet](doc/financials/GL_220_Cheat_Sheet.docx) (Inv Rec'd Not Invoiced 2120-000)
+- [GL Accounts Chart](doc/financials/GL_Accounts.xlsx)
+
+## 💰 Financial Workflows
+- **GL 121 (WIP):** Account `1210-000`. Tracks labor/parts on open WOs. Clears to Cost of Sales (COS) upon billing.
+  - *Process:* NQA tracks WIP -> Posting pushes to GL 1210 -> Billing credits 1210 / debits 5000 (COS).
+- **GL 220 (IRNI):** Account `2120-000`. "Inventory Received Not Invoiced".
+  - *Process:* PO Receipt -> Credit 2120 / Debit Inventory. AP Invoice -> Debit 2120 / Credit AP.
+  - *Goal:* Balance should match "Uninvoiced Receipts" report.
+
 ## 📊 Current State (Snapshot)
 - **Last Update:** 2026-02-04
-- **Revenue MTD:** $158,298 (22.8% of Target)
-- **A/B Ratio:** 34.2% (Target: 58.5%)
+- **Revenue MTD:** $29,278 (4.2% of Target)
+- **A/B Ratio:** 34.5% (Target: 58.5%)
 - **WIP Total:** $0 (Open WOs)
 
 ## 🚨 Active Alerts
-- **A/B Ratio:** CRITICAL (34.2% vs 58.5%). Gap: -25.0 pts.
+- **A/B Ratio:** CRITICAL (34.5% vs 58.5%). Gap: -25.0 pts.
 - **Login:** Password logic patched (case-insensitive + crash fix applied).
 
 ## 📥 Pending Tasks
