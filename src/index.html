@@ -541,109 +541,111 @@
 
         /* ── TICKER BAR ── */
         .ticker-bar {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 38px;
-            background: linear-gradient(90deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
-            border-top: 2px solid #334155;
-            display: flex;
-            align-items: center;
-            z-index: 1000;
-            overflow: hidden;
-            font-size: 0.82em;
-        }
-
-        .ticker-label {
-            flex-shrink: 0;
-            background: linear-gradient(135deg, #ef4444, #dc2626);
-            color: white;
-            font-weight: bold;
-            padding: 4px 12px;
-            font-size: 0.85em;
-            letter-spacing: 0.5px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            height: 100%;
-            z-index: 2;
-        }
-
-        .ticker-label-ok {
-            background: linear-gradient(135deg, #10b981, #059669);
-        }
-
-        .ticker-track {
-            flex: 1;
-            overflow: hidden;
-            position: relative;
-            height: 100%;
-            display: flex;
-            align-items: center;
-        }
-
-        .ticker-content {
-            display: flex;
-            white-space: nowrap;
-            animation: tickerScroll var(--ticker-duration, 60s) linear infinite;
-            gap: 0;
-        }
-
-        .ticker-content:hover {
-            animation-play-state: paused;
-        }
-
-        .ticker-item {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 0 24px;
-            color: #e2e8f0;
-            border-right: 1px solid #334155;
-            height: 38px;
-            flex-shrink: 0;
-        }
-
-        .ticker-item .t-icon {
-            font-size: 1.1em;
-        }
-
-        .ticker-item .t-label {
-            color: #94a3b8;
-            font-size: 0.85em;
-        }
-
-        .ticker-item .t-value {
-            font-weight: bold;
-        }
-
-        .ticker-item .t-urgent {
-            color: #fca5a5;
-        }
-
-        .ticker-item .t-warn {
-            color: #fde68a;
-        }
-
-        .ticker-item .t-ok {
-            color: #a7f3d0;
-        }
-
-        @keyframes tickerScroll {
-            0% {
-                transform: translateX(0);
+            const GOALS_DATA= {
+                monthlyTarget: 694000,
+                    revenueMTD: 199000,
+                    currentMonthAB: 34.2,
+                    currentELR: 3,
+                    targetAB: 58.5,
+                    height: 38px;
+                background: linear-gradient(90deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+                border-top: 2px solid #334155;
+                display: flex;
+                align-items: center;
+                z-index: 1000;
+                overflow: hidden;
+                font-size: 0.82em;
             }
 
-            100% {
-                transform: translateX(-50%);
+            .ticker-label {
+                flex-shrink: 0;
+                background: linear-gradient(135deg, #ef4444, #dc2626);
+                color: white;
+                font-weight: bold;
+                padding: 4px 12px;
+                font-size: 0.85em;
+                letter-spacing: 0.5px;
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                height: 100%;
+                z-index: 2;
             }
-        }
 
-        /* pad bottom of dashboard so ticker doesn't cover content */
-        .dashboard {
-            padding-bottom: 48px;
-        }
+            .ticker-label-ok {
+                background: linear-gradient(135deg, #10b981, #059669);
+            }
+
+            .ticker-track {
+                flex: 1;
+                overflow: hidden;
+                position: relative;
+                height: 100%;
+                display: flex;
+                align-items: center;
+            }
+
+            .ticker-content {
+                display: flex;
+                white-space: nowrap;
+                animation: tickerScroll var(--ticker-duration, 60s) linear infinite;
+                gap: 0;
+            }
+
+            .ticker-content:hover {
+                animation-play-state: paused;
+            }
+
+            .ticker-item {
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                padding: 0 24px;
+                color: #e2e8f0;
+                border-right: 1px solid #334155;
+                height: 38px;
+                flex-shrink: 0;
+            }
+
+            .ticker-item .t-icon {
+                font-size: 1.1em;
+            }
+
+            .ticker-item .t-label {
+                color: #94a3b8;
+                font-size: 0.85em;
+            }
+
+            .ticker-item .t-value {
+                font-weight: bold;
+            }
+
+            .ticker-item .t-urgent {
+                color: #fca5a5;
+            }
+
+            .ticker-item .t-warn {
+                color: #fde68a;
+            }
+
+            .ticker-item .t-ok {
+                color: #a7f3d0;
+            }
+
+            @keyframes tickerScroll {
+                0% {
+                    transform: translateX(0);
+                }
+
+                100% {
+                    transform: translateX(-50%);
+                }
+            }
+
+            /* pad bottom of dashboard so ticker doesn't cover content */
+            .dashboard {
+                padding-bottom: 48px;
+            }
     </style>
 </head>
 
@@ -1310,6 +1312,16 @@
                     <div class="metric">
                         <div class="metric-value">54</div>
                         <div class="metric-label">Total Open WOs</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" style="color:#f59e0b;">34.2%</div>
+                        <div class="metric-label">A/B Ratio</div>
+                        <div class="metric-sub">Target: 58.5%</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" id="elrDisplay">$0/hr</div>
+                        <div class="metric-label">Effective Labor Rate</div>
+                        <div class="metric-sub">Global Average</div>
                     </div>
                     <div class="metric">
                         <div class="metric-value">42</div>
@@ -3112,7 +3124,7 @@
             // ── BILLED WOs (from Billed WO report — blank Sqk Type rows only) ──
             // Claude updates when Billed WO report is processed
             billedWOsDate: '02/04/26',
-            billedWOsList:[{"wo": "CU97A", "shop": "SDN", "hours": 0, "laborBilled": 0, "issue": ""}, {"wo": "CU97A", "shop": "SDN", "hours": 0, "laborBilled": 0, "issue": ""}, {"wo": "CU97A", "shop": "SDN", "hours": 106.3, "laborBilled": 6236, "issue": "Low Rate $58/hr"}, {"wo": "CU97A", "shop": "SDN", "hours": 106.3, "laborBilled": 6236, "issue": "Low Rate $58/hr"}, {"wo": "CVSXA", "shop": "SDR", "hours": 0, "laborBilled": 0, "issue": ""}, {"wo": "CVSXA", "shop": "SDR", "hours": 0, "laborBilled": 0, "issue": ""}, {"wo": "CVSXA", "shop": "SDR", "hours": 125.0, "laborBilled": 844, "issue": "Low Rate $6/hr"}, {"wo": "CVSXA", "shop": "SDR", "hours": 125.0, "laborBilled": 844, "issue": "Low Rate $6/hr"}, {"wo": "CVUAA", "shop": "SHC", "hours": 0, "laborBilled": 0, "issue": ""}, {"wo": "CVUAA", "shop": "SHC", "hours": 0, "laborBilled": 0, "issue": ""}, {"wo": "CVUAA", "shop": "SHC", "hours": 825.5, "laborBilled": 0, "issue": ""}, {"wo": "CVUAA", "shop": "SHC", "hours": 825.5, "laborBilled": 0, "issue": ""}, {"wo": "CVYQA", "shop": "SDR", "hours": 0, "laborBilled": 0, "issue": ""}, {"wo": "CVYQA", "shop": "SDR", "hours": 0, "laborBilled": 0, "issue": ""}, {"wo": "CVYQA", "shop": "SDR", "hours": 115.1, "laborBilled": 633, "issue": "Low Rate $5/hr"}, {"wo": "CVYQA", "shop": "SDR", "hours": 115.1, "laborBilled": 633, "issue": "Low Rate $5/hr"}, {"wo": "CW2UA", "shop": "SDN", "hours": 0, "laborBilled": 0, "issue": ""}, {"wo": "CW2UA", "shop": "SDN", "hours": 0, "laborBilled": 0, "issue": ""}, {"wo": "CW2UA", "shop": "SDN", "hours": 380.1, "laborBilled": 2949, "issue": "Low Rate $7/hr"}, {"wo": "CW2UA", "shop": "SDN", "hours": 380.1, "laborBilled": 2949, "issue": "Low Rate $7/hr"}, {"wo": "CW27A", "shop": "SDR", "hours": 0, "laborBilled": 0, "issue": ""}, {"wo": "CW27A", "shop": "SDR", "hours": 0, "laborBilled": 0, "issue": ""}, {"wo": "CW27A", "shop": "SDR", "hours": 122.6, "laborBilled": 1440, "issue": "Low Rate $11/hr"}, {"wo": "CW27A", "shop": "SDR", "hours": 122.6, "laborBilled": 1440, "issue": "Low Rate $11/hr"}, {"wo": "CW5MA", "shop": "SDN", "hours": 0, "laborBilled": 0, "issue": ""}, {"wo": "CW5MA", "shop": "SDN", "hours": 0, "laborBilled": 0, "issue": ""}, {"wo": "CW5MA", "shop": "SDN", "hours": 133.0, "laborBilled": 523, "issue": "Low Rate $3/hr"}, {"wo": "CW5MA", "shop": "SDN", "hours": 133.0, "laborBilled": 523, "issue": "Low Rate $3/hr"}, {"wo": "CW5NA", "shop": "SDN", "hours": 0, "laborBilled": 0, "issue": ""}, {"wo": "CW5NA", "shop": "SDN", "hours": 0, "laborBilled": 0, "issue": ""}, {"wo": "CW5NA", "shop": "SDN", "hours": 118.2, "laborBilled": 1308, "issue": "Low Rate $11/hr"}, {"wo": "CW5NA", "shop": "SDN", "hours": 118.2, "laborBilled": 1308, "issue": "Low Rate $11/hr"}, {"wo": "CW65A", "shop": "SDN", "hours": 0, "laborBilled": 0, "issue": ""}, {"wo": "CW65A", "shop": "SDN", "hours": 0, "laborBilled": 0, "issue": ""}, {"wo": "CW65A", "shop": "SDN", "hours": 113.1, "laborBilled": 706, "issue": "Low Rate $6/hr"}, {"wo": "CW65A", "shop": "SDN", "hours": 113.1, "laborBilled": 706, "issue": "Low Rate $6/hr"}, {"wo": "DUYYA", "shop": "SDN", "hours": 0, "laborBilled": 0, "issue": ""}, {"wo": "DUYYA", "shop": "SDN", "hours": 0, "laborBilled": 0, "issue": ""}, {"wo": "DUYYA", "shop": "SDN", "hours": 141.1, "laborBilled": 0, "issue": ""}, {"wo": "DUYYA", "shop": "SDN", "hours": 141.1, "laborBilled": 0, "issue": ""}, {"wo": "DV26A", "shop": "SDN", "hours": 0, "laborBilled": 0, "issue": ""}, {"wo": "DV26A", "shop": "SDN", "hours": 0, "laborBilled": 0, "issue": ""}, {"wo": "DV26A", "shop": "SDN", "hours": 1520.3, "laborBilled": 0, "issue": ""}, {"wo": "DV26A", "shop": "SDN", "hours": 1520.3, "laborBilled": 0, "issue": ""}],
+            billedWOsList:[{"wo": "CU97A", "shop": "SDN", "customer": "106696", "hours": 0, "laborBilled": 0, "rate_wo": 0, "issue": ""}, {"wo": "CU97A", "shop": "SDN", "customer": "106696", "hours": 0, "laborBilled": 0, "rate_wo": 0, "issue": ""}, {"wo": "CU97A", "shop": "SDN", "customer": "106696", "hours": 106.3, "laborBilled": 6236, "rate_wo": 58, "issue": "Low Rate $58/hr"}, {"wo": "CU97A", "shop": "SDN", "customer": "106696", "hours": 106.3, "laborBilled": 6236, "rate_wo": 58, "issue": "Low Rate $58/hr"}, {"wo": "CVSXA", "shop": "SDR", "customer": "159091", "hours": 0, "laborBilled": 0, "rate_wo": 0, "issue": ""}, {"wo": "CVSXA", "shop": "SDR", "customer": "159091", "hours": 0, "laborBilled": 0, "rate_wo": 0, "issue": ""}, {"wo": "CVSXA", "shop": "SDR", "customer": "159091", "hours": 125.0, "laborBilled": 844, "rate_wo": 6, "issue": "Low Rate $6/hr"}, {"wo": "CVSXA", "shop": "SDR", "customer": "159091", "hours": 125.0, "laborBilled": 844, "rate_wo": 6, "issue": "Low Rate $6/hr"}, {"wo": "CVUAA", "shop": "SHC", "customer": "109004", "hours": 0, "laborBilled": 0, "rate_wo": 0, "issue": ""}, {"wo": "CVUAA", "shop": "SHC", "customer": "109004", "hours": 0, "laborBilled": 0, "rate_wo": 0, "issue": ""}, {"wo": "CVUAA", "shop": "SHC", "customer": "109004", "hours": 825.5, "laborBilled": 0, "rate_wo": 0, "issue": ""}, {"wo": "CVUAA", "shop": "SHC", "customer": "109004", "hours": 825.5, "laborBilled": 0, "rate_wo": 0, "issue": ""}, {"wo": "CVYQA", "shop": "SDR", "customer": "139695", "hours": 0, "laborBilled": 0, "rate_wo": 0, "issue": ""}, {"wo": "CVYQA", "shop": "SDR", "customer": "139695", "hours": 0, "laborBilled": 0, "rate_wo": 0, "issue": ""}, {"wo": "CVYQA", "shop": "SDR", "customer": "139695", "hours": 115.1, "laborBilled": 633, "rate_wo": 5, "issue": "Low Rate $5/hr"}, {"wo": "CVYQA", "shop": "SDR", "customer": "139695", "hours": 115.1, "laborBilled": 633, "rate_wo": 5, "issue": "Low Rate $5/hr"}, {"wo": "CW2UA", "shop": "SDN", "customer": "136429", "hours": 0, "laborBilled": 0, "rate_wo": 0, "issue": ""}, {"wo": "CW2UA", "shop": "SDN", "customer": "136429", "hours": 0, "laborBilled": 0, "rate_wo": 0, "issue": ""}, {"wo": "CW2UA", "shop": "SDN", "customer": "136429", "hours": 380.1, "laborBilled": 2949, "rate_wo": 7, "issue": "Low Rate $7/hr"}, {"wo": "CW2UA", "shop": "SDN", "customer": "136429", "hours": 380.1, "laborBilled": 2949, "rate_wo": 7, "issue": "Low Rate $7/hr"}, {"wo": "CW27A", "shop": "SDR", "customer": "139695", "hours": 0, "laborBilled": 0, "rate_wo": 0, "issue": ""}, {"wo": "CW27A", "shop": "SDR", "customer": "139695", "hours": 0, "laborBilled": 0, "rate_wo": 0, "issue": ""}, {"wo": "CW27A", "shop": "SDR", "customer": "139695", "hours": 122.6, "laborBilled": 1440, "rate_wo": 11, "issue": "Low Rate $11/hr"}, {"wo": "CW27A", "shop": "SDR", "customer": "139695", "hours": 122.6, "laborBilled": 1440, "rate_wo": 11, "issue": "Low Rate $11/hr"}, {"wo": "CW5MA", "shop": "SDN", "customer": "147174", "hours": 0, "laborBilled": 0, "rate_wo": 0, "issue": ""}, {"wo": "CW5MA", "shop": "SDN", "customer": "147174", "hours": 0, "laborBilled": 0, "rate_wo": 0, "issue": ""}, {"wo": "CW5MA", "shop": "SDN", "customer": "147174", "hours": 133.0, "laborBilled": 523, "rate_wo": 3, "issue": "Low Rate $3/hr"}, {"wo": "CW5MA", "shop": "SDN", "customer": "147174", "hours": 133.0, "laborBilled": 523, "rate_wo": 3, "issue": "Low Rate $3/hr"}, {"wo": "CW5NA", "shop": "SDN", "customer": "147174", "hours": 0, "laborBilled": 0, "rate_wo": 0, "issue": ""}, {"wo": "CW5NA", "shop": "SDN", "customer": "147174", "hours": 0, "laborBilled": 0, "rate_wo": 0, "issue": ""}, {"wo": "CW5NA", "shop": "SDN", "customer": "147174", "hours": 118.2, "laborBilled": 1308, "rate_wo": 11, "issue": "Low Rate $11/hr"}, {"wo": "CW5NA", "shop": "SDN", "customer": "147174", "hours": 118.2, "laborBilled": 1308, "rate_wo": 11, "issue": "Low Rate $11/hr"}, {"wo": "CW65A", "shop": "SDN", "customer": "109004", "hours": 0, "laborBilled": 0, "rate_wo": 0, "issue": ""}, {"wo": "CW65A", "shop": "SDN", "customer": "109004", "hours": 0, "laborBilled": 0, "rate_wo": 0, "issue": ""}, {"wo": "CW65A", "shop": "SDN", "customer": "109004", "hours": 113.1, "laborBilled": 706, "rate_wo": 6, "issue": "Low Rate $6/hr"}, {"wo": "CW65A", "shop": "SDN", "customer": "109004", "hours": 113.1, "laborBilled": 706, "rate_wo": 6, "issue": "Low Rate $6/hr"}, {"wo": "DUYYA", "shop": "SDN", "customer": "109004", "hours": 0, "laborBilled": 0, "rate_wo": 0, "issue": ""}, {"wo": "DUYYA", "shop": "SDN", "customer": "109004", "hours": 0, "laborBilled": 0, "rate_wo": 0, "issue": ""}, {"wo": "DUYYA", "shop": "SDN", "customer": "109004", "hours": 141.1, "laborBilled": 0, "rate_wo": 0, "issue": ""}, {"wo": "DUYYA", "shop": "SDN", "customer": "109004", "hours": 141.1, "laborBilled": 0, "rate_wo": 0, "issue": ""}, {"wo": "DV26A", "shop": "SDN", "customer": "109004", "hours": 0, "laborBilled": 0, "rate_wo": 0, "issue": ""}, {"wo": "DV26A", "shop": "SDN", "customer": "109004", "hours": 0, "laborBilled": 0, "rate_wo": 0, "issue": ""}, {"wo": "DV26A", "shop": "SDN", "customer": "109004", "hours": 1520.3, "laborBilled": 0, "rate_wo": 0, "issue": ""}, {"wo": "DV26A", "shop": "SDN", "customer": "109004", "hours": 1520.3, "laborBilled": 0, "rate_wo": 0, "issue": ""}],
 
 
             // ── WIP DATA (from Time Sold × Anchor cross-reference) ──
@@ -3743,6 +3755,27 @@ ${surveyUrl}`;
             saveNpsSurveys(surveys);
             renderNpsTable();
         };
+
+        // Update ELR
+        document.getElementById('elrDisplay').textContent = `$${GOALS_DATA.currentELR}/hr`;
+
+        // Render NPS
+        const npsBody = document.getElementById('npsTableBody');
+        if (npsBody && GOALS_DATA.npsList) {
+            npsBody.innerHTML = GOALS_DATA.npsList.map(item => `
+                <tr>
+                    <td>${item.customer}</td>
+                    <td>${item.wo}</td>
+                    <td>${item.email !== 'Missing' ? '✅ Found' : '❌ Missing'}</td>
+                    <td>
+                        <a href="${item.link}" class="btn badge-green" target="_blank">📧 Send Survey</a>
+                    </td>
+                </tr>
+            `).join('');
+            if (GOALS_DATA.npsList.length === 0) {
+                npsBody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:#666;">No new surveys needed today.</td></tr>';
+            }
+        }
 
         // Send & Log button
         const sendBtn = document.getElementById('sendNpsSurveyBtn');
