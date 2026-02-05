@@ -1,0 +1,240 @@
+[
+  {
+    "wo": "C7ACA",
+    "code": "",
+    "tech": "CRUZA",
+    "issue": "Squwak Not Signed off",
+    "source": "2025 Master - April"
+  },
+  {
+    "wo": "C8PCA",
+    "code": "",
+    "tech": "Hannas/Smikz",
+    "issue": "Part number in Corrective action and Logbook does not match 8130",
+    "source": "2025 Master - April"
+  },
+  {
+    "wo": "C9BEA",
+    "code": "",
+    "tech": "Macos",
+    "issue": "Model Number of Part installed listed in corrective action and logbook does not match 8130-3",
+    "source": "2025 Master - May"
+  },
+  {
+    "wo": "CA32A",
+    "code": "",
+    "tech": "Curza/Huber",
+    "issue": "Aircraft is 135. RTS is 91",
+    "source": "2025 Master - May"
+  },
+  {
+    "wo": "CA6TA",
+    "code": "",
+    "tech": "Curza/Huber",
+    "issue": "Need more clartifcation on why the maintence is being performed. State we installed a FMS with a teardown report. No reason Why",
+    "source": "2025 Master - May"
+  },
+  {
+    "wo": "CCJDA",
+    "code": "MS",
+    "tech": "HMICH",
+    "issue": "Listed AMM Section 34-18-01 used in write up turned in 34-18-00. Airspeed chart not completed",
+    "source": "2025 Master - June"
+  },
+  {
+    "wo": "CCAAA",
+    "code": "MS",
+    "tech": "CRUZA",
+    "issue": "91.411 and RVSM Charts not completed",
+    "source": "2025 Master - June"
+  },
+  {
+    "wo": "CAZFA",
+    "code": "MS",
+    "tech": "MACOS",
+    "issue": "SQ 2,3,4 and Logbook do not state Same form fit and function statement, also SQ 3,4 lists a different title for the servo installed as removed. 91.411 Chart Not Completed or signed.",
+    "source": "2025 Master - June"
+  },
+  {
+    "wo": "CLHJA",
+    "code": "WA",
+    "tech": "Ken",
+    "issue": "Missing Signed Work Agreement",
+    "source": "2025 Master - Oct"
+  },
+  {
+    "wo": "CNKYA",
+    "code": "PP",
+    "tech": "Ken/John        /Jose",
+    "issue": "Mssing Airport Location and and Work Away block checked in 145 section of work order. ",
+    "source": "2025 Master - Oct"
+  },
+  {
+    "wo": "CNKYA",
+    "code": "RTS",
+    "tech": "Jose",
+    "issue": "RVSM Logbook not finaled and signed.",
+    "source": "2025 Master - Oct"
+  },
+  {
+    "wo": "CL18A",
+    "code": "PP",
+    "tech": "Ken/Hannas",
+    "issue": "Mssing Airport Location and and Work Away block checked in 145 section of work order. ",
+    "source": "2025 Master - Oct"
+  },
+  {
+    "wo": "DQ4XA",
+    "code": "PP",
+    "tech": "Ken",
+    "issue": "Mssing Airport Location and and Work Away block checked in 145 section of work order. ",
+    "source": "2025 Master - Oct"
+  },
+  {
+    "wo": "CPDAA",
+    "code": "RTS",
+    "tech": "Sean",
+    "issue": "Squwak 1 Final Inspection not signed off",
+    "source": "2025 Master - Oct"
+  },
+  {
+    "wo": "CMYYA",
+    "code": "MS",
+    "tech": "John/Jose",
+    "issue": "Incorrect data listed for Air Data System Checks listed a 34-17-01 instead a 34-17-00. Baro chart in AMM not filled out. Ducnan 91.411 chart not signed.",
+    "source": "2025 Master - Oct"
+  },
+  {
+    "wo": "CMYYA",
+    "code": "MS",
+    "tech": "Ken",
+    "issue": "Logbook has incorect Ref data listed. Work was performed on 10-22 and and 10/27 logbook is dated for 10/28. Two Logbooks should have been created for the two dates.",
+    "source": "2025 Master - Oct"
+  },
+  {
+    "wo": "CDG5A",
+    "code": "WA",
+    "tech": "Ken/Huber/Armando",
+    "issue": "Missing Signed Work Agreement",
+    "source": "2025 Master - Oct"
+  },
+  {
+    "wo": "CKTCA",
+    "code": "RTS",
+    "tech": "Hannas",
+    "issue": "Completed Corrective action and Logbook as a 135 operatior. Aircraft is a Part 91.",
+    "source": "2025 Master - Oct"
+  },
+  {
+    "wo": "CPBSA",
+    "code": "MS",
+    "tech": "Ken",
+    "issue": "Work Performed on 10/29 however logbook is dated for 10/24",
+    "source": "2025 Master - Oct"
+  },
+  {
+    "wo": "CPTUA",
+    "code": "RTS",
+    "tech": "CRUZA",
+    "issue": "Listed unit as Inspected when it should sate Repaired on 8130-3.",
+    "source": "2025 Master - Nov"
+  },
+  {
+    "wo": "CQ90A",
+    "code": "MI",
+    "tech": "NORIJ",
+    "issue": "Preliminary Inspection not signed off after work was completed on the aicraft",
+    "source": "2025 Master - Nov"
+  },
+  {
+    "wo": "CQ90A",
+    "code": "MS",
+    "tech": "NORIJ",
+    "issue": "Tech grabbed alternate part number for back shell that was order for diffreent install and did not verify what part was sold to current install.",
+    "source": "2025 Master - Nov"
+  },
+  {
+    "wo": "CQU7A",
+    "code": "MS",
+    "tech": "MACOS",
+    "issue": "Work Order missing Special Programs i.e. Part 91, Part 135 Etc..",
+    "source": "2025 Master - Nov"
+  },
+  {
+    "wo": "CP69A",
+    "code": "MS",
+    "tech": "SMIKZ",
+    "issue": "Stand-by Altmeter serial number tested did not match the number on the 8130 for the part.",
+    "source": "2025 Master - Nov"
+  },
+  {
+    "wo": "CP69A",
+    "code": "MS",
+    "tech": "Huber",
+    "issue": "Stand-by Altmeter serial number installed did not match the number on the 8130 for the part.",
+    "source": "2025 Master - Nov"
+  },
+  {
+    "wo": "CP69A",
+    "code": "MS",
+    "tech": "SMIKZ",
+    "issue": "Stand-by Altmeter serial number installed and tested did not match the number on the 8130 for the part.",
+    "source": "2025 Master - Nov"
+  },
+  {
+    "wo": "CP69A",
+    "code": "WA",
+    "tech": "SMIKZ/HUBER/CRUZA",
+    "issue": "Final NQ not Signed at time of QA Review",
+    "source": "2025 Master - Nov"
+  },
+  {
+    "wo": "CQHTA",
+    "code": "MI",
+    "tech": "CRUZA",
+    "issue": "Corrective ation completed and time sold without the Preliminary being signed",
+    "source": "2025 Master - Nov"
+  },
+  {
+    "wo": "CPSQA",
+    "code": "MS",
+    "tech": "SMIKZ",
+    "issue": "Listed installed part as Repaired. 8130 state the part was modified.",
+    "source": "2025 Master - Dec"
+  },
+  {
+    "wo": "CRXKA",
+    "code": "MS",
+    "tech": "SMIKZ",
+    "issue": "Part 135 statement was missing from the corrective action and logbook",
+    "source": "2025 Master - Dec"
+  },
+  {
+    "wo": "CQZUA",
+    "code": "WA",
+    "tech": "CRUZA",
+    "issue": "Final NQ not Signed at time of QA Review",
+    "source": "2025 Master - Dec"
+  },
+  {
+    "wo": "CQZUA",
+    "code": "MS",
+    "tech": "CRUZA",
+    "issue": "Missing AD Statement on SQ 3 and Logbook.",
+    "source": "2025 Master - Dec"
+  },
+  {
+    "wo": "CQZUA",
+    "code": "RTS",
+    "tech": "HUBER",
+    "issue": "No Logbook issued for removal of part sent in for repair on Sq 1.",
+    "source": "2025 Master - Dec"
+  },
+  {
+    "wo": "DSYQA",
+    "code": "RTS",
+    "tech": "SMIKZ",
+    "issue": "Part 145 Block with Airprt location and Work Away was not completed.",
+    "source": "2025 Master - Dec"
+  }
+]

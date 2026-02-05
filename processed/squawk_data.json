@@ -1,0 +1,398 @@
+[
+  {
+    "wo": "CU0VA",
+    "aircraft": "N84RJ",
+    "squawk": 1,
+    "description": "GSU75 AHRS intermittent red x",
+    "status": "Opn",
+    "expected_hours": 0.1,
+    "actual_hours": 34.5
+  },
+  {
+    "wo": "CU0VA",
+    "aircraft": "N84RJ",
+    "squawk": 2,
+    "description": "91.411 & 91.413",
+    "status": "Opn",
+    "expected_hours": 0.0,
+    "actual_hours": 4.0
+  },
+  {
+    "wo": "CU1EA",
+    "aircraft": "N505RR",
+    "squawk": 1,
+    "description": "Tail Number Restrap",
+    "status": "QII",
+    "expected_hours": 0.0,
+    "actual_hours": 20.9
+  },
+  {
+    "wo": "CU1EA",
+    "aircraft": "N505RR",
+    "squawk": 2,
+    "description": "SATCOM Restrap",
+    "status": "QII",
+    "expected_hours": 0.0,
+    "actual_hours": 6.0
+  },
+  {
+    "wo": "CU1EA",
+    "aircraft": "N505RR",
+    "squawk": 3,
+    "description": "SVS troubleshooting",
+    "status": "QII",
+    "expected_hours": 0.0,
+    "actual_hours": 2.5
+  },
+  {
+    "wo": "CU1EA",
+    "aircraft": "N505RR",
+    "squawk": 4,
+    "description": "Autopilot troubleshooting",
+    "status": "QII",
+    "expected_hours": 0.0,
+    "actual_hours": 4.5
+  },
+  {
+    "wo": "CU1EA",
+    "aircraft": "N505RR",
+    "squawk": 5,
+    "description": "Databases for NAV and charts",
+    "status": "QII",
+    "expected_hours": 0.0,
+    "actual_hours": 2.0
+  },
+  {
+    "wo": "CU1EA",
+    "aircraft": "N505RR",
+    "squawk": 1000,
+    "description": "Travel to BJC",
+    "status": "QII",
+    "expected_hours": 0.0,
+    "actual_hours": 8.5
+  },
+  {
+    "wo": "CUL2A",
+    "aircraft": "N5203U",
+    "squawk": 1,
+    "description": "KT74 inoperative",
+    "status": "Opn",
+    "expected_hours": 0.1,
+    "actual_hours": 12.5
+  },
+  {
+    "wo": "CUPFA",
+    "aircraft": "N176MG",
+    "squawk": 1,
+    "description": "Replace #2 ADC due to red X",
+    "status": "QII",
+    "expected_hours": 0.1,
+    "actual_hours": 10.4
+  },
+  {
+    "wo": "CUPFA",
+    "aircraft": "N176MG",
+    "squawk": 2,
+    "description": "Troubleshoot leaks on P/S system",
+    "status": "QII",
+    "expected_hours": 0.0,
+    "actual_hours": 7.0
+  },
+  {
+    "wo": "CUPFA",
+    "aircraft": "N176MG",
+    "squawk": 3,
+    "description": "Supply IRU cooling fan. Billing only.",
+    "status": "QII",
+    "expected_hours": 0.0,
+    "actual_hours": 0.0
+  },
+  {
+    "wo": "CUPFA",
+    "aircraft": "N176MG",
+    "squawk": 9000,
+    "description": "CHARGES NOT COVERED UNDER WARRANTY",
+    "status": "Inf",
+    "expected_hours": 0.0,
+    "actual_hours": 0.0
+  },
+  {
+    "wo": "CV5EA",
+    "aircraft": "N726DR",
+    "squawk": 1,
+    "description": "TCAS Failure",
+    "status": "Opn",
+    "expected_hours": 0.0,
+    "actual_hours": 4.5
+  },
+  {
+    "wo": "CVN0A",
+    "aircraft": "N4QL",
+    "squawk": 1,
+    "description": "ARTEX ELT Installation",
+    "status": "Opn",
+    "expected_hours": 41.0,
+    "actual_hours": 42.5
+  },
+  {
+    "wo": "CVN2A",
+    "aircraft": "N801SF",
+    "squawk": 1,
+    "description": "#1 ADC Failure",
+    "status": "Opn",
+    "expected_hours": 0.0,
+    "actual_hours": 3.0
+  },
+  {
+    "wo": "CVNKA",
+    "aircraft": "N1870E",
+    "squawk": 1,
+    "description": "WXR Remove and Replace",
+    "status": "Opn",
+    "expected_hours": 0.0,
+    "actual_hours": 0.0
+  },
+  {
+    "wo": "CVNKA",
+    "aircraft": "N1870E",
+    "squawk": 2,
+    "description": "ALTITUDE ADJUST Message",
+    "status": "Opn",
+    "expected_hours": 0.0,
+    "actual_hours": 0.0
+  },
+  {
+    "wo": "CVRQA",
+    "aircraft": "N95MJ",
+    "squawk": 1,
+    "description": "Replace Nic/Proc 4 for date and time delay",
+    "status": "QII",
+    "expected_hours": 0.1,
+    "actual_hours": 6.5
+  },
+  {
+    "wo": "CVRQA",
+    "aircraft": "N95MJ",
+    "squawk": 2,
+    "description": "Obtain software pn for SDR and MODMAN II",
+    "status": "QII",
+    "expected_hours": 0.0,
+    "actual_hours": 1.0
+  },
+  {
+    "wo": "CVRQA",
+    "aircraft": "N95MJ",
+    "squawk": 3,
+    "description": "Replace Nic/proc 2,5 and 6",
+    "status": "Opn",
+    "expected_hours": 0.0,
+    "actual_hours": 0.0
+  },
+  {
+    "wo": "CVWLA",
+    "aircraft": "N707EL",
+    "squawk": 1,
+    "description": "Universal Upgrade",
+    "status": "Opn",
+    "expected_hours": 0.0,
+    "actual_hours": 8.0
+  },
+  {
+    "wo": "CVWLA",
+    "aircraft": "N707EL",
+    "squawk": 2,
+    "description": "Engineering",
+    "status": "Opn",
+    "expected_hours": 0.0,
+    "actual_hours": 0.0
+  },
+  {
+    "wo": "CVY8A",
+    "aircraft": "N442FP",
+    "squawk": 1,
+    "description": "91.411/413/RVSM Checks",
+    "status": "Opn",
+    "expected_hours": 0.0,
+    "actual_hours": 30.0
+  },
+  {
+    "wo": "CW3EA",
+    "aircraft": "N2651F",
+    "squawk": 1,
+    "description": "Install GPS antenna doubler",
+    "status": "Opn",
+    "expected_hours": 0.1,
+    "actual_hours": 4.0
+  },
+  {
+    "wo": "CW3EA",
+    "aircraft": "N2651F",
+    "squawk": 2,
+    "description": "DG issues",
+    "status": "Opn",
+    "expected_hours": 0.0,
+    "actual_hours": 3.0
+  },
+  {
+    "wo": "CW3EA",
+    "aircraft": "N2651F",
+    "squawk": 3,
+    "description": "GPS intermittent position",
+    "status": "Opn",
+    "expected_hours": 0.0,
+    "actual_hours": 0.0
+  },
+  {
+    "wo": "CW3EA",
+    "aircraft": "N2651F",
+    "squawk": 4,
+    "description": "Weak Tx on COMs",
+    "status": "Opn",
+    "expected_hours": 0.0,
+    "actual_hours": 0.0
+  },
+  {
+    "wo": "CWACA",
+    "aircraft": "N1071Z",
+    "squawk": 1,
+    "description": "Autopilot issues",
+    "status": "Opn",
+    "expected_hours": 0.1,
+    "actual_hours": 3.0
+  },
+  {
+    "wo": "CWBZA",
+    "aircraft": "N10AZ",
+    "squawk": 1,
+    "description": "Autopilot disconnecting",
+    "status": "Opn",
+    "expected_hours": 0.1,
+    "actual_hours": 2.0
+  },
+  {
+    "wo": "DUVSA",
+    "aircraft": "STOCK",
+    "squawk": 1,
+    "description": "Ovhl 1 Oxygen Mask",
+    "status": "Opn",
+    "expected_hours": 0.0,
+    "actual_hours": 2.0
+  },
+  {
+    "wo": "DUVVA",
+    "aircraft": "STOCK",
+    "squawk": 1,
+    "description": "Ovhl 1 Oxygen Mask",
+    "status": "Opn",
+    "expected_hours": 0.0,
+    "actual_hours": 2.0
+  },
+  {
+    "wo": "DV62A",
+    "aircraft": "STOCK",
+    "squawk": 1,
+    "description": "Ovhl 1 Oxygen Mask",
+    "status": "Opn",
+    "expected_hours": 0.0,
+    "actual_hours": 2.5
+  },
+  {
+    "wo": "DV63A",
+    "aircraft": "STOCK",
+    "squawk": 1,
+    "description": "Ovhl 1 Oxygen Mask",
+    "status": "Opn",
+    "expected_hours": 0.0,
+    "actual_hours": 2.5
+  },
+  {
+    "wo": "DV64A",
+    "aircraft": "STOCK",
+    "squawk": 1,
+    "description": "Ovhl 1 Oxygen Mask",
+    "status": "Opn",
+    "expected_hours": 0.0,
+    "actual_hours": 2.5
+  },
+  {
+    "wo": "DVBKA",
+    "aircraft": "N831FR",
+    "squawk": 1,
+    "description": "Supply 2 Tubes Sealant",
+    "status": "Opn",
+    "expected_hours": 0.0,
+    "actual_hours": 2.5
+  },
+  {
+    "wo": "DVR0A",
+    "aircraft": "STOCK",
+    "squawk": 1,
+    "description": "Repair Servo",
+    "status": "Opn",
+    "expected_hours": 0.0,
+    "actual_hours": 1.0
+  },
+  {
+    "wo": "DVWTA",
+    "aircraft": "N1TM",
+    "squawk": 1,
+    "description": "Renewal 6th yr MSP Avionics Contract",
+    "status": "Opn",
+    "expected_hours": 0.0,
+    "actual_hours": 3.0
+  },
+  {
+    "wo": "DVWUA",
+    "aircraft": "N1TM",
+    "squawk": 1,
+    "description": "Renewal 2nd yr MSP Mechanical Contract",
+    "status": "Opn",
+    "expected_hours": 0.0,
+    "actual_hours": 3.0
+  },
+  {
+    "wo": "DW11A",
+    "aircraft": "N66CC",
+    "squawk": 1,
+    "description": "Happ Exch Graphics Module",
+    "status": "Opn",
+    "expected_hours": 0.0,
+    "actual_hours": 0.0
+  },
+  {
+    "wo": "DW1BA",
+    "aircraft": "N4QL",
+    "squawk": 1,
+    "description": "ELT Antenna",
+    "status": "Opn",
+    "expected_hours": 0.0,
+    "actual_hours": 0.0
+  },
+  {
+    "wo": "DW44A",
+    "aircraft": "N572XR",
+    "squawk": 1,
+    "description": "Assist with Air Data",
+    "status": "Rrc",
+    "expected_hours": 0.0,
+    "actual_hours": 4.0
+  },
+  {
+    "wo": "DW44A",
+    "aircraft": "N572XR",
+    "squawk": 1000,
+    "description": "Travel Time",
+    "status": "Rrc",
+    "expected_hours": 0.0,
+    "actual_hours": 1.0
+  },
+  {
+    "wo": "DW6VA",
+    "aircraft": "N19EP",
+    "squawk": 1,
+    "description": "Supply Exch Landing Gear",
+    "status": "Opn",
+    "expected_hours": 0.0,
+    "actual_hours": 1.5
+  }
+]

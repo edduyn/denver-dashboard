@@ -5,10 +5,10 @@
     "rts_date": "2026-02-04",
     "rts_timestamp": "2026-02-04T22:39:10+00:00",
     "sender": "Edduyn Pita <edduyn.pita@duncanaviation.com>",
-    "billed": false,
-    "billed_date": null,
+    "billed": true,
+    "billed_date": "02/03/26",
     "days_elapsed": -1,
-    "status": "on_track"
+    "status": "billed"
   },
   "N209CV": {
     "wo": "N209CV",
@@ -16,10 +16,10 @@
     "rts_date": "2026-02-04",
     "rts_timestamp": "2026-02-04T22:39:10+00:00",
     "sender": "Edduyn Pita <edduyn.pita@duncanaviation.com>",
-    "billed": false,
-    "billed_date": null,
+    "billed": true,
+    "billed_date": "02/03/26",
     "days_elapsed": -1,
-    "status": "on_track"
+    "status": "billed"
   },
   "N505RR": {
     "wo": "N505RR",
