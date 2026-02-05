@@ -4631,7 +4631,7 @@ ${surveyUrl}`;
             // Top 5 profitable + losing WOs
             const sorted = [...woProfit].sort((a, b) => b.variance - a.variance);
             const top5 = sorted.filter(w => w.variance > 0).slice(0, 5);
-            const losers = sorted.filter(w => w.variance < 0).sort((a, b) => a.variance - b.variance);
+            const losers = sorted.filter(w => w.variance < 0 && !(w.issue && w.issue.includes('Vendor Repair'))).sort((a, b) => a.variance - b.variance);
 
             // Key insights auto-generated
             const profitableShops = shopOrder.filter(s => shops[s] && (shops[s].laborBilled - shops[s].hours * rates[s].flatRate) >= 0);
