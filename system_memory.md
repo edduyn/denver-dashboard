@@ -3,11 +3,11 @@
 ## 📊 Current State (Snapshot)
 - **Last Update:** 2026-02-04
 - **Revenue MTD:** $29,278 (4.2% of Target)
-- **A/B Ratio:** 34.1% (Target: 58.5%)
+- **A/B Ratio:** 34.2% (Target: 58.5%)
 - **WIP Total:** $0 (Open WOs)
 
 ## 🚨 Active Alerts
-- **A/B Ratio:** CRITICAL (34.1% vs 58.5%). Gap: -25.0 pts.
+- **A/B Ratio:** CRITICAL (34.2% vs 58.5%). Gap: -25.0 pts.
 - **Login:** Password logic patched (case-insensitive + crash fix applied).
 
 ## 📥 Pending Tasks
