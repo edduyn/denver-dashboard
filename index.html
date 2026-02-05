@@ -1459,6 +1459,9 @@
                 </div>
             </div>
 
+            <!-- AGING AT-RISK WOs TRACKER -->
+            <div id="agingAtRiskContainer"></div>
+
             <!-- TOP WIP WOs -->
             <div id="wipOverviewContainer"></div>
 
@@ -3220,7 +3223,20 @@
                 { wo: 'CG4NA', shop: 'SDN', days: 188, wip: 2486, status: 'dispute', notes: 'Kauffman owner was in ICU, hope to resolve soon' },
             ],
 
-            // ── NQA FLAT RATE ANALYSIS ──
+            // ── AGING AT-RISK WOs (Will be 30+ days by EOM) ──
+            // Claude updates: WOs opened before Jan 30 that are still open will be 30+ days by Feb 28
+            // Rule: openDate <= (EOM - 30 days) AND status = 'open'
+            agingAtRiskDate: '02/05/26',
+            agingEOM: 'Feb 28',  // End of month for calculation
+            agingAtRiskWOs: [
+                // Claude adds: {wo, shop, customer, openDate, daysOpen, daysByEOM, wip, status: 'at-risk'|'critical'|'resolved', notes}
+                // Critical = already 30+ days, At-Risk = will be 30+ by EOM
+                { wo: 'CTQMA', shop: 'SDR', customer: 'Robert P Husted', openDate: '12/15/25', daysOpen: 52, daysByEOM: 75, wip: 1595, status: 'critical', notes: 'QA audit cited — needs billing priority' },
+                { wo: 'CU0VA', shop: 'SDR', customer: 'The Club at Centennial', openDate: '01/06/26', daysOpen: 30, daysByEOM: 53, wip: 3118, status: 'critical', notes: 'QA audit cited — review status' },
+                { wo: 'CU1EA', shop: 'SDN', customer: '42K Re Management LLC', openDate: '01/08/26', daysOpen: 28, daysByEOM: 51, wip: 725, status: 'at-risk', notes: 'Continuing from Jan — push to close' },
+                { wo: 'CVY8A', shop: 'SDN', customer: 'Stinson Aviation LLC', openDate: '01/15/26', daysOpen: 21, daysByEOM: 44, wip: 2900, status: 'at-risk', notes: '91.411/413/RVSM — biggest Feb WO' },
+            ],
+
             // Claude updates when Billed WO report is processed — cross-reference squawks with Price Items
             // AUTO-SYNC: nqaJobs + tmJobs should cover ALL squawks in billedWOsList
             // Missing WOs flagged automatically by renderer
@@ -4279,6 +4295,71 @@ ${surveyUrl}`;
         }
 
         // ═══════════════════════════════════════════════════════
+        // AGING AT-RISK WOs RENDERER — Tracks WOs that will be 30+ days by EOM
+        // ═══════════════════════════════════════════════════════
+        function renderAgingAtRisk() {
+            const container = document.getElementById('agingAtRiskContainer');
+            if (!container) return;
+            const d = GOALS_DATA;
+            const entries = d.agingAtRiskWOs || [];
+            if (entries.length === 0) {
+                container.innerHTML = '';
+                return;
+            }
+
+            const criticalCount = entries.filter(e => e.status === 'critical').length;
+            const atRiskCount = entries.filter(e => e.status === 'at-risk').length;
+            const totalWip = entries.reduce((s, e) => s + (e.wip || 0), 0);
+            const badgeClass = criticalCount > 0 ? 'badge-red' : atRiskCount > 0 ? 'badge-amber' : 'badge-green';
+            const badgeText = criticalCount > 0 ? `🔴 ${criticalCount} Critical` : atRiskCount > 0 ? `⚠️ ${atRiskCount} At-Risk` : '✅ Clear';
+
+            let html = `<div class="card" style="border:2px solid ${criticalCount > 0 ? '#ef4444' : '#f59e0b'};">
+                <div class="card-header">
+                    <span class="card-title">⏰ Aging WOs At-Risk (30+ days by ${d.agingEOM})</span>
+                    <span class="badge ${badgeClass}">${badgeText}</span>
+                </div>
+                <div style="background:rgba(239,68,68,0.1);padding:10px;border-radius:6px;margin-bottom:12px;font-size:0.85em;color:#fca5a5;">
+                    <strong>📊 Tracking:</strong> WOs currently open that will hit 30+ days by end of month | 
+                    <strong>Total WIP at risk:</strong> $${totalWip.toLocaleString()} | 
+                    Updated: ${d.agingAtRiskDate}
+                </div>
+                <div class="table-container"><table>
+                    <thead>
+                        <tr><th>WO#</th><th>Shop</th><th>Customer</th><th>Open Date</th><th>Days Now</th><th>Days by EOM</th><th>WIP</th><th>Status</th><th>Notes</th></tr>
+                    </thead>
+                    <tbody>`;
+
+            entries.sort((a, b) => b.daysByEOM - a.daysByEOM).forEach(e => {
+                const statusBadge = e.status === 'critical'
+                    ? '<span class="badge badge-red">🔴 30+ NOW</span>'
+                    : e.status === 'at-risk'
+                        ? '<span class="badge badge-amber">⚠️ At-Risk</span>'
+                        : '<span class="badge badge-green">✅ OK</span>';
+                const rowBg = e.status === 'critical' ? 'background:rgba(239,68,68,0.15)' : e.status === 'at-risk' ? 'background:rgba(251,191,36,0.15)' : '';
+
+                html += `<tr style="${rowBg}">
+                    <td><strong>${e.wo}</strong></td>
+                    <td>${e.shop}</td>
+                    <td>${e.customer}</td>
+                    <td>${e.openDate}</td>
+                    <td>${e.daysOpen}</td>
+                    <td style="font-weight:bold;color:${e.daysByEOM >= 30 ? '#ef4444' : '#f59e0b'};">${e.daysByEOM}</td>
+                    <td style="color:#10b981;font-weight:bold;">$${(e.wip || 0).toLocaleString()}</td>
+                    <td>${statusBadge}</td>
+                    <td style="font-size:0.85em;">${e.notes || ''}</td>
+                </tr>`;
+            });
+
+            html += `</tbody></table></div>
+                <div style="background:#0f172a;padding:10px;border-radius:6px;margin-top:10px;font-size:0.85em;color:#94a3b8;">
+                    <strong style="color:#f59e0b;">📋 Action Required:</strong> Prioritize billing these WOs before ${d.agingEOM} to avoid the Over 30 list. Critical WOs already on Brian's radar.
+                </div>
+            </div>`;
+
+            container.innerHTML = html;
+        }
+
+        // ═══════════════════════════════════════════════════════
         // WIP OVERVIEW RENDERER — Auto-syncs from GOALS_DATA.wipEntries
         // ═══════════════════════════════════════════════════════
         function renderWipOverview() {
@@ -4560,6 +4641,7 @@ ${surveyUrl}`;
         renderGoals();
         renderWeeklyGoals();
         renderRankings();
+        renderAgingAtRisk();
         renderWipOverview();
         renderSdvExpectedHours();
         renderShopProfitability();
