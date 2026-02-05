@@ -1,0 +1,35 @@
+{
+  "N218KF": {
+    "wo": "N218KF",
+    "shop": "CW5NA",
+    "rts_date": "2026-02-04",
+    "rts_timestamp": "2026-02-04T22:39:10+00:00",
+    "sender": "Edduyn Pita <edduyn.pita@duncanaviation.com>",
+    "billed": false,
+    "billed_date": null,
+    "days_elapsed": -1,
+    "status": "on_track"
+  },
+  "N209CV": {
+    "wo": "N209CV",
+    "shop": "CW5MA",
+    "rts_date": "2026-02-04",
+    "rts_timestamp": "2026-02-04T22:39:10+00:00",
+    "sender": "Edduyn Pita <edduyn.pita@duncanaviation.com>",
+    "billed": false,
+    "billed_date": null,
+    "days_elapsed": -1,
+    "status": "on_track"
+  },
+  "N505RR": {
+    "wo": "N505RR",
+    "shop": "CU1EA",
+    "rts_date": "2026-02-04",
+    "rts_timestamp": "2026-02-04T22:39:10+00:00",
+    "sender": "Edduyn Pita <edduyn.pita@duncanaviation.com>",
+    "billed": false,
+    "billed_date": null,
+    "days_elapsed": -1,
+    "status": "on_track"
+  }
+}

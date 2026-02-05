@@ -5,6 +5,9 @@ import datetime
 import warnings
 import re
 import json
+import email
+from email import policy
+import base64
 
 print("DEBUG: Script starting execution...")
 
@@ -26,6 +29,8 @@ INBOX_DIR = os.path.join(BASE_DIR, "inbox")
 PROCESSED_DIR = os.path.join(BASE_DIR, "processed")
 INDEX_HTML = os.path.join(BASE_DIR, "src", "index.html")
 MEMORY_FILE = os.path.join(BASE_DIR, "system_memory.md")
+DAYS_TO_BILL_FILE = os.path.join(BASE_DIR, "days_to_bill_tracking.json")
+MAX_DAYS_TO_BILL = 7  # Maximum days from RTS inspection to billing
 
 SHOP_CODES = ['SDN', 'SDR', 'SDV', 'SHC']
 SHOP_RATES = {
@@ -51,19 +56,26 @@ def find_latest_file(directory, pattern_marker):
     return max(files, key=os.path.getmtime)
 
 def find_inbox_files():
-    """Scans inbox for relevant reports."""
+    """Scans inbox for relevant reports and email files."""
     files = {}
     if not os.path.exists(INBOX_DIR):
         print(f"WARN: Inbox not found: {INBOX_DIR}")
         return files
         
     all_files = glob.glob(os.path.join(INBOX_DIR, "*.*"))
+    email_files = []
+    
     for f in all_files:
         name = os.path.basename(f).lower()
         if "paid" in name: files["PAID_HRS"] = f
         elif "sold" in name: files["SOLD"] = f
         elif "anchor" in name: files["ANCHOR"] = f
         elif "billed" in name: files["BILLED_WO"] = f
+        elif name.endswith(".eml"):
+            email_files.append(f)
+    
+    if email_files:
+        files["EMAILS"] = email_files
     
     return files
 
@@ -194,6 +206,209 @@ def normalize_name(name):
     if len(parts) == 3 and len(parts[1]) == 1:
         return f"{parts[0]} {parts[2]}"
     return name
+
+# --- Email Processing Functions ---
+
+def parse_email_file(filepath):
+    """Parses .eml file and extracts work order information."""
+    try:
+        with open(filepath, 'rb') as f:
+            msg = email.message_from_binary_file(f, policy=policy.default)
+        
+        # Extract email metadata
+        subject = msg.get('Subject', '')
+        date_str = msg.get('Date', '')
+        sender = msg.get('From', '')
+        
+        # Parse date
+        email_date = None
+        if date_str:
+            try:
+                from email.utils import parsedate_to_datetime
+                email_date = parsedate_to_datetime(date_str)
+            except:
+                email_date = datetime.datetime.now()
+        else:
+            email_date = datetime.datetime.now()
+        
+        # Extract body text
+        body_text = ""
+        if msg.is_multipart():
+            for part in msg.walk():
+                content_type = part.get_content_type()
+                if content_type == 'text/plain':
+                    try:
+                        payload = part.get_payload(decode=True)
+                        if payload:
+                            body_text = payload.decode('utf-8', errors='ignore')
+                            break
+                    except:
+                        pass
+        else:
+            try:
+                payload = msg.get_payload(decode=True)
+                if payload:
+                    body_text = payload.decode('utf-8', errors='ignore')
+            except:
+                pass
+        
+        return {
+            'subject': subject,
+            'date': email_date,
+            'sender': sender,
+            'body': body_text
+        }
+    except Exception as e:
+        print(f"ERROR: Failed to parse email {filepath}: {e}")
+        return None
+
+def extract_work_orders_from_email(email_data):
+    """Extracts work order numbers and shop codes from email body."""
+    if not email_data or not email_data.get('body'):
+        return []
+    
+    body = email_data['body']
+    work_orders = []
+    
+    # Pattern to match work order format: N###XX (e.g., N218KF, N209CV, N505RR)
+    wo_pattern = r'\b(N\d{3,4}[A-Z]{2})\b'
+    # Pattern to match shop codes: CW5NA, CW5MA, CU1EA, etc.
+    shop_pattern = r'\b([A-Z]{2}\d[A-Z]{2})\b'
+    
+    wo_matches = re.findall(wo_pattern, body)
+    shop_matches = re.findall(shop_pattern, body)
+    
+    # Pair work orders with shop codes (they appear in sequence in the email)
+    for i, wo in enumerate(wo_matches):
+        shop = shop_matches[i] if i < len(shop_matches) else 'Unknown'
+        work_orders.append({
+            'wo': wo,
+            'shop': shop,
+            'rts_date': email_data['date'].strftime('%Y-%m-%d'),
+            'rts_timestamp': email_data['date'].isoformat(),
+            'sender': email_data['sender']
+        })
+    
+    return work_orders
+
+def load_days_to_bill_tracking():
+    """Loads existing days-to-bill tracking data."""
+    if os.path.exists(DAYS_TO_BILL_FILE):
+        try:
+            with open(DAYS_TO_BILL_FILE, 'r') as f:
+                return json.load(f)
+        except:
+            return {}
+    return {}
+
+def save_days_to_bill_tracking(data):
+    """Saves days-to-bill tracking data."""
+    try:
+        with open(DAYS_TO_BILL_FILE, 'w') as f:
+            json.dump(data, f, indent=2)
+        print(f"SAVED: Days-to-bill tracking updated ({len(data)} work orders)")
+    except Exception as e:
+        print(f"ERROR: Failed to save days-to-bill tracking: {e}")
+
+def update_days_to_bill_tracking(work_orders):
+    """Updates days-to-bill tracking with new work orders from email."""
+    tracking = load_days_to_bill_tracking()
+    
+    for wo_data in work_orders:
+        wo = wo_data['wo']
+        # Only add if not already tracked
+        if wo not in tracking:
+            tracking[wo] = {
+                'wo': wo,
+                'shop': wo_data['shop'],
+                'rts_date': wo_data['rts_date'],
+                'rts_timestamp': wo_data['rts_timestamp'],
+                'sender': wo_data['sender'],
+                'billed': False,
+                'billed_date': None,
+                'days_elapsed': 0,
+                'status': 'pending'
+            }
+            print(f"TRACKED: {wo} ({wo_data['shop']}) - RTS on {wo_data['rts_date']}")
+    
+    # Update days elapsed for all pending work orders
+    today = datetime.datetime.now()
+    for wo, data in tracking.items():
+        if not data['billed']:
+            rts_date = datetime.datetime.fromisoformat(data['rts_timestamp'])
+            # Remove timezone info to make comparison work
+            if rts_date.tzinfo is not None:
+                rts_date = rts_date.replace(tzinfo=None)
+            days_elapsed = (today - rts_date).days
+            data['days_elapsed'] = days_elapsed
+            
+            # Update status based on days elapsed
+            if days_elapsed > MAX_DAYS_TO_BILL:
+                data['status'] = 'overdue'
+            elif days_elapsed >= MAX_DAYS_TO_BILL - 2:
+                data['status'] = 'at_risk'
+            else:
+                data['status'] = 'on_track'
+    
+    save_days_to_bill_tracking(tracking)
+    return tracking
+
+def process_email_files(email_files):
+    """Processes all email files and extracts work order information."""
+    all_work_orders = []
+    
+    for email_file in email_files:
+        print(f"PROCESSING EMAIL: {os.path.basename(email_file)}")
+        email_data = parse_email_file(email_file)
+        
+        if email_data:
+            work_orders = extract_work_orders_from_email(email_data)
+            if work_orders:
+                print(f"  Found {len(work_orders)} work orders: {', '.join([wo['wo'] for wo in work_orders])}")
+                all_work_orders.extend(work_orders)
+            else:
+                print(f"  No work orders found in email")
+    
+    if all_work_orders:
+        tracking = update_days_to_bill_tracking(all_work_orders)
+        return tracking
+    
+    return load_days_to_bill_tracking()
+
+def get_days_to_bill_summary():
+    """Gets summary of days-to-bill tracking for dashboard display."""
+    tracking = load_days_to_bill_tracking()
+    
+    summary = {
+        'total_pending': 0,
+        'on_track': 0,
+        'at_risk': 0,
+        'overdue': 0,
+        'work_orders': []
+    }
+    
+    for wo, data in tracking.items():
+        if not data['billed']:
+            summary['total_pending'] += 1
+            if data['status'] == 'overdue':
+                summary['overdue'] += 1
+            elif data['status'] == 'at_risk':
+                summary['at_risk'] += 1
+            else:
+                summary['on_track'] += 1
+            
+            summary['work_orders'].append({
+                'wo': wo,
+                'shop': data['shop'],
+                'days_elapsed': data['days_elapsed'],
+                'rts_date': data['rts_date'],
+                'status': data['status']
+            })
+    
+    # Sort by days elapsed (descending)
+    summary['work_orders'].sort(key=lambda x: x['days_elapsed'], reverse=True)
+    
+    return summary
 
 # --- Parsing Logic ---
 
@@ -532,16 +747,42 @@ def main():
         print("💤 Inbox empty. No action taken.")
         return
 
-    metrics = get_metrics(inbox_files)
+    # Process email files first (for days-to-bill tracking)
+    days_to_bill_tracking = {}
+    if "EMAILS" in inbox_files:
+        days_to_bill_tracking = process_email_files(inbox_files["EMAILS"])
+        # Archive email files
+        for email_file in inbox_files["EMAILS"]:
+            archive_file(email_file)
     
-    update_html(metrics)
-    update_system_memory(metrics)
+    # Process Excel reports if present
+    if any(key in inbox_files for key in ["PAID_HRS", "SOLD", "ANCHOR", "BILLED_WO"]):
+        metrics = get_metrics(inbox_files)
+        
+        update_html(metrics)
+        update_system_memory(metrics)
+        
+        # Auto-Push to GitHub
+        push_to_github()
+        
+        # Archive Excel files
+        for key in ["PAID_HRS", "SOLD", "ANCHOR", "BILLED_WO"]:
+            if key in inbox_files:
+                archive_file(inbox_files[key])
     
-    # Auto-Push to GitHub
-    push_to_github()
-    
-    for f in inbox_files.values():
-        archive_file(f)
+    # Print days-to-bill summary
+    if days_to_bill_tracking:
+        summary = get_days_to_bill_summary()
+        print(f"\n📊 DAYS-TO-BILL SUMMARY:")
+        print(f"  Total Pending: {summary['total_pending']}")
+        print(f"  On Track: {summary['on_track']}")
+        print(f"  At Risk (5-7 days): {summary['at_risk']}")
+        print(f"  Overdue (>7 days): {summary['overdue']}")
+        if summary['overdue'] > 0:
+            print(f"\n  ⚠️  OVERDUE WORK ORDERS:")
+            for wo in summary['work_orders']:
+                if wo['status'] == 'overdue':
+                    print(f"    {wo['wo']} ({wo['shop']}) - {wo['days_elapsed']} days since RTS")
         
     print("✅ PROCESS COMPLETE: Dashboard updated, memory synced, pushed to GitHub, files archived.")
 
