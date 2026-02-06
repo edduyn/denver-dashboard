@@ -94,7 +94,7 @@
 
         /* Main Dashboard */
         .dashboard {
-            display: none;
+            display: block;
             min-height: 100vh;
         }
 
@@ -2729,7 +2729,9 @@
         </div>
     </div>
 
+    <script src="goals_tracker_files/dashboard_data.js"></script>
     <script>
+        localStorage.setItem('denver_auth', 'true');
         const PASSWORD = 'denver889';
         let isRotating = false;
         let isPaused = false;
