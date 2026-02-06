@@ -9,6 +9,8 @@ import email
 from email import policy
 import base64
 
+import shutil
+
 print("DEBUG: Script starting execution...")
 
 try:
@@ -27,6 +29,7 @@ warnings.filterwarnings("ignore")
 BASE_DIR = os.getcwd()
 INBOX_DIR = os.path.join(BASE_DIR, "inbox")
 PROCESSED_DIR = os.path.join(BASE_DIR, "processed")
+EMAILS_DIR = os.path.join(PROCESSED_DIR, "emails")
 INDEX_HTML = os.path.join(BASE_DIR, "src", "index.html")
 MEMORY_FILE = os.path.join(BASE_DIR, "system_memory.md")
 DAYS_TO_BILL_FILE = os.path.join(BASE_DIR, "days_to_bill_tracking.json")
@@ -95,9 +98,22 @@ def archive_file(filepath):
     filename = os.path.basename(filepath)
     ts = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
     new_name = f"{ts}_{filename}"
-    dest = os.path.join(PROCESSED_DIR, new_name)
     
-    print(f"ARCHIVED: {filename} -> {new_name}")
+    # Determine destination based on file type
+    if filename.lower().endswith('.eml'):
+        if not os.path.exists(EMAILS_DIR):
+            os.makedirs(EMAILS_DIR)
+        dest = os.path.join(EMAILS_DIR, new_name)
+    else:
+        if not os.path.exists(PROCESSED_DIR):
+            os.makedirs(PROCESSED_DIR)
+        dest = os.path.join(PROCESSED_DIR, new_name)
+    
+    try:
+        shutil.move(filepath, dest)
+        print(f"ARCHIVED: {filename} -> {new_name}")
+    except Exception as e:
+        print(f"ERROR: Failed to archive {filename}: {e}")
 
 def process_training_email(content):
     """Parses email content for training assignments and updates the JSON DB"""

@@ -1,14 +1,14 @@
 window.dashboardData = {
   "metadata": {
     "version": "2.1",
-    "last_updated": "2026-02-04 14:07",
+    "last_updated": "2026-02-06 09:55",
     "owner": "Edduyn Pita"
   },
   "current_performance": {
     "ab_ratio": {
-      "current": 24.5,
+      "current": 37.6,
       "target": 58.5,
-      "variance": -34.0,
+      "variance": -20.9,
       "trend": "tracking",
       "rank": "TBD"
     },
@@ -512,13 +512,13 @@ window.dashboardData = {
     {
       "id": 1,
       "title": "#1 Financial Objectives (A/B Ratio + ELR)",
-      "pct": 42,
-      "status": "At Risk",
+      "pct": 64,
+      "status": "Behind",
       "trend": "In Progress (\u2191)",
       "metrics": [
         {
           "label": "Current A/B",
-          "value": "24.5%"
+          "value": "37.6%"
         },
         {
           "label": "Target",
@@ -526,10 +526,10 @@ window.dashboardData = {
         },
         {
           "label": "Gap",
-          "value": "-34.0 pts"
+          "value": "-20.9 pts"
         }
       ],
-      "description": "\ud83d\udcc8 Up from 26.8% last week! Rank TBD. Keep momentum."
+      "description": "\ud83d\udcc8 Up from 24.5% last week! Goal is 58.5%. Keep momentum."
     },
     {
       "id": 2,

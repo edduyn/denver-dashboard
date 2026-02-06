@@ -1,19 +1,19 @@
 {
   "metadata": {
     "version": "1.1",
-    "last_updated": "2026-01-29",
-    "data_as_of": "2026-01-29",
+    "last_updated": "2026-02-06",
+    "data_as_of": "2026-02-06",
     "update_frequency": "Daily by Claude when reports provided",
     "owner": "Edduyn Pita"
   },
   "current_performance": {
     "ab_ratio": {
-      "current": 25.8,
+      "current": 37.6,
       "target": 58.5,
-      "variance": -32.7,
+      "variance": -20.9,
       "trend": "tracking",
-      "rank": "20th of 21",
-      "last_updated": "2026-01-28"
+      "rank": "TBD",
+      "last_updated": "2026-02-06"
     },
     "wip_account_0889_35015": {
       "current_balance": -8600,
@@ -37,23 +37,86 @@
     "total_expected_hours": 560.5,
     "aog_count": 3,
     "aog_items": [
-      {"wo": "CG4NC", "tail": "N628EK", "status": "BillHold", "work": "FMS/NCU", "customer": "Kauffman Land"},
-      {"wo": "CU92B", "tail": "N331MW", "status": "Shipped to satellite", "work": "FMS/NCU", "customer": "Robbins Aviation"},
-      {"wo": "CU1EB", "tail": "N505RR", "status": "Shipped to satellite", "work": "ELT", "customer": "42K Re Management"}
+      {
+        "wo": "CG4NC",
+        "tail": "N628EK",
+        "status": "BillHold",
+        "work": "FMS/NCU",
+        "customer": "Kauffman Land"
+      },
+      {
+        "wo": "CU92B",
+        "tail": "N331MW",
+        "status": "Shipped to satellite",
+        "work": "FMS/NCU",
+        "customer": "Robbins Aviation"
+      },
+      {
+        "wo": "CU1EB",
+        "tail": "N505RR",
+        "status": "Shipped to satellite",
+        "work": "ELT",
+        "customer": "42K Re Management"
+      }
     ],
     "by_shop": {
-      "SDV": {"open_wos": 8, "expected_hours": 471.1, "wip_at_70": 32977},
-      "SDN": {"open_wos": 41, "expected_hours": 0.4, "wip_at_145": 58},
-      "SDR": {"open_wos": 5, "expected_hours": 0.5, "wip_at_145": 73},
-      "SHC": {"open_wos": 3, "expected_hours": 0, "wip_at_145": 0},
-      "Repair": {"open_wos": 9, "expected_hours": 86.5, "note": "NAV/GY1/HSI/HYD/ELM shops"}
+      "SDV": {
+        "open_wos": 8,
+        "expected_hours": 471.1,
+        "wip_at_70": 32977
+      },
+      "SDN": {
+        "open_wos": 41,
+        "expected_hours": 0.4,
+        "wip_at_145": 58
+      },
+      "SDR": {
+        "open_wos": 5,
+        "expected_hours": 0.5,
+        "wip_at_145": 73
+      },
+      "SHC": {
+        "open_wos": 3,
+        "expected_hours": 0,
+        "wip_at_145": 0
+      },
+      "Repair": {
+        "open_wos": 9,
+        "expected_hours": 86.5,
+        "note": "NAV/GY1/HSI/HYD/ELM shops"
+      }
     },
     "sdv_special_wip_over_10h": [
-      {"wo": "CV78A", "customer": "Primus Capital", "tail": "N303JJ", "expected_hours": 400.0, "wip_at_70": 28000, "work": "Gogo Avance L3", "ac_out": "2026-03-06"},
-      {"wo": "CVN0A", "customer": "Stevens Aerospace", "tail": "N4QL", "expected_hours": 41.0, "wip_at_70": 2870, "work": "ARTEX ELT Install"},
-      {"wo": "CMJHA", "customer": "Business Aviators", "tail": "N1870E", "expected_hours": 24.0, "wip_at_70": 1680, "work": "Ensemble Upgrade"}
+      {
+        "wo": "CV78A",
+        "customer": "Primus Capital",
+        "tail": "N303JJ",
+        "expected_hours": 400.0,
+        "wip_at_70": 28000,
+        "work": "Gogo Avance L3",
+        "ac_out": "2026-03-06"
+      },
+      {
+        "wo": "CVN0A",
+        "customer": "Stevens Aerospace",
+        "tail": "N4QL",
+        "expected_hours": 41.0,
+        "wip_at_70": 2870,
+        "work": "ARTEX ELT Install"
+      },
+      {
+        "wo": "CMJHA",
+        "customer": "Business Aviators",
+        "tail": "N1870E",
+        "expected_hours": 24.0,
+        "wip_at_70": 1680,
+        "work": "Ensemble Upgrade"
+      }
     ],
-    "sdv_special_total": {"hours": 465.0, "wip": 32550}
+    "sdv_special_total": {
+      "hours": 465.0,
+      "wip": 32550
+    }
   },
   "ytd_tracking": {
     "total_revenue": 182000,
@@ -66,9 +129,9 @@
   "goal_progress": {
     "goal_1_ab_ratio": {
       "description": "Achieve 58.5% A/B Ratio",
-      "current": 25.8,
+      "current": 37.6,
       "target": 58.5,
-      "percent_complete": 44.1,
+      "percent_complete": 64.3,
       "monthly_target_met": "0/12"
     },
     "goal_2_nps": {
@@ -84,7 +147,11 @@
       "technical_scheduled": "5/8",
       "technical_percent": 63,
       "need_dates": 3,
-      "need_dates_names": ["Ken Smith", "John Watson", "Juan Medina"],
+      "need_dates_names": [
+        "Ken Smith",
+        "John Watson",
+        "Juan Medina"
+      ],
       "completed_sessions": 0
     },
     "goal_4_expected_hours": {
@@ -141,26 +208,76 @@
   },
   "training_schedule": {
     "scheduled": [
-      {"name": "Armando Triana-Cruz", "course": "Honeywell Primus EPIC Line Maint", "location": "Dallas, TX", "dates": "Apr 27 - May 1"},
-      {"name": "Michael Huber", "course": "Virtual Garmin G3000/G5000", "location": "Virtual", "dates": "Jan 28-29"},
-      {"name": "Jose Noris", "course": "Virtual Garmin G1000 NXi", "location": "Virtual", "dates": "Feb 26-27"},
-      {"name": "Michael Hannas", "course": "Virtual Garmin G3000/G5000", "location": "Virtual", "dates": "Jun 17-18"},
-      {"name": "Julia Langford", "course": "Virtual Garmin G3000/G5000", "location": "Virtual", "dates": "Jan 28-29"}
+      {
+        "name": "Armando Triana-Cruz",
+        "course": "Honeywell Primus EPIC Line Maint",
+        "location": "Dallas, TX",
+        "dates": "Apr 27 - May 1"
+      },
+      {
+        "name": "Michael Huber",
+        "course": "Virtual Garmin G3000/G5000",
+        "location": "Virtual",
+        "dates": "Jan 28-29"
+      },
+      {
+        "name": "Jose Noris",
+        "course": "Virtual Garmin G1000 NXi",
+        "location": "Virtual",
+        "dates": "Feb 26-27"
+      },
+      {
+        "name": "Michael Hannas",
+        "course": "Virtual Garmin G3000/G5000",
+        "location": "Virtual",
+        "dates": "Jun 17-18"
+      },
+      {
+        "name": "Julia Langford",
+        "course": "Virtual Garmin G3000/G5000",
+        "location": "Virtual",
+        "dates": "Jan 28-29"
+      }
     ],
     "need_dates": [
-      {"name": "Ken Smith", "course": "Virtual Gogo Dealer Training"},
-      {"name": "John Watson", "course": "aeroIT Certification"},
-      {"name": "Juan Medina", "course": "Composite Repair", "location": "Lincoln, NE"}
+      {
+        "name": "Ken Smith",
+        "course": "Virtual Gogo Dealer Training"
+      },
+      {
+        "name": "John Watson",
+        "course": "aeroIT Certification"
+      },
+      {
+        "name": "Juan Medina",
+        "course": "Composite Repair",
+        "location": "Lincoln, NE"
+      }
     ]
   },
   "friday_update_data": {
     "last_received": "2026-01-23",
     "satellite_ab_rankings": {
-      "1": {"shop": "Scottsdale", "ab": 77.7},
-      "2": {"shop": "Seattle", "ab": 74.7},
-      "3": {"shop": "Sacramento", "ab": 74.0},
-      "20": {"shop": "Denver", "ab": 25.0},
-      "21": {"shop": "Houston", "ab": 14.3}
+      "1": {
+        "shop": "Scottsdale",
+        "ab": 77.7
+      },
+      "2": {
+        "shop": "Seattle",
+        "ab": 74.7
+      },
+      "3": {
+        "shop": "Sacramento",
+        "ab": 74.0
+      },
+      "20": {
+        "shop": "Denver",
+        "ab": 25.0
+      },
+      "21": {
+        "shop": "Houston",
+        "ab": 14.3
+      }
     },
     "network_average": 48.0,
     "budget_target": 58.7,
@@ -168,11 +285,19 @@
   },
   "data_sources": {
     "morning_report": {
-      "provides": ["Time Sold", "A Hours", "A/B Ratio snapshot"],
+      "provides": [
+        "Time Sold",
+        "A Hours",
+        "A/B Ratio snapshot"
+      ],
       "timing": "Start of day"
     },
     "afternoon_report": {
-      "provides": ["Billed WOs", "Revenue", "Anchor data"],
+      "provides": [
+        "Billed WOs",
+        "Revenue",
+        "Anchor data"
+      ],
       "timing": "End of day"
     },
     "friday_updates": {

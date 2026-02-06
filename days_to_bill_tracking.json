@@ -29,6 +29,39 @@
     "sender": "Edduyn Pita <edduyn.pita@duncanaviation.com>",
     "billed": false,
     "billed_date": null,
+    "days_elapsed": 0,
+    "status": "on_track"
+  },
+  "N572XR": {
+    "wo": "N572XR",
+    "shop": "DW1LA",
+    "rts_date": "2026-02-05",
+    "rts_timestamp": "2026-02-05T21:53:31+00:00",
+    "sender": "Edduyn Pita <edduyn.pita@duncanaviation.com>",
+    "billed": false,
+    "billed_date": null,
+    "days_elapsed": -1,
+    "status": "on_track"
+  },
+  "N650GP": {
+    "wo": "N650GP",
+    "shop": "Unknown",
+    "rts_date": "2026-02-05",
+    "rts_timestamp": "2026-02-05T21:53:31+00:00",
+    "sender": "Edduyn Pita <edduyn.pita@duncanaviation.com>",
+    "billed": false,
+    "billed_date": null,
+    "days_elapsed": -1,
+    "status": "on_track"
+  },
+  "N442FP": {
+    "wo": "N442FP",
+    "shop": "Unknown",
+    "rts_date": "2026-02-05",
+    "rts_timestamp": "2026-02-05T21:53:31+00:00",
+    "sender": "Edduyn Pita <edduyn.pita@duncanaviation.com>",
+    "billed": false,
+    "billed_date": null,
     "days_elapsed": -1,
     "status": "on_track"
   }

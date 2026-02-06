@@ -761,7 +761,7 @@
                 </div>
                 <div
                     style="background:#0f172a;padding:8px;border-radius:6px;margin-top:10px;font-size:0.75em;color:#94a3b8;">
-                    📈 <strong>Feb MTD (4 days):</strong> A/B 41.0% ✅ | 9 WOs Billed ($30,175 rev) | ELR $375/hr | 90
+                    📈 <strong>Feb MTD (6 days):</strong> A/B 37.6% ✅ | 9 WOs Billed ($30,175 rev) | ELR $375/hr | 90
                     Open WOs | 2 AOG
                 </div>
             </div>
@@ -974,7 +974,7 @@
         <!-- OVERVIEW TAB -->
         <div class="content" id="overview">
             <div class="alert-banner">
-                ⚠️ FEBRUARY MTD: A/B 41.0% (Day 5) — UP 8.5 pts from Jan 32.5% | 9 WOs Billed ($30,175 rev) | ELR
+                ⚠️ FEBRUARY MTD: A/B 37.6% (Day 6) — UP 5.1 pts from Jan 32.5% | 9 WOs Billed ($30,175 rev) | ELR
                 $375/hr ✅
             </div>
 
@@ -990,12 +990,12 @@
                     <div style="background:linear-gradient(135deg,#1e3a5f,#1e40af);padding:20px;border-radius:12px;">
                         <div style="text-align:center;margin-bottom:8px;">
                             <div style="color:#93c5fd;font-size:0.85em;text-transform:uppercase;letter-spacing:1px;">📊
-                                February MTD (Day 5)</div>
+                                February MTD (Day 6)</div>
                             <div style="color:#60a5fa;font-size:0.72em;margin-top:2px;">Non-Shop Sold ÷ Total Sold</div>
                         </div>
                         <div style="text-align:center;">
-                            <div style="font-size:3em;font-weight:bold;color:#10b981;">41.0%</div>
-                            <div style="color:#86efac;font-size:0.85em;margin-top:3px;">Budget: 58.5% | Gap: -17.5 pts
+                            <div style="font-size:3em;font-weight:bold;color:#10b981;">37.6%</div>
+                            <div style="color:#86efac;font-size:0.85em;margin-top:3px;">Budget: 58.5% | Gap: -20.9 pts
                             </div>
                         </div>
                         <div style="margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:8px;">
@@ -1117,7 +1117,7 @@
                         </div>
                         <!-- Feb MTD -->
                         <div style="flex:1;display:flex;flex-direction:column;align-items:center;">
-                            <div style="font-size:0.7em;color:#10b981;margin-bottom:4px;">41.0%</div>
+                            <div style="font-size:0.7em;color:#10b981;margin-bottom:4px;">37.6%</div>
                             <div
                                 style="width:100%;background:linear-gradient(to top,#065f46,#10b981);border-radius:4px 4px 0 0;height:82.0px;border:2px dashed #34d399;">
                             </div>
@@ -1149,7 +1149,7 @@
                     ⚠️ <strong>Why payroll A/B (24.5%) ≠ Matt's A/B (32.5%) in January:</strong> Payroll-based A/B is
                     lower because payroll includes 768.5h of paid-but-never-sold time (manager + Hannas LOA since
                     10/28/25, dual knee replacement). Matt's official formula correctly excludes these by using only
-                    Time Sold report data. February MTD at 41.0% is encouraging — keep pushing billable hours.
+                    Time Sold report data. February MTD at 37.6% is encouraging — keep pushing billable hours.
                 </div>
             </div>
 
@@ -1752,10 +1752,12 @@
                     <div style="color:#a855f7;font-weight:bold;margin-bottom:8px;">🔒 CMMC-CUI & ISP-1402 Security
                         Training</div>
                     <div style="display:flex;flex-wrap:wrap;gap:8px;">
-                        <span style="background:#581c87;padding:4px 10px;border-radius:4px;font-size:0.85em;">John
+                        <span style="background:#14532d;padding:4px 10px;border-radius:4px;font-size:0.85em;">✅ John
                             Watson</span>
                         <span style="background:#581c87;padding:4px 10px;border-radius:4px;font-size:0.85em;">Jose
                             Noris</span>
+                        <span style="background:#581c87;padding:4px 10px;border-radius:4px;font-size:0.85em;">Edduyn
+                            Pita</span>
                     </div>
                 </div>
 
@@ -2914,8 +2916,9 @@
             abMonthly: [
                 // Claude adds rows as months close: {month, mattOfficial, localCalc, nonShopHrs, totalSoldHrs, paidHrs, rank, networkTotal}
                 { month: 'Jan', mattOfficial: 32.5, localCalc: 33.2, nonShopHrs: 720.1, totalSoldHrs: 2168.5, paidHrs: null, rank: 19, networkTotal: 21, networkAvg: 49.2 },
+                { month: 'Feb', mattOfficial: 37.6, localCalc: 37.6, nonShopHrs: null, totalSoldHrs: null, paidHrs: null, rank: 'TBD', networkTotal: 21, networkAvg: null },
             ],
-            abNotes: '📊 January closed. Corrected A/B uses Time Sold non-shop hours ÷ total sold hours. Network rank: 19th of 21.',
+            abNotes: '📊 February MTD: 37.6%. Goal is 58.5%. Trending up from Jan (32.5%).',
 
             // ── GOAL #3: Training ──
             training: {
@@ -2970,8 +2973,9 @@
                         status: 'pending',
                         dueDate: 'Feb 28',
                         assignees: [
-                            { name: 'John Watson', status: 'pending' },
-                            { name: 'Jose Noris', status: 'pending' }
+                            { name: 'John Watson', status: 'completed' },
+                            { name: 'Jose Noris', status: 'pending' },
+                            { name: 'Edduyn Pita', status: 'pending' }
                         ]
                     }
                 ],
@@ -3134,7 +3138,7 @@
 
             // ── CURRENT MONTH A/B (in-progress, before month closes) ──
             // Claude updates from daily Time Sold reports during the month
-            currentMonthAB: 41.0, // Feb MTD through 02/04 — 81.9h non-shop / 200h total
+            currentMonthAB: 37.6, // Feb MTD through 02/06 — Updated via Weekly Metrics email
 
             // ── SDV EXPECTED HOURS (Goal #4) ──
             // Claude updates from Time Sold report (SDV WOs) and Job View report (expected hours)
