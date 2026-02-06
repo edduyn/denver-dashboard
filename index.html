@@ -108,6 +108,7 @@
         .action-text { flex: 1; }
         .action-priority { padding: 2px 8px; border-radius: 4px; font-size: 0.75em; }
         .priority-high { background: #ef4444; color: #fff; }
+        .priority-done { background: #10b981; color: #fff; }
         .priority-med { background: #f59e0b; color: #000; }
         
         /* Alert Banner */
@@ -195,8 +196,8 @@
                     <div class="goal-header">
                         <span class="goal-title">#2 Net Promoter Score (NPS) - Customer Satisfaction</span>
                         <div class="goal-progress">
-                            <span id="npsGoalPct" class="goal-pct" style="color:#ef4444">0%</span>
-                            <span id="npsGoalBadge" class="badge badge-red">Action Needed!</span>
+                            <span id="npsGoalPct" class="goal-pct" style="color:#10b981">8%</span>
+                            <span id="npsGoalBadge" class="badge badge-green">On Track</span>
                         </div>
                     </div>
                     <!-- Completed Surveys -->
@@ -216,7 +217,7 @@
                         <span id="npsSentCount" style="font-size:0.85em;color:#94a3b8;width:70px;">0 / 41</span>
                     </div>
                     <div id="npsGoalSummary" style="margin-top:10px;">Target: 1/month (12/yr) | Sent vs Billed WOs: 0/41</div>
-                    <div class="goal-notes">📊 Feb: 14 WOs billed ($42K). Need emails for 6 new Feb customers. See Actions tab.</div>
+                    <div class="goal-notes">📊 Feb: 14 WOs billed ($42K). ✅ Jan NPS: 1/1 COMPLETED (Score: 10, HighWays LLC). Denver GREEN on BZ scorecard. Network: 29 surveys total, Seattle leads (13). Need emails for 6 new Feb customers.</div>
                 </div>
                 
                 <div class="goal-card">
@@ -298,7 +299,7 @@
                     <div class="goal-header">
                         <span class="goal-title">#8 Monthly A/B Budget Performance</span>
                         <div class="goal-progress">
-                            <span class="goal-pct" style="color:#ef4444">0/12</span>
+                            <span class="goal-pct" style="color:#10b981">1/12</span>
                             <span class="badge badge-red">0% Months Met</span>
                         </div>
                     </div>
@@ -350,7 +351,7 @@
                         </div>
                         <div style="background:#1e293b;padding:8px;border-radius:6px;text-align:center;">
                             <div style="color:#64748b;font-size:0.7em;">YEAR PROJECTION</div>
-                            <div style="color:#ef4444;font-size:1.2em;font-weight:bold;">0/12</div>
+                            <div style="color:#10b981;font-size:1.2em;font-weight:bold;">1/12</div>
                         </div>
                     </div>
                     <div class="goal-notes">📊 <strong>Tracker System:</strong> ✅ Implemented | <strong>Execution:</strong> Need +33.3 pts to hit Jan target. Focus on billable hour assignments.</div>
@@ -438,7 +439,7 @@
                     <span class="card-title">🚨 Critical Actions</span>
                     <span class="badge badge-red">Urgent</span>
                 </div>
-                <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">⭐ NPS Survey - One-Click in Goals tab - READY!</span><span class="action-priority priority-high">HIGH</span></div>
+                <div class="action-item"><div class="action-check checked"></div><span class="action-text">⭐ NPS Survey - Jan COMPLETE! Score: 10 (HighWays LLC/CVSXA). Feb target: send 1 more.</span><span class="action-priority priority-done">DONE</span></div>
                 <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">Douglas Riera Guzman - improved to 8h billable (keep momentum)</span><span class="action-priority priority-high">HIGH</span></div>
                 <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">Guillermo Tovar S. - improved to 36% (good progress!)</span><span class="action-priority priority-high">HIGH</span></div>
                 <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">CG4NA - 188 days old, vendor dispute (Kauffman)</span><span class="action-priority priority-high">HIGH</span></div>
@@ -516,7 +517,7 @@
             <div class="card" style="border:2px solid #a855f7;">
                 <div class="card-header">
                     <span class="card-title">⭐ NPS Survey - Goal #2</span>
-                    <span class="badge" id="npsBadge" style="background:#ef4444;">Jan: 0/1 ⚠️</span>
+                    <span class="badge" id="npsBadge" style="background:#10b981;">Jan: 1/1 ✅</span>
                 </div>
                 
                 <!-- Stats Banner -->
@@ -537,6 +538,30 @@
                         <div style="color:#94a3b8;font-size:0.7em;">RESPONSE RATE</div>
                         <div id="statRate" style="color:#a855f7;font-size:1.5em;font-weight:bold;">-</div>
                     </div>
+                </div>
+                
+                <!-- January NPS Result -->
+                <div style="background:linear-gradient(135deg,#064e3b,#065f46);padding:15px;border-radius:10px;margin-bottom:15px;border-left:4px solid #10b981;">
+                    <div style="font-weight:bold;color:#6ee7b7;margin-bottom:8px;">🎉 January NPS Result — Score: 10 (Promoter!)</div>
+                    <div style="font-size:0.85em;color:#a7f3d0;">
+                        <strong>WO:</strong> CVSXA | <strong>Customer:</strong> HighWays LLC | <strong>Shop:</strong> SDR<br>
+                        <strong>Comment:</strong> <em>"Sean was terrific. The scheduling and communication were excellent. Autopilot was fixed in one day."</em><br>
+                        <strong>Completed by:</strong> Brian Zitek (02/06/26)
+                    </div>
+                </div>
+
+                <!-- Network Standings -->
+                <div style="background:#1e293b;padding:12px;border-radius:8px;margin-bottom:15px;font-size:0.8em;">
+                    <div style="color:#60a5fa;font-weight:bold;margin-bottom:6px;">📡 January Network NPS Standings (29 total surveys)</div>
+                    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:4px;color:#94a3b8;">
+                        <span>🥇 Seattle: 13</span><span>Nashville: 3</span>
+                        <span>Las Vegas: 2</span><span>Atlanta: 2</span>
+                        <span>Long Island: 2</span><span>Ft Lauderdale: 2</span>
+                        <span>White Plains: 1</span><span>Manassas: 1</span>
+                        <span style="color:#10b981;font-weight:bold;">✅ Denver: 1</span><span>Teterboro: 1</span>
+                        <span>Dallas: 1</span><span style="color:#ef4444;">Bedford+11 others: 0</span>
+                    </div>
+                    <div style="color:#64748b;margin-top:6px;">BZ Goal: 1/shop/month = 252/year network. Denver is GREEN ✅</div>
                 </div>
                 
                 <div style="background:linear-gradient(135deg,#581c87,#7c3aed);padding:20px;border-radius:10px;margin-bottom:15px;">
@@ -2604,6 +2629,8 @@
         // NPS Tracking - HARDCODED DATA (persists across file reloads)
         // Claude updates this array when you report new surveys sent
         let npsSurveyData = [
+            // === COMPLETED SURVEYS ===
+            {date: '02/06/26', customer: 'HighWays LLC', email: '', wo: 'CVSXA', regNum: 'N405MA', status: 'Completed', score: 10, completedBy: 'Brian Zitek', comments: 'Sean was terrific. The scheduling and communication were excellent. Autopilot was fixed in one day.'},
             // === 01/30/26 - NEW BATCH ===
             {date: '01/30/26', customer: 'MHH Inc', email: 'BILL.BENTON@MHHINC.NET', wo: 'DSW4A', regNum: 'N7BD', status: 'Sent', score: null},
             {date: '01/30/26', customer: 'Patrick Lee', email: 'patrick.e.lee@protonmail.com', wo: 'CU16A', regNum: 'N176MG', status: 'Sent', score: null},
