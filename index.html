@@ -468,21 +468,12 @@
                     <div style="color:#94a3b8;font-size:0.8em;margin-top:5px;">Need +4.8 pts by Fri | Currently 19th rank</div>
                 </div>
                 
-                <!-- Goal 2: Aging WO Closures -->
-                <div style="background:#1e293b;padding:12px;border-radius:8px;margin-bottom:10px;">
-                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-                        <span style="color:#e2e8f0;">ðŸ“‹ Close 5+ WOs from 90+ day aging list</span>
-                        <span id="weeklyAgingStatus" class="badge badge-amber">2 / 5</span>
-                    </div>
-                    <div style="display:flex;gap:5px;flex-wrap:wrap;">
-                        <span style="background:#10b981;color:white;padding:2px 8px;border-radius:4px;font-size:0.8em;">âœ… DTBLA</span>
-                        <span style="background:#10b981;color:white;padding:2px 8px;border-radius:4px;font-size:0.8em;">âœ… DSW4A</span>
-                        <span style="background:#374151;color:#9ca3af;padding:2px 8px;border-radius:4px;font-size:0.8em;">â¬œ 3 more needed</span>
-                    </div>
-                    <div style="color:#94a3b8;font-size:0.8em;margin-top:5px;">CG4NA (188 days) still in dispute</div>
+                                <!-- Goal 2: Aging WO Closures (DYNAMIC) -->
+                <div id="agingWOSection" style="background:#1e293b;padding:12px;border-radius:8px;margin-bottom:10px;">
+                    <!-- Rendered by renderAgingTracker() -->
                 </div>
                 
-                <!-- Goal 3: Rank Improvement -->
+<!-- Goal 3: Rank Improvement -->
                 <div style="background:#1e293b;padding:12px;border-radius:8px;">
                     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
                         <span style="color:#e2e8f0;">ðŸ† Move up to 17th rank (pass Austin & St. Louis)</span>
@@ -2725,9 +2716,97 @@ ${surveyUrl}`;
             document.getElementById('customerDbCount').textContent = customerDatabase.length;
         }
         
-        // Initialize tracking table and customer table
+        // ============================================================
+        // AGING WO TRACKER (Dynamic) - Claude updates this array
+        // ============================================================
+        const AGING_WO_GOAL = 5; // Target closures per month
+        
+        // Status: 'closed' | 'open' | 'dispute' | 'monitoring'
+        const agingWOTracker = [
+            {wo: 'DTBLA', customer: 'Peregrine', daysOld: 40, status: 'closed', dateClosed: '01/26/26', notes: 'Billed'},
+            {wo: 'DSW4A', customer: 'MHH Inc', daysOld: 48, status: 'closed', dateClosed: '01/26/26', notes: 'Billed before EOM'},
+            {wo: 'CG4NA', customer: 'Kauffman', daysOld: 198, status: 'dispute', dateClosed: null, notes: 'Owner was in ICU, hope to resolve soon'},
+        ];
+        
+        function renderAgingTracker() {
+            const container = document.getElementById('agingWOSection');
+            if (!container) return;
+            
+            const closed = agingWOTracker.filter(w => w.status === 'closed');
+            const open = agingWOTracker.filter(w => w.status === 'open');
+            const disputes = agingWOTracker.filter(w => w.status === 'dispute');
+            const monitoring = agingWOTracker.filter(w => w.status === 'monitoring');
+            const closedCount = closed.length;
+            const remaining = Math.max(0, AGING_WO_GOAL - closedCount);
+            
+            // Badge color
+            let badgeClass = 'badge-red';
+            if (closedCount >= AGING_WO_GOAL) badgeClass = 'badge-green';
+            else if (closedCount >= 3) badgeClass = 'badge-amber';
+            
+            let html = '';
+            
+            // Header
+            html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">';
+            html += '<span style="color:#e2e8f0;">\uD83D\uDCCB Close ' + AGING_WO_GOAL + '+ WOs from 90+ day aging list</span>';
+            html += '<span class="badge ' + badgeClass + '">' + closedCount + ' / ' + AGING_WO_GOAL + '</span>';
+            html += '</div>';
+            
+            // Tags row
+            html += '<div style="display:flex;gap:5px;flex-wrap:wrap;">';
+            
+            // Closed WOs (green tags)
+            closed.forEach(function(w) {
+                html += '<span style="background:#10b981;color:white;padding:2px 8px;border-radius:4px;font-size:0.8em;">\u2705 ' + w.wo + '</span>';
+            });
+            
+            // Open WOs (blue tags)
+            open.forEach(function(w) {
+                html += '<span style="background:#3b82f6;color:white;padding:2px 8px;border-radius:4px;font-size:0.8em;">\uD83D\uDD27 ' + w.wo + ' (' + w.daysOld + 'd)</span>';
+            });
+            
+            // Dispute WOs (red tags)
+            disputes.forEach(function(w) {
+                html += '<span style="background:#ef4444;color:white;padding:2px 8px;border-radius:4px;font-size:0.8em;">\uD83D\uDED1 ' + w.wo + ' (' + w.daysOld + 'd)</span>';
+            });
+            
+            // Monitoring WOs (amber tags)
+            monitoring.forEach(function(w) {
+                html += '<span style="background:#f59e0b;color:black;padding:2px 8px;border-radius:4px;font-size:0.8em;">\uD83D\uDC41 ' + w.wo + ' (' + w.daysOld + 'd)</span>';
+            });
+            
+            // Remaining needed (gray tag)
+            if (remaining > 0) {
+                html += '<span style="background:#374151;color:#9ca3af;padding:2px 8px;border-radius:4px;font-size:0.8em;">\u2B1C ' + remaining + ' more needed</span>';
+            }
+            
+            html += '</div>';
+            
+            // Notes line - show disputes and open items
+            var noteItems = [];
+            disputes.forEach(function(w) {
+                noteItems.push(w.wo + ' (' + w.daysOld + ' days) ' + (w.notes || 'in dispute'));
+            });
+            open.forEach(function(w) {
+                noteItems.push(w.wo + ' (' + w.daysOld + ' days) ' + (w.notes || 'open'));
+            });
+            monitoring.forEach(function(w) {
+                noteItems.push(w.wo + ' (' + w.daysOld + ' days) ' + (w.notes || 'monitoring'));
+            });
+            
+            if (noteItems.length > 0) {
+                html += '<div style="color:#94a3b8;font-size:0.8em;margin-top:5px;">' + noteItems.join(' | ') + '</div>';
+            } else if (closedCount >= AGING_WO_GOAL) {
+                html += '<div style="color:#10b981;font-size:0.8em;margin-top:5px;">\u2705 Goal met! All aging WOs addressed.</div>';
+            }
+            
+            container.innerHTML = html;
+        }
+        
+        // Initialize tracking table, customer table, and aging tracker
         renderNpsTable();
         renderCustomerTable();
+        renderAgingTracker();
         
         // Prevent input fields from triggering scroll pause
         document.querySelectorAll('input').forEach(input => {
