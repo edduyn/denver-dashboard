@@ -178,14 +178,14 @@
                     <div class="goal-header">
                         <span class="goal-title">#1 Financial Objectives (A/B Ratio + ELR)</span>
                         <div class="goal-progress">
-                            <span class="goal-pct" style="color:#f59e0b">59%</span>
+                            <span class="goal-pct" style="color:#f59e0b">56%</span>
                             <span class="badge badge-amber">Improving</span>
                         </div>
                     </div>
                     <div class="progress-container">
                         <div class="progress-bar"><div class="progress-fill progress-amber" style="width:56%"></div></div>
                     </div>
-                    <div>Current: 32.5% A/B | Target: 58.5% | Gap: -26.0 pts</div>
+                    <div id="sb-goal-ab">Current: 32.5% A/B | Target: 58.5% | Gap: -26.0 pts</div>
                     <div class="goal-notes">ðŸ“ˆ Up from 26.8% last week! 19th of 21 satellites (+1 rank). Keep momentum.</div>
                 </div>
                 
@@ -344,14 +344,14 @@
                         </div>
                         <div style="background:#1e293b;padding:8px;border-radius:6px;text-align:center;">
                             <div style="color:#64748b;font-size:0.7em;">CURRENT TREND</div>
-                            <div style="color:#f59e0b;font-size:1.2em;font-weight:bold;">41.2%</div>
+                            <div style="color:#f59e0b;font-size:1.2em;font-weight:bold;">25.2%</div>
                         </div>
                         <div style="background:#1e293b;padding:8px;border-radius:6px;text-align:center;">
                             <div style="color:#64748b;font-size:0.7em;">YEAR PROJECTION</div>
                             <div style="color:#ef4444;font-size:1.2em;font-weight:bold;">0/12</div>
                         </div>
                     </div>
-                    <div class="goal-notes">ðŸ“Š <strong>Tracker System:</strong> âœ… Implemented | <strong>Execution:</strong> Jan missed at 33.1%. Feb tracking 41.2% - CV78A starts Feb 17 should boost. Need +17.3 pts.</div>
+                    <div class="goal-notes">ðŸ“Š <strong>Tracker System:</strong> âœ… Implemented | <strong>Execution:</strong> Need +33.3 pts to hit Jan target. Focus on billable hour assignments.</div>
                 </div>
                 
                 <div class="goal-card">
@@ -440,8 +440,8 @@
                 <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">Douglas Riera Guzman - improved to 8h billable (keep momentum)</span><span class="action-priority priority-high">HIGH</span></div>
                 <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">Guillermo Tovar S. - improved to 36% (good progress!)</span><span class="action-priority priority-high">HIGH</span></div>
                 <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">CG4NA - 188 days old, vendor dispute (Kauffman)</span><span class="action-priority priority-high">HIGH</span></div>
-                <div class="action-item"><div class="action-check checked"></div><span class="action-text">&#x2705; Watson, Andrew - MidYear Review COMPLETED 2/9 (pending sigs)</span><span class="action-priority" style="background:#10b981;color:#fff">DONE</span></div>
-                <div class="action-item"><div class="action-check checked"></div><span class="action-text">&#x2705; Guillermo Tovar S. - 90-Day Review COMPLETED 2/9 (pending sigs)</span><span class="action-priority" style="background:#10b981;color:#fff">DONE</span></div>
+                <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">Watson, Andrew - MidYear Review due Feb 4 (8 days)</span><span class="action-priority priority-high">HIGH</span></div>
+                <div class="action-item"><div class="action-check" onclick="this.classList.toggle('checked')"></div><span class="action-text">Guillermo Tovar S. - 90-Day Review due Feb 8 (12 days)</span><span class="action-priority priority-high">HIGH</span></div>
                 <div class="action-item"><div class="action-check checked" onclick="this.classList.toggle('checked')"></div><span class="action-text">âœ… Reply to Brian Zitek Over 30 list with WO notes</span><span class="action-priority" style="background:#10b981;color:#fff">DONE</span></div>
             </div>
             
@@ -468,12 +468,21 @@
                     <div style="color:#94a3b8;font-size:0.8em;margin-top:5px;">Need +4.8 pts by Fri | Currently 19th rank</div>
                 </div>
                 
-                                <!-- Goal 2: Aging WO Closures (DYNAMIC) -->
-                <div id="agingWOSection" style="background:#1e293b;padding:12px;border-radius:8px;margin-bottom:10px;">
-                    <!-- Rendered by renderAgingTracker() -->
+                <!-- Goal 2: Aging WO Closures -->
+                <div style="background:#1e293b;padding:12px;border-radius:8px;margin-bottom:10px;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                        <span style="color:#e2e8f0;">ðŸ“‹ Close 5+ WOs from 90+ day aging list</span>
+                        <span id="weeklyAgingStatus" class="badge badge-amber">2 / 5</span>
+                    </div>
+                    <div style="display:flex;gap:5px;flex-wrap:wrap;">
+                        <span style="background:#10b981;color:white;padding:2px 8px;border-radius:4px;font-size:0.8em;">âœ… DTBLA</span>
+                        <span style="background:#10b981;color:white;padding:2px 8px;border-radius:4px;font-size:0.8em;">âœ… DSW4A</span>
+                        <span style="background:#374151;color:#9ca3af;padding:2px 8px;border-radius:4px;font-size:0.8em;">â¬œ 3 more needed</span>
+                    </div>
+                    <div style="color:#94a3b8;font-size:0.8em;margin-top:5px;">CG4NA (188 days) still in dispute</div>
                 </div>
                 
-<!-- Goal 3: Rank Improvement -->
+                <!-- Goal 3: Rank Improvement -->
                 <div style="background:#1e293b;padding:12px;border-radius:8px;">
                     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
                         <span style="color:#e2e8f0;">ðŸ† Move up to 17th rank (pass Austin & St. Louis)</span>
@@ -622,8 +631,8 @@
         
         <!-- OVERVIEW TAB -->
         <div class="content" id="overview">
-            <div class="alert-banner">
-                âš ï¸ A/B RATIO: 34.6% YTD vs 58.5% Target | Feb: 41.2% | Rank: 21st of 21 | Feb trending UP from Jan 33.1% âœ…
+            <div class="alert-banner" id="sb-alert-banner">
+                âš ï¸ A/B RATIO: 32.5% vs 58.5% Target | Gap: -26.0 pts | Rank: 19th of 21 | +5.7 pts vs last week âœ…
             </div>
             
             <!-- A/B COMPARISON CARD -->
@@ -635,13 +644,13 @@
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
                     <div style="background:linear-gradient(135deg,#1e3a5f,#2563eb);padding:20px;border-radius:12px;text-align:center;">
                         <div style="color:#93c5fd;font-size:0.9em;margin-bottom:5px;">ðŸ“§ MATT'S EMAIL (Official)</div>
-                        <div style="font-size:2.8em;font-weight:bold;color:#f59e0b;">32.5%</div>
+                        <div id="sb-ab-big" style="font-size:2.8em;font-weight:bold;color:#f59e0b;">32.5%</div>
                         <div style="color:#bfdbfe;font-size:0.85em;margin-top:8px;">YTD thru Fri 1/30</div>
                         <div style="color:#fca5a5;font-size:0.9em;margin-top:5px;">Gap: -26.0 pts | <span style="color:#4ade80;">+5.7 vs last wk</span></div>
                     </div>
                     <div style="background:linear-gradient(135deg,#1e293b,#334155);padding:20px;border-radius:12px;text-align:center;">
                         <div style="color:#cbd5e1;font-size:0.9em;margin-bottom:5px;">ðŸŒ NETWORK AVERAGE</div>
-                        <div style="font-size:2.8em;font-weight:bold;color:#f59e0b;">49.2%</div>
+                        <div id="sb-net-avg" style="font-size:2.8em;font-weight:bold;color:#f59e0b;">49.2%</div>
                         <div style="color:#94a3b8;font-size:0.85em;margin-top:8px;">Budget: 58.7%</div>
                         <div style="color:#fca5a5;font-size:0.9em;margin-top:5px;">Gap: -9.5 pts</div>
                     </div>
@@ -649,7 +658,7 @@
                 <div style="margin-top:15px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;text-align:center;">
                     <div style="background:#1e293b;padding:10px;border-radius:6px;">
                         <div style="color:#94a3b8;font-size:0.8em;">Denver Rank</div>
-                        <div style="color:#ef4444;font-weight:bold;">19 of 21</div>
+                        <div id="sb-rank-display" style="color:#ef4444;font-weight:bold;">19 of 21</div>
                     </div>
                     <div style="background:#1e293b;padding:10px;border-radius:6px;">
                         <div style="color:#94a3b8;font-size:0.8em;">vs Network</div>
@@ -661,35 +670,35 @@
                     </div>
                 </div>
                 <div style="background:#14532d;padding:10px;border-radius:6px;margin-top:10px;font-size:0.85em;color:#bbf7d0;">
-                    âœ… <strong>Feb trending UP!</strong> 41.2% Feb vs 33.1% Jan. CV78A (400h) starts Feb 17 &#x2014; will boost SDV numbers.
+                    âœ… <strong>Improving!</strong> Up from 26.8% last week. Keep pushing billable hours.
                 </div>
             </div>
             
             <div class="card">
                 <div class="card-header">
                     <span class="card-title">January 2026 Metrics</span>
-                    <span class="badge badge-blue">Updated Mon 2/09 8:36 AM</span>
+                    <span class="badge badge-blue">Updated Fri 1/30 8:30 AM</span>
                 </div>
                 <div class="card-grid">
                     <div class="metric">
-                        <div class="metric-value">34.6%</div>
-                        <div class="metric-label">YTD A/B</div>
-                        <div class="metric-sub">Feb: 41.2% &#x2191;</div>
+                        <div class="metric-value" id="sb-m-ab">32.5%</div>
+                        <div class="metric-label">Official A/B</div>
+                        <div class="metric-sub">Matt's report 1/30</div>
                     </div>
                     <div class="metric">
-                        <div class="metric-value">21/21</div>
-                        <div class="metric-label">Jan Final Rank</div>
-                        <div class="metric-sub">Feb tracking better</div>
+                        <div class="metric-value" id="sb-m-rank">19/21</div>
+                        <div class="metric-label">Network Rank</div>
+                        <div class="metric-sub">Up from 20th</div>
                     </div>
                     <div class="metric">
-                        <div class="metric-value">$42K</div>
-                        <div class="metric-label">Feb Revenue MTD</div>
-                        <div class="metric-sub">15 WOs | $26K GP</div>
+                        <div class="metric-value" id="sb-m-rev">$239K</div>
+                        <div class="metric-label">Revenue MTD</div>
+                        <div class="metric-sub">34% of $694K goal</div>
                     </div>
                     <div class="metric">
-                        <div class="metric-value">$58K</div>
-                        <div class="metric-label">Total WIP</div>
-                        <div class="metric-sub">477h open | 68 WOs</div>
+                        <div class="metric-value" id="sb-m-billed">46</div>
+                        <div class="metric-label">Billed WOs</div>
+                        <div class="metric-sub" id="sb-m-gp">$89K GP</div>
                     </div>
                 </div>
             </div>
@@ -728,25 +737,26 @@
             <div class="card">
                 <div class="card-header">
                     <span class="card-title">Employee Performance - A/B Efficiency</span>
-                    <span class="badge badge-amber">Target: 58.5% | Updated 02/09 8:36 AM</span>
+                    <span class="badge badge-amber">Target: 58.5% | Updated 01/30 8:17 AM</span>
                 </div>
                 <div class="table-container">
                     <table>
                         <thead>
                             <tr><th>Rank</th><th>Employee</th><th>Billable</th><th>Paid YTD</th><th>A/B %</th><th>Status</th></tr>
                         </thead>
-                        <tbody>
-                            <tr style="background:rgba(16,185,129,0.2)"><td>1</td><td>Sean Macoomb</td><td>149.5h</td><td>217.5h</td><td>69%</td><td><span class="badge badge-green">Above Target</span></td></tr>
-                            <tr style="background:rgba(16,185,129,0.2)"><td>2</td><td>Juan Medina</td><td>139.0h</td><td>249.0h</td><td>56%</td><td><span class="badge badge-amber">Below Target</span></td></tr>
-                            <tr><td>3</td><td>Michael Huber</td><td>101.0h</td><td>217.5h</td><td>46%</td><td><span class="badge badge-amber">Below Target</span></td></tr>
-                            <tr><td>4</td><td>Julia Langford</td><td>95.5h</td><td>216.0h</td><td>44%</td><td><span class="badge badge-amber">Below Target</span></td></tr>
-                            <tr><td>5</td><td>Armando Triana-Cruz</td><td>82.0h</td><td>215.0h</td><td>38%</td><td><span class="badge badge-red">Critical</span></td></tr>
-                            <tr><td>6</td><td>Andrew Watson</td><td>61.0h</td><td>213.5h</td><td>29%</td><td><span class="badge badge-red">Critical</span></td></tr>
-                            <tr><td>7</td><td>Ken Smith</td><td>61.0h</td><td>242.0h</td><td>25%</td><td><span class="badge badge-red">Critical</span></td></tr>
-                            <tr><td>8</td><td>Guillermo Tovar S.</td><td>53.0h</td><td>215.5h</td><td>25%</td><td><span class="badge badge-red">Critical</span></td></tr>
-                            <tr><td>9</td><td>Jose Noris</td><td>45.0h</td><td>218.0h</td><td>21%</td><td><span class="badge badge-red">Critical</span></td></tr>
-                            <tr><td>10</td><td>John Watson</td><td>44.5h</td><td>216.0h</td><td>21%</td><td><span class="badge badge-red">Critical</span></td></tr>
-                            <tr><td>11</td><td>Douglas Riera Guzman</td><td>11.0h</td><td>216.0h</td><td>5%</td><td><span class="badge badge-red">Critical</span></td></tr>
+                        <tbody id="sb-emp-tbody">
+                            <tr style="background:rgba(16,185,129,0.2)"><td>1</td><td>Sean Macoomb</td><td>111.0h</td><td>160.0h</td><td>69%</td><td><span class="badge badge-green">Above Target</span></td></tr>
+                            <tr style="background:rgba(16,185,129,0.2)"><td>2</td><td>Juan Medina</td><td>110.5h</td><td>160.0h</td><td>69%</td><td><span class="badge badge-green">Above Target</span></td></tr>
+                            <tr><td>3</td><td>Julia Langford</td><td>72.5h</td><td>162.0h</td><td>45%</td><td><span class="badge badge-amber">Below Target</span></td></tr>
+                            <tr><td>4</td><td>Michael Huber</td><td>64.0h</td><td>162.0h</td><td>40%</td><td><span class="badge badge-amber">Below Target</span></td></tr>
+                            <tr><td>5</td><td>Kim Owen</td><td>58.2h</td><td>161.5h</td><td>36%</td><td><span class="badge badge-amber">Below Target</span></td></tr>
+                            <tr><td>6</td><td>Armando Triana-Cruz</td><td>54.5h</td><td>160.0h</td><td>34%</td><td><span class="badge badge-red">Critical</span></td></tr>
+                            <tr><td>7</td><td>Guillermo Tovar S.</td><td>49.0h</td><td>159.5h</td><td>31%</td><td><span class="badge badge-red">Critical</span></td></tr>
+                            <tr><td>8</td><td>Andrew Watson</td><td>40.5h</td><td>138.5h</td><td>29%</td><td><span class="badge badge-red">Critical</span></td></tr>
+                            <tr><td>9</td><td>Jose Noris</td><td>43.0h</td><td>158.0h</td><td>27%</td><td><span class="badge badge-red">Critical</span></td></tr>
+                            <tr><td>10</td><td>Ken Smith</td><td>37.0h</td><td>167.0h</td><td>22%</td><td><span class="badge badge-red">Critical</span></td></tr>
+                            <tr><td>11</td><td>John Watson</td><td>30.0h</td><td>138.5h</td><td>22%</td><td><span class="badge badge-red">Critical</span></td></tr>
+                            <tr><td>12</td><td>Douglas Riera Guzman</td><td>11.0h</td><td>160.0h</td><td>7%</td><td><span class="badge badge-red">Critical</span></td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -755,7 +765,7 @@
             <div class="card">
                 <div class="card-header">
                     <span class="card-title">ðŸ—“ï¸ Upcoming Evaluations</span>
-                    <span class="badge badge-green">2 Completed</span>
+                    <span class="badge badge-amber">2 Due in 30 Days</span>
                 </div>
                 <div class="table-container">
                     <table>
@@ -763,8 +773,8 @@
                             <tr><th>Date</th><th>Employee</th><th>Type</th><th>Days</th></tr>
                         </thead>
                         <tbody>
-                            <tr style="background:rgba(16,185,129,0.2)"><td>02/04</td><td>Watson, Andrew</td><td>MidYear</td><td><span class="badge badge-green">Done &#x2705;</span></td></tr>
-                            <tr style="background:rgba(16,185,129,0.2)"><td>02/08</td><td>Guillermo Tovar S.</td><td>90-Day</td><td><span class="badge badge-green">Done &#x2705;</span></td></tr>
+                            <tr style="background:rgba(245,158,11,0.2)"><td>02/04</td><td>Watson, Andrew</td><td>MidYear</td><td><span class="badge badge-amber">9</span></td></tr>
+                            <tr style="background:rgba(245,158,11,0.2)"><td>02/08</td><td>Guillermo Tovar S.</td><td>90-Day</td><td><span class="badge badge-amber">13</span></td></tr>
                             <tr><td>03/10</td><td>Noris, Jose</td><td>Yearly</td><td>43</td></tr>
                             <tr style="background:rgba(100,116,139,0.2)"><td>07/15</td><td>Hannas, Michael ðŸ”´ LOA</td><td>Yearly</td><td>170</td></tr>
                         </tbody>
@@ -778,25 +788,25 @@
             <div class="card">
                 <div class="card-header">
                 <span class="card-title">Work Order Summary</span>
-                <span class="badge badge-blue">68 Open WOs</span>
+                <span class="badge badge-blue">54 Open WOs</span>
                 </div>
                 <div class="card-grid">
                 <div class="metric">
-                <div class="metric-value">68</div>
+                <div class="metric-value">54</div>
                 <div class="metric-label">Total Open WOs</div>
                 </div>
                 <div class="metric">
-                <div class="metric-value">15</div>
-                <div class="metric-label">Billed WOs (Feb)</div>
+                <div class="metric-value">42</div>
+                <div class="metric-label">Billed WOs (Jan)</div>
                 </div>
                 <div class="metric">
-                <div class="metric-value" style="color:#10b981">$57,922</div>
+                <div class="metric-value" style="color:#10b981">$45,920</div>
                 <div class="metric-label">Total Open WIP</div>
                 <div class="metric-sub">ðŸ’° 560.5h expected</div>
                 </div>
                 <div class="metric">
-                <div class="metric-value" style="color:#f59e0b">477h</div>
-                <div class="metric-label">Hours on Open WOs</div>
+                <div class="metric-value" style="color:#f59e0b">560h</div>
+                <div class="metric-label">Expected Hours</div>
                 </div>
                 </div>
             </div>
@@ -1495,7 +1505,7 @@
             <div class="card" style="border:2px solid #f59e0b;">
                 <div class="card-header">
                     <span class="card-title">ðŸ“‹ Corrective Action Tracker - January 2026 Audit</span>
-                    <span class="badge badge-amber">1/5 Closed</span>
+                    <span class="badge badge-amber">0/5 Closed</span>
                 </div>
                 <div class="table-container">
                     <table>
@@ -1504,39 +1514,39 @@
                         </thead>
                         <tbody>
                             <tr style="background:rgba(251,191,36,0.15);">
-                                <td style="color:#10b981;font-weight:bold;">1.1/1.10 REPEAT</td>
-                                <td>Flame locker In/Out checklist training completed by Edduyn + Chris Demarest to Guillermo.</td>
+                                <td style="color:#fbbf24;font-weight:bold;">1.1/1.10 REPEAT</td>
+                                <td>Complete flame locker In/Out checklist implementation. Train all techs on procedure.</td>
                                 <td>Edduyn</td>
-                                <td style="color:#10b981;">Feb 9 &#x2705;</td>
-                                <td><span class="badge badge-green">Closed</span></td>
+                                <td style="color:#ef4444;">Feb 7</td>
+                                <td><span class="badge badge-amber">In Progress</span></td>
                             </tr>
                             <tr>
                                 <td>2.9 Parts Segregation</td>
                                 <td>Create designated unserviceable parts area. Retrain team on RSGOM PP-14.</td>
-                                <td>John Watson</td>
+                                <td>Jose</td>
                                 <td>Feb 14</td>
-                                <td><span class="badge badge-amber">In Progress</span></td>
+                                <td><span class="badge badge-red">Not Started</span></td>
                             </tr>
                             <tr>
                                 <td>1.3 Parts Storage</td>
                                 <td>Update CTQMA work order with vendor parts. Implement parts documentation SOP.</td>
                                 <td>John Watson</td>
-                                <td style="color:#ef4444;">Feb 7 (OVERDUE)</td>
-                                <td><span class="badge badge-amber">In Progress</span></td>
+                                <td>Feb 7</td>
+                                <td><span class="badge badge-red">Not Started</span></td>
                             </tr>
                             <tr>
                                 <td>1.4 Work Area</td>
                                 <td>Implement end-of-shift cleanup checklist. Daily walk-through before close.</td>
-                                <td>John Watson</td>
-                                <td style="color:#ef4444;">Feb 7 (OVERDUE)</td>
-                                <td><span class="badge badge-amber">In Progress</span></td>
+                                <td>Ken</td>
+                                <td>Feb 7</td>
+                                <td><span class="badge badge-red">Not Started</span></td>
                             </tr>
                             <tr>
                                 <td>1.3 Parts Tagging</td>
                                 <td>Update CU0VA with panel removals in AS400. Retrain on parts tagging requirements.</td>
-                                <td>John Watson</td>
-                                <td style="color:#ef4444;">Feb 7 (OVERDUE)</td>
-                                <td><span class="badge badge-amber">In Progress</span></td>
+                                <td>Jose</td>
+                                <td>Feb 7</td>
+                                <td><span class="badge badge-red">Not Started</span></td>
                             </tr>
                         </tbody>
                     </table>
@@ -1569,7 +1579,7 @@
                         <div class="metric-sub">From Dec 2025</div>
                     </div>
                     <div class="metric">
-                        <div class="metric-value" style="color:#10b981">1</div>
+                        <div class="metric-value" style="color:#ef4444">0</div>
                         <div class="metric-label">Closed</div>
                         <div class="metric-sub">Corrective Actions</div>
                     </div>
@@ -1678,9 +1688,9 @@
                         <!-- SDV Special WIP -->
                         <div style="background:linear-gradient(135deg,#78350f,#92400e);padding:20px;border-radius:12px;border:2px solid #f59e0b;">
                             <div style="color:#fcd34d;font-size:0.9em;font-weight:bold;margin-bottom:5px;">3ï¸âƒ£ SDV SPECIAL WIP (Matt)</div>
-                            <div style="color:#fbbf24;font-size:2.2em;font-weight:bold;">$5,005</div>
+                            <div style="color:#fbbf24;font-size:2.2em;font-weight:bold;">$3,815</div>
                             <div style="color:#fde68a;font-size:0.85em;margin-top:8px;">WOs >10h Ã— $70 (excl DB1UA)</div>
-                            <div style="color:#fcd34d;font-size:0.75em;margin-top:5px;">71.5h | CVN0A + CV78A + CVWLA</div>
+                            <div style="color:#fcd34d;font-size:0.75em;margin-top:5px;">54.5h | CVN0A + CV78A</div>
                         </div>
                     </div>
                     
@@ -1783,12 +1793,11 @@
                         <tbody>
                             <tr style="background:rgba(147,51,234,0.2)"><td><strong>DB1UA</strong> ðŸ“</td><td>Hogs Head Air 1 LLC</td><td style="color:#a855f7;">73.0h</td><td style="color:#a855f7;">$5,110</td><td style="font-size:0.8em;color:#a855f7;">NJ controlled - EXCLUDE from Matt</td></tr>
                             <tr style="background:rgba(16,185,129,0.2)"><td><strong>CVN0A</strong></td><td>Stevens Aerospace (N4QL)</td><td style="color:#10b981;font-weight:bold;">38.5h</td><td style="color:#fbbf24;font-weight:bold">$2,695</td><td style="font-size:0.8em;">ARTEX ELT Install</td></tr>
-                            <tr style="background:rgba(16,185,129,0.2)"><td><strong>CV78A</strong></td><td>Primus Capital (N303JJ)</td><td style="color:#10b981;font-weight:bold;">22.0h</td><td style="color:#fbbf24;font-weight:bold">$1,540</td><td style="font-size:0.8em;">Gogo L3 - work started, big install Feb 17</td></tr>
-                            <tr style="background:rgba(16,185,129,0.2)"><td><strong>CVWLA</strong></td><td>HighWays LLC</td><td style="color:#10b981;font-weight:bold;">11.0h</td><td style="color:#fbbf24;font-weight:bold">$770</td><td style="font-size:0.8em;">New SDV WO</td></tr>
+                            <tr style="background:rgba(16,185,129,0.2)"><td><strong>CV78A</strong></td><td>Primus Capital (N303JJ)</td><td style="color:#10b981;font-weight:bold;">16.0h</td><td style="color:#fbbf24;font-weight:bold">$1,120</td><td style="font-size:0.8em;">Gogo L3 - more hours coming Feb</td></tr>
                             <tr style="background:rgba(251,191,36,0.2);font-weight:bold;">
                                 <td colspan="2">TOTAL FOR MATT (excl DB1UA)</td>
-                                <td>71.5h</td>
-                                <td style="color:#fbbf24;">$5,005</td>
+                                <td>54.5h</td>
+                                <td style="color:#fbbf24;">$3,815</td>
                                 <td></td>
                             </tr>
                         </tbody>
@@ -1800,13 +1809,12 @@
                 <div style="background:#1e293b;padding:12px;border-radius:8px;margin-top:15px;">
                     <strong style="color:#60a5fa;">ðŸ“‹ Email Template for Matt:</strong>
                     <div style="color:#e2e8f0;font-size:0.9em;margin-top:8px;font-family:monospace;background:#0f172a;padding:10px;border-radius:4px;">
-                        Subject: Denver SDV Special WIP - February 2026<br><br>
+                        Subject: Denver SDV Special WIP - January 2026<br><br>
                         Matt, here are the SDV WOs with >10 sold hours for special WIP @ $70/hr, 15% margin:<br><br>
                         CVN0A: 38.5h = $2,695 (Stevens Aerospace - ARTEX ELT)<br>
-                        CV78A: 22.0h = $1,540 (Primus Capital - Gogo L3, big install starts Feb 17)<br>
-                        CVWLA: 11.0h = $770 (HighWays LLC)<br><br>
-                        Total: 71.5h = $5,005<br><br>
-                        Note: DB1UA excluded - NJ controlled.
+                        CV78A: 16.0h = $1,120 (Primus Capital - Gogo L3, more hours coming Feb)<br><br>
+                        Total: 54.5h = $3,815<br><br>
+                        Note: DB1UA (73h/$5,110) excluded - NJ controlled.
                     </div>
                 </div>
                 <div style="background:#0f172a;padding:10px;border-radius:6px;margin-top:10px;font-size:0.8em;color:#94a3b8;">
@@ -2004,7 +2012,7 @@
             <div class="card">
                 <div class="card-header">
                     <span class="card-title">ðŸ† Duncan Aviation Satellite Network - A/B Ratio Rankings</span>
-                    <span class="badge badge-red">Jan 2026 Final</span>
+                    <span class="badge badge-blue">Jan 30, 2026 (YTD)</span>
                 </div>
                 <p style="color:#94a3b8;margin-bottom:15px;font-size:0.9em;">
                     <strong>A/B Ratio</strong> = Actual Billable Hours Ã· Bought (Paid) Hours | Measures labor efficiency
@@ -2716,103 +2724,175 @@ ${surveyUrl}`;
             document.getElementById('customerDbCount').textContent = customerDatabase.length;
         }
         
-        // ============================================================
-        // AGING WO TRACKER (Dynamic) - Claude updates this array
-        // ============================================================
-        const AGING_WO_GOAL = 5; // Target closures per month
-        
-        // Status: 'closed' | 'open' | 'dispute' | 'monitoring'
-        const agingWOTracker = [
-            {wo: 'DTBLA', customer: 'Peregrine', daysOld: 40, status: 'closed', dateClosed: '01/26/26', notes: 'Billed'},
-            {wo: 'DSW4A', customer: 'MHH Inc', daysOld: 48, status: 'closed', dateClosed: '01/26/26', notes: 'Billed before EOM'},
-            {wo: 'CG4NA', customer: 'Kauffman', daysOld: 198, status: 'dispute', dateClosed: null, notes: 'Owner was in ICU, hope to resolve soon'},
-        ];
-        
-        function renderAgingTracker() {
-            const container = document.getElementById('agingWOSection');
-            if (!container) return;
-            
-            const closed = agingWOTracker.filter(w => w.status === 'closed');
-            const open = agingWOTracker.filter(w => w.status === 'open');
-            const disputes = agingWOTracker.filter(w => w.status === 'dispute');
-            const monitoring = agingWOTracker.filter(w => w.status === 'monitoring');
-            const closedCount = closed.length;
-            const remaining = Math.max(0, AGING_WO_GOAL - closedCount);
-            
-            // Badge color
-            let badgeClass = 'badge-red';
-            if (closedCount >= AGING_WO_GOAL) badgeClass = 'badge-green';
-            else if (closedCount >= 3) badgeClass = 'badge-amber';
-            
-            let html = '';
-            
-            // Header
-            html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">';
-            html += '<span style="color:#e2e8f0;">\uD83D\uDCCB Close ' + AGING_WO_GOAL + '+ WOs from 90+ day aging list</span>';
-            html += '<span class="badge ' + badgeClass + '">' + closedCount + ' / ' + AGING_WO_GOAL + '</span>';
-            html += '</div>';
-            
-            // Tags row
-            html += '<div style="display:flex;gap:5px;flex-wrap:wrap;">';
-            
-            // Closed WOs (green tags)
-            closed.forEach(function(w) {
-                html += '<span style="background:#10b981;color:white;padding:2px 8px;border-radius:4px;font-size:0.8em;">\u2705 ' + w.wo + '</span>';
-            });
-            
-            // Open WOs (blue tags)
-            open.forEach(function(w) {
-                html += '<span style="background:#3b82f6;color:white;padding:2px 8px;border-radius:4px;font-size:0.8em;">\uD83D\uDD27 ' + w.wo + ' (' + w.daysOld + 'd)</span>';
-            });
-            
-            // Dispute WOs (red tags)
-            disputes.forEach(function(w) {
-                html += '<span style="background:#ef4444;color:white;padding:2px 8px;border-radius:4px;font-size:0.8em;">\uD83D\uDED1 ' + w.wo + ' (' + w.daysOld + 'd)</span>';
-            });
-            
-            // Monitoring WOs (amber tags)
-            monitoring.forEach(function(w) {
-                html += '<span style="background:#f59e0b;color:black;padding:2px 8px;border-radius:4px;font-size:0.8em;">\uD83D\uDC41 ' + w.wo + ' (' + w.daysOld + 'd)</span>';
-            });
-            
-            // Remaining needed (gray tag)
-            if (remaining > 0) {
-                html += '<span style="background:#374151;color:#9ca3af;padding:2px 8px;border-radius:4px;font-size:0.8em;">\u2B1C ' + remaining + ' more needed</span>';
-            }
-            
-            html += '</div>';
-            
-            // Notes line - show disputes and open items
-            var noteItems = [];
-            disputes.forEach(function(w) {
-                noteItems.push(w.wo + ' (' + w.daysOld + ' days) ' + (w.notes || 'in dispute'));
-            });
-            open.forEach(function(w) {
-                noteItems.push(w.wo + ' (' + w.daysOld + ' days) ' + (w.notes || 'open'));
-            });
-            monitoring.forEach(function(w) {
-                noteItems.push(w.wo + ' (' + w.daysOld + ' days) ' + (w.notes || 'monitoring'));
-            });
-            
-            if (noteItems.length > 0) {
-                html += '<div style="color:#94a3b8;font-size:0.8em;margin-top:5px;">' + noteItems.join(' | ') + '</div>';
-            } else if (closedCount >= AGING_WO_GOAL) {
-                html += '<div style="color:#10b981;font-size:0.8em;margin-top:5px;">\u2705 Goal met! All aging WOs addressed.</div>';
-            }
-            
-            container.innerHTML = html;
-        }
-        
-        // Initialize tracking table, customer table, and aging tracker
+        // Initialize tracking table and customer table
         renderNpsTable();
         renderCustomerTable();
-        renderAgingTracker();
         
         // Prevent input fields from triggering scroll pause
         document.querySelectorAll('input').forEach(input => {
             input.addEventListener('click', e => e.stopPropagation());
             input.addEventListener('focus', e => e.stopPropagation());
         });
+    </script>
+
+    <!-- SUPABASE INTEGRATION (Phase 1) -->
+    <script>
+    (function() {
+        const SB_URL = 'https://pjielffstfzqffrpmyyt.supabase.co/rest/v1';
+        const SB_KEY = 'sb_publishable_D7jVVmwqhHcSj3AanXaCow_eOykmr4d';
+        const HEADERS = { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY };
+
+        // Helper: fetch from Supabase
+        async function sbFetch(table, query) {
+            try {
+                const res = await fetch(SB_URL + '/' + table + '?' + query, { headers: HEADERS });
+                if (!res.ok) throw new Error(res.status);
+                return await res.json();
+            } catch(e) {
+                console.warn('[Supabase] Fetch failed for ' + table + ':', e.message);
+                return null;
+            }
+        }
+
+        // Helper: safe DOM update
+        function setText(id, text) {
+            const el = document.getElementById(id);
+            if (el && text !== undefined && text !== null) el.textContent = text;
+        }
+        function setHtml(id, html) {
+            const el = document.getElementById(id);
+            if (el && html !== undefined) el.innerHTML = html;
+        }
+
+        // Format helpers
+        function fmtK(val) { return val >= 1000 ? '$' + Math.round(val/1000) + 'K' : '$' + val; }
+        function fmtPct(val) { return val + '%'; }
+
+        // === LOAD METRICS ===
+        async function loadMetrics() {
+            const rows = await sbFetch('metrics', 'select=*&order=month.desc&limit=2');
+            if (!rows || rows.length === 0) return;
+
+            // Latest month
+            const m = rows[0];
+            const month = m.month; // e.g. '2026-02'
+            const monthName = new Date(month + '-01').toLocaleString('en', {month:'long', year:'numeric'});
+
+            // Update overview metric cards
+            setText('sb-m-ab', fmtPct(m.ab_ratio));
+            setText('sb-m-rank', (m.network_rank || '—') + '/' + m.total_locations);
+            setText('sb-m-rev', fmtK(m.revenue));
+            setText('sb-m-billed', m.billed_wos);
+            if (m.gp) setText('sb-m-gp', fmtK(m.gp) + ' GP');
+
+            // Update big A/B display
+            setText('sb-ab-big', fmtPct(m.ab_ratio));
+
+            // Update alert banner
+            const rankStr = m.network_rank ? m.network_rank + 'th of ' + m.total_locations : '';
+            const gap = (m.ab_ratio - 58.5).toFixed(1);
+            const banner = document.getElementById('sb-alert-banner');
+            if (banner) {
+                banner.innerHTML = '\u26A0\uFE0F A/B RATIO: ' + fmtPct(m.ab_ratio) + 
+                    ' vs 58.5% Target | Gap: ' + gap + ' pts | Rank: ' + rankStr +
+                    ' | ELR: $' + (m.elr || '—') + '/hr';
+            }
+
+            // Update rank display
+            if (m.network_rank) {
+                setText('sb-rank-display', m.network_rank + ' of ' + m.total_locations);
+            }
+
+            // Update Goals tab A/B line
+            const goalEl = document.getElementById('sb-goal-ab');
+            if (goalEl) {
+                goalEl.textContent = 'Current: ' + fmtPct(m.ab_ratio) + ' A/B | Target: 58.5% | Gap: ' + gap + ' pts';
+            }
+
+            // Show data freshness
+            const ts = new Date(m.updated_at);
+            const freshStr = ts.toLocaleDateString('en-US', {month:'short', day:'numeric'}) + ' ' + 
+                             ts.toLocaleTimeString('en-US', {hour:'numeric', minute:'2-digit'});
+            console.log('[Supabase] Metrics loaded: ' + monthName + ' (updated ' + freshStr + ')');
+        }
+
+        // === LOAD EMPLOYEES ===
+        async function loadEmployees() {
+            const rows = await sbFetch('employees', 'select=*&status=neq.LOA&order=ab_ratio.desc');
+            if (!rows || rows.length === 0) return;
+
+            const tbody = document.getElementById('sb-emp-tbody');
+            if (!tbody) return;
+
+            const target = 58.5;
+            let html = '';
+            rows.forEach(function(emp, idx) {
+                const ab = emp.ab_ratio || 0;
+                let badge, style = '';
+                if (ab >= target) {
+                    badge = '<span class="badge badge-green">Above Target</span>';
+                    style = ' style="background:rgba(16,185,129,0.2)"';
+                } else if (ab >= 35) {
+                    badge = '<span class="badge badge-amber">Below Target</span>';
+                } else {
+                    badge = '<span class="badge badge-red">Critical</span>';
+                }
+                const billH = (emp.billable_hours || 0).toFixed(1) + 'h';
+                const paidH = (emp.paid_hours || 0).toFixed(1) + 'h';
+                html += '<tr' + style + '><td>' + (idx+1) + '</td><td>' + emp.name + 
+                    '</td><td>' + billH + '</td><td>' + paidH + 
+                    '</td><td>' + Math.round(ab) + '%</td><td>' + badge + '</td></tr>';
+            });
+            tbody.innerHTML = html;
+            console.log('[Supabase] Employees loaded: ' + rows.length + ' active');
+        }
+
+        // === LOAD NPS STATS ===
+        async function loadNpsStats() {
+            const rows = await sbFetch('nps_surveys', 'select=*&order=date_sent.desc');
+            if (!rows) return;
+
+            const sent = rows.length;
+            const completed = rows.filter(function(s) { return s.status === 'Completed'; }).length;
+            const pending = rows.filter(function(s) { return s.status === 'Sent'; }).length;
+
+            const statSent = document.getElementById('statSent');
+            const statCompleted = document.getElementById('statCompleted');
+            const statPending = document.getElementById('statPending');
+            
+            if (statSent) statSent.textContent = sent + '/49';
+            if (statCompleted) statCompleted.textContent = completed;
+            if (statPending) statPending.textContent = pending;
+
+            // Update NPS badge
+            const badge = document.getElementById('npsBadge');
+            if (badge) {
+                if (completed >= 1) {
+                    badge.textContent = 'Jan: ' + completed + '/1 \u2705';
+                    badge.style.background = '#10b981';
+                } else if (sent > 0) {
+                    badge.textContent = 'Jan: 0/1 \u23F3';
+                    badge.style.background = '#f59e0b';
+                }
+            }
+            console.log('[Supabase] NPS loaded: ' + sent + ' sent, ' + completed + ' completed');
+        }
+
+        // === INIT: Load all data ===
+        async function initSupabase() {
+            console.log('[Supabase] Connecting to denver-dashboard...');
+            await Promise.all([loadMetrics(), loadEmployees(), loadNpsStats()]);
+            console.log('[Supabase] \u2705 Dashboard data loaded from Supabase');
+        }
+
+        // Run after DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initSupabase);
+        } else {
+            // Small delay to let existing scripts run first
+            setTimeout(initSupabase, 500);
+        }
+    })();
     </script>
 </body>
 </html>
