@@ -1084,7 +1084,22 @@
             isRotating = !isRotating;
             document.getElementById('rotateBtn').textContent = isRotating ? '⏸️ Stop' : '▶️ Auto';
             document.getElementById('rotateBtn').style.background = isRotating ? '#ef4444' : '#10b981';
+
+            if (!isRotating) {
+                // Reset to first tab when stopped
+                currentTab = 0;
+                showTab(tabs[currentTab]);
+            }
         }
+
+        // Auto-rotate through tabs every 30 seconds
+        setInterval(() => {
+            if (isRotating) {
+                currentTab = (currentTab + 1) % tabs.length;
+                showTab(tabs[currentTab]);
+                console.log(`Auto-rotated to tab: ${tabs[currentTab]}`);
+            }
+        }, 30000); // 30 seconds
         
         // Tab click handlers
         document.querySelectorAll('.tab').forEach(tab => {
