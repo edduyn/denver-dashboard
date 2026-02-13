@@ -569,7 +569,7 @@
 
             <!-- Individual A/B Performance -->
             <div class="card">
-                <div class="card-title">⏱️ Individual A/B Performance - Previous Work Day</div>
+                <div class="card-title" id="individualABTitle">⏱️ Individual A/B Performance - Loading...</div>
                 <table class="data-table">
                     <thead>
                         <tr>
@@ -2582,8 +2582,33 @@
             console.log('loadIndividualAB: Starting...');
 
             try {
-                // Fetch time entries for previous work day (2026-02-10)
-                const response = await fetch(`${SUPABASE_URL}/rest/v1/time_entries?entry_date=eq.2026-02-10&select=*`, {
+                // Calculate previous work day (skip weekends)
+                const today = new Date();
+                let previousWorkDay = new Date(today);
+                previousWorkDay.setDate(previousWorkDay.getDate() - 1);
+
+                // If previous day is Sunday (0), go back to Friday
+                if (previousWorkDay.getDay() === 0) {
+                    previousWorkDay.setDate(previousWorkDay.getDate() - 2);
+                }
+                // If previous day is Saturday (6), go back to Friday
+                else if (previousWorkDay.getDay() === 6) {
+                    previousWorkDay.setDate(previousWorkDay.getDate() - 1);
+                }
+
+                const previousWorkDayStr = previousWorkDay.toISOString().split('T')[0];
+                const displayDate = previousWorkDay.toLocaleDateString('en-US', {
+                    weekday: 'short',
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                });
+
+                // Update card title with actual date
+                document.getElementById('individualABTitle').textContent = `⏱️ Individual A/B Performance - ${displayDate}`;
+
+                // Fetch time entries for previous work day
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/time_entries?entry_date=eq.${previousWorkDayStr}&select=*`, {
                     headers: HEADERS
                 });
 
