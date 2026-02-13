@@ -656,10 +656,11 @@
                                 <th>Signoff Date</th>
                                 <th>Days Pending</th>
                                 <th>Status</th>
+                                <th>Notes / Warnings</th>
                             </tr>
                         </thead>
                         <tbody id="workOrdersList">
-                            <tr><td colspan="5" style="text-align:center; color:#94a3b8;">Loading data...</td></tr>
+                            <tr><td colspan="6" style="text-align:center; color:#94a3b8;">Loading data...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -1227,6 +1228,25 @@
                                      wo.category === 'amber' ? 'badge-amber' : 'badge-red';
                     const statusText = wo.category === 'green' ? 'On Track' :
                                      wo.category === 'amber' ? 'Watch' : 'Urgent';
+
+                    // Calculate if WO will be over 30 days by month-end
+                    const signoffDate = new Date(wo.signoff_date);
+                    const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+                    const daysOpenByMonthEnd = Math.floor((endOfMonth - signoffDate) / (1000 * 60 * 60 * 24));
+
+                    // Generate warning if will be over 30 days
+                    let warning = '';
+                    if (daysOpenByMonthEnd >= 30) {
+                        const daysUntilMonthEnd = Math.floor((endOfMonth - today) / (1000 * 60 * 60 * 24));
+                        warning = `<div style="background: #7c2d12; padding: 8px; border-radius: 4px; border-left: 3px solid #ef4444;">
+                            <strong style="color: #fca5a5;">⚠️ Over 30 Warning</strong><br/>
+                            <span style="color: #fed7aa; font-size: 0.85em;">
+                                Will be <strong>${daysOpenByMonthEnd} days</strong> old by month-end (${endOfMonth.toLocaleDateString()})<br/>
+                                <strong>${daysUntilMonthEnd} days</strong> to bill or will appear in Brian's report
+                            </span>
+                        </div>`;
+                    }
+
                     return `
                         <tr>
                             <td><strong>${wo.work_order_number}</strong></td>
@@ -1234,10 +1254,11 @@
                             <td>${new Date(wo.signoff_date).toLocaleDateString()}</td>
                             <td>${wo.daysPending} days</td>
                             <td><span class="badge ${badgeClass}">${statusText}</span></td>
+                            <td>${warning || '<span style="color: #10b981;">✓ Will not exceed 30 days</span>'}</td>
                         </tr>
                     `;
                 }).join('');
-                document.getElementById('workOrdersList').innerHTML = listHTML || '<tr><td colspan="5" style="text-align:center;">No pending work orders</td></tr>';
+                document.getElementById('workOrdersList').innerHTML = listHTML || '<tr><td colspan="6" style="text-align:center;">No pending work orders</td></tr>';
             } catch (error) {
                 console.error('Error loading work orders:', error);
                 document.getElementById('workOrdersBadge').textContent = 'Error';
