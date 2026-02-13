@@ -1209,13 +1209,32 @@
         // Load Work Orders Data
         async function loadWorkOrders() {
             try {
-                const response = await fetch(`${SUPABASE_URL}/rest/v1/work_orders?select=*&status=eq.pending_billing&order=signoff_date.asc`, {
+                // Fetch pending work orders
+                const woResponse = await fetch(`${SUPABASE_URL}/rest/v1/work_orders?select=*&status=eq.pending_billing&order=signoff_date.asc`, {
                     headers: {
                         'apikey': SUPABASE_KEY,
                         'Authorization': `Bearer ${SUPABASE_KEY}`
                     }
                 });
-                const workOrders = await response.json();
+                const workOrders = await woResponse.json();
+
+                // Fetch over 30 WOs to get open_date and days_open
+                const over30Response = await fetch(`${SUPABASE_URL}/rest/v1/over_30_wos?select=wo_number,open_date,days_open`, {
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': `Bearer ${SUPABASE_KEY}`
+                    }
+                });
+                const over30WOs = await over30Response.json();
+
+                // Create lookup map
+                const over30Map = {};
+                over30WOs.forEach(wo => {
+                    over30Map[wo.wo_number] = {
+                        open_date: wo.open_date,
+                        days_open: wo.days_open
+                    };
+                });
 
                 const today = new Date();
                 today.setHours(0, 0, 0, 0);
@@ -1227,7 +1246,17 @@
                     let category = 'green';
                     if (daysPending >= 8) category = 'red';
                     else if (daysPending >= 4) category = 'amber';
-                    return { ...wo, daysPending, category };
+
+                    // Add over 30 data if available
+                    const over30Data = over30Map[wo.work_order_number];
+
+                    return {
+                        ...wo,
+                        daysPending,
+                        category,
+                        open_date: over30Data?.open_date || null,
+                        current_days_open: over30Data?.days_open || null
+                    };
                 });
 
                 // Count by category
@@ -1256,21 +1285,40 @@
                                      wo.category === 'amber' ? 'Watch' : 'Urgent';
 
                     // Calculate if WO will be over 30 days by month-end
-                    const signoffDate = new Date(wo.signoff_date);
                     const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-                    const daysOpenByMonthEnd = Math.floor((endOfMonth - signoffDate) / (1000 * 60 * 60 * 24));
+                    const daysUntilMonthEnd = Math.floor((endOfMonth - today) / (1000 * 60 * 60 * 24));
 
-                    // Generate warning if will be over 30 days
                     let warning = '';
-                    if (daysOpenByMonthEnd >= 30) {
-                        const daysUntilMonthEnd = Math.floor((endOfMonth - today) / (1000 * 60 * 60 * 24));
-                        warning = `<div style="background: #7c2d12; padding: 8px; border-radius: 4px; border-left: 3px solid #ef4444;">
-                            <strong style="color: #fca5a5;">⚠️ Over 30 Warning</strong><br/>
-                            <span style="color: #fed7aa; font-size: 0.85em;">
-                                Will be <strong>${daysOpenByMonthEnd} days</strong> old by month-end (${endOfMonth.toLocaleDateString()})<br/>
-                                <strong>${daysUntilMonthEnd} days</strong> to bill or will appear in Brian's report
-                            </span>
-                        </div>`;
+
+                    // Use open_date if available (from over_30_wos table), otherwise estimate
+                    if (wo.open_date) {
+                        // Calculate actual days open by month-end
+                        const openDate = new Date(wo.open_date);
+                        const daysOpenByMonthEnd = Math.floor((endOfMonth - openDate) / (1000 * 60 * 60 * 24));
+                        const currentDaysOpen = wo.current_days_open || Math.floor((today - openDate) / (1000 * 60 * 60 * 24));
+
+                        if (currentDaysOpen >= 30) {
+                            // Already over 30 days!
+                            warning = `<div style="background: #7c2d12; padding: 8px; border-radius: 4px; border-left: 3px solid #ef4444;">
+                                <strong style="color: #fca5a5;">🔴 ALREADY OVER 30 DAYS</strong><br/>
+                                <span style="color: #fed7aa; font-size: 0.85em;">
+                                    Currently <strong>${currentDaysOpen} days</strong> open (opened ${new Date(wo.open_date).toLocaleDateString()})<br/>
+                                    <strong>URGENT:</strong> Bill immediately to avoid Brian's report!
+                                </span>
+                            </div>`;
+                        } else if (daysOpenByMonthEnd >= 30) {
+                            // Will be over 30 by month-end
+                            warning = `<div style="background: #7c2d12; padding: 8px; border-radius: 4px; border-left: 3px solid #f59e0b;">
+                                <strong style="color: #fbbf24;">⚠️ Will Hit 30 Days</strong><br/>
+                                <span style="color: #fed7aa; font-size: 0.85em;">
+                                    Currently ${currentDaysOpen} days, will be <strong>${daysOpenByMonthEnd} days</strong> by month-end<br/>
+                                    <strong>${daysUntilMonthEnd} days</strong> to bill before appearing in Brian's report
+                                </span>
+                            </div>`;
+                        }
+                    } else {
+                        // No open_date available - show info message
+                        warning = '<span style="color: #94a3b8; font-size: 0.85em;">ℹ️ Open date unknown - bill ASAP to be safe</span>';
                     }
 
                     return `
