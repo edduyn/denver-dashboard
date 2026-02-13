@@ -1867,18 +1867,32 @@
                         statusEl.innerHTML = `<div style="color: ${statusColor}; font-weight: bold;">${statusMsg}</div>`;
                     }
 
-                    // Matt's numbers from latest rankings data
-                    const mattAB = rank.denver_ab_actual;
-                    const mattBudget = rank.denver_ab_budget;
-                    const mattGap = (mattAB - mattBudget).toFixed(1);
-                    const weekEnding = new Date(rank.week_ending);
-                    const monthName = weekEnding.toLocaleDateString('en-US', { month: 'short' });
-                    const dayNum = weekEnding.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric' });
+                    // Matt's numbers from latest rankings data - fetch from database
+                    try {
+                        const rankingsResponse = await fetch(`${SUPABASE_URL}/rest/v1/rankings?select=*&order=week_ending.desc&limit=1`, {
+                            headers: HEADERS
+                        });
 
-                    document.getElementById('mattAB').textContent = `${mattAB}%`;
-                    document.getElementById('mattPeriod').textContent = `Latest (${monthName} ${dayNum} Update)`;
-                    document.getElementById('mattRank').textContent = `Rank: ${rank.denver_position}${getOrdinalSuffix(rank.denver_position)}/${rank.total_shops} | Gap: ${mattGap} pts`;
-                    document.getElementById('janRank').textContent = `${rank.denver_position}${getOrdinalSuffix(rank.denver_position)}`;
+                        if (rankingsResponse.status === 200) {
+                            const rankings = await rankingsResponse.json();
+                            if (rankings.length > 0) {
+                                const rank = rankings[0];
+                                const mattAB = rank.denver_ab_actual;
+                                const mattBudget = rank.denver_ab_budget;
+                                const mattGap = (mattAB - mattBudget).toFixed(1);
+                                const weekEnding = new Date(rank.week_ending);
+                                const monthName = weekEnding.toLocaleDateString('en-US', { month: 'short' });
+                                const dayNum = weekEnding.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric' });
+
+                                document.getElementById('mattAB').textContent = `${mattAB}%`;
+                                document.getElementById('mattPeriod').textContent = `Latest (${monthName} ${dayNum} Update)`;
+                                document.getElementById('mattRank').textContent = `Rank: ${rank.denver_position}${getOrdinalSuffix(rank.denver_position)}/${rank.total_shops} | Gap: ${mattGap} pts`;
+                                document.getElementById('janRank').textContent = `${rank.denver_position}${getOrdinalSuffix(rank.denver_position)}`;
+                            }
+                        }
+                    } catch (error) {
+                        console.error('Error loading Matt rankings:', error);
+                    }
                 }
             } catch (error) {
                 console.error('Error calculating A/B ratios:', error);
