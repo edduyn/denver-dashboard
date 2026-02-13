@@ -1113,6 +1113,16 @@
             await loadWIP();
         }
 
+        // Helper function to get ordinal suffix (1st, 2nd, 3rd, etc.)
+        function getOrdinalSuffix(num) {
+            const j = num % 10;
+            const k = num % 100;
+            if (j === 1 && k !== 11) return 'st';
+            if (j === 2 && k !== 12) return 'nd';
+            if (j === 3 && k !== 13) return 'rd';
+            return 'th';
+        }
+
         // Load Rankings Data
         async function loadRankings() {
             try {
@@ -1857,11 +1867,18 @@
                         statusEl.innerHTML = `<div style="color: ${statusColor}; font-weight: bold;">${statusMsg}</div>`;
                     }
 
-                    // Matt's numbers (hardcoded from Friday email - update these manually)
-                    document.getElementById('mattAB').textContent = '37.6%';
-                    document.getElementById('mattPeriod').textContent = 'Jan Final (2/6 Update)';
-                    document.getElementById('mattRank').textContent = 'Rank: 21st/21 | Gap: -20.9 pts';
-                    document.getElementById('janRank').textContent = '21st';
+                    // Matt's numbers from latest rankings data
+                    const mattAB = rank.denver_ab_actual;
+                    const mattBudget = rank.denver_ab_budget;
+                    const mattGap = (mattAB - mattBudget).toFixed(1);
+                    const weekEnding = new Date(rank.week_ending);
+                    const monthName = weekEnding.toLocaleDateString('en-US', { month: 'short' });
+                    const dayNum = weekEnding.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric' });
+
+                    document.getElementById('mattAB').textContent = `${mattAB}%`;
+                    document.getElementById('mattPeriod').textContent = `Latest (${monthName} ${dayNum} Update)`;
+                    document.getElementById('mattRank').textContent = `Rank: ${rank.denver_position}${getOrdinalSuffix(rank.denver_position)}/${rank.total_shops} | Gap: ${mattGap} pts`;
+                    document.getElementById('janRank').textContent = `${rank.denver_position}${getOrdinalSuffix(rank.denver_position)}`;
                 }
             } catch (error) {
                 console.error('Error calculating A/B ratios:', error);
