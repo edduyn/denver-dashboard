@@ -1129,10 +1129,10 @@
 
                     // Update current position metrics
                     document.getElementById('denverPosition').textContent = `#${latest.denver_position} of ${latest.total_shops}`;
-                    document.getElementById('abActual').textContent = `${latest.ab_percentage_actual}%`;
-                    document.getElementById('abBudget').textContent = `${latest.ab_percentage_budget}%`;
+                    document.getElementById('abActual').textContent = `${latest.denver_ab_actual}%`;
+                    document.getElementById('abBudget').textContent = `${latest.denver_ab_budget}%`;
 
-                    const variance = (latest.ab_percentage_actual - latest.ab_percentage_budget).toFixed(1);
+                    const variance = (latest.denver_ab_actual - latest.denver_ab_budget).toFixed(1);
                     document.getElementById('abVariance').textContent = `${variance > 0 ? '+' : ''}${variance}%`;
                     document.getElementById('abVariance').style.color = variance >= 0 ? '#10b981' : '#ef4444';
 
@@ -1146,15 +1146,15 @@
 
                     // Load history table
                     const historyHTML = rankings.map(r => {
-                        const v = (r.ab_percentage_actual - r.ab_percentage_budget).toFixed(1);
+                        const v = (r.denver_ab_actual - r.denver_ab_budget).toFixed(1);
                         const statusClass = v >= 0 ? 'badge-green' : 'badge-red';
                         const statusText = v >= 0 ? 'On Target' : 'Below';
                         return `
                             <tr>
                                 <td>${new Date(r.week_ending).toLocaleDateString()}</td>
                                 <td><strong>#${r.denver_position}</strong> of ${r.total_shops}</td>
-                                <td>${r.ab_percentage_actual}%</td>
-                                <td>${r.ab_percentage_budget}%</td>
+                                <td>${r.denver_ab_actual}%</td>
+                                <td>${r.denver_ab_budget}%</td>
                                 <td style="color:${v >= 0 ? '#10b981' : '#ef4444'}">${v > 0 ? '+' : ''}${v}%</td>
                                 <td><span class="badge ${statusClass}">${statusText}</span></td>
                             </tr>
@@ -2010,7 +2010,7 @@
                     const rank = rankings[0];
 
                     // Calculate A/B ratio (from rankings data which has the actual A/B%)
-                    const abPercentage = rank.ab_percentage_actual;
+                    const abPercentage = rank.denver_ab_actual;
                     const target = 58.5;
                     const gap = (target - abPercentage).toFixed(1);
 
