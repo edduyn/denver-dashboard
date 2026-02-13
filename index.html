@@ -91,36 +91,6 @@
         .badge-blue { background: #3b82f6; color: #fff; }
         .badge-gray { background: #64748b; color: #fff; }
 
-        /* Training Matrix Vertical Headers */
-        .training-header-cell {
-            writing-mode: vertical-rl;
-            text-orientation: mixed;
-            white-space: nowrap;
-            padding: 8px 12px !important;
-            min-width: 50px !important;
-            max-width: 50px !important;
-            height: 250px;
-            vertical-align: bottom;
-            text-align: center;
-            font-size: 0.85em;
-        }
-        .training-matrix-cell {
-            text-align: center;
-            vertical-align: middle;
-            min-width: 50px;
-            max-width: 50px;
-            padding: 8px 4px !important;
-            font-size: 0.75em;
-        }
-        .training-employee-cell {
-            position: sticky;
-            left: 0;
-            background: #1e293b;
-            z-index: 5;
-            font-weight: 600;
-            min-width: 150px;
-        }
-
         /* Goal Cards */
         .goal-card { background: rgba(0,0,0,0.2); border-radius: 12px; padding: 15px; margin-bottom: 12px; }
         .goal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
@@ -813,15 +783,19 @@
                 <div class="card-header">
                     <span class="card-title">📋 Training Assignments Detail</span>
                 </div>
-                <div class="table-container" style="overflow-x: auto;">
-                    <table id="trainingMatrixTable" style="width: auto; min-width: 100%;">
-                        <thead id="trainingMatrixHeader">
+                <div class="table-container">
+                    <table>
+                        <thead>
                             <tr>
-                                <th style="min-width: 150px; position: sticky; left: 0; background: #1e293b; z-index: 10;">Employee</th>
+                                <th style="width: 200px;">Employee</th>
+                                <th style="width: 450px;">Training Course</th>
+                                <th style="width: 120px;">Category</th>
+                                <th style="width: 120px;">Due Date</th>
+                                <th style="width: 120px;">Status</th>
                             </tr>
                         </thead>
                         <tbody id="trainingDetail">
-                            <tr><td colspan="100" style="text-align:center; color:#94a3b8;">Loading training data...</td></tr>
+                            <tr><td colspan="5" style="text-align:center; color:#94a3b8;">Loading training data...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -1598,65 +1572,68 @@
                 document.getElementById('trainingByCategory').innerHTML = categoryHTML ||
                     '<tr><td colspan="5" style="text-align:center;">No training data</td></tr>';
 
-                // Build Training Matrix (Employees x Training Courses)
+                // Build Training Detail Table - Grouped by Employee, then Status Priority
 
-                // Get unique employees and training titles
-                const employees = [...new Set(training.map(t => t.employee_name))].sort();
-                const trainingTitles = [...new Set(training.map(t => t.training_title))].sort();
-
-                if (employees.length === 0 || trainingTitles.length === 0) {
+                if (training.length === 0) {
                     document.getElementById('trainingDetail').innerHTML =
-                        '<tr><td colspan="100" style="text-align:center;">No training assignments</td></tr>';
+                        '<tr><td colspan="5" style="text-align:center;">No training assignments</td></tr>';
                     return;
                 }
 
-                // Build header row with vertical training titles
-                let headerHTML = '<tr><th class="training-employee-cell">Employee</th>';
-                trainingTitles.forEach(title => {
-                    headerHTML += `<th class="training-header-cell">${title}</th>`;
+                // Sort training: Past Due first, then by employee, then by status
+                const sortedTraining = training.sort((a, b) => {
+                    // Priority 1: Past Due first
+                    if (a.status === 'Past Due' && b.status !== 'Past Due') return -1;
+                    if (a.status !== 'Past Due' && b.status === 'Past Due') return 1;
+
+                    // Priority 2: Sort by employee name
+                    if (a.employee_name !== b.employee_name) {
+                        return a.employee_name.localeCompare(b.employee_name);
+                    }
+
+                    // Priority 3: Within same employee, sort by status (Due Soon, In Progress, Completed)
+                    const statusOrder = { 'Due Soon': 1, 'In Progress': 2, 'Completed': 3 };
+                    const aOrder = statusOrder[a.status] || 4;
+                    const bOrder = statusOrder[b.status] || 4;
+                    if (aOrder !== bOrder) return aOrder - bOrder;
+
+                    // Priority 4: Sort by training title
+                    return a.training_title.localeCompare(b.training_title);
                 });
-                headerHTML += '</tr>';
-                document.getElementById('trainingMatrixHeader').innerHTML = headerHTML;
 
-                // Build matrix rows
-                const matrixHTML = employees.map(employee => {
-                    let rowHTML = `<tr><td class="training-employee-cell">${employee}</td>`;
+                // Build table with employee grouping
+                let currentEmployee = '';
+                const detailHTML = sortedTraining.map((t, index) => {
+                    const showEmployee = t.employee_name !== currentEmployee;
+                    if (showEmployee) currentEmployee = t.employee_name;
 
-                    trainingTitles.forEach(title => {
-                        // Find assignment for this employee + training
-                        const assignment = training.find(t =>
-                            t.employee_name === employee && t.training_title === title
-                        );
+                    const badgeClass = t.status === 'Past Due' ? 'badge-red' :
+                                     t.status === 'Completed' ? 'badge-green' :
+                                     t.status === 'Due Soon' ? 'badge-amber' : 'badge-gray';
 
-                        if (assignment) {
-                            const dueDate = assignment.due_date ?
-                                new Date(assignment.due_date).toLocaleDateString('en-US', {
-                                    month: 'numeric',
-                                    day: 'numeric'
-                                }) : '';
+                    const dueDateStr = t.due_date ?
+                        new Date(t.due_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) :
+                        '<span style="color: #64748b;">No date set</span>';
 
-                            const statusColor = assignment.status === 'Past Due' ? '#ef4444' :
-                                              assignment.status === 'Completed' ? '#10b981' :
-                                              assignment.status === 'Due Soon' ? '#f59e0b' : '#94a3b8';
+                    // Truncate long training titles
+                    const shortTitle = t.training_title.length > 80 ?
+                        t.training_title.substring(0, 77) + '...' :
+                        t.training_title;
 
-                            const checkmark = assignment.status === 'Completed' ? '✓' : '○';
-
-                            rowHTML += `
-                                <td class="training-matrix-cell" style="color: ${statusColor};">
-                                    <div style="font-size: 1.2em; font-weight: bold;">${checkmark}</div>
-                                    <div style="font-size: 0.7em; margin-top: 2px;">${dueDate}</div>
-                                </td>
-                            `;
-                        } else {
-                            rowHTML += '<td class="training-matrix-cell" style="color: #475569;">—</td>';
-                        }
-                    });
-
-                    rowHTML += '</tr>';
-                    return rowHTML;
+                    return `
+                        <tr ${showEmployee ? 'style="border-top: 2px solid #475569;"' : ''}>
+                            <td style="font-weight: ${showEmployee ? '700' : '400'}; color: ${showEmployee ? '#fff' : '#94a3b8'};">
+                                ${showEmployee ? t.employee_name : ''}
+                            </td>
+                            <td style="font-size: 0.9em;">${shortTitle}</td>
+                            <td style="font-size: 0.85em;">${t.category || '<span style="color: #64748b;">Uncategorized</span>'}</td>
+                            <td style="font-size: 0.85em;">${dueDateStr}</td>
+                            <td><span class="badge ${badgeClass}">${t.status}</span></td>
+                        </tr>
+                    `;
                 }).join('');
 
-                document.getElementById('trainingDetail').innerHTML = matrixHTML;
+                document.getElementById('trainingDetail').innerHTML = detailHTML;
 
             } catch (error) {
                 console.error('Error loading training data:', error);
