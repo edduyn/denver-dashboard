@@ -1880,9 +1880,11 @@
                                 const mattAB = rank.denver_ab_actual;
                                 const mattBudget = rank.denver_ab_budget;
                                 const mattGap = (mattAB - mattBudget).toFixed(1);
-                                const weekEnding = new Date(rank.week_ending);
+
+                                // Parse date correctly (add time to avoid timezone issues)
+                                const weekEnding = new Date(rank.week_ending + 'T12:00:00');
                                 const monthName = weekEnding.toLocaleDateString('en-US', { month: 'short' });
-                                const dayNum = weekEnding.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric' });
+                                const dayNum = weekEnding.getDate();
 
                                 document.getElementById('mattAB').textContent = `${mattAB}%`;
                                 document.getElementById('mattPeriod').textContent = `Latest (${monthName} ${dayNum} Update)`;
