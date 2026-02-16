@@ -94,10 +94,21 @@
         /* Goal Cards */
         .goal-card { background: rgba(0,0,0,0.2); border-radius: 12px; padding: 15px; margin-bottom: 12px; }
         .goal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .goal-title { font-weight: 600; }
+        .goal-title { font-weight: 600; font-size: 0.95em; }
         .goal-progress { display: flex; align-items: center; gap: 10px; }
         .goal-pct { font-size: 1.2em; font-weight: bold; }
         .goal-notes { color: #94a3b8; font-size: 0.85em; margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.1); }
+        .goal-timeline { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
+        .timeline-bar { flex: 1; height: 6px; background: #334155; border-radius: 3px; overflow: hidden; position: relative; }
+        .timeline-fill { height: 100%; border-radius: 3px; background: rgba(245,158,11,0.4); }
+        .timeline-marker { position: absolute; top: -3px; width: 3px; height: 12px; background: #f59e0b; border-radius: 2px; }
+        .timeline-label { font-size: 0.75em; color: #64748b; white-space: nowrap; }
+        .goal-pace { font-size: 0.8em; margin-top: 4px; }
+        .pace-ahead { color: #10b981; }
+        .pace-behind { color: #ef4444; }
+        .pace-ontrack { color: #f59e0b; }
+        .goal-section-header { color: #f59e0b; font-size: 0.85em; font-weight: 600; margin: 18px 0 8px 0; padding: 6px 12px; background: rgba(245,158,11,0.1); border-radius: 8px; display: flex; align-items: center; gap: 6px; }
+        .goal-section-header:first-of-type { margin-top: 0; }
         
         /* Action Items */
         .action-item { display: flex; align-items: center; gap: 12px; padding: 12px; background: rgba(0,0,0,0.2); border-radius: 8px; margin-bottom: 8px; }
@@ -168,12 +179,32 @@
         
         <!-- GOALS TAB -->
         <div class="content active" id="goals">
-            <!-- Active Goals Card -->
+            <!-- All 11 Goals Dashboard -->
             <div class="card">
                 <div class="card-header">
                     <span class="card-title">🎯 2026 Denver 889 Goals</span>
-                    <span class="badge badge-amber">3/11 Active</span>
+                    <span class="badge badge-amber" id="goalsActiveBadge">11 Goals</span>
                 </div>
+                <!-- 12-Month Timeline Indicator -->
+                <div style="margin-bottom: 15px; padding: 10px 14px; background: rgba(245,158,11,0.08); border-radius: 10px; border: 1px solid rgba(245,158,11,0.2);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                        <span style="font-size: 0.85em; color: #f59e0b; font-weight: 600;">📅 2026 Annual Timeline</span>
+                        <span style="font-size: 0.8em; color: #94a3b8;" id="timelineStatus">--</span>
+                    </div>
+                    <div class="timeline-bar" style="height: 8px;">
+                        <div class="timeline-fill" id="yearProgressFill" style="width: 0%;"></div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-top: 4px;">
+                        <span style="font-size: 0.7em; color: #64748b;">Jan</span>
+                        <span style="font-size: 0.7em; color: #64748b;">Mar</span>
+                        <span style="font-size: 0.7em; color: #64748b;">Jun</span>
+                        <span style="font-size: 0.7em; color: #64748b;">Sep</span>
+                        <span style="font-size: 0.7em; color: #64748b;">Dec</span>
+                    </div>
+                </div>
+
+                <!-- Section: Financial Performance -->
+                <div class="goal-section-header">💰 Financial Performance</div>
 
                 <!-- Goal #1: A/B Ratio -->
                 <div class="goal-card">
@@ -192,14 +223,106 @@
                     <div class="goal-notes">
                         <strong>Current:</strong> <span id="currentAB">--</span> |
                         <strong>Target:</strong> 58.5% |
-                        <strong>Rank:</strong> <span id="networkRank">--</span> of 21 shops
+                        <strong>Rank:</strong> <span id="networkRank">--</span> of 21 shops |
+                        <strong>Gap:</strong> <span id="abGap">--</span>
                     </div>
+                    <div class="goal-pace" id="abPace">--</div>
                 </div>
+
+                <!-- Goal #7: WIP Account Health -->
+                <div class="goal-card">
+                    <div class="goal-header">
+                        <span class="goal-title">🏦 #7: WIP Account Health (Positive Balance)</span>
+                        <span class="badge" id="wipGoalBadge">Loading...</span>
+                    </div>
+                    <div class="goal-progress">
+                        <div style="flex: 1;">
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="wipProgressBar" style="width: 0%;"></div>
+                            </div>
+                        </div>
+                        <span class="goal-pct" id="wipProgressPct">--</span>
+                    </div>
+                    <div class="goal-notes">
+                        <strong>Account:</strong> 0889.35015 |
+                        <strong>Balance:</strong> <span id="wipBalance">--</span> |
+                        <strong>Target:</strong> Positive
+                    </div>
+                    <div class="goal-pace" id="wipPace">--</div>
+                </div>
+
+                <!-- Goal #8: Days to Bill Reduction -->
+                <div class="goal-card">
+                    <div class="goal-header">
+                        <span class="goal-title">⏱️ #8: Days to Bill Reduction</span>
+                        <span class="badge" id="dtbGoalBadge">Loading...</span>
+                    </div>
+                    <div class="goal-progress">
+                        <div style="flex: 1;">
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="dtbProgressBar" style="width: 0%;"></div>
+                            </div>
+                        </div>
+                        <span class="goal-pct" id="dtbProgressPct">--</span>
+                    </div>
+                    <div class="goal-notes">
+                        <strong>Avg Days:</strong> <span id="dtbAvg">--</span> |
+                        <strong>Target:</strong> Minimize |
+                        <strong>Trend:</strong> <span id="dtbTrend">--</span>
+                    </div>
+                    <div class="goal-pace" id="dtbPace">--</div>
+                </div>
+
+                <!-- Goal #10: Flat Rate Profitability -->
+                <div class="goal-card">
+                    <div class="goal-header">
+                        <span class="goal-title">📋 #10: Flat Rate Profitability Analysis</span>
+                        <span class="badge" id="flatRateGoalBadge">Loading...</span>
+                    </div>
+                    <div class="goal-progress">
+                        <div style="flex: 1;">
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="flatRateProgressBar" style="width: 0%;"></div>
+                            </div>
+                        </div>
+                        <span class="goal-pct" id="flatRateProgressPct">--</span>
+                    </div>
+                    <div class="goal-notes">
+                        <strong>Shops:</strong> SDN, SDR, SHC |
+                        <strong>Status:</strong> <span id="flatRateStatus">Data gathering</span>
+                    </div>
+                    <div class="goal-pace" id="flatRatePace">--</div>
+                </div>
+
+                <!-- Goal #11: Employee Loan Accounting -->
+                <div class="goal-card">
+                    <div class="goal-header">
+                        <span class="goal-title">👥 #11: Employee Loan Accounting</span>
+                        <span class="badge" id="loanGoalBadge">Loading...</span>
+                    </div>
+                    <div class="goal-progress">
+                        <div style="flex: 1;">
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="loanProgressBar" style="width: 0%;"></div>
+                            </div>
+                        </div>
+                        <span class="goal-pct" id="loanProgressPct">--</span>
+                    </div>
+                    <div class="goal-notes">
+                        <strong>Occurrences:</strong> <span id="loanCount">--</span> |
+                        <strong>Hours Impact:</strong> <span id="loanHours">--</span> |
+                        <strong>Tracking:</strong> Active monitoring
+                    </div>
+                    <div class="goal-pace" id="loanPace">--</div>
+                </div>
+
+                <!-- Section: Customer & Quality -->
+                <div class="goal-section-header">⭐ Customer & Quality</div>
 
                 <!-- Goal #2: NPS Program -->
                 <div class="goal-card">
                     <div class="goal-header">
-                        <span class="goal-title">📧 #2: NPS Program (12 completed/year)</span>
+                        <span class="goal-title">📧 #2: NPS Survey Coverage (1/month min)</span>
                         <span class="badge" id="npsGoalBadge">Loading...</span>
                     </div>
                     <div class="goal-progress">
@@ -212,12 +335,82 @@
                     </div>
                     <div class="goal-notes">
                         <strong>YTD Completed:</strong> <span id="pendingSurveys">--</span> of 12 |
-                        <strong>This Month Sent:</strong> <span id="surveysSent">--</span> |
+                        <strong>This Month:</strong> <span id="surveysSent">--</span> |
                         <strong>Billed WOs:</strong> <span id="billedWOsMonth">--</span>
                     </div>
+                    <div class="goal-pace" id="npsPace">--</div>
                 </div>
 
-                <!-- Goal #3: Training -->
+                <!-- Goal #4: SDV Expected Hours -->
+                <div class="goal-card">
+                    <div class="goal-header">
+                        <span class="goal-title">🔧 #4: SDV Expected Hours Tracking</span>
+                        <span class="badge" id="sdvGoalBadge">Loading...</span>
+                    </div>
+                    <div class="goal-progress">
+                        <div style="flex: 1;">
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="sdvProgressBar" style="width: 0%;"></div>
+                            </div>
+                        </div>
+                        <span class="goal-pct" id="sdvProgressPct">--</span>
+                    </div>
+                    <div class="goal-notes">
+                        <strong>WOs Tracked:</strong> <span id="sdvTracked">--</span> |
+                        <strong>Variance:</strong> <span id="sdvVariance">--</span> |
+                        <strong>Shop:</strong> SDV Install
+                    </div>
+                    <div class="goal-pace" id="sdvPace">--</div>
+                </div>
+
+                <!-- Goal #5: Vendor Dispute Communication -->
+                <div class="goal-card">
+                    <div class="goal-header">
+                        <span class="goal-title">📞 #5: Vendor Dispute Communication (&lt;30 days)</span>
+                        <span class="badge" id="disputeGoalBadge">Loading...</span>
+                    </div>
+                    <div class="goal-progress">
+                        <div style="flex: 1;">
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="disputeProgressBar" style="width: 0%;"></div>
+                            </div>
+                        </div>
+                        <span class="goal-pct" id="disputeProgressPct">--</span>
+                    </div>
+                    <div class="goal-notes">
+                        <strong>Disputes:</strong> <span id="disputeTotal">--</span> |
+                        <strong>Resolved &lt;30d:</strong> <span id="disputeResolved">--</span> |
+                        <strong>Overdue:</strong> <span id="disputeOverdue">--</span>
+                    </div>
+                    <div class="goal-pace" id="disputePace">--</div>
+                </div>
+
+                <!-- Goal #9: Over 30 Days Resolution -->
+                <div class="goal-card">
+                    <div class="goal-header">
+                        <span class="goal-title">📅 #9: Over 30 Days WO Resolution</span>
+                        <span class="badge" id="over30GoalBadge">Loading...</span>
+                    </div>
+                    <div class="goal-progress">
+                        <div style="flex: 1;">
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="over30ProgressBar" style="width: 0%;"></div>
+                            </div>
+                        </div>
+                        <span class="goal-pct" id="over30ProgressPct">--</span>
+                    </div>
+                    <div class="goal-notes">
+                        <strong>Open &gt;30d:</strong> <span id="over30Count">--</span> |
+                        <strong>Target:</strong> 0 |
+                        <strong>Oldest:</strong> <span id="over30Oldest">--</span>
+                    </div>
+                    <div class="goal-pace" id="over30Pace">--</div>
+                </div>
+
+                <!-- Section: Team & Compliance -->
+                <div class="goal-section-header">🤝 Team & Compliance</div>
+
+                <!-- Goal #3: Training Completion -->
                 <div class="goal-card">
                     <div class="goal-header">
                         <span class="goal-title">📚 #3: Training Completion (100% on time)</span>
@@ -236,46 +429,37 @@
                         <strong>Past Due:</strong> <span id="pastDueTraining" style="color: #ef4444;">--</span> |
                         <strong>Due Soon:</strong> <span id="upcomingTraining">--</span>
                     </div>
+                    <div class="goal-pace" id="trainingPace">--</div>
                 </div>
 
-                <!-- Placeholder: Goals 4-6 -->
-                <div class="goal-card" style="opacity: 0.6;">
-                    <div class="goal-header">
-                        <span class="goal-title">📊 #4-6: Pending Implementation</span>
-                        <span class="badge badge-gray">Coming Soon</span>
-                    </div>
-                    <div style="padding: 10px; color: #94a3b8; font-size: 0.9em;">
-                        #4: Flat-Rate System Evaluation | #5: Customer Experience | #6: Billing Accuracy
-                    </div>
-                </div>
-
-                <!-- Goal #7: FAA and Internal Audits -->
+                <!-- Goal #6: Culture Audit - Team Engagement -->
                 <div class="goal-card">
                     <div class="goal-header">
-                        <span class="goal-title">✅ #7: FAA & Internal Audits (No Findings)</span>
-                        <span class="badge" id="auditGoalBadge">Loading...</span>
+                        <span class="goal-title">🎉 #6: Culture Audit - Team Engagement</span>
+                        <span class="badge" id="cultureGoalBadge">Loading...</span>
                     </div>
                     <div class="goal-progress">
                         <div style="flex: 1;">
                             <div class="progress-bar">
-                                <div class="progress-fill" id="auditProgressBar" style="width: 0%;"></div>
+                                <div class="progress-fill" id="cultureProgressBar" style="width: 0%;"></div>
                             </div>
                         </div>
-                        <span class="goal-pct" id="auditProgressPct">--</span>
+                        <span class="goal-pct" id="cultureProgressPct">--</span>
                     </div>
                     <div class="goal-notes">
-                        <strong>2026 Audits:</strong> <span id="auditTotal">--</span> |
-                        <strong>No Findings:</strong> <span id="auditPassed">--</span> |
-                        <strong>Findings:</strong> <span id="auditFindings">--</span>
+                        <strong>Events YTD:</strong> <span id="cultureEvents">--</span> |
+                        <strong>Expected by now:</strong> <span id="cultureExpected">--</span> |
+                        <strong>Annual Target:</strong> 12
                     </div>
+                    <div class="goal-pace" id="culturePace">--</div>
                 </div>
             </div>
 
-            <!-- 2026 Goals Overview -->
+            <!-- 2026 Goals Scorecard -->
             <div class="card">
                 <div class="card-header">
-                    <span class="card-title">📋 2026 Strategic Goals Overview</span>
-                    <span class="badge badge-amber">3/11 Tracking</span>
+                    <span class="card-title">📋 2026 Goals Scorecard</span>
+                    <span class="badge" id="scorecardBadge">--</span>
                 </div>
                 <div class="table-container">
                     <table>
@@ -284,76 +468,12 @@
                                 <th>#</th>
                                 <th>Goal</th>
                                 <th>Target</th>
+                                <th>Current</th>
                                 <th>Status</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td><strong>1</strong></td>
-                                <td>A/B Ratio & ELR Financial Objectives</td>
-                                <td>Meet or exceed 2026 targets</td>
-                                <td><span class="badge badge-green">Active Tracking</span></td>
-                            </tr>
-                            <tr>
-                                <td><strong>2</strong></td>
-                                <td>NPS Program Participation</td>
-                                <td>200 entries network-wide (1/month Denver)</td>
-                                <td><span class="badge badge-green">Active Tracking</span></td>
-                            </tr>
-                            <tr>
-                                <td><strong>3</strong></td>
-                                <td>Training Completion</td>
-                                <td>All mandatory & technical on time</td>
-                                <td><span class="badge badge-green">Active Tracking</span></td>
-                            </tr>
-                            <tr>
-                                <td><strong>4</strong></td>
-                                <td>Flat-Rate System Evaluation</td>
-                                <td>Re-evaluate using hard data</td>
-                                <td><span class="badge badge-amber">Data Gathering</span></td>
-                            </tr>
-                            <tr>
-                                <td><strong>5</strong></td>
-                                <td>Customer Experience Management</td>
-                                <td>Prompt, consistent, professional communication</td>
-                                <td><span class="badge badge-amber">Pending</span></td>
-                            </tr>
-                            <tr>
-                                <td><strong>6</strong></td>
-                                <td>Shop Expense Management</td>
-                                <td>Stay within budgeted amounts</td>
-                                <td><span class="badge badge-amber">Pending</span></td>
-                            </tr>
-                            <tr>
-                                <td><strong>7</strong></td>
-                                <td>FAA & Internal Audits</td>
-                                <td>Complete with no findings</td>
-                                <td><span class="badge badge-amber">Pending</span></td>
-                            </tr>
-                            <tr>
-                                <td><strong>8</strong></td>
-                                <td>Monthly A/B Budget Plan</td>
-                                <td>Meet budget each month</td>
-                                <td><span class="badge badge-amber">Pending</span></td>
-                            </tr>
-                            <tr>
-                                <td><strong>9</strong></td>
-                                <td>Dealer Programs Tracking</td>
-                                <td>Track customer reactions & success rates</td>
-                                <td><span class="badge badge-amber">Pending</span></td>
-                            </tr>
-                            <tr>
-                                <td><strong>10</strong></td>
-                                <td>Vendor Dispute Communication</td>
-                                <td>Communicate to BZ within 30 days</td>
-                                <td><span class="badge badge-amber">Pending</span></td>
-                            </tr>
-                            <tr>
-                                <td><strong>11</strong></td>
-                                <td>Risk Assessment Reduction</td>
-                                <td>Identify areas to reduce overall risk score</td>
-                                <td><span class="badge badge-amber">Pending</span></td>
-                            </tr>
+                        <tbody id="scorecardBody">
+                            <tr><td colspan="5" style="color: #64748b; text-align: center;">Loading scorecard...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -2555,149 +2675,164 @@
             }
         }
 
-        // Load Goals Data
+        // ==========================================
+        // GOALS DATA — All 11 Goals, 12-Month Timeline
+        // ==========================================
+
+        // Helper: Calculate year progress and pace
+        function getYearProgress() {
+            const now = new Date();
+            const startOfYear = new Date(now.getFullYear(), 0, 1);
+            const endOfYear = new Date(now.getFullYear(), 11, 31);
+            const totalDays = (endOfYear - startOfYear) / (1000 * 60 * 60 * 24);
+            const elapsed = (now - startOfYear) / (1000 * 60 * 60 * 24);
+            const pct = (elapsed / totalDays * 100);
+            const currentMonth = now.getMonth() + 1; // 1-12
+            return { pct: pct.toFixed(1), currentMonth, elapsed: Math.floor(elapsed), totalDays: Math.floor(totalDays), monthsElapsed: currentMonth };
+        }
+
+        // Helper: Set goal status (badge, progress bar, percentage, pace)
+        function setGoalStatus(prefix, { value, target, pct, badge, badgeClass, barClass, pctColor, paceText, paceClass }) {
+            const badgeEl = document.getElementById(`${prefix}GoalBadge`);
+            const barEl = document.getElementById(`${prefix}ProgressBar`);
+            const pctEl = document.getElementById(`${prefix}ProgressPct`);
+            const paceEl = document.getElementById(`${prefix}Pace`);
+
+            if (badgeEl) { badgeEl.textContent = badge; badgeEl.className = `badge ${badgeClass}`; }
+            if (barEl) { barEl.style.width = `${Math.min(pct, 100)}%`; barEl.className = `progress-fill ${barClass}`; }
+            if (pctEl) { pctEl.textContent = value; if (pctColor) pctEl.style.color = pctColor; }
+            if (paceEl) { paceEl.textContent = paceText; paceEl.className = `goal-pace ${paceClass}`; }
+        }
+
+        // Helper: Determine pace context for a goal vs 12-month timeline
+        function getPaceInfo(currentPct, yearPct) {
+            const diff = currentPct - yearPct;
+            if (diff >= 5) return { text: `▲ ${diff.toFixed(0)}% ahead of pace`, cls: 'pace-ahead' };
+            if (diff >= -5) return { text: `● On pace (Year: ${yearPct}% elapsed)`, cls: 'pace-ontrack' };
+            return { text: `▼ ${Math.abs(diff).toFixed(0)}% behind pace (Year: ${yearPct}% elapsed)`, cls: 'pace-behind' };
+        }
+
         async function loadGoalsData() {
-            console.log('loadGoalsData: Starting...');
+            console.log('loadGoalsData: Starting all 11 goals...');
+            const yr = getYearProgress();
+
+            // Set the annual timeline indicator
+            document.getElementById('yearProgressFill').style.width = `${yr.pct}%`;
+            document.getElementById('timelineStatus').textContent = `Month ${yr.monthsElapsed}/12 · Day ${yr.elapsed}/${yr.totalDays} · ${yr.pct}% elapsed`;
+
+            // Track scorecard data for bottom table
+            const scorecard = [];
+
             try {
-                // Get latest metrics and rankings data
-                const [metricsResp, rankingsResp] = await Promise.all([
+                // ====================================
+                // FETCH ALL DATA IN PARALLEL
+                // ====================================
+                const [metricsResp, rankingsResp, npsMonthResp, npsYearResp, metricsMonthResp, trainingResp] = await Promise.all([
                     fetch(`${SUPABASE_URL}/rest/v1/daily_metrics?select=*&order=report_date.desc&limit=1`, {
                         headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
                     }),
                     fetch(`${SUPABASE_URL}/rest/v1/rankings?select=*&order=week_ending.desc&limit=1`, {
+                        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+                    }),
+                    fetch(`${SUPABASE_URL}/rest/v1/nps_surveys?select=*&date_sent=gte.${new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString().split('T')[0]}&order=date_sent.desc`, {
+                        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+                    }),
+                    fetch(`${SUPABASE_URL}/rest/v1/nps_surveys?select=*&date_sent=gte.${new Date(new Date().getFullYear(), 0, 1).toISOString().split('T')[0]}&order=date_sent.desc`, {
+                        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+                    }),
+                    fetch(`${SUPABASE_URL}/rest/v1/daily_metrics?select=billed_wo_count,report_date&report_date=gte.${new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString().split('T')[0]}&order=report_date.desc`, {
+                        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+                    }),
+                    fetch(`${SUPABASE_URL}/rest/v1/training?select=*&order=due_date.asc`, {
                         headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
                     })
                 ]);
 
                 const metrics = await metricsResp.json();
                 const rankings = await rankingsResp.json();
-
-                console.log('loadGoalsData: Got metrics:', metrics.length, 'rankings:', rankings.length);
-
-                if (metrics.length > 0 && rankings.length > 0) {
-                    const latest = metrics[0];
-                    const rank = rankings[0];
-
-                    // Calculate A/B ratio (from rankings data which has the actual A/B%)
-                    const abPercentage = rank.denver_ab_actual;
-                    const target = 58.5;
-                    const gap = (target - abPercentage).toFixed(1);
-
-                    // Update Goal #1 metrics
-                    document.getElementById('currentAB').textContent = `${abPercentage}%`;
-                    document.getElementById('networkRank').textContent = `#${rank.denver_position}`;
-
-                    // Progress bar and status
-                    const progress = (abPercentage / target * 100).toFixed(0);
-                    const progressBar = document.getElementById('abProgressBar');
-                    const progressPct = document.getElementById('abProgressPct');
-
-                    if (progressBar && progressPct) {
-                        progressBar.style.width = `${Math.min(progress, 100)}%`;
-                        progressPct.textContent = `${abPercentage}%`;
-                        console.log('Goal #1: Set progress bar to', progress, '% | A/B:', abPercentage);
-                    } else {
-                        console.error('Goal #1: Progress bar elements not found!');
-                    }
-
-                    if (abPercentage >= target) {
-                        document.getElementById('abGoalBadge').textContent = '✅ Goal Met!';
-                        document.getElementById('abGoalBadge').className = 'badge badge-green';
-                        progressBar.className = 'progress-fill progress-green';
-                        progressPct.style.color = '#10b981';
-                    } else if (progress >= 75) {
-                        document.getElementById('abGoalBadge').textContent = `${progress}% to Goal`;
-                        document.getElementById('abGoalBadge').className = 'badge badge-amber';
-                        progressBar.className = 'progress-fill progress-amber';
-                        progressPct.style.color = '#f59e0b';
-                    } else {
-                        document.getElementById('abGoalBadge').textContent = `${progress}% to Goal`;
-                        document.getElementById('abGoalBadge').className = 'badge badge-red';
-                        progressBar.className = 'progress-fill progress-red';
-                        progressPct.style.color = '#ef4444';
-                    }
-                }
-
-                // Goal #2: NPS Program Participation
-                // Get current month's data
-                const now = new Date();
-                const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).toISOString().split('T')[0];
-                const firstDayOfYear = new Date(now.getFullYear(), 0, 1).toISOString().split('T')[0];
-
-                // Fetch NPS surveys from this month and year
-                const [npsMonthResp, npsYearResp, metricsMonthResp] = await Promise.all([
-                    fetch(`${SUPABASE_URL}/rest/v1/nps_surveys?select=*&date_sent=gte.${firstDayOfMonth}&order=date_sent.desc`, {
-                        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
-                    }),
-                    fetch(`${SUPABASE_URL}/rest/v1/nps_surveys?select=*&date_sent=gte.${firstDayOfYear}&order=date_sent.desc`, {
-                        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
-                    }),
-                    fetch(`${SUPABASE_URL}/rest/v1/daily_metrics?select=billed_wo_count,report_date&report_date=gte.${firstDayOfMonth}&order=report_date.desc`, {
-                        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
-                    })
-                ]);
-
                 const npsMonth = await npsMonthResp.json();
                 const npsYear = await npsYearResp.json();
                 const metricsMonth = await metricsMonthResp.json();
-
-                // Sum up billed WOs for the month
-                const totalBilledWOs = metricsMonth.reduce((sum, day) => sum + (day.billed_wo_count || 0), 0);
-
-                // Count NPS surveys sent this month and YTD
-                const entriesThisMonth = npsMonth.length;
-                const entriesYTD = npsYear.length;
-                const completedYTD = npsYear.filter(s => s.status === 'Completed').length;
-                const monthlyGoal = 1;
-
-                // Update Goal #2 metrics
-                document.getElementById('surveysSent').textContent = entriesThisMonth;
-                document.getElementById('billedWOsMonth').textContent = totalBilledWOs;
-                document.getElementById('pendingSurveys').textContent = completedYTD;
-
-                // Progress bar and status (annual goal: 12 COMPLETED surveys)
-                const annualGoal = 12;
-                const npsProgress = (completedYTD / annualGoal * 100).toFixed(0);
-                const npsProgressBar = document.getElementById('npsProgressBar');
-                const npsProgressPct = document.getElementById('npsProgressPct');
-
-                npsProgressBar.style.width = `${Math.min(npsProgress, 100)}%`;
-                npsProgressPct.textContent = `${completedYTD}/12`;
-
-                // Badge shows monthly status (monthlyGoal already declared above)
-                if (completedYTD >= annualGoal) {
-                    document.getElementById('npsGoalBadge').textContent = '✅ Annual Goal Met!';
-                    document.getElementById('npsGoalBadge').className = 'badge badge-green';
-                    npsProgressBar.className = 'progress-fill progress-green';
-                    npsProgressPct.style.color = '#10b981';
-                } else if (entriesThisMonth >= monthlyGoal) {
-                    document.getElementById('npsGoalBadge').textContent = '✅ This Month Met';
-                    document.getElementById('npsGoalBadge').className = 'badge badge-green';
-                    npsProgressBar.className = 'progress-fill progress-amber';
-                    npsProgressPct.style.color = '#f59e0b';
-                } else if (completedYTD > 0) {
-                    document.getElementById('npsGoalBadge').textContent = `${npsProgress}% to Annual`;
-                    document.getElementById('npsGoalBadge').className = 'badge badge-amber';
-                    npsProgressBar.className = 'progress-fill progress-amber';
-                    npsProgressPct.style.color = '#f59e0b';
-                } else {
-                    document.getElementById('npsGoalBadge').textContent = 'No completions yet';
-                    document.getElementById('npsGoalBadge').className = 'badge badge-red';
-                    npsProgressBar.className = 'progress-fill progress-red';
-                    npsProgressPct.style.color = '#ef4444';
-                }
-
-                // Goal #3: Training Completion
-                const trainingResp = await fetch(`${SUPABASE_URL}/rest/v1/training?select=*&order=due_date.asc`, {
-                    headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
-                });
                 const training = await trainingResp.json();
 
-                // Count by status
+                console.log('loadGoalsData: Data fetched — metrics:', metrics.length, 'rankings:', rankings.length, 'npsYear:', npsYear.length, 'training:', training.length);
+
+                // ====================================
+                // GOAL #1: A/B Ratio Target (58.5%)
+                // ====================================
+                if (rankings.length > 0) {
+                    const rank = rankings[0];
+                    const abPercentage = rank.denver_ab_actual;
+                    const target = 58.5;
+                    const gap = (target - abPercentage).toFixed(1);
+                    const progress = (abPercentage / target * 100);
+
+                    document.getElementById('currentAB').textContent = `${abPercentage}%`;
+                    document.getElementById('networkRank').textContent = `#${rank.denver_position}`;
+                    document.getElementById('abGap').textContent = abPercentage >= target ? 'None' : `${gap}pp`;
+
+                    const pace = getPaceInfo(progress, parseFloat(yr.pct));
+                    // A/B ratio is a continuous target — needs to be met every month
+                    // So progress = current/target, but context is how far into the year we are
+
+                    let badge, badgeClass, barClass, pctColor;
+                    if (abPercentage >= target) {
+                        badge = '✅ On Target'; badgeClass = 'badge-green'; barClass = 'progress-fill progress-green'; pctColor = '#10b981';
+                    } else if (progress >= 75) {
+                        badge = `${gap}pp gap`; badgeClass = 'badge-amber'; barClass = 'progress-fill progress-amber'; pctColor = '#f59e0b';
+                    } else {
+                        badge = `${gap}pp gap`; badgeClass = 'badge-red'; barClass = 'progress-fill progress-red'; pctColor = '#ef4444';
+                    }
+
+                    setGoalStatus('ab', {
+                        value: `${abPercentage}%`, target: `${target}%`, pct: progress,
+                        badge, badgeClass, barClass, pctColor,
+                        paceText: `${pace.text} · Must maintain 58.5% each month`, paceClass: pace.cls
+                    });
+
+                    scorecard.push({ num: 1, name: 'A/B Ratio Target', target: '58.5%', current: `${abPercentage}%`, status: abPercentage >= target ? 'green' : (progress >= 75 ? 'amber' : 'red'), statusText: abPercentage >= target ? 'On Target' : `${gap}pp gap` });
+                }
+
+                // ====================================
+                // GOAL #2: NPS Survey Coverage (1/month)
+                // ====================================
+                const totalBilledWOs = metricsMonth.reduce((sum, d) => sum + (d.billed_wo_count || 0), 0);
+                const entriesThisMonth = npsMonth.length;
+                const completedYTD = npsYear.filter(s => s.status === 'Completed').length;
+                const sentYTD = npsYear.length;
+                const annualGoal = 12;
+                const expectedByNow = yr.monthsElapsed; // 1 per month
+                const npsProgress = (sentYTD / annualGoal * 100);
+
+                document.getElementById('surveysSent').textContent = entriesThisMonth;
+                document.getElementById('billedWOsMonth').textContent = totalBilledWOs;
+                document.getElementById('pendingSurveys').textContent = sentYTD;
+
+                const npsPace = getPaceInfo(npsProgress, parseFloat(yr.pct));
+                let npsBadge, npsBadgeClass, npsBarClass, npsPctColor;
+                if (sentYTD >= annualGoal) {
+                    npsBadge = '✅ Annual Goal Met!'; npsBadgeClass = 'badge-green'; npsBarClass = 'progress-fill progress-green'; npsPctColor = '#10b981';
+                } else if (sentYTD >= expectedByNow) {
+                    npsBadge = '✅ On Pace'; npsBadgeClass = 'badge-green'; npsBarClass = 'progress-fill progress-green'; npsPctColor = '#10b981';
+                } else if (entriesThisMonth >= 1) {
+                    npsBadge = `${sentYTD}/${expectedByNow} expected`; npsBadgeClass = 'badge-amber'; npsBarClass = 'progress-fill progress-amber'; npsPctColor = '#f59e0b';
+                } else {
+                    npsBadge = `Need ${expectedByNow - sentYTD} more`; npsBadgeClass = 'badge-red'; npsBarClass = 'progress-fill progress-red'; npsPctColor = '#ef4444';
+                }
+
+                setGoalStatus('nps', {
+                    value: `${sentYTD}/12`, pct: npsProgress,
+                    badge: npsBadge, badgeClass: npsBadgeClass, barClass: npsBarClass, pctColor: npsPctColor,
+                    paceText: `${npsPace.text} · Expected ${expectedByNow} by month ${yr.monthsElapsed}`, paceClass: npsPace.cls
+                });
+
+                scorecard.push({ num: 2, name: 'NPS Survey Coverage', target: '12/year (1/mo)', current: `${sentYTD} sent`, status: sentYTD >= expectedByNow ? 'green' : 'red', statusText: sentYTD >= expectedByNow ? 'On Pace' : `${expectedByNow - sentYTD} behind` });
+
+                // ====================================
+                // GOAL #3: Training Completion (100%)
+                // ====================================
                 const completedCount = training.filter(t => t.status === 'Completed').length;
                 const pastDueCount = training.filter(t => t.status === 'Past Due').length;
-
-                // Count upcoming (due within 30 days)
                 const today = new Date();
                 const thirtyDaysFromNow = new Date(today);
                 thirtyDaysFromNow.setDate(today.getDate() + 30);
@@ -2706,100 +2841,223 @@
                     const dueDate = new Date(t.due_date);
                     return dueDate > today && dueDate <= thirtyDaysFromNow;
                 }).length;
-
-                // Calculate completion rate
                 const totalTraining = training.length;
-                const completionRate = totalTraining > 0 ? ((completedCount / totalTraining) * 100).toFixed(1) : '0.0';
+                const completionRate = totalTraining > 0 ? ((completedCount / totalTraining) * 100) : 0;
 
-                // Update Goal #3 metrics
-                document.getElementById('completedTraining').textContent = completedCount;
+                document.getElementById('completedTraining').textContent = `${completedCount}/${totalTraining}`;
                 document.getElementById('pastDueTraining').textContent = pastDueCount;
                 document.getElementById('upcomingTraining').textContent = upcomingCount;
 
-                // Progress bar and status
-                const trainingProgressBar = document.getElementById('trainingProgressBar');
-                const trainingProgressPct = document.getElementById('trainingProgressPct');
-
-                trainingProgressBar.style.width = `${completionRate}%`;
-                trainingProgressPct.textContent = `${completionRate}%`;
-
-                if (pastDueCount === 0 && parseFloat(completionRate) === 100) {
-                    document.getElementById('trainingGoalBadge').textContent = '✅ Goal Met!';
-                    document.getElementById('trainingGoalBadge').className = 'badge badge-green';
-                    trainingProgressBar.className = 'progress-fill progress-green';
-                    trainingProgressPct.style.color = '#10b981';
+                const trainingPace = getPaceInfo(completionRate, parseFloat(yr.pct));
+                let trBadge, trBadgeClass, trBarClass, trPctColor;
+                if (pastDueCount === 0 && completionRate === 100) {
+                    trBadge = '✅ All Complete'; trBadgeClass = 'badge-green'; trBarClass = 'progress-fill progress-green'; trPctColor = '#10b981';
                 } else if (pastDueCount > 0) {
-                    document.getElementById('trainingGoalBadge').textContent = `${pastDueCount} Past Due`;
-                    document.getElementById('trainingGoalBadge').className = 'badge badge-red';
-                    trainingProgressBar.className = 'progress-fill progress-red';
-                    trainingProgressPct.style.color = '#ef4444';
+                    trBadge = `⚠️ ${pastDueCount} Past Due`; trBadgeClass = 'badge-red'; trBarClass = 'progress-fill progress-red'; trPctColor = '#ef4444';
                 } else {
-                    document.getElementById('trainingGoalBadge').textContent = `${completionRate}% Complete`;
-                    document.getElementById('trainingGoalBadge').className = 'badge badge-amber';
-                    trainingProgressBar.className = 'progress-fill progress-amber';
-                    trainingProgressPct.style.color = '#f59e0b';
+                    trBadge = `${completionRate.toFixed(0)}% Done`; trBadgeClass = 'badge-amber'; trBarClass = 'progress-fill progress-amber'; trPctColor = '#f59e0b';
                 }
 
-                // Goal #7: FAA & Internal Audits (No Findings)
-                const auditResponse = await fetch(`${SUPABASE_URL}/rest/v1/inspections?year=eq.2026`, {
-                    headers: HEADERS
+                setGoalStatus('training', {
+                    value: `${completionRate.toFixed(1)}%`, pct: completionRate,
+                    badge: trBadge, badgeClass: trBadgeClass, barClass: trBarClass, pctColor: trPctColor,
+                    paceText: pastDueCount > 0 ? `▼ ${pastDueCount} items past due — needs immediate attention` : trainingPace.text, paceClass: pastDueCount > 0 ? 'pace-behind' : trainingPace.cls
                 });
 
-                // Check if table exists
-                if (auditResponse.status === 404) {
-                    console.log('Inspections table not created yet - Goal #7');
-                    document.getElementById('auditGoalBadge').textContent = 'Setup Required';
-                    document.getElementById('auditGoalBadge').className = 'badge badge-gray';
-                    document.getElementById('auditTotal').textContent = '0';
-                    document.getElementById('auditPassed').textContent = '0';
-                    document.getElementById('auditFindings').textContent = '0';
-                    document.getElementById('auditProgressBar').style.width = '0%';
-                    document.getElementById('auditProgressPct').textContent = '0/0';
+                scorecard.push({ num: 3, name: 'Training Completion', target: '100% on time', current: `${completionRate.toFixed(0)}%`, status: pastDueCount > 0 ? 'red' : (completionRate === 100 ? 'green' : 'amber'), statusText: pastDueCount > 0 ? `${pastDueCount} past due` : `${completionRate.toFixed(0)}%` });
+
+                // ====================================
+                // GOAL #4: SDV Expected Hours Tracking
+                // ====================================
+                // This goal tracks per-WO expected vs actual hours for SDV Install shop
+                // Data not yet automated — show as manual tracking goal
+                setGoalStatus('sdv', {
+                    value: 'Manual', pct: 0,
+                    badge: 'Manual Track', badgeClass: 'badge-amber', barClass: 'progress-fill progress-amber', pctColor: '#f59e0b',
+                    paceText: `● SDV Install shop — track expected hours before work begins on each WO`, paceClass: 'pace-ontrack'
+                });
+                document.getElementById('sdvTracked').textContent = '--';
+                document.getElementById('sdvVariance').textContent = '--';
+
+                scorecard.push({ num: 4, name: 'SDV Expected Hours', target: 'Track per WO', current: 'Manual', status: 'amber', statusText: 'Manual tracking' });
+
+                // ====================================
+                // GOAL #5: Vendor Dispute Communication
+                // ====================================
+                // Target: Communicate to BZ within 30 days of dispute
+                setGoalStatus('dispute', {
+                    value: '--', pct: 0,
+                    badge: 'Manual Track', badgeClass: 'badge-amber', barClass: 'progress-fill progress-amber', pctColor: '#f59e0b',
+                    paceText: `● Communicate disputes to BZ within 30 days — as needed basis`, paceClass: 'pace-ontrack'
+                });
+                document.getElementById('disputeTotal').textContent = '--';
+                document.getElementById('disputeResolved').textContent = '--';
+                document.getElementById('disputeOverdue').textContent = '--';
+
+                scorecard.push({ num: 5, name: 'Vendor Dispute Comm.', target: '<30 days to BZ', current: '--', status: 'amber', statusText: 'As needed' });
+
+                // ====================================
+                // GOAL #6: Culture Audit - Team Engagement
+                // ====================================
+                // From strategic_objectives.json: 1 event completed on 2026-01-08
+                const cultureEventsYTD = 1; // Known: team lunch 1/8/26
+                const cultureExpected = yr.monthsElapsed; // 1 per month
+                const cultureProgress = (cultureEventsYTD / 12 * 100);
+                const culturePace = getPaceInfo(cultureProgress, parseFloat(yr.pct));
+
+                document.getElementById('cultureEvents').textContent = cultureEventsYTD;
+                document.getElementById('cultureExpected').textContent = cultureExpected;
+
+                let culBadge, culBadgeClass, culBarClass, culPctColor;
+                if (cultureEventsYTD >= cultureExpected) {
+                    culBadge = '✅ On Pace'; culBadgeClass = 'badge-green'; culBarClass = 'progress-fill progress-green'; culPctColor = '#10b981';
                 } else {
-                    const audits = await auditResponse.json();
-
-                    const totalAudits = audits.length;
-                const findingsCount = audits.filter(a => a.discrepency).length;
-                const noFindingsCount = totalAudits - findingsCount;
-                const passRate = totalAudits > 0 ? ((noFindingsCount / totalAudits) * 100).toFixed(0) : '100';
-
-                // Update Goal #7 metrics
-                document.getElementById('auditTotal').textContent = totalAudits;
-                document.getElementById('auditPassed').textContent = noFindingsCount;
-                document.getElementById('auditFindings').textContent = findingsCount;
-
-                // Progress bar and status (100% = no findings target)
-                const auditProgressBar = document.getElementById('auditProgressBar');
-                const auditProgressPct = document.getElementById('auditProgressPct');
-
-                auditProgressBar.style.width = `${passRate}%`;
-                auditProgressPct.textContent = `${noFindingsCount}/${totalAudits}`;
-
-                if (findingsCount === 0 && totalAudits > 0) {
-                    document.getElementById('auditGoalBadge').textContent = '✅ Goal Met!';
-                    document.getElementById('auditGoalBadge').className = 'badge badge-green';
-                    auditProgressBar.className = 'progress-fill progress-green';
-                } else if (findingsCount > 0) {
-                    document.getElementById('auditGoalBadge').textContent = `${findingsCount} Findings`;
-                    document.getElementById('auditGoalBadge').className = 'badge badge-red';
-                    auditProgressBar.className = 'progress-fill progress-red';
-                } else {
-                    document.getElementById('auditGoalBadge').textContent = 'No Audits Yet';
-                    document.getElementById('auditGoalBadge').className = 'badge badge-gray';
-                    auditProgressBar.className = 'progress-fill progress-gray';
+                    culBadge = `${cultureExpected - cultureEventsYTD} behind`; culBadgeClass = 'badge-red'; culBarClass = 'progress-fill progress-red'; culPctColor = '#ef4444';
                 }
+
+                setGoalStatus('culture', {
+                    value: `${cultureEventsYTD}/12`, pct: cultureProgress,
+                    badge: culBadge, badgeClass: culBadgeClass, barClass: culBarClass, pctColor: culPctColor,
+                    paceText: `${culturePace.text} · Last event: Jan 8 team lunch`, paceClass: culturePace.cls
+                });
+
+                scorecard.push({ num: 6, name: 'Team Engagement', target: '12 events/year', current: `${cultureEventsYTD} events`, status: cultureEventsYTD >= cultureExpected ? 'green' : 'red', statusText: cultureEventsYTD >= cultureExpected ? 'On pace' : `${cultureExpected - cultureEventsYTD} behind` });
+
+                // ====================================
+                // GOAL #7: WIP Account Health
+                // ====================================
+                const wipBalance = -8600; // From strategic_objectives.json — will be updated when data source available
+                const wipPositive = wipBalance >= 0;
+
+                document.getElementById('wipBalance').textContent = wipBalance >= 0 ? `$${wipBalance.toLocaleString()}` : `-$${Math.abs(wipBalance).toLocaleString()}`;
+                document.getElementById('wipBalance').style.color = wipPositive ? '#10b981' : '#ef4444';
+
+                setGoalStatus('wip', {
+                    value: wipPositive ? 'Positive' : 'Negative', pct: wipPositive ? 100 : 25,
+                    badge: wipPositive ? '✅ Healthy' : '⚠️ Negative', badgeClass: wipPositive ? 'badge-green' : 'badge-red',
+                    barClass: wipPositive ? 'progress-fill progress-green' : 'progress-fill progress-red',
+                    pctColor: wipPositive ? '#10b981' : '#ef4444',
+                    paceText: wipPositive ? `● WIP account healthy — maintain positive balance` : `▼ WIP account negative (-$${Math.abs(wipBalance).toLocaleString()}) — needs attention to reach positive by year end`,
+                    paceClass: wipPositive ? 'pace-ahead' : 'pace-behind'
+                });
+
+                scorecard.push({ num: 7, name: 'WIP Account Health', target: 'Positive balance', current: `$${wipBalance.toLocaleString()}`, status: wipPositive ? 'green' : 'red', statusText: wipPositive ? 'Healthy' : 'Negative' });
+
+                // ====================================
+                // GOAL #8: Days to Bill Reduction
+                // ====================================
+                setGoalStatus('dtb', {
+                    value: '--', pct: 0,
+                    badge: 'Manual Track', badgeClass: 'badge-amber', barClass: 'progress-fill progress-amber', pctColor: '#f59e0b',
+                    paceText: `● Track from Days to Bill Report — minimize time from completion to billing`, paceClass: 'pace-ontrack'
+                });
+                document.getElementById('dtbAvg').textContent = '--';
+                document.getElementById('dtbTrend').textContent = '--';
+
+                scorecard.push({ num: 8, name: 'Days to Bill Reduction', target: 'Minimize', current: '--', status: 'amber', statusText: 'Manual tracking' });
+
+                // ====================================
+                // GOAL #9: Over 30 Days Resolution
+                // ====================================
+                // Check anchor_work_orders for WOs open > 30 days
+                try {
+                    const anchorResp = await fetch(`${SUPABASE_URL}/rest/v1/anchor_work_orders?select=wo_number,date_in&order=date_in.asc`, {
+                        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+                    });
+                    const anchorWOs = await anchorResp.json();
+                    const thirtyDaysAgo = new Date();
+                    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+                    const over30WOs = anchorWOs.filter(wo => {
+                        if (!wo.date_in) return false;
+                        return new Date(wo.date_in) < thirtyDaysAgo;
+                    });
+
+                    const over30Count = over30WOs.length;
+                    const oldestWO = over30WOs.length > 0 ? over30WOs[0] : null;
+                    const oldestDays = oldestWO ? Math.floor((new Date() - new Date(oldestWO.date_in)) / (1000*60*60*24)) : 0;
+
+                    document.getElementById('over30Count').textContent = over30Count;
+                    document.getElementById('over30Oldest').textContent = oldestWO ? `${oldestDays}d (${oldestWO.wo_number})` : 'N/A';
+
+                    const over30Pct = over30Count === 0 ? 100 : Math.max(0, 100 - (over30Count * 10));
+
+                    setGoalStatus('over30', {
+                        value: over30Count === 0 ? '✅ 0' : `${over30Count}`, pct: over30Pct,
+                        badge: over30Count === 0 ? '✅ Clear' : `⚠️ ${over30Count} open`, badgeClass: over30Count === 0 ? 'badge-green' : (over30Count <= 3 ? 'badge-amber' : 'badge-red'),
+                        barClass: over30Count === 0 ? 'progress-fill progress-green' : (over30Count <= 3 ? 'progress-fill progress-amber' : 'progress-fill progress-red'),
+                        pctColor: over30Count === 0 ? '#10b981' : (over30Count <= 3 ? '#f59e0b' : '#ef4444'),
+                        paceText: over30Count === 0 ? `● All WOs resolved within 30 days` : `▼ ${over30Count} WOs over 30 days — oldest: ${oldestDays} days (${oldestWO?.wo_number || '?'})`,
+                        paceClass: over30Count === 0 ? 'pace-ahead' : 'pace-behind'
+                    });
+
+                    scorecard.push({ num: 9, name: 'Over 30 Days Resolution', target: '0 overdue', current: `${over30Count} open`, status: over30Count === 0 ? 'green' : 'red', statusText: over30Count === 0 ? 'Clear' : `${over30Count} overdue` });
+                } catch (e) {
+                    console.warn('Goal #9 data error:', e);
+                    setGoalStatus('over30', { value: '--', pct: 0, badge: 'No Data', badgeClass: 'badge-gray', barClass: 'progress-fill progress-amber', pctColor: '#64748b', paceText: '● Unable to fetch ANCHOR data', paceClass: 'pace-ontrack' });
+                    document.getElementById('over30Count').textContent = '--';
+                    document.getElementById('over30Oldest').textContent = '--';
+                    scorecard.push({ num: 9, name: 'Over 30 Days Resolution', target: '0 overdue', current: '--', status: 'gray', statusText: 'No data' });
                 }
+
+                // ====================================
+                // GOAL #10: Flat Rate Profitability
+                // ====================================
+                setGoalStatus('flatRate', {
+                    value: 'Gathering', pct: 15,
+                    badge: 'Data Phase', badgeClass: 'badge-amber', barClass: 'progress-fill progress-amber', pctColor: '#f59e0b',
+                    paceText: `● Evaluate flat rate system for SDN/SDR/SHC — need billing data from AS400`, paceClass: 'pace-ontrack'
+                });
+                document.getElementById('flatRateStatus').textContent = 'Data gathering phase';
+
+                scorecard.push({ num: 10, name: 'Flat Rate Profitability', target: 'Evaluate system', current: 'Gathering data', status: 'amber', statusText: 'In progress' });
+
+                // ====================================
+                // GOAL #11: Employee Loan Accounting
+                // ====================================
+                setGoalStatus('loan', {
+                    value: 'Active', pct: 50,
+                    badge: 'Monitoring', badgeClass: 'badge-amber', barClass: 'progress-fill progress-amber', pctColor: '#f59e0b',
+                    paceText: `● Track loaned employee hours — Denver gets hours but other shop controls billing`, paceClass: 'pace-ontrack'
+                });
+                document.getElementById('loanCount').textContent = '--';
+                document.getElementById('loanHours').textContent = '--';
+
+                scorecard.push({ num: 11, name: 'Employee Loan Acctg', target: 'Track properly', current: 'Monitoring', status: 'amber', statusText: 'Active' });
+
+                // ====================================
+                // BUILD SCORECARD TABLE
+                // ====================================
+                // Count active goals
+                const greenCount = scorecard.filter(s => s.status === 'green').length;
+                const redCount = scorecard.filter(s => s.status === 'red').length;
+                const amberCount = scorecard.filter(s => s.status === 'amber').length;
+                document.getElementById('goalsActiveBadge').textContent = `${greenCount} ✅ ${amberCount} 🟡 ${redCount} 🔴`;
+                document.getElementById('goalsActiveBadge').className = `badge ${redCount > 0 ? 'badge-red' : (amberCount > 3 ? 'badge-amber' : 'badge-green')}`;
+
+                document.getElementById('scorecardBadge').textContent = `${greenCount}/${scorecard.length} On Track`;
+                document.getElementById('scorecardBadge').className = `badge ${greenCount >= 8 ? 'badge-green' : (greenCount >= 5 ? 'badge-amber' : 'badge-red')}`;
+
+                // Sort scorecard by goal number
+                scorecard.sort((a, b) => a.num - b.num);
+
+                const tbody = document.getElementById('scorecardBody');
+                tbody.innerHTML = scorecard.map(s => `
+                    <tr>
+                        <td><strong>${s.num}</strong></td>
+                        <td>${s.name}</td>
+                        <td style="color: #94a3b8;">${s.target}</td>
+                        <td style="font-weight: 600;">${s.current}</td>
+                        <td><span class="badge badge-${s.status}">${s.statusText}</span></td>
+                    </tr>
+                `).join('');
 
             } catch (error) {
                 console.error('Error loading goals data:', error);
-                document.getElementById('abGoalBadge').textContent = 'Error';
-                document.getElementById('abGoalBadge').className = 'badge badge-red';
-                document.getElementById('npsGoalBadge').textContent = 'Error';
-                document.getElementById('npsGoalBadge').className = 'badge badge-red';
-                document.getElementById('trainingGoalBadge').textContent = 'Error';
-                document.getElementById('trainingGoalBadge').className = 'badge badge-red';
-                document.getElementById('auditGoalBadge').textContent = 'Error';
-                document.getElementById('auditGoalBadge').className = 'badge badge-red';
+                ['ab', 'nps', 'training', 'wip', 'dtb', 'sdv', 'dispute', 'culture', 'over30', 'flatRate', 'loan'].forEach(prefix => {
+                    const el = document.getElementById(`${prefix}GoalBadge`);
+                    if (el) { el.textContent = 'Error'; el.className = 'badge badge-red'; }
+                });
             }
         }
 
