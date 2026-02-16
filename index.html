@@ -1705,13 +1705,14 @@
                 // Fetch ANCHOR work orders for open dates
                 let anchorWOs = [];
                 try {
-                    const anchorResponse = await fetch(`${SUPABASE_URL}/rest/v1/anchor_work_orders?select=wo_number,open_date`, {
+                    const anchorResponse = await fetch(`${SUPABASE_URL}/rest/v1/anchor_work_orders?select=wo_number,date_in`, {
                         headers: {
                             'apikey': SUPABASE_KEY,
                             'Authorization': `Bearer ${SUPABASE_KEY}`
                         }
                     });
-                    anchorWOs = await anchorResponse.json();
+                    const anchorData = await anchorResponse.json();
+                    anchorWOs = Array.isArray(anchorData) ? anchorData.map(a => ({ wo_number: a.wo_number, open_date: a.date_in })) : [];
                 } catch (err) {
                     console.log('anchor_work_orders table not available yet, skipping...');
                 }
@@ -2771,23 +2772,27 @@
                     document.getElementById('networkRank').textContent = `#${rank.denver_position}`;
                     document.getElementById('abGap').textContent = abPercentage >= target ? 'None' : `${gap}pp`;
 
-                    const pace = getPaceInfo(progress, parseFloat(yr.pct));
-                    // A/B ratio is a continuous target — needs to be met every month
-                    // So progress = current/target, but context is how far into the year we are
-
-                    let badge, badgeClass, barClass, pctColor;
+                    // A/B ratio is a continuous monthly target — must be AT 58.5% each month
+                    // Progress bar = current/target ratio, but pace is about the gap
+                    let badge, badgeClass, barClass, pctColor, abPaceText, abPaceClass;
                     if (abPercentage >= target) {
                         badge = '✅ On Target'; badgeClass = 'badge-green'; barClass = 'progress-fill progress-green'; pctColor = '#10b981';
+                        abPaceText = `▲ Meeting target — maintain 58.5% monthly`; abPaceClass = 'pace-ahead';
+                    } else if (progress >= 90) {
+                        badge = `${gap}pp gap`; badgeClass = 'badge-amber'; barClass = 'progress-fill progress-amber'; pctColor = '#f59e0b';
+                        abPaceText = `● Close to target — need +${gap}pp to reach 58.5%`; abPaceClass = 'pace-ontrack';
                     } else if (progress >= 75) {
                         badge = `${gap}pp gap`; badgeClass = 'badge-amber'; barClass = 'progress-fill progress-amber'; pctColor = '#f59e0b';
+                        abPaceText = `▼ ${gap}pp below target — must reach 58.5% each month (Month ${yr.monthsElapsed}/12)`; abPaceClass = 'pace-behind';
                     } else {
                         badge = `${gap}pp gap`; badgeClass = 'badge-red'; barClass = 'progress-fill progress-red'; pctColor = '#ef4444';
+                        abPaceText = `▼ ${gap}pp below target — significant gap to close (Month ${yr.monthsElapsed}/12)`; abPaceClass = 'pace-behind';
                     }
 
                     setGoalStatus('ab', {
                         value: `${abPercentage}%`, target: `${target}%`, pct: progress,
                         badge, badgeClass, barClass, pctColor,
-                        paceText: `${pace.text} · Must maintain 58.5% each month`, paceClass: pace.cls
+                        paceText: abPaceText, paceClass: abPaceClass
                     });
 
                     scorecard.push({ num: 1, name: 'A/B Ratio Target', target: '58.5%', current: `${abPercentage}%`, status: abPercentage >= target ? 'green' : (progress >= 75 ? 'amber' : 'red'), statusText: abPercentage >= target ? 'On Target' : `${gap}pp gap` });
@@ -2908,17 +2913,20 @@
                 document.getElementById('cultureEvents').textContent = cultureEventsYTD;
                 document.getElementById('cultureExpected').textContent = cultureExpected;
 
-                let culBadge, culBadgeClass, culBarClass, culPctColor;
+                const cultureBehind = cultureExpected - cultureEventsYTD;
+                let culBadge, culBadgeClass, culBarClass, culPctColor, culPaceText, culPaceClass;
                 if (cultureEventsYTD >= cultureExpected) {
                     culBadge = '✅ On Pace'; culBadgeClass = 'badge-green'; culBarClass = 'progress-fill progress-green'; culPctColor = '#10b981';
+                    culPaceText = `▲ On pace — ${cultureEventsYTD} events in ${yr.monthsElapsed} months · Last: Jan 8 team lunch`; culPaceClass = 'pace-ahead';
                 } else {
-                    culBadge = `${cultureExpected - cultureEventsYTD} behind`; culBadgeClass = 'badge-red'; culBarClass = 'progress-fill progress-red'; culPctColor = '#ef4444';
+                    culBadge = `${cultureBehind} behind`; culBadgeClass = 'badge-red'; culBarClass = 'progress-fill progress-red'; culPctColor = '#ef4444';
+                    culPaceText = `▼ ${cultureBehind} event(s) behind — need ${cultureExpected} by month ${yr.monthsElapsed}, have ${cultureEventsYTD} · Last: Jan 8`; culPaceClass = 'pace-behind';
                 }
 
                 setGoalStatus('culture', {
                     value: `${cultureEventsYTD}/12`, pct: cultureProgress,
                     badge: culBadge, badgeClass: culBadgeClass, barClass: culBarClass, pctColor: culPctColor,
-                    paceText: `${culturePace.text} · Last event: Jan 8 team lunch`, paceClass: culturePace.cls
+                    paceText: culPaceText, paceClass: culPaceClass
                 });
 
                 scorecard.push({ num: 6, name: 'Team Engagement', target: '12 events/year', current: `${cultureEventsYTD} events`, status: cultureEventsYTD >= cultureExpected ? 'green' : 'red', statusText: cultureEventsYTD >= cultureExpected ? 'On pace' : `${cultureExpected - cultureEventsYTD} behind` });
@@ -2964,7 +2972,9 @@
                     const anchorResp = await fetch(`${SUPABASE_URL}/rest/v1/anchor_work_orders?select=wo_number,date_in&order=date_in.asc`, {
                         headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
                     });
-                    const anchorWOs = await anchorResp.json();
+                    const anchorData9 = await anchorResp.json();
+                    if (!Array.isArray(anchorData9)) throw new Error('anchor_work_orders returned non-array: ' + JSON.stringify(anchorData9).slice(0, 200));
+                    const anchorWOs = anchorData9;
                     const thirtyDaysAgo = new Date();
                     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
