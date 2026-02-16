@@ -1079,6 +1079,13 @@
             document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
             document.getElementById(tabId).classList.add('active');
 
+            // Track current tab index
+            const idx = tabs.indexOf(tabId);
+            if (idx !== -1) currentTab = idx;
+
+            // Scroll page back to top on tab switch
+            window.scrollTo(0, 0);
+
             // Load tab-specific data
             if (tabId === 'actions') {
                 loadActionsData();
@@ -1089,29 +1096,31 @@
             // Clear any existing scroll interval
             if (scrollInterval) clearInterval(scrollInterval);
 
-            const contentArea = document.querySelector('.content.active');
-            if (!contentArea) return;
+            // Reset scroll to top of page
+            window.scrollTo(0, 0);
 
-            // Reset scroll to top
-            contentArea.scrollTop = 0;
+            // Small delay to let DOM settle after tab switch
+            setTimeout(() => {
+                const scrollHeight = document.body.scrollHeight - window.innerHeight;
+                if (scrollHeight <= 0) return; // Nothing to scroll
 
-            const scrollHeight = contentArea.scrollHeight - contentArea.clientHeight;
-            const scrollDuration = 30000; // 30 seconds
-            const scrollStep = scrollHeight / (scrollDuration / 50); // Update every 50ms
+                const scrollDuration = 25000; // 25 seconds to scroll, 5 seconds pause at bottom before tab switch
+                const scrollStep = scrollHeight / (scrollDuration / 50); // Update every 50ms
 
-            scrollInterval = setInterval(() => {
-                if (!isRotating || isPaused) {
-                    clearInterval(scrollInterval);
-                    return;
-                }
+                scrollInterval = setInterval(() => {
+                    if (!isRotating || isPaused) {
+                        clearInterval(scrollInterval);
+                        return;
+                    }
 
-                contentArea.scrollTop += scrollStep;
+                    window.scrollBy(0, scrollStep);
 
-                // If reached bottom, prepare for tab switch
-                if (contentArea.scrollTop >= scrollHeight - 5) {
-                    clearInterval(scrollInterval);
-                }
-            }, 50);
+                    // If reached bottom, stop scrolling (tab switch timer handles the rest)
+                    if ((window.scrollY + window.innerHeight) >= document.body.scrollHeight - 5) {
+                        clearInterval(scrollInterval);
+                    }
+                }, 50);
+            }, 200);
         }
 
         function stopAutoScroll() {
