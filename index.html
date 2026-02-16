@@ -613,7 +613,108 @@
             </div>
         </div>
         <div class="content" id="workorders">
-            <!-- Work Orders Summary -->
+            <!-- ANCHOR Open Work Orders Summary (Primary Source of Truth) -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">⚓ Open Work Orders — ANCHOR Report</span>
+                    <span class="badge" id="anchorBadge">Loading...</span>
+                </div>
+                <div style="margin-bottom: 16px; padding: 10px 14px; background: #1e293b; border-left: 4px solid #3b82f6; border-radius: 6px;">
+                    <div style="color: #93c5fd; font-weight: bold;">📡 Source: AS400 ANCHOR Report (Daily Import)</div>
+                    <div style="color: #94a3b8; font-size: 0.85em; margin-top: 4px;">Single source of truth for ALL open work orders across Denver shops. Report date: <span id="anchorReportDate">--</span></div>
+                </div>
+                <div class="card-grid">
+                    <div class="metric">
+                        <div class="metric-value" id="anchorTotal">--</div>
+                        <div class="metric-label">Total Open WOs</div>
+                        <div class="metric-sub">All Denver Shops</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" style="color: #ef4444;" id="anchorAOG">--</div>
+                        <div class="metric-label">AOG</div>
+                        <div class="metric-sub">Aircraft on Ground</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" style="color: #f59e0b;" id="anchorExpHrs">--</div>
+                        <div class="metric-label">Expected Hours</div>
+                        <div class="metric-sub">Total Backlog</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" style="color: #ef4444;" id="anchorOver30">--</div>
+                        <div class="metric-label">Over 30 Days</div>
+                        <div class="metric-sub">Aging WOs</div>
+                    </div>
+                </div>
+                <!-- Shop Breakdown -->
+                <div class="card-grid" style="margin-top: 12px;">
+                    <div class="metric">
+                        <div class="metric-value" style="font-size: 1.6em;" id="anchorSDN">--</div>
+                        <div class="metric-label">SDN</div>
+                        <div class="metric-sub">Airframes</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" style="font-size: 1.6em;" id="anchorSDV">--</div>
+                        <div class="metric-label">SDV</div>
+                        <div class="metric-sub">Avionics</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" style="font-size: 1.6em;" id="anchorSDR">--</div>
+                        <div class="metric-label">SDR</div>
+                        <div class="metric-sub">Accessories</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" style="font-size: 1.6em;" id="anchorSHC">--</div>
+                        <div class="metric-label">SHC</div>
+                        <div class="metric-sub">Structures</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ANCHOR Work Orders Table -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">📝 All Open Work Orders</span>
+                    <div style="display: flex; gap: 8px; align-items: center;">
+                        <select id="anchorShopFilter" onchange="filterAnchorTable()" style="padding: 6px 10px; border-radius: 6px; background: #1e293b; color: #fff; border: 1px solid #334155; font-size: 0.85em;">
+                            <option value="all">All Shops</option>
+                            <option value="SDN">SDN - Airframes</option>
+                            <option value="SDV">SDV - Avionics</option>
+                            <option value="SDR">SDR - Accessories</option>
+                            <option value="SHC">SHC - Structures</option>
+                        </select>
+                        <select id="anchorSortBy" onchange="filterAnchorTable()" style="padding: 6px 10px; border-radius: 6px; background: #1e293b; color: #fff; border: 1px solid #334155; font-size: 0.85em;">
+                            <option value="days_open_desc">Days Open (Oldest)</option>
+                            <option value="days_open_asc">Days Open (Newest)</option>
+                            <option value="exp_hrs_desc">Exp Hours (Highest)</option>
+                            <option value="shop">By Shop</option>
+                            <option value="aog">AOG First</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>WO#</th>
+                                <th>Shop</th>
+                                <th>Status</th>
+                                <th>Tail#</th>
+                                <th>Customer</th>
+                                <th>Description</th>
+                                <th>Open Date</th>
+                                <th>Days Open</th>
+                                <th>Exp Hrs</th>
+                                <th>AOG</th>
+                            </tr>
+                        </thead>
+                        <tbody id="anchorWorkOrdersList">
+                            <tr><td colspan="10" style="text-align:center; color:#94a3b8;">Loading ANCHOR data...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Billing Tracking Section -->
             <div class="card">
                 <div class="card-header">
                     <span class="card-title">📋 Work Orders Pending Billing</span>
@@ -646,7 +747,7 @@
             <!-- Work Orders List -->
             <div class="card">
                 <div class="card-header">
-                    <span class="card-title">📝 Work Orders Detail</span>
+                    <span class="card-title">📝 Billing Detail</span>
                 </div>
                 <div class="table-container">
                     <table>
@@ -1235,8 +1336,132 @@
             'Content-Type': 'application/json'
         };
 
+        // Global store for ANCHOR data (used by filter/sort)
+        let anchorWorkOrdersData = [];
+
+        // Load ANCHOR Work Orders (Primary Source of Truth)
+        async function loadAnchorWorkOrders() {
+            try {
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/anchor_work_orders?select=*&order=days_open.desc.nullslast`, {
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': `Bearer ${SUPABASE_KEY}`
+                    }
+                });
+                const data = await response.json();
+                if (!Array.isArray(data)) {
+                    console.log('anchor_work_orders returned non-array:', data);
+                    document.getElementById('anchorBadge').textContent = 'No Data';
+                    document.getElementById('anchorBadge').className = 'badge badge-gray';
+                    return;
+                }
+                anchorWorkOrdersData = data;
+
+                // Summary metrics
+                const total = data.length;
+                const aogCount = data.filter(wo => wo.is_aog).length;
+                const totalExpHrs = data.reduce((sum, wo) => sum + (wo.expected_hours || 0), 0);
+                const over30Count = data.filter(wo => wo.days_open && wo.days_open > 30).length;
+                const reportDate = data.length > 0 ? data[0].report_date : '--';
+
+                document.getElementById('anchorTotal').textContent = total;
+                document.getElementById('anchorAOG').textContent = aogCount;
+                document.getElementById('anchorExpHrs').textContent = Math.round(totalExpHrs) + 'h';
+                document.getElementById('anchorOver30').textContent = over30Count;
+                document.getElementById('anchorReportDate').textContent = reportDate ? new Date(reportDate + 'T00:00:00').toLocaleDateString() : '--';
+
+                // Shop breakdown
+                const shopCounts = { SDN: 0, SDV: 0, SDR: 0, SHC: 0 };
+                data.forEach(wo => { if (shopCounts.hasOwnProperty(wo.shop)) shopCounts[wo.shop]++; });
+                document.getElementById('anchorSDN').textContent = shopCounts.SDN;
+                document.getElementById('anchorSDV').textContent = shopCounts.SDV;
+                document.getElementById('anchorSDR').textContent = shopCounts.SDR;
+                document.getElementById('anchorSHC').textContent = shopCounts.SHC;
+
+                // Badge
+                if (aogCount > 0) {
+                    document.getElementById('anchorBadge').textContent = `${aogCount} AOG | ${total} WOs`;
+                    document.getElementById('anchorBadge').className = 'badge badge-red';
+                } else if (over30Count > 0) {
+                    document.getElementById('anchorBadge').textContent = `${over30Count} Over 30d | ${total} WOs`;
+                    document.getElementById('anchorBadge').className = 'badge badge-amber';
+                } else {
+                    document.getElementById('anchorBadge').textContent = `${total} Open WOs`;
+                    document.getElementById('anchorBadge').className = 'badge badge-green';
+                }
+
+                // Render table
+                filterAnchorTable();
+
+            } catch (error) {
+                console.error('Error loading ANCHOR work orders:', error);
+                document.getElementById('anchorBadge').textContent = 'Error';
+                document.getElementById('anchorBadge').className = 'badge badge-red';
+            }
+        }
+
+        // Filter and sort ANCHOR table
+        function filterAnchorTable() {
+            const shopFilter = document.getElementById('anchorShopFilter').value;
+            const sortBy = document.getElementById('anchorSortBy').value;
+
+            let filtered = [...anchorWorkOrdersData];
+
+            // Filter by shop
+            if (shopFilter !== 'all') {
+                filtered = filtered.filter(wo => wo.shop === shopFilter);
+            }
+
+            // Sort
+            switch (sortBy) {
+                case 'days_open_desc':
+                    filtered.sort((a, b) => (b.days_open || 0) - (a.days_open || 0));
+                    break;
+                case 'days_open_asc':
+                    filtered.sort((a, b) => (a.days_open || 0) - (b.days_open || 0));
+                    break;
+                case 'exp_hrs_desc':
+                    filtered.sort((a, b) => (b.expected_hours || 0) - (a.expected_hours || 0));
+                    break;
+                case 'shop':
+                    filtered.sort((a, b) => (a.shop || '').localeCompare(b.shop || '') || (b.days_open || 0) - (a.days_open || 0));
+                    break;
+                case 'aog':
+                    filtered.sort((a, b) => (b.is_aog ? 1 : 0) - (a.is_aog ? 1 : 0) || (b.days_open || 0) - (a.days_open || 0));
+                    break;
+            }
+
+            const tableHTML = filtered.map(wo => {
+                const daysOpen = wo.days_open || 0;
+                const daysClass = daysOpen >= 30 ? 'badge-red' : daysOpen >= 14 ? 'badge-amber' : 'badge-green';
+                const shopColors = { SDN: '#3b82f6', SDV: '#8b5cf6', SDR: '#f97316', SHC: '#06b6d4' };
+                const shopColor = shopColors[wo.shop] || '#64748b';
+                const aogFlag = wo.is_aog ? '<span style="background:#ef4444;color:#fff;padding:2px 6px;border-radius:4px;font-weight:bold;font-size:0.75em;">AOG</span>' : '';
+                const openDate = wo.open_date ? new Date(wo.open_date + 'T00:00:00').toLocaleDateString() : '--';
+                const desc = wo.description ? (wo.description.length > 35 ? wo.description.substring(0, 35) + '...' : wo.description) : '--';
+
+                return `
+                    <tr style="${wo.is_aog ? 'background: rgba(239,68,68,0.15);' : daysOpen >= 30 ? 'background: rgba(239,68,68,0.08);' : ''}">
+                        <td><strong>${wo.wo_number}</strong></td>
+                        <td><span style="color:${shopColor};font-weight:600;">${wo.shop}</span></td>
+                        <td>${wo.anchor_status || '--'}</td>
+                        <td>${wo.tail_number || '--'}</td>
+                        <td>${wo.customer || '--'}</td>
+                        <td title="${wo.description || ''}" style="font-size:0.85em;">${desc}</td>
+                        <td>${openDate}</td>
+                        <td><span class="badge ${daysClass}">${daysOpen}d</span></td>
+                        <td>${wo.expected_hours ? Math.round(wo.expected_hours) + 'h' : '0h'}</td>
+                        <td>${aogFlag}</td>
+                    </tr>
+                `;
+            }).join('');
+
+            document.getElementById('anchorWorkOrdersList').innerHTML = tableHTML || '<tr><td colspan="10" style="text-align:center; color:#94a3b8;">No ANCHOR work orders found</td></tr>';
+        }
+
         // Load all dashboard data
         async function loadDashboardData() {
+            await loadAnchorWorkOrders();
             await loadRankings();
             await loadWorkOrders();
             await loadBillingPriority();
