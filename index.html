@@ -2886,76 +2886,51 @@
 
         async function loadNPSRecommendations(existingSurveys) {
             try {
-                // 1. Get billed work orders
-                const billedWOsResp = await fetch(`${SUPABASE_URL}/rest/v1/work_orders?select=work_order_number,tail_number,billed_date&status=eq.billed&order=billed_date.desc&limit=50`, {
-                    headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
-                });
-                const billedWOs = await billedWOsResp.json();
-                if (!Array.isArray(billedWOs)) { console.log('billedWOs not array'); return; }
-
-                // 2. Get customer data sources in parallel
-                const [anchorResp, woRefResp, custEmailsResp] = await Promise.all([
-                    fetch(`${SUPABASE_URL}/rest/v1/anchor_work_orders?select=wo_number,customer,customer_id,tail_number`, {
-                        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
-                    }),
-                    fetch(`${SUPABASE_URL}/rest/v1/wo_reference?select=wo_number,customer,customer_id`, {
+                // 1. Get billed work orders (now includes customer_id from AS400 Billed WO report)
+                const [billedWOsResp, custEmailsResp, anchorResp] = await Promise.all([
+                    fetch(`${SUPABASE_URL}/rest/v1/work_orders?select=work_order_number,tail_number,billed_date,customer_id,customer_name&status=eq.billed&order=billed_date.desc&limit=50`, {
                         headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
                     }),
                     fetch(`${SUPABASE_URL}/rest/v1/customers?select=customer_number,email,customer_name`, {
                         headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+                    }),
+                    fetch(`${SUPABASE_URL}/rest/v1/anchor_work_orders?select=wo_number,customer,customer_id`, {
+                        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
                     })
                 ]);
 
-                const anchorWOs = await anchorResp.json();
-                const woRefs = await woRefResp.json();
+                const billedWOs = await billedWOsResp.json();
                 const custEmails = await custEmailsResp.json();
+                const anchorWOs = await anchorResp.json();
+                if (!Array.isArray(billedWOs)) { console.log('billedWOs not array'); return; }
 
-                // 3. Build lookup maps
-                // ANCHOR: wo_number → { customer, customer_id }
-                const anchorMap = {};
-                // Also build reverse maps: customer_name → customer_id, tail# → { customer, customer_id }
-                const customerNameToId = {};
-                const tailToCustomer = {};
-                if (Array.isArray(anchorWOs)) anchorWOs.forEach(a => {
-                    anchorMap[a.wo_number] = { customer: a.customer, customer_id: a.customer_id };
-                    if (a.customer && a.customer_id) {
-                        customerNameToId[a.customer.toLowerCase().trim()] = a.customer_id;
-                    }
-                    if (a.tail_number && a.customer_id) {
-                        tailToCustomer[a.tail_number] = { customer: a.customer, customer_id: a.customer_id };
-                    }
-                });
-
-                // WO Reference: wo_number → { customer, customer_id }
-                const woRefMap = {};
-                if (Array.isArray(woRefs)) woRefs.forEach(r => {
-                    woRefMap[r.wo_number] = { customer: r.customer || null, customer_id: r.customer_id || null };
-                    // Also add wo_reference customer data to reverse maps
-                    if (r.customer && r.customer_id) {
-                        if (!customerNameToId[r.customer.toLowerCase().trim()]) {
-                            customerNameToId[r.customer.toLowerCase().trim()] = r.customer_id;
-                        }
-                    }
-                });
-
-                // Customer emails: customer_number → email (first match wins)
+                // 2. Build customer_number → email lookup from Customers email.xlsx database
                 const emailByCustomerId = {};
                 if (Array.isArray(custEmails)) custEmails.forEach(c => {
-                    if (!emailByCustomerId[c.customer_number]) {
+                    if (c.customer_number && c.email) {
                         emailByCustomerId[c.customer_number] = c.email;
+                    }
+                });
+
+                // 3. Build customer_id → customer_name lookup from ANCHOR (for display names)
+                const customerIdToName = {};
+                if (Array.isArray(anchorWOs)) anchorWOs.forEach(a => {
+                    if (a.customer_id && a.customer) {
+                        customerIdToName[a.customer_id] = a.customer;
                     }
                 });
 
                 // 4. Build set of WO#s already surveyed
                 const surveyedWOs = new Set(existingSurveys.map(s => s.wo_number));
 
-                // 5. Build set of customers already surveyed THIS MONTH (one per customer per month)
+                // 5. Build set of customer_ids already surveyed THIS MONTH (one per customer per month)
                 const now = new Date();
                 const firstDayOfMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-01`;
                 const surveyedCustomersThisMonth = new Set();
                 existingSurveys.forEach(s => {
-                    if (s.date_sent >= firstDayOfMonth && s.customer) {
-                        surveyedCustomersThisMonth.add(s.customer.toLowerCase().trim());
+                    if (s.date_sent >= firstDayOfMonth) {
+                        // Track by customer name (lowercase) for deduplication
+                        if (s.customer) surveyedCustomersThisMonth.add(s.customer.toLowerCase().trim());
                     }
                 });
 
@@ -2969,31 +2944,19 @@
                     return;
                 }
 
-                // 7. Enrich each WO with customer data and email
+                // 7. Enrich each WO with email from Customers email.xlsx (matched by customer_id)
                 const enriched = unsurveyed.map(wo => {
                     const billedDate = new Date(wo.billed_date);
                     const daysSince = Math.floor((now - billedDate) / (1000 * 60 * 60 * 24));
 
-                    // Find customer info: ANCHOR first, then wo_reference (with customer_id), then tail# lookup
-                    const anchorData = anchorMap[wo.work_order_number];
-                    const woRefData = woRefMap[wo.work_order_number];
-                    const tailData = wo.tail_number ? tailToCustomer[wo.tail_number] : null;
+                    // customer_id comes directly from work_orders (AS400 Billed WO report Cust# field)
+                    const customerId = wo.customer_id || null;
+                    // Customer name: from work_orders, or look up from ANCHOR by customer_id
+                    const customerName = wo.customer_name || customerIdToName[customerId] || null;
 
-                    let customerName = anchorData?.customer || woRefData?.customer || tailData?.customer || null;
-                    let customerId = anchorData?.customer_id || woRefData?.customer_id || null;
-
-                    // If no customer_id from direct WO match, try name→id or tail→id reverse lookup
-                    if (!customerId && customerName) {
-                        customerId = customerNameToId[customerName.toLowerCase().trim()] || null;
-                    }
-                    if (!customerId && tailData?.customer_id) {
-                        customerId = tailData.customer_id;
-                    }
-
+                    // Look up email from Customers email.xlsx database by customer_id
                     let email = null;
                     let emailSource = null;
-
-                    // Look up email by customer_id from customers table
                     if (customerId && emailByCustomerId[customerId]) {
                         email = emailByCustomerId[customerId];
                         emailSource = 'database';
