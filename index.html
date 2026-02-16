@@ -410,10 +410,10 @@
                     <table>
                         <thead>
                             <tr>
-                                <th>Customer</th>
+                                <th>Tail Number</th>
                                 <th>Email</th>
-                                <th>Last WO</th>
-                                <th>Days Since</th>
+                                <th>Work Order</th>
+                                <th>Days Since Billed</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -1033,6 +1033,10 @@
     <script>
         const PASSWORD = 'denver889';
         let isRotating = false;
+        let isPaused = false;
+        let scrollInterval = null;
+        let tabSwitchInterval = null;
+        let pauseTimeout = null;
         let currentTab = 0;
         const tabs = ['goals', 'actions', 'overview', 'employees', 'workorders', 'training', 'quality', 'wip', 'rankings'];
         
@@ -1043,6 +1047,7 @@
                 document.getElementById('loginScreen').style.display = 'none';
                 document.getElementById('dashboard').style.display = 'block';
                 localStorage.setItem('denver_auth', 'true');
+                initializeEventListeners();
                 showTab(tabs[0]);
                 loadDashboardData();
             } else {
@@ -1080,31 +1085,136 @@
             }
         }
         
+        function startAutoScroll() {
+            // Clear any existing scroll interval
+            if (scrollInterval) clearInterval(scrollInterval);
+
+            const contentArea = document.querySelector('.content.active');
+            if (!contentArea) return;
+
+            // Reset scroll to top
+            contentArea.scrollTop = 0;
+
+            const scrollHeight = contentArea.scrollHeight - contentArea.clientHeight;
+            const scrollDuration = 30000; // 30 seconds
+            const scrollStep = scrollHeight / (scrollDuration / 50); // Update every 50ms
+
+            scrollInterval = setInterval(() => {
+                if (!isRotating || isPaused) {
+                    clearInterval(scrollInterval);
+                    return;
+                }
+
+                contentArea.scrollTop += scrollStep;
+
+                // If reached bottom, prepare for tab switch
+                if (contentArea.scrollTop >= scrollHeight - 5) {
+                    clearInterval(scrollInterval);
+                }
+            }, 50);
+        }
+
+        function stopAutoScroll() {
+            if (scrollInterval) {
+                clearInterval(scrollInterval);
+                scrollInterval = null;
+            }
+            if (tabSwitchInterval) {
+                clearInterval(tabSwitchInterval);
+                tabSwitchInterval = null;
+            }
+            if (pauseTimeout) {
+                clearTimeout(pauseTimeout);
+                pauseTimeout = null;
+            }
+        }
+
         function toggleRotate() {
             isRotating = !isRotating;
-            document.getElementById('rotateBtn').textContent = isRotating ? '⏸️ Stop' : '▶️ Auto';
-            document.getElementById('rotateBtn').style.background = isRotating ? '#ef4444' : '#10b981';
 
-            if (!isRotating) {
-                // Reset to first tab when stopped
+            if (isRotating) {
+                // Start auto-scroll
+                document.getElementById('rotateBtn').textContent = '⏹️ Stop';
+                document.getElementById('rotateBtn').style.background = '#ef4444';
+                isPaused = false;
+                startAutoRotation();
+            } else {
+                // Stop everything
+                document.getElementById('rotateBtn').textContent = '▶️ Auto';
+                document.getElementById('rotateBtn').style.background = '#10b981';
+                stopAutoScroll();
+                isPaused = false;
                 currentTab = 0;
                 showTab(tabs[currentTab]);
             }
         }
 
-        // Auto-rotate through tabs every 30 seconds
-        setInterval(() => {
-            if (isRotating) {
+        function pauseRotation() {
+            if (!isRotating) return;
+
+            isPaused = true;
+            stopAutoScroll();
+
+            console.log('Paused for 30 seconds - manual scroll enabled');
+
+            // Auto-resume after 30 seconds
+            pauseTimeout = setTimeout(() => {
+                if (isRotating) {
+                    isPaused = false;
+                    console.log('Resuming auto-scroll...');
+                    startAutoScroll();
+                }
+            }, 30000);
+        }
+
+        function startAutoRotation() {
+            // Clear any existing intervals
+            stopAutoScroll();
+
+            // Start scrolling current tab
+            startAutoScroll();
+
+            // Switch tabs every 30 seconds
+            tabSwitchInterval = setInterval(() => {
+                if (!isRotating || isPaused) return;
+
                 currentTab = (currentTab + 1) % tabs.length;
                 showTab(tabs[currentTab]);
-                console.log(`Auto-rotated to tab: ${tabs[currentTab]}`);
-            }
-        }, 30000); // 30 seconds
-        
-        // Tab click handlers
-        document.querySelectorAll('.tab').forEach(tab => {
-            tab.addEventListener('click', () => showTab(tab.dataset.tab));
-        });
+                console.log(`Switched to tab: ${tabs[currentTab]}`);
+
+                // Start scrolling the new tab
+                setTimeout(() => {
+                    if (isRotating && !isPaused) {
+                        startAutoScroll();
+                    }
+                }, 100);
+            }, 30000);
+        }
+
+        // Initialize event listeners after DOM is ready
+        function initializeEventListeners() {
+            // Listen for scroll events to enable pause on manual scroll
+            document.addEventListener('wheel', (e) => {
+                if (isRotating && !isPaused) {
+                    // User is trying to scroll manually - pause auto-scroll
+                    pauseRotation();
+                }
+            }, { passive: true });
+
+            // Tab click handlers
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    // Stop auto-scroll when manually clicking tabs
+                    if (isRotating) {
+                        isRotating = false;
+                        stopAutoScroll();
+                        document.getElementById('rotateBtn').textContent = '▶️ Auto';
+                        document.getElementById('rotateBtn').style.background = '#10b981';
+                    }
+                    showTab(tab.dataset.tab);
+                });
+            });
+        }
         
         // Supabase Configuration
         const SUPABASE_URL = 'https://pjielffstfzqffrpmyyt.supabase.co';
@@ -1127,6 +1237,7 @@
             await loadGoalsData();
             await loadEmployeeData();
             await loadWIP();
+            await loadActionsData();
         }
 
         // Helper function to get ordinal suffix (1st, 2nd, 3rd, etc.)
@@ -1216,12 +1327,33 @@
                 });
                 const over30WOs = await over30Response.json();
 
-                // Create lookup map
+                // Fetch ANCHOR work orders for open dates
+                let anchorWOs = [];
+                try {
+                    const anchorResponse = await fetch(`${SUPABASE_URL}/rest/v1/anchor_work_orders?select=wo_number,open_date`, {
+                        headers: {
+                            'apikey': SUPABASE_KEY,
+                            'Authorization': `Bearer ${SUPABASE_KEY}`
+                        }
+                    });
+                    anchorWOs = await anchorResponse.json();
+                } catch (err) {
+                    console.log('anchor_work_orders table not available yet, skipping...');
+                }
+
+                // Create lookup maps - ANCHOR has priority over over_30_wos
                 const over30Map = {};
                 over30WOs.forEach(wo => {
                     over30Map[wo.wo_number] = {
                         open_date: wo.open_date,
                         days_open: wo.days_open
+                    };
+                });
+
+                const anchorMap = {};
+                anchorWOs.forEach(wo => {
+                    anchorMap[wo.wo_number] = {
+                        open_date: wo.open_date
                     };
                 });
 
@@ -1236,15 +1368,30 @@
                     if (daysPending >= 8) category = 'red';
                     else if (daysPending >= 4) category = 'amber';
 
-                    // Add over 30 data if available
+                    // Priority: ANCHOR data first, then over_30_wos
+                    const anchorData = anchorMap[wo.work_order_number];
                     const over30Data = over30Map[wo.work_order_number];
+
+                    let open_date = null;
+                    let current_days_open = null;
+
+                    if (anchorData?.open_date) {
+                        // Use ANCHOR open date (most reliable source - directly from AS400)
+                        open_date = anchorData.open_date;
+                        const openDateObj = new Date(open_date);
+                        current_days_open = Math.floor((today - openDateObj) / (1000 * 60 * 60 * 24));
+                    } else if (over30Data?.open_date) {
+                        // Fallback to over_30_wos
+                        open_date = over30Data.open_date;
+                        current_days_open = over30Data.days_open;
+                    }
 
                     return {
                         ...wo,
                         daysPending,
                         category,
-                        open_date: over30Data?.open_date || null,
-                        current_days_open: over30Data?.days_open || null
+                        open_date,
+                        current_days_open
                     };
                 });
 
@@ -2482,6 +2629,72 @@
             }
         }
 
+        async function loadNPSRecommendations(existingSurveys) {
+            try {
+                // Get all work orders that have been billed (status = 'billed')
+                const billedWOsResp = await fetch(`${SUPABASE_URL}/rest/v1/work_orders?select=work_order_number,tail_number,billed_date&status=eq.billed&order=billed_date.desc&limit=50`, {
+                    headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+                });
+                const billedWOs = await billedWOsResp.json();
+
+                console.log('Found', billedWOs.length, 'billed work orders');
+
+                // Create a set of work orders that already have surveys
+                const surveyedWOs = new Set(existingSurveys.map(s => s.wo_number));
+
+                // Filter for work orders that don't have surveys yet
+                const unsurveyed = billedWOs.filter(wo => !surveyedWOs.has(wo.work_order_number));
+
+                console.log('Found', unsurveyed.length, 'work orders without surveys');
+
+                if (unsurveyed.length === 0) {
+                    document.getElementById('customerRecommendations').innerHTML = '<tr><td colspan="5" style="text-align:center; color:#10b981;">✅ All billed work orders have been surveyed!</td></tr>';
+                    document.getElementById('recommendBadge').textContent = '0 Pending';
+                    document.getElementById('recommendBadge').className = 'badge badge-green';
+                    return;
+                }
+
+                // Display recommendations
+                const recommendHTML = unsurveyed.slice(0, 15).map(wo => {
+                    const billedDate = new Date(wo.billed_date);
+                    const today = new Date();
+                    const daysSince = Math.floor((today - billedDate) / (1000 * 60 * 60 * 24));
+
+                    // Use tail number as identifier for now (until customers table is added)
+                    const customer = wo.tail_number ? `Aircraft Owner (${wo.tail_number})` : 'Customer';
+                    const email = 'customer@example.com';  // Placeholder - needs customer data
+                    const billedDateStr = billedDate.toLocaleDateString();
+
+                    return `
+                        <tr>
+                            <td><strong>${wo.tail_number || 'Unknown'}</strong></td>
+                            <td style="color: #94a3b8; font-size: 0.85em;">${email}</td>
+                            <td><strong style="color: #10b981;">${wo.work_order_number}</strong><br>
+                                <span style="color: #64748b; font-size: 0.85em;">Billed: ${billedDateStr}</span>
+                            </td>
+                            <td><span style="color: ${daysSince > 7 ? '#ef4444' : daysSince > 3 ? '#f59e0b' : '#10b981'};">${daysSince} day${daysSince !== 1 ? 's' : ''}</span></td>
+                            <td>
+                                <button
+                                    class="action-btn"
+                                    onclick="fillNPSForm('${customer.replace(/'/g, "\\'")}', '${email}', '${wo.work_order_number}', '${wo.tail_number || ''}')"
+                                    style="background: #10b981; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.9em; font-weight: bold;">
+                                    📧 Send Survey
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+
+                document.getElementById('customerRecommendations').innerHTML = recommendHTML;
+                document.getElementById('recommendBadge').textContent = `${unsurveyed.length} Pending`;
+                document.getElementById('recommendBadge').className = unsurveyed.length > 5 ? 'badge badge-amber' : 'badge badge-green';
+
+            } catch (error) {
+                console.error('Error loading NPS recommendations:', error);
+                document.getElementById('customerRecommendations').innerHTML = '<tr><td colspan="5" style="text-align:center; color:#ef4444;">Error loading recommendations</td></tr>';
+            }
+        }
+
         async function loadActionsData() {
             // Load customer recommendations and recent activity
             try {
@@ -2509,9 +2722,8 @@
                 document.getElementById('activityBadge').textContent = `${activity.length} Recent`;
                 document.getElementById('activityBadge').className = 'badge badge-green';
 
-                // TODO: Load customer recommendations from work_orders + customers tables
-                document.getElementById('recommendBadge').textContent = 'Coming Soon';
-                document.getElementById('recommendBadge').className = 'badge badge-amber';
+                // Load recommendations: Newly billed work orders (not yet surveyed)
+                await loadNPSRecommendations(activity);
 
             } catch (error) {
                 console.error('Error loading actions data:', error);
@@ -2884,6 +3096,7 @@
             console.log('Auto-login: User authenticated');
             document.getElementById('loginScreen').style.display = 'none';
             document.getElementById('dashboard').style.display = 'block';
+            initializeEventListeners();
             showTab(tabs[0]);
             loadDashboardData();
         } else {
