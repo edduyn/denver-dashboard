@@ -114,11 +114,15 @@
         .month-timeline { display: flex; gap: 4px; }
         .month-block { flex: 1; height: 32px; border-radius: 4px; background: #334155; display: flex; align-items: center; justify-content: center; font-size: 0.7em; font-weight: 600; transition: all 0.3s ease; }
         .month-block span { color: #64748b; }
-        .month-block.complete { background: #10b981; }
+        .month-block.met, .month-block.exceeded { background: #10b981; } /* Green - goal met */
+        .month-block.met span, .month-block.exceeded span { color: #fff; }
+        .month-block.missed { background: #ef4444; } /* Red - goal missed */
+        .month-block.missed span { color: #fff; }
+        .month-block.complete { background: #64748b; } /* Gray - no data */
         .month-block.complete span { color: #fff; }
-        .month-block.current { background: #f59e0b; }
+        .month-block.current { background: #f59e0b; } /* Orange - in progress */
         .month-block.current span { color: #fff; }
-        .month-block.future { background: #1e293b; }
+        .month-block.future { background: #1e293b; } /* Dark gray - future */
         .month-block.future span { color: #475569; }
         
         /* Action Items */
@@ -2958,8 +2962,8 @@
             return { text: `▼ ${Math.abs(diff).toFixed(0)}% behind pace (Year: ${yearPct}% elapsed)`, cls: 'pace-behind' };
         }
 
-        // Update 12-month timeline for a goal
-        function updateMonthTimeline(timelineId, currentMonthId, currentMonth) {
+        // Update 12-month timeline for a goal with performance-based coloring
+        async function updateMonthTimeline(timelineId, currentMonthId, currentMonth, goalNumber) {
             const timeline = document.getElementById(timelineId);
             const monthSpan = document.getElementById(currentMonthId);
 
@@ -2967,17 +2971,43 @@
 
             if (monthSpan) monthSpan.textContent = currentMonth;
 
+            // Fetch monthly performance data for this goal
+            let monthlyPerformance = {};
+            try {
+                const perfResp = await fetch(
+                    `${SUPABASE_URL}/rest/v1/monthly_goal_performance?year=eq.2026&goal_number=eq.${goalNumber}&select=*`,
+                    { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
+                );
+                const perfData = await perfResp.json();
+                if (Array.isArray(perfData)) {
+                    perfData.forEach(p => {
+                        monthlyPerformance[p.month] = p.status; // 'met', 'exceeded', 'missed', 'in_progress'
+                    });
+                }
+            } catch (error) {
+                console.log('Could not fetch monthly performance data:', error);
+            }
+
             const blocks = timeline.querySelectorAll('.month-block');
             blocks.forEach(block => {
                 const month = parseInt(block.dataset.month);
-                block.classList.remove('complete', 'current', 'future');
+                block.classList.remove('complete', 'current', 'future', 'met', 'exceeded', 'missed', 'in_progress');
+
+                const perfStatus = monthlyPerformance[month];
 
                 if (month < currentMonth) {
-                    block.classList.add('complete');
+                    // Past month - color based on actual performance
+                    if (perfStatus === 'met' || perfStatus === 'exceeded') {
+                        block.classList.add('met'); // Green
+                    } else if (perfStatus === 'missed') {
+                        block.classList.add('missed'); // Red
+                    } else {
+                        block.classList.add('complete'); // Gray (no data)
+                    }
                 } else if (month === currentMonth) {
-                    block.classList.add('current');
+                    block.classList.add('current'); // Orange (in progress)
                 } else {
-                    block.classList.add('future');
+                    block.classList.add('future'); // Gray outline
                 }
             });
         }
@@ -3251,16 +3281,18 @@
                 document.getElementById('pendingSurveys').textContent = sentYTD;
 
                 let npsBadge, npsBadgeClass, npsBarClass, npsPctColor, npsPaceText, npsPaceClass;
-                if (sentYTD >= yearlyGoal) {
-                    npsBadge = '✅ Yearly Goal Met!'; npsBadgeClass = 'badge-green'; npsBarClass = 'progress-fill progress-green'; npsPctColor = '#10b981';
-                    npsPaceText = `▲ ${sentYTD} of 12 yearly goal achieved`; npsPaceClass = 'pace-ahead';
-                } else if (sentYTD >= expectedByNow) {
-                    npsBadge = '✅ On Pace'; npsBadgeClass = 'badge-green'; npsBarClass = 'progress-fill progress-green'; npsPctColor = '#10b981';
-                    npsPaceText = `▲ ${sentYTD} of 12 yearly — on pace (expected ${expectedByNow} by month ${yr.monthsElapsed})`; npsPaceClass = 'pace-ahead';
+                if (sentYTD >= expectedByNow) {
+                    const ahead = sentYTD - expectedByNow;
+                    npsBadge = ahead > 0 ? `✅ +${ahead} Ahead` : '✅ On Pace';
+                    npsBadgeClass = 'badge-green';
+                    npsBarClass = 'progress-fill progress-green';
+                    npsPctColor = '#10b981';
+                    npsPaceText = `▲ ${sentYTD} sent YTD (expected ${expectedByNow} by month ${yr.monthsElapsed}) — yearly target: 12`;
+                    npsPaceClass = 'pace-ahead';
                 } else {
                     const behind = expectedByNow - sentYTD;
-                    npsBadge = `Need ${behind} more`; npsBadgeClass = 'badge-red'; npsBarClass = 'progress-fill progress-red'; npsPctColor = '#ef4444';
-                    npsPaceText = `▼ ${sentYTD} of 12 yearly — ${behind} behind pace (expected ${expectedByNow})`; npsPaceClass = 'pace-behind';
+                    npsBadge = `⚠️ ${behind} Behind`; npsBadgeClass = 'badge-red'; npsBarClass = 'progress-fill progress-red'; npsPctColor = '#ef4444';
+                    npsPaceText = `▼ ${sentYTD} of ${expectedByNow} expected — ${behind} behind pace for month ${yr.monthsElapsed}`; npsPaceClass = 'pace-behind';
                 }
 
                 setGoalStatus('nps', {
@@ -3371,17 +3403,17 @@
                 // UPDATE 12-MONTH TIMELINES FOR ALL GOALS
                 // ====================================
                 const currentMonth = yr.monthsElapsed;
-                updateMonthTimeline('abMonthTimeline', 'abCurrentMonth', currentMonth);
-                updateMonthTimeline('npsMonthTimeline', 'npsCurrentMonth', currentMonth);
-                updateMonthTimeline('trainingMonthTimeline', 'trainingCurrentMonth', currentMonth);
-                updateMonthTimeline('goal4MonthTimeline', 'goal4CurrentMonth', currentMonth);
-                updateMonthTimeline('goal5MonthTimeline', 'goal5CurrentMonth', currentMonth);
-                updateMonthTimeline('goal6MonthTimeline', 'goal6CurrentMonth', currentMonth);
-                updateMonthTimeline('goal7MonthTimeline', 'goal7CurrentMonth', currentMonth);
-                updateMonthTimeline('goal8MonthTimeline', 'goal8CurrentMonth', currentMonth);
-                updateMonthTimeline('goal9MonthTimeline', 'goal9CurrentMonth', currentMonth);
-                updateMonthTimeline('goal10MonthTimeline', 'goal10CurrentMonth', currentMonth);
-                updateMonthTimeline('goal11MonthTimeline', 'goal11CurrentMonth', currentMonth);
+                await updateMonthTimeline('abMonthTimeline', 'abCurrentMonth', currentMonth, 1);
+                await updateMonthTimeline('npsMonthTimeline', 'npsCurrentMonth', currentMonth, 2);
+                await updateMonthTimeline('trainingMonthTimeline', 'trainingCurrentMonth', currentMonth, 3);
+                await updateMonthTimeline('goal4MonthTimeline', 'goal4CurrentMonth', currentMonth, 4);
+                await updateMonthTimeline('goal5MonthTimeline', 'goal5CurrentMonth', currentMonth, 5);
+                await updateMonthTimeline('goal6MonthTimeline', 'goal6CurrentMonth', currentMonth, 6);
+                await updateMonthTimeline('goal7MonthTimeline', 'goal7CurrentMonth', currentMonth, 7);
+                await updateMonthTimeline('goal8MonthTimeline', 'goal8CurrentMonth', currentMonth, 8);
+                await updateMonthTimeline('goal9MonthTimeline', 'goal9CurrentMonth', currentMonth, 9);
+                await updateMonthTimeline('goal10MonthTimeline', 'goal10CurrentMonth', currentMonth, 10);
+                await updateMonthTimeline('goal11MonthTimeline', 'goal11CurrentMonth', currentMonth, 11);
 
                 // ====================================
                 // UPDATE GOALS SUMMARY BADGE
