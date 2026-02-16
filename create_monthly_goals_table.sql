@@ -21,7 +21,7 @@ CREATE INDEX IF NOT EXISTS idx_monthly_goals_goal ON monthly_goal_performance(go
 INSERT INTO monthly_goal_performance (year, month, goal_number, goal_name, target_value, actual_value, status, notes)
 VALUES 
   (2026, 1, 1, 'A/B Ratio', 58.5, 33.1, 'missed', 'Ranked 21st/21 shops. Gap: 25.4pp'),
-  (2026, 1, 2, 'NPS Surveys', 1, 23, 'exceeded', '23 surveys sent vs 1 required'),
+  (2026, 1, 2, 'NPS Surveys', 1, 1, 'met', '1 survey completed (23 sent, 1 response received)'),
   (2026, 1, 3, 'Training Completion', 100, 0, 'missed', 'No training completed in January')
 ON CONFLICT (year, month, goal_number) DO UPDATE SET
   actual_value = EXCLUDED.actual_value,
@@ -33,7 +33,7 @@ ON CONFLICT (year, month, goal_number) DO UPDATE SET
 INSERT INTO monthly_goal_performance (year, month, goal_number, goal_name, target_value, actual_value, status, notes)
 VALUES 
   (2026, 2, 1, 'A/B Ratio', 58.5, 38.8, 'in_progress', 'Current MTD: 38.8%. Still below target.'),
-  (2026, 2, 2, 'NPS Surveys', 1, 0, 'in_progress', 'No surveys sent yet in February'),
+  (2026, 2, 2, 'NPS Surveys', 1, 0, 'in_progress', '0 surveys completed in February (many sent, awaiting responses)'),
   (2026, 2, 3, 'Training Completion', 100, 25, 'in_progress', '2 completed (Garmin training on 1/30)')
 ON CONFLICT (year, month, goal_number) DO UPDATE SET
   actual_value = EXCLUDED.actual_value,
