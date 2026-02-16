@@ -3270,38 +3270,39 @@
                 }
 
                 // ====================================
-                // GOAL #2: NPS Program (1/month minimum)
+                // GOAL #2: NPS Program (1 COMPLETED per month minimum)
                 // ====================================
                 const sentYTD = npsYear.length;
+                const completedYTD = npsYear.filter(s => s.score !== null).length; // Only count responses received
                 const yearlyGoal = 12;
                 const expectedByNow = yr.monthsElapsed;
-                const npsProgress = Math.min((sentYTD / yearlyGoal * 100), 100);
+                const npsProgress = Math.min((completedYTD / yearlyGoal * 100), 100);
 
                 document.getElementById('surveysSent').textContent = sentYTD;
-                document.getElementById('pendingSurveys').textContent = sentYTD;
+                document.getElementById('pendingSurveys').textContent = completedYTD; // Show COMPLETED, not sent
 
                 let npsBadge, npsBadgeClass, npsBarClass, npsPctColor, npsPaceText, npsPaceClass;
-                if (sentYTD >= expectedByNow) {
-                    const ahead = sentYTD - expectedByNow;
+                if (completedYTD >= expectedByNow) {
+                    const ahead = completedYTD - expectedByNow;
                     npsBadge = ahead > 0 ? `✅ +${ahead} Ahead` : '✅ On Pace';
                     npsBadgeClass = 'badge-green';
                     npsBarClass = 'progress-fill progress-green';
                     npsPctColor = '#10b981';
-                    npsPaceText = `▲ ${sentYTD} sent YTD (expected ${expectedByNow} by month ${yr.monthsElapsed}) — yearly target: 12`;
+                    npsPaceText = `▲ ${completedYTD} completed YTD (expected ${expectedByNow} by month ${yr.monthsElapsed}) — yearly target: 12`;
                     npsPaceClass = 'pace-ahead';
                 } else {
-                    const behind = expectedByNow - sentYTD;
+                    const behind = expectedByNow - completedYTD;
                     npsBadge = `⚠️ ${behind} Behind`; npsBadgeClass = 'badge-red'; npsBarClass = 'progress-fill progress-red'; npsPctColor = '#ef4444';
-                    npsPaceText = `▼ ${sentYTD} of ${expectedByNow} expected — ${behind} behind pace for month ${yr.monthsElapsed}`; npsPaceClass = 'pace-behind';
+                    npsPaceText = `▼ ${completedYTD} of ${expectedByNow} expected — ${behind} behind pace for month ${yr.monthsElapsed}`; npsPaceClass = 'pace-behind';
                 }
 
                 setGoalStatus('nps', {
-                    value: `${sentYTD}/12`, pct: npsProgress,
+                    value: `${completedYTD}/12`, pct: npsProgress,
                     badge: npsBadge, badgeClass: npsBadgeClass, barClass: npsBarClass, pctColor: npsPctColor,
                     paceText: npsPaceText, paceClass: npsPaceClass
                 });
 
-                scorecard.push({ num: 2, name: 'NPS Program', target: '12/year', current: `${sentYTD}/12`, status: sentYTD >= expectedByNow ? 'green' : 'red', statusText: sentYTD >= expectedByNow ? 'On Pace' : `${expectedByNow - sentYTD} behind` });
+                scorecard.push({ num: 2, name: 'NPS Program', target: '12/year', current: `${completedYTD}/12`, status: completedYTD >= expectedByNow ? 'green' : 'red', statusText: completedYTD >= expectedByNow ? 'On Pace' : `${expectedByNow - completedYTD} behind` });
 
                 // ====================================
                 // GOAL #3: Training Completion (100% On Time)
