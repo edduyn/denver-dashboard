@@ -2613,39 +2613,55 @@
                 if (metrics.length > 0) {
                     const latest = metrics[0];
 
-                    // Update current metrics
-                    document.getElementById('soldHours').textContent = latest.total_sold_hours ? latest.total_sold_hours.toFixed(1) : '--';
-                    document.getElementById('billedWOs').textContent = latest.billed_wo_count || '--';
-                    document.getElementById('employeeCount').textContent = latest.employee_count || '--';
+                    // Update current metrics (check if elements exist first)
+                    const soldHoursEl = document.getElementById('soldHours');
+                    const billedWOsEl = document.getElementById('billedWOs');
+                    const employeeCountEl = document.getElementById('employeeCount');
 
-                    const avgHours = latest.total_sold_hours && latest.employee_count
-                        ? (latest.total_sold_hours / latest.employee_count).toFixed(1)
-                        : '--';
-                    document.getElementById('hoursPerEmployee').textContent = avgHours;
+                    if (soldHoursEl) soldHoursEl.textContent = latest.total_sold_hours ? latest.total_sold_hours.toFixed(1) : '--';
+                    if (billedWOsEl) billedWOsEl.textContent = latest.billed_wo_count || '--';
+                    if (employeeCountEl) employeeCountEl.textContent = latest.employee_count || '--';
 
-                    const reportDate = new Date(latest.report_date).toLocaleDateString();
-                    document.getElementById('soldHoursDate').textContent = reportDate;
+                    const hoursPerEmployeeEl = document.getElementById('hoursPerEmployee');
+                    if (hoursPerEmployeeEl) {
+                        const avgHours = latest.total_sold_hours && latest.employee_count
+                            ? (latest.total_sold_hours / latest.employee_count).toFixed(1)
+                            : '--';
+                        hoursPerEmployeeEl.textContent = avgHours;
+                    }
+
+                    const soldHoursDateEl = document.getElementById('soldHoursDate');
+                    if (soldHoursDateEl) {
+                        const reportDate = new Date(latest.report_date).toLocaleDateString();
+                        soldHoursDateEl.textContent = reportDate;
+                    }
 
                     // Status badge
-                    document.getElementById('dailyMetricsBadge').textContent = 'Up to Date';
-                    document.getElementById('dailyMetricsBadge').className = 'badge badge-green';
+                    const dailyMetricsBadgeEl = document.getElementById('dailyMetricsBadge');
+                    if (dailyMetricsBadgeEl) {
+                        dailyMetricsBadgeEl.textContent = 'Up to Date';
+                        dailyMetricsBadgeEl.className = 'badge badge-green';
+                    }
 
                     // Load history table
-                    const historyHTML = metrics.map(m => {
-                        const avg = m.total_sold_hours && m.employee_count
-                            ? (m.total_sold_hours / m.employee_count).toFixed(1)
-                            : '--';
-                        return `
-                            <tr>
-                                <td>${new Date(m.report_date).toLocaleDateString()}</td>
-                                <td><strong>${m.total_sold_hours ? m.total_sold_hours.toFixed(1) : '--'}</strong></td>
-                                <td>${m.billed_wo_count || '--'}</td>
-                                <td>${m.employee_count || '--'}</td>
-                                <td>${avg}</td>
-                            </tr>
-                        `;
-                    }).join('');
-                    document.getElementById('dailyMetricsHistory').innerHTML = historyHTML;
+                    const dailyMetricsHistoryEl = document.getElementById('dailyMetricsHistory');
+                    if (dailyMetricsHistoryEl) {
+                        const historyHTML = metrics.map(m => {
+                            const avg = m.total_sold_hours && m.employee_count
+                                ? (m.total_sold_hours / m.employee_count).toFixed(1)
+                                : '--';
+                            return `
+                                <tr>
+                                    <td>${new Date(m.report_date).toLocaleDateString()}</td>
+                                    <td><strong>${m.total_sold_hours ? m.total_sold_hours.toFixed(1) : '--'}</strong></td>
+                                    <td>${m.billed_wo_count || '--'}</td>
+                                    <td>${m.employee_count || '--'}</td>
+                                    <td>${avg}</td>
+                                </tr>
+                            `;
+                        }).join('');
+                        dailyMetricsHistoryEl.innerHTML = historyHTML;
+                    }
                 }
             } catch (error) {
                 console.error('Error loading daily metrics:', error);
@@ -2983,10 +2999,14 @@
 
                 const budgetData = await budgetResp.json();
 
-                if (!budgetData || budgetData.length === 0) {
-                    console.log('loadBudgetData: No budget data available');
-                    document.getElementById('budgetDeptTable').innerHTML =
-                        '<tr><td colspan="6" style="text-align:center; padding: 20px; color: #94a3b8;">No budget data available. Please set up budget_vs_actual table.</td></tr>';
+                // Check if table doesn't exist or no data
+                if (!budgetData || !Array.isArray(budgetData) || budgetData.length === 0 || budgetData.code) {
+                    console.log('loadBudgetData: No budget data available - table may not exist yet');
+                    const deptTable = document.getElementById('budgetDeptTable');
+                    if (deptTable) {
+                        deptTable.innerHTML =
+                            '<tr><td colspan="6" style="text-align:center; padding: 20px; color: #94a3b8;">No budget data available. Please set up budget_vs_actual table.</td></tr>';
+                    }
                     return;
                 }
 
@@ -3228,7 +3248,6 @@
                 const npsProgress = Math.min((sentYTD / yearlyGoal * 100), 100);
 
                 document.getElementById('surveysSent').textContent = sentYTD;
-                document.getElementById('billedWOsMonth').textContent = '--';
                 document.getElementById('pendingSurveys').textContent = sentYTD;
 
                 let npsBadge, npsBadgeClass, npsBarClass, npsPctColor, npsPaceText, npsPaceClass;
