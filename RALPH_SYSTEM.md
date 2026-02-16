@@ -32,6 +32,48 @@ Ralph handles:
 
 ## Ralph's Capabilities
 
+### 0. Self-Healing (NEW! 🩹)
+Ralph now includes **autonomous self-healing** capabilities:
+
+**Automatic Detection:**
+- ✅ JavaScript errors and exceptions
+- ✅ Database connectivity issues
+- ✅ Missing DOM elements
+- ✅ Broken month timelines
+- ✅ Stale data (not updating)
+- ✅ Promise rejections
+
+**Automatic Repair:**
+- 🔧 Reconnect to Supabase if connection drops
+- 🔧 Reload dashboard data if stale
+- 🔧 Rebuild month timelines if corrupted
+- 🔧 Clear error states and retry
+- 🔧 Refresh specific components as needed
+
+**Health Monitoring:**
+- 🏥 Runs health checks every 60 seconds
+- 🏥 Monitors for consecutive errors (3x threshold)
+- 🏥 Validates all 11 goal timelines
+- 🏥 Checks database connectivity
+- 🏥 Logs all healing attempts
+
+**Self-Diagnostics:**
+Ralph can diagnose and report:
+- Current health status
+- Recent healing attempts
+- Error patterns detected
+- System component status
+
+**Manual Control:**
+You can interact with the self-healing system:
+```javascript
+// In browser console:
+ralph.performHealthCheck()      // Run manual health check
+ralph.generateHealthReport()    // View detailed health report
+ralph.getHealingHistory()       // See what Ralph has fixed
+ralph.setAutoRepair(false)      // Disable auto-repair if needed
+```
+
 ### 1. Data Management
 - **Import**: CSV, Excel, JSON, AS400 reports
 - **Process**: Clean, transform, validate data
@@ -135,13 +177,29 @@ When Ralph needs clarification:
 - ❓ "Should this metric update daily or weekly?"
 - ❓ "Where does this data come from - AS400 or manual entry?"
 
-### Error Handling
-If something goes wrong:
+### Error Handling & Self-Healing
+Ralph now automatically fixes most issues:
+
+**Automatic Healing (No User Action Required):**
+- ⚠️ "Database connection lost"
+- 🔧 "Auto-healing: Reconnecting to Supabase..."
+- ✅ "Healed: Connection restored, data refreshed"
+
+**Pattern Recognition:**
+- ⚠️ "Month timeline rendering error (3x detected)"
+- 🔧 "Auto-healing: Rebuilding timeline for Goal #4..."
+- ✅ "Healed: Timeline restored with 12 months"
+
+**Data Issues:**
+- ⚠️ "Dashboard data appears stale (last update > 5 min)"
+- 🔧 "Auto-healing: Refreshing all data sources..."
+- ✅ "Healed: Data updated, timestamp current"
+
+**When Manual Help Needed:**
 - ⚠️ "Issue detected: Missing date field in CSV"
-- 🔧 "Attempting auto-fix..."
-- ✅ "Fixed - used report_date as fallback"
-- OR
-- ❌ "Cannot proceed - need your input on column mapping"
+- 🔧 "Attempted auto-fix..."
+- ❌ "Cannot auto-heal - need your input on column mapping"
+- 💬 "Please specify which column contains the date"
 
 ---
 
