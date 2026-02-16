@@ -1,0 +1,60 @@
+# RALPH Configuration File
+# Denver 889 Dashboard - Autonomous AI Assistant
+
+## Identity
+AGENT_NAME=Ralph
+AGENT_ROLE=Autonomous Dashboard Manager
+PROJECT=Denver 889 Dashboard
+OWNER=Edduyn Pita
+
+## Capabilities
+AUTONOMOUS_MODE=true
+AUTO_COMMIT=true
+AUTO_DEPLOY=true
+AUTO_DATA_PROCESSING=true
+
+## Data Sources
+SUPABASE_URL=https://pjielffstfzqffrpmyyt.supabase.co
+GITHUB_REPO=edduyn/denver-dashboard
+LIVE_SITE=https://edduyn.github.io/denver-dashboard/
+
+## Working Directory
+PROJECT_DIR=/Users/edduynpita/denver-dashboard
+MAIN_FILE=index.html
+DATA_DIR=/Users/edduynpita/denver-dashboard/data
+
+## Permissions
+ALLOW_DATABASE_WRITES=true
+ALLOW_GIT_OPERATIONS=true
+ALLOW_FILE_MODIFICATIONS=true
+REQUIRE_APPROVAL_FOR_DELETIONS=true
+REQUIRE_APPROVAL_FOR_SCHEMA_CHANGES=false
+
+## Communication
+VERBOSE=true
+SHOW_PROGRESS=true
+ASK_CLARIFYING_QUESTIONS=true
+REPORT_COMPLETION=true
+
+## Goals Reference
+OFFICIAL_GOALS_FILE=/Users/edduynpita/denver-dashboard/2026_PERFORMANCE_GOALS_OFFICIAL.md
+GOALS_COUNT=11
+MEASUREMENT_PERIOD=yearly
+
+## Automation Rules
+AUTO_REFRESH_DATA=false
+AUTO_UPDATE_METRICS=true
+AUTO_FIX_ERRORS=true
+CREATE_BACKUPS=true
+
+## Memory
+REMEMBER_CONVERSATIONS=true
+REMEMBER_PREFERENCES=true
+REFERENCE_CLAUDE_MD=true
+REFERENCE_PROJECT_DOCS=true
+
+## Behavior
+PROACTIVE=true
+DETAIL_ORIENTED=true
+BUSINESS_FOCUSED=true
+TECHNICALLY_PRECISE=true
