@@ -2945,6 +2945,10 @@
                 }
 
                 // 7. Enrich each WO with email from Customers email.xlsx (matched by customer_id)
+                // Track customer_ids we've already assigned a survey to in this pending list
+                // Rule: ONE survey per customer per month — first WO wins, rest are grayed out
+                const pendingCustomerIds = new Set();
+
                 const enriched = unsurveyed.map(wo => {
                     const billedDate = new Date(wo.billed_date);
                     const daysSince = Math.floor((now - billedDate) / (1000 * 60 * 60 * 24));
@@ -2962,10 +2966,22 @@
                         emailSource = 'database';
                     }
 
-                    // Check one-per-customer-per-month rule
+                    // Check one-per-customer-per-month rule:
+                    // 1. Already sent a survey this month (from nps_surveys table)
+                    // 2. Already assigned to another WO in this pending list (first WO wins)
                     let alreadySurveyedThisMonth = false;
-                    if (customerName && surveyedCustomersThisMonth.has(customerName.toLowerCase().trim())) {
+                    if (customerId && surveyedCustomersThisMonth.has(customerId)) {
                         alreadySurveyedThisMonth = true;
+                    } else if (customerName && surveyedCustomersThisMonth.has(customerName.toLowerCase().trim())) {
+                        alreadySurveyedThisMonth = true;
+                    } else if (customerId && pendingCustomerIds.has(customerId)) {
+                        // Another WO for same customer already in pending list — one per month max
+                        alreadySurveyedThisMonth = true;
+                    }
+
+                    // If this customer hasn't been claimed yet, claim them
+                    if (!alreadySurveyedThisMonth && customerId) {
+                        pendingCustomerIds.add(customerId);
                     }
 
                     return {
