@@ -392,105 +392,6 @@
                 </div>
             </div>
 
-            <!-- 2026 Goals Scorecard -->
-            <div class="card">
-                <div class="card-header">
-                    <span class="card-title">📋 2026 Goals Scorecard Summary</span>
-                    <span class="badge badge-amber" id="scorecardBadge">Loading...</span>
-                </div>
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th style="width: 40px;">#</th>
-                                <th>Goal</th>
-                                <th style="width: 150px;">Target</th>
-                                <th style="width: 150px;">Tracking Method</th>
-                                <th style="width: 100px;">Status</th>
-                            </tr>
-                        </thead>
-                        <tbody id="scorecardBody">
-                            <tr>
-                                <td>1</td>
-                                <td>Financial Objectives (A/B, ELR)</td>
-                                <td>A/B: 58.5%</td>
-                                <td>Dashboard</td>
-                                <td><span class="badge" id="goal1Status">Loading...</span></td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>NPS Survey Program</td>
-                                <td>1/month (12/year)</td>
-                                <td>NET Promoter results</td>
-                                <td><span class="badge" id="goal2Status">Loading...</span></td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>Training Completion</td>
-                                <td>100% on time</td>
-                                <td>Training Due Report</td>
-                                <td><span class="badge" id="goal3Status">Loading...</span></td>
-                            </tr>
-                            <tr>
-                                <td>4</td>
-                                <td>Flat-Rate System Evaluation</td>
-                                <td>Data analysis</td>
-                                <td>squawk_data.json</td>
-                                <td><span class="badge badge-gray">In Progress</span></td>
-                            </tr>
-                            <tr>
-                                <td>5</td>
-                                <td>Customer Communication</td>
-                                <td>Prompt & professional</td>
-                                <td>Manual/Process</td>
-                                <td><span class="badge badge-green">Ongoing</span></td>
-                            </tr>
-                            <tr>
-                                <td>6</td>
-                                <td>Expense Budget Management</td>
-                                <td>Within budget</td>
-                                <td>Financial reports</td>
-                                <td><span class="badge badge-gray">Monthly Review</span></td>
-                            </tr>
-                            <tr>
-                                <td>7</td>
-                                <td>Audits - Zero Findings</td>
-                                <td>0 findings</td>
-                                <td>Manual</td>
-                                <td><span class="badge" id="goal7Status">Loading...</span></td>
-                            </tr>
-                            <tr>
-                                <td>8</td>
-                                <td>Monthly A/B Plan</td>
-                                <td>Meet budget monthly</td>
-                                <td>Dashboard</td>
-                                <td><span class="badge" id="goal8Status">Loading...</span></td>
-                            </tr>
-                            <tr>
-                                <td>9</td>
-                                <td>Dealer Programs Exclusive Use</td>
-                                <td>100% compliance</td>
-                                <td>Dealer Programs folder</td>
-                                <td><span class="badge badge-green">Compliant</span></td>
-                            </tr>
-                            <tr>
-                                <td>10</td>
-                                <td>Vendor Dispute Communication</td>
-                                <td>< 30 days to BZ</td>
-                                <td>WO Disputes folder</td>
-                                <td><span class="badge badge-green">On Track</span></td>
-                            </tr>
-                            <tr>
-                                <td>11</td>
-                                <td>Risk Area Identification</td>
-                                <td>Reduce score</td>
-                                <td>Strategic</td>
-                                <td><span class="badge badge-gray">Strategic</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
         </div>
         
         <!-- Other tabs - placeholder content -->
@@ -2924,30 +2825,13 @@
                 scorecard.push({ num: 11, name: 'Risk Identification', target: 'Reduce score', current: 'Strategic', status: 'amber', statusText: 'Ongoing' });
 
                 // ====================================
-                // BUILD SCORECARD TABLE
+                // UPDATE GOALS SUMMARY BADGE
                 // ====================================
                 const greenCount = scorecard.filter(s => s.status === 'green').length;
                 const redCount = scorecard.filter(s => s.status === 'red').length;
                 const amberCount = scorecard.filter(s => s.status === 'amber').length;
                 document.getElementById('goalsActiveBadge').textContent = `${greenCount} ✅ ${amberCount} 🟡 ${redCount} 🔴`;
                 document.getElementById('goalsActiveBadge').className = `badge ${redCount > 0 ? 'badge-red' : (amberCount > 3 ? 'badge-amber' : 'badge-green')}`;
-
-                document.getElementById('scorecardBadge').textContent = `${greenCount}/${scorecard.length} On Track`;
-                document.getElementById('scorecardBadge').className = `badge ${greenCount >= 8 ? 'badge-green' : (greenCount >= 5 ? 'badge-amber' : 'badge-red')}`;
-
-                // Sort scorecard by goal number
-                scorecard.sort((a, b) => a.num - b.num);
-
-                const tbody = document.getElementById('scorecardBody');
-                tbody.innerHTML = scorecard.map(s => `
-                    <tr>
-                        <td><strong>${s.num}</strong></td>
-                        <td>${s.name}</td>
-                        <td style="color: #94a3b8;">${s.target}</td>
-                        <td style="font-weight: 600;">${s.current}</td>
-                        <td><span class="badge badge-${s.status}">${s.statusText}</span></td>
-                    </tr>
-                `).join('');
 
             } catch (error) {
                 console.error('Error loading goals data:', error);
