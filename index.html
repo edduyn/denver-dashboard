@@ -109,6 +109,17 @@
         .pace-ontrack { color: #f59e0b; }
         .goal-section-header { color: #f59e0b; font-size: 0.85em; font-weight: 600; margin: 18px 0 8px 0; padding: 6px 12px; background: rgba(245,158,11,0.1); border-radius: 8px; display: flex; align-items: center; gap: 6px; }
         .goal-section-header:first-of-type { margin-top: 0; }
+
+        /* Month Timeline */
+        .month-timeline { display: flex; gap: 4px; }
+        .month-block { flex: 1; height: 32px; border-radius: 4px; background: #334155; display: flex; align-items: center; justify-content: center; font-size: 0.7em; font-weight: 600; transition: all 0.3s ease; }
+        .month-block span { color: #64748b; }
+        .month-block.complete { background: #10b981; }
+        .month-block.complete span { color: #fff; }
+        .month-block.current { background: #f59e0b; }
+        .month-block.current span { color: #fff; }
+        .month-block.future { background: #1e293b; }
+        .month-block.future span { color: #475569; }
         
         /* Action Items */
         .action-item { display: flex; align-items: center; gap: 12px; padding: 12px; background: rgba(0,0,0,0.2); border-radius: 8px; margin-bottom: 8px; }
@@ -212,14 +223,6 @@
                         <span class="goal-title">📊 #1: Meet/Exceed Financial Objectives (A/B Ratio 58.5%, ELR)</span>
                         <span class="badge" id="abGoalBadge">Loading...</span>
                     </div>
-                    <div class="goal-progress">
-                        <div style="flex: 1;">
-                            <div class="progress-bar">
-                                <div class="progress-fill" id="abProgressBar" style="width: 0%;"></div>
-                            </div>
-                        </div>
-                        <span class="goal-pct" id="abProgressPct">--</span>
-                    </div>
                     <div class="goal-notes">
                         <strong>Current A/B:</strong> <span id="currentAB">--</span> |
                         <strong>Target:</strong> 58.5% |
@@ -227,6 +230,24 @@
                         <strong>Gap:</strong> <span id="abGap">--</span>
                     </div>
                     <div class="goal-pace" id="abPace">Tracked via Dashboard</div>
+                    <!-- 12-Month Progress Timeline -->
+                    <div style="margin-top: 10px;">
+                        <div style="font-size: 0.75em; color: #94a3b8; margin-bottom: 4px;">2026 Progress (Month <span id="abCurrentMonth">--</span>/12)</div>
+                        <div class="month-timeline" id="abMonthTimeline">
+                            <div class="month-block" data-month="1"><span>J</span></div>
+                            <div class="month-block" data-month="2"><span>F</span></div>
+                            <div class="month-block" data-month="3"><span>M</span></div>
+                            <div class="month-block" data-month="4"><span>A</span></div>
+                            <div class="month-block" data-month="5"><span>M</span></div>
+                            <div class="month-block" data-month="6"><span>J</span></div>
+                            <div class="month-block" data-month="7"><span>J</span></div>
+                            <div class="month-block" data-month="8"><span>A</span></div>
+                            <div class="month-block" data-month="9"><span>S</span></div>
+                            <div class="month-block" data-month="10"><span>O</span></div>
+                            <div class="month-block" data-month="11"><span>N</span></div>
+                            <div class="month-block" data-month="12"><span>D</span></div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Goal #6: Stay Within Expense Budget -->
