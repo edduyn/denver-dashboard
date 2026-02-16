@@ -2898,7 +2898,7 @@
                     fetch(`${SUPABASE_URL}/rest/v1/anchor_work_orders?select=wo_number,customer,customer_id,tail_number`, {
                         headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
                     }),
-                    fetch(`${SUPABASE_URL}/rest/v1/wo_reference?select=wo_number,customer`, {
+                    fetch(`${SUPABASE_URL}/rest/v1/wo_reference?select=wo_number,customer,customer_id`, {
                         headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
                     }),
                     fetch(`${SUPABASE_URL}/rest/v1/customers?select=customer_number,email,customer_name`, {
@@ -2926,10 +2926,16 @@
                     }
                 });
 
-                // WO Reference: wo_number → customer name
+                // WO Reference: wo_number → { customer, customer_id }
                 const woRefMap = {};
                 if (Array.isArray(woRefs)) woRefs.forEach(r => {
-                    if (r.customer) woRefMap[r.wo_number] = r.customer;
+                    woRefMap[r.wo_number] = { customer: r.customer || null, customer_id: r.customer_id || null };
+                    // Also add wo_reference customer data to reverse maps
+                    if (r.customer && r.customer_id) {
+                        if (!customerNameToId[r.customer.toLowerCase().trim()]) {
+                            customerNameToId[r.customer.toLowerCase().trim()] = r.customer_id;
+                        }
+                    }
                 });
 
                 // Customer emails: customer_number → email (first match wins)
@@ -2968,15 +2974,15 @@
                     const billedDate = new Date(wo.billed_date);
                     const daysSince = Math.floor((now - billedDate) / (1000 * 60 * 60 * 24));
 
-                    // Find customer info: ANCHOR first, then wo_reference, then tail# lookup
+                    // Find customer info: ANCHOR first, then wo_reference (with customer_id), then tail# lookup
                     const anchorData = anchorMap[wo.work_order_number];
-                    const woRefCustomer = woRefMap[wo.work_order_number];
+                    const woRefData = woRefMap[wo.work_order_number];
                     const tailData = wo.tail_number ? tailToCustomer[wo.tail_number] : null;
 
-                    let customerName = anchorData?.customer || woRefCustomer || tailData?.customer || null;
-                    let customerId = anchorData?.customer_id || null;
+                    let customerName = anchorData?.customer || woRefData?.customer || tailData?.customer || null;
+                    let customerId = anchorData?.customer_id || woRefData?.customer_id || null;
 
-                    // If no customer_id from ANCHOR WO match, try name→id or tail→id lookup
+                    // If no customer_id from direct WO match, try name→id or tail→id reverse lookup
                     if (!customerId && customerName) {
                         customerId = customerNameToId[customerName.toLowerCase().trim()] || null;
                     }
