@@ -144,6 +144,7 @@
         <div class="header">
             <div class="header-left">
                 <h1>🛩️ Denver Satellite (889)</h1>
+                <span id="lastUpdated" style="color: #64748b; font-size: 0.75em; margin-left: 10px; white-space: nowrap;">Loading...</span>
             </div>
             <div class="header-right">
                 <span class="status-indicator" id="statusIndicator">Ready</span>
@@ -1247,6 +1248,20 @@
             await loadEmployeeData();
             await loadWIP();
             await loadActionsData();
+
+            // Update last refreshed timestamp
+            const now = new Date();
+            const timeStr = now.toLocaleString('en-US', {
+                month: 'short', day: 'numeric',
+                hour: 'numeric', minute: '2-digit',
+                hour12: true
+            });
+            document.getElementById('lastUpdated').textContent = `Updated: ${timeStr}`;
+            document.getElementById('lastUpdated').style.color = '#10b981';
+            // Fade back to gray after 5 seconds
+            setTimeout(() => {
+                document.getElementById('lastUpdated').style.color = '#64748b';
+            }, 5000);
         }
 
         // Helper function to get ordinal suffix (1st, 2nd, 3rd, etc.)
