@@ -1515,6 +1515,11 @@
                 initializeEventListeners();
                 showTab(tabs[0]);
                 loadDashboardData();
+                // Auto-start rotation on login
+                isRotating = true;
+                document.getElementById('rotateBtn').textContent = '⏹️ Stop';
+                document.getElementById('rotateBtn').style.background = '#ef4444';
+                setTimeout(() => startAutoRotation(), 1500);
             } else {
                 document.getElementById('errorMsg').style.display = 'block';
                 setTimeout(() => {
@@ -1569,7 +1574,7 @@
                 const scrollHeight = document.body.scrollHeight - window.innerHeight;
                 if (scrollHeight <= 0) return; // Nothing to scroll
 
-                const scrollDuration = 25000; // 25 seconds to scroll, 5 seconds pause at bottom before tab switch
+                const scrollDuration = 31250; // ~31s to scroll (20% slower than original 25s)
                 const scrollStep = scrollHeight / (scrollDuration / 50); // Update every 50ms
 
                 scrollInterval = setInterval(() => {
@@ -4114,6 +4119,11 @@
             initializeEventListeners();
             showTab(tabs[0]);
             loadDashboardData();
+            // Auto-start rotation on refresh
+            isRotating = true;
+            document.getElementById('rotateBtn').textContent = '⏹️ Stop';
+            document.getElementById('rotateBtn').style.background = '#ef4444';
+            setTimeout(() => startAutoRotation(), 1500); // slight delay to let data load first
         } else {
             console.log('Auto-login: No saved auth, showing login screen');
         }
