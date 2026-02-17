@@ -539,11 +539,12 @@
                 <div class="goal-card">
                     <div class="goal-header">
                         <span class="goal-title">📞 #10: Vendor Disputes - Communicate to BZ Within 30 Days</span>
-                        <span class="badge badge-gray">Process</span>
+                        <span class="badge badge-gray" id="goal10Badge">Loading...</span>
                     </div>
                     <div class="goal-notes">
                         <strong>Objective:</strong> Report disputes to Brian Zitek within 30 days<br>
-                        <strong>Status:</strong> Check WO Disputes folder<br>
+                        <strong>Status:</strong> <span id="goal10Status">Loading...</span><br>
+                        <strong>YTD:</strong> Disputes: <span id="disputesCount">--</span> | Avg Response: <span id="disputesAvgDays">--</span> days | <span id="disputesResolved">--</span> resolved<br>
                         <strong>Target:</strong> 100% on-time communication
                     </div>
 
@@ -3477,9 +3478,61 @@
                 scorecard.push({ num: 9, name: 'Dealer Programs', target: '100% use', current: 'Compliant', status: 'green', statusText: 'Compliant' });
 
                 // ====================================
-                // GOAL #10: Vendor Dispute Communication (Manual/Static)
+                // GOAL #10: Vendor Dispute Communication (Dynamic)
                 // ====================================
-                scorecard.push({ num: 10, name: 'Vendor Disputes', target: '<30 days to BZ', current: 'As Needed', status: 'green', statusText: 'Timely' });
+                try {
+                    const disputeResp = await fetch(`${SUPABASE_URL}/rest/v1/vendor_disputes?year=eq.2026&select=*`, { headers: HEADERS });
+                    const disputeData = await disputeResp.json();
+                    if (Array.isArray(disputeData) && disputeData.length > 0) {
+                        const totalDisputes = disputeData.length;
+                        const onTimeDisputes = disputeData.filter(d => d.days_to_notify !== null && d.days_to_notify <= 30).length;
+                        const resolvedDisputes = disputeData.filter(d => d.status === 'resolved').length;
+                        const avgDays = disputeData.filter(d => d.days_to_notify !== null).length > 0
+                            ? Math.round(disputeData.filter(d => d.days_to_notify !== null).reduce((sum, d) => sum + d.days_to_notify, 0) / disputeData.filter(d => d.days_to_notify !== null).length)
+                            : 0;
+                        const compliancePct = Math.round((onTimeDisputes / totalDisputes) * 100);
+
+                        // Update display elements
+                        const disputesCountEl = document.getElementById('disputesCount');
+                        const disputesAvgDaysEl = document.getElementById('disputesAvgDays');
+                        const disputesResolvedEl = document.getElementById('disputesResolved');
+                        const goal10StatusEl = document.getElementById('goal10Status');
+                        const goal10BadgeEl = document.getElementById('goal10Badge');
+
+                        if (disputesCountEl) disputesCountEl.textContent = totalDisputes;
+                        if (disputesAvgDaysEl) disputesAvgDaysEl.textContent = avgDays;
+                        if (disputesResolvedEl) disputesResolvedEl.textContent = resolvedDisputes;
+
+                        if (compliancePct === 100) {
+                            if (goal10BadgeEl) { goal10BadgeEl.className = 'badge badge-green'; goal10BadgeEl.textContent = '✅ 100% On Time'; }
+                            if (goal10StatusEl) goal10StatusEl.textContent = `${totalDisputes} dispute(s) — all communicated ≤30 days (avg: ${avgDays} days)`;
+                            scorecard.push({ num: 10, name: 'Vendor Disputes', target: '<30 days to BZ', current: `${totalDisputes} dispute, ${avgDays} day avg`, status: 'green', statusText: '100% On Time' });
+                        } else {
+                            const lateCount = totalDisputes - onTimeDisputes;
+                            if (goal10BadgeEl) { goal10BadgeEl.className = 'badge badge-amber'; goal10BadgeEl.textContent = `⚠️ ${lateCount} Late`; }
+                            if (goal10StatusEl) goal10StatusEl.textContent = `${lateCount} dispute(s) communicated >30 days`;
+                            scorecard.push({ num: 10, name: 'Vendor Disputes', target: '<30 days to BZ', current: `${compliancePct}% on time`, status: 'amber', statusText: `${lateCount} Late` });
+                        }
+                    } else {
+                        // No disputes YTD — process compliant (nothing to report)
+                        const goal10BadgeEl = document.getElementById('goal10Badge');
+                        const goal10StatusEl = document.getElementById('goal10Status');
+                        if (goal10BadgeEl) { goal10BadgeEl.className = 'badge badge-green'; goal10BadgeEl.textContent = '✅ No Disputes'; }
+                        if (goal10StatusEl) goal10StatusEl.textContent = 'No vendor disputes recorded YTD';
+                        const disputesCountEl = document.getElementById('disputesCount');
+                        const disputesAvgDaysEl = document.getElementById('disputesAvgDays');
+                        const disputesResolvedEl = document.getElementById('disputesResolved');
+                        if (disputesCountEl) disputesCountEl.textContent = '0';
+                        if (disputesAvgDaysEl) disputesAvgDaysEl.textContent = '0';
+                        if (disputesResolvedEl) disputesResolvedEl.textContent = '0';
+                        scorecard.push({ num: 10, name: 'Vendor Disputes', target: '<30 days to BZ', current: 'No disputes', status: 'green', statusText: 'No Disputes' });
+                    }
+                } catch(e) {
+                    console.error('Goal #10 error:', e);
+                    const goal10BadgeEl = document.getElementById('goal10Badge');
+                    if (goal10BadgeEl) { goal10BadgeEl.className = 'badge badge-gray'; goal10BadgeEl.textContent = 'Process'; }
+                    scorecard.push({ num: 10, name: 'Vendor Disputes', target: '<30 days to BZ', current: 'As Needed', status: 'green', statusText: 'Timely' });
+                }
 
                 // ====================================
                 // GOAL #11: Risk Area Identification (Manual/Static)
