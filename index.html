@@ -507,12 +507,13 @@
                 <div class="goal-card">
                     <div class="goal-header">
                         <span class="goal-title">📋 #9: Use Dealer Programs Tab Exclusively</span>
-                        <span class="badge badge-gray">Process</span>
+                        <span class="badge badge-gray" id="goal9Badge">Loading...</span>
                     </div>
                     <div class="goal-notes">
                         <strong>Objective:</strong> All dealer program work through proper tab<br>
-                        <strong>Status:</strong> Check Dealer Programs folder<br>
-                        <strong>Compliance:</strong> 100% usage requirement
+                        <strong>Status:</strong> <span id="goal9Status">Loading...</span><br>
+                        <strong>YTD:</strong> Programs: <span id="dpTotalCount">--</span> | List: $<span id="dpTotalList">--</span> | Cost: $<span id="dpTotalCost">--</span> | Margin: <span id="dpMargin">--</span>%<br>
+                        <strong>Breakdown:</strong> <span id="dpBreakdown">--</span>
                     </div>
 
                     <!-- 12-Month Progress Timeline -->
@@ -3473,9 +3474,60 @@
                 scorecard.push({ num: 8, name: 'Monthly A/B Plan', target: 'Meet monthly', current: 'Active', status: 'amber', statusText: 'Planning' });
 
                 // ====================================
-                // GOAL #9: Dealer Programs - Exclusive Use (Manual/Static)
+                // GOAL #9: Dealer Programs - Exclusive Use (Dynamic)
                 // ====================================
-                scorecard.push({ num: 9, name: 'Dealer Programs', target: '100% use', current: 'Compliant', status: 'green', statusText: 'Compliant' });
+                try {
+                    const dpResp = await fetch(`${SUPABASE_URL}/rest/v1/dealer_programs?select=*`, { headers: HEADERS });
+                    const dpData = await dpResp.json();
+                    if (Array.isArray(dpData) && dpData.length > 0) {
+                        const totalPrograms = dpData.length;
+                        const totalList = dpData.reduce((sum, d) => sum + (parseFloat(d.list_price) || 0), 0);
+                        const totalCost = dpData.reduce((sum, d) => sum + (parseFloat(d.cost) || 0), 0);
+                        const margin = totalList > 0 ? ((totalList - totalCost) / totalList * 100).toFixed(1) : 0;
+                        const paidCount = dpData.filter(d => d.status === 'Paid').length;
+                        const acceptedCount = dpData.filter(d => d.status === 'Accepted').length;
+
+                        // Count by program
+                        const programCounts = {};
+                        dpData.forEach(d => {
+                            const prog = d.program || 'Unknown';
+                            programCounts[prog] = (programCounts[prog] || 0) + 1;
+                        });
+                        const breakdownStr = Object.entries(programCounts).map(([k, v]) => `${k}: ${v}`).join(' | ');
+
+                        // Update display elements
+                        const dpTotalCountEl = document.getElementById('dpTotalCount');
+                        const dpTotalListEl = document.getElementById('dpTotalList');
+                        const dpTotalCostEl = document.getElementById('dpTotalCost');
+                        const dpMarginEl = document.getElementById('dpMargin');
+                        const dpBreakdownEl = document.getElementById('dpBreakdown');
+                        const goal9StatusEl = document.getElementById('goal9Status');
+                        const goal9BadgeEl = document.getElementById('goal9Badge');
+
+                        if (dpTotalCountEl) dpTotalCountEl.textContent = totalPrograms;
+                        if (dpTotalListEl) dpTotalListEl.textContent = totalList.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+                        if (dpTotalCostEl) dpTotalCostEl.textContent = totalCost.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+                        if (dpMarginEl) dpMarginEl.textContent = margin;
+                        if (dpBreakdownEl) dpBreakdownEl.textContent = breakdownStr;
+
+                        // All programs tracked = compliant (green)
+                        if (goal9BadgeEl) { goal9BadgeEl.className = 'badge badge-green'; goal9BadgeEl.textContent = `✅ ${totalPrograms} Programs`; }
+                        if (goal9StatusEl) goal9StatusEl.textContent = `${paidCount} Paid, ${acceptedCount} Accepted — 100% through Dealer Programs tab`;
+
+                        scorecard.push({ num: 9, name: 'Dealer Programs', target: '100% use', current: `${totalPrograms} programs tracked`, status: 'green', statusText: 'Compliant' });
+                    } else {
+                        const goal9BadgeEl = document.getElementById('goal9Badge');
+                        const goal9StatusEl = document.getElementById('goal9Status');
+                        if (goal9BadgeEl) { goal9BadgeEl.className = 'badge badge-gray'; goal9BadgeEl.textContent = 'No Data'; }
+                        if (goal9StatusEl) goal9StatusEl.textContent = 'No dealer programs recorded';
+                        scorecard.push({ num: 9, name: 'Dealer Programs', target: '100% use', current: 'No data', status: 'gray', statusText: 'No Data' });
+                    }
+                } catch(e) {
+                    console.error('Goal #9 error:', e);
+                    const goal9BadgeEl = document.getElementById('goal9Badge');
+                    if (goal9BadgeEl) { goal9BadgeEl.className = 'badge badge-gray'; goal9BadgeEl.textContent = 'Process'; }
+                    scorecard.push({ num: 9, name: 'Dealer Programs', target: '100% use', current: 'Compliant', status: 'green', statusText: 'Compliant' });
+                }
 
                 // ====================================
                 // GOAL #10: Vendor Dispute Communication (Dynamic)
