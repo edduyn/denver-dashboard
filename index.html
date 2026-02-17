@@ -3674,11 +3674,15 @@
                 const anchorWOs = await anchorResp.json();
                 if (!Array.isArray(billedWOs)) { console.log('billedWOs not array'); return; }
 
-                // 2. Build customer_number → email lookup from Customers email.xlsx database
+                // 2. Build customer_number → email AND name lookups from customers table
                 const emailByCustomerId = {};
+                const nameByCustomerId = {};
                 if (Array.isArray(custEmails)) custEmails.forEach(c => {
                     if (c.customer_number && c.email) {
                         emailByCustomerId[c.customer_number] = c.email;
+                    }
+                    if (c.customer_number && c.customer_name) {
+                        nameByCustomerId[c.customer_number] = c.customer_name;
                     }
                 });
 
@@ -3725,8 +3729,8 @@
 
                     // customer_id comes directly from work_orders (AS400 Billed WO report Cust# field)
                     const customerId = wo.customer_id || null;
-                    // Customer name: from work_orders, or look up from ANCHOR by customer_id
-                    const customerName = wo.customer_name || customerIdToName[customerId] || null;
+                    // Customer name: from work_orders → ANCHOR → customers table
+                    const customerName = wo.customer_name || customerIdToName[customerId] || nameByCustomerId[customerId] || null;
 
                     // Look up email from Customers email.xlsx database by customer_id
                     let email = null;
