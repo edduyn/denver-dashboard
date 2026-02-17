@@ -2470,16 +2470,22 @@
                 const inspections = await response.json();
                 console.log('Inspection data received:', inspections);
 
-                // Calculate metrics
-                const total = inspections.length;
-                const discrepancies = inspections.filter(i => i.discrepency).length;
-                const passed = total - discrepancies;
+                // Calculate metrics — per-audit (grouped by month)
+                const auditsByMonth = {};
+                inspections.forEach(i => {
+                    const m = i.month || 'Unknown';
+                    if (!auditsByMonth[m]) auditsByMonth[m] = { findings: 0 };
+                    if (i.discrepency) auditsByMonth[m].findings++;
+                });
+                const total = Object.keys(auditsByMonth).length; // total audits (months)
+                const discrepancies = inspections.filter(i => i.discrepency).length; // total findings
+                const passed = Object.values(auditsByMonth).filter(a => a.findings === 0).length; // clean audits
                 const passRate = total > 0 ? ((passed / total) * 100).toFixed(1) : '0';
 
                 // Update summary metrics
-                document.getElementById('totalInspections').textContent = total;
-                document.getElementById('passedInspections').textContent = passed;
-                document.getElementById('failedInspections').textContent = discrepancies;
+                document.getElementById('totalInspections').textContent = total + ' audits';
+                document.getElementById('passedInspections').textContent = passed + ' clean';
+                document.getElementById('failedInspections').textContent = discrepancies + ' findings';
                 document.getElementById('passRate').textContent = passRate + '%';
 
                 // Update progress bar
@@ -3392,18 +3398,66 @@
                 scorecard.push({ num: 6, name: 'Expense Budget', target: 'Within budget', current: 'Monthly Review', status: 'amber', statusText: 'Tracking' });
 
                 // ====================================
-                // GOAL #7: FAA/Internal Audits - Zero Findings
+                // GOAL #7: FAA/Internal Audits - Zero Findings (Dynamic)
                 // ====================================
-                // NOTE: Uses 'audit' prefix to match auditGoalBadge in HTML
-                setGoalStatus('audit', {
-                    value: 'Ongoing', pct: 50,
-                    badge: '✓ Compliant', badgeClass: 'badge-green', barClass: 'progress-fill progress-green', pctColor: '#10b981',
-                    paceText: `● Yearly target: Complete all FAA and internal audits with zero findings`, paceClass: 'pace-ontrack'
-                });
-                document.getElementById('auditsCompleted').textContent = '--';
-                document.getElementById('auditFindings').textContent = '0';
+                try {
+                    const auditResp = await fetch(`${SUPABASE_URL}/rest/v1/inspections?year=eq.2026&select=*`, { headers: HEADERS });
+                    const auditData = await auditResp.json();
 
-                scorecard.push({ num: 7, name: 'Audits - Zero Findings', target: '0 findings', current: 'Ongoing', status: 'green', statusText: 'Compliant' });
+                    if (Array.isArray(auditData)) {
+                        // Group by month to calculate per-audit pass rate
+                        const auditMonths = {};
+                        auditData.forEach(row => {
+                            const m = row.month || 'Unknown';
+                            if (!auditMonths[m]) auditMonths[m] = { findings: 0 };
+                            if (row.discrepency) auditMonths[m].findings++;
+                        });
+
+                        const totalAudits = Object.keys(auditMonths).length;
+                        const cleanAudits = Object.values(auditMonths).filter(a => a.findings === 0).length;
+                        const totalFindings = auditData.filter(r => r.discrepency).length;
+                        const auditPassPct = totalAudits > 0 ? Math.round((cleanAudits / totalAudits) * 100) : 100;
+
+                        document.getElementById('auditsCompleted').textContent = totalAudits;
+                        document.getElementById('auditFindings').textContent = totalFindings;
+
+                        let auditBadge, auditBadgeClass, auditBarClass, auditPctColor, auditPaceText, auditPaceClass, auditStatus, auditStatusText;
+
+                        if (totalFindings === 0) {
+                            auditBadge = '✅ Zero Findings'; auditBadgeClass = 'badge-green';
+                            auditBarClass = 'progress-fill progress-green'; auditPctColor = '#10b981';
+                            auditPaceText = `▲ ${totalAudits} audit(s) completed — all clean`; auditPaceClass = 'pace-ontrack';
+                            auditStatus = 'green'; auditStatusText = 'Zero Findings';
+                        } else if (cleanAudits > 0 && Object.values(auditMonths).slice(-1)[0]?.findings === 0) {
+                            // Most recent audit was clean but had prior findings
+                            auditBadge = `⚠️ ${totalFindings} Finding(s) YTD`; auditBadgeClass = 'badge-amber';
+                            auditBarClass = 'progress-fill progress-amber'; auditPctColor = '#f59e0b';
+                            auditPaceText = `▲ Most recent audit clean. ${totalFindings} finding(s) earlier in year.`; auditPaceClass = 'pace-behind';
+                            auditStatus = 'amber'; auditStatusText = `${totalFindings} Findings YTD`;
+                        } else {
+                            auditBadge = `🔴 ${totalFindings} Finding(s)`; auditBadgeClass = 'badge-red';
+                            auditBarClass = 'progress-fill progress-red'; auditPctColor = '#ef4444';
+                            auditPaceText = `▼ ${totalFindings} finding(s) across ${totalAudits - cleanAudits} audit(s)`; auditPaceClass = 'pace-behind';
+                            auditStatus = 'red'; auditStatusText = `${totalFindings} Findings`;
+                        }
+
+                        setGoalStatus('audit', {
+                            value: `${cleanAudits}/${totalAudits} Clean`, pct: auditPassPct,
+                            badge: auditBadge, badgeClass: auditBadgeClass,
+                            barClass: auditBarClass, pctColor: auditPctColor,
+                            paceText: auditPaceText, paceClass: auditPaceClass
+                        });
+
+                        scorecard.push({ num: 7, name: 'Audits - Zero Findings', target: '0 findings', current: `${totalFindings} finding(s)`, status: auditStatus, statusText: auditStatusText });
+                    } else {
+                        throw new Error('Invalid audit data');
+                    }
+                } catch (e) {
+                    setGoalStatus('audit', { value: '--', pct: 0, badge: 'No Data', badgeClass: 'badge-gray', barClass: 'progress-fill progress-green', pctColor: '#94a3b8', paceText: '● Audit data unavailable', paceClass: 'pace-ontrack' });
+                    document.getElementById('auditsCompleted').textContent = '--';
+                    document.getElementById('auditFindings').textContent = '--';
+                    scorecard.push({ num: 7, name: 'Audits - Zero Findings', target: '0 findings', current: '--', status: 'gray', statusText: 'No Data' });
+                }
 
                 // ====================================
                 // GOAL #8: Monthly A/B Plan
