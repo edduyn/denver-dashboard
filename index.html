@@ -3833,14 +3833,15 @@
         async function loadActionsData() {
             // Load customer recommendations and recent activity
             try {
-                // Get recent NPS activity
-                const activityResp = await fetch(`${SUPABASE_URL}/rest/v1/nps_surveys?select=*&order=date_sent.desc&limit=10`, {
+                // Get ALL NPS surveys (needed for full cross-reference) and recent for display
+                const allSurveysResp = await fetch(`${SUPABASE_URL}/rest/v1/nps_surveys?select=*&order=date_sent.desc`, {
                     headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
                 });
-                const activity = await activityResp.json();
+                const allSurveys = await allSurveysResp.json();
 
-                // Update activity table
-                const activityHTML = activity.map(survey => {
+                // Display only last 10 in activity table
+                const recentActivity = allSurveys.slice(0, 10);
+                const activityHTML = recentActivity.map(survey => {
                     const statusClass = survey.status === 'Completed' ? 'badge-green' : 'badge-amber';
                     return `
                         <tr>
@@ -3854,11 +3855,11 @@
                 }).join('');
                 document.getElementById('npsActivity').innerHTML = activityHTML || '<tr><td colspan="5" style="text-align:center; color:#94a3b8;">No recent activity</td></tr>';
 
-                document.getElementById('activityBadge').textContent = `${activity.length} Recent`;
+                document.getElementById('activityBadge').textContent = `${allSurveys.length} Total`;
                 document.getElementById('activityBadge').className = 'badge badge-green';
 
-                // Load recommendations: Newly billed work orders (not yet surveyed)
-                await loadNPSRecommendations(activity);
+                // Load recommendations using ALL surveys for accurate cross-reference
+                await loadNPSRecommendations(allSurveys);
 
             } catch (error) {
                 console.error('Error loading actions data:', error);
