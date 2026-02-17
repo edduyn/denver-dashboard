@@ -1242,16 +1242,21 @@
             <div class="card">
                 <div class="card-header">
                     <span class="card-title">📋 Training Assignments Detail</span>
+                    <div style="display:flex; gap:8px;">
+                        <button id="filterAll" onclick="filterTraining('all')" class="badge badge-gray" style="cursor:pointer; border:none; padding:4px 12px; font-size:0.8em;">All</button>
+                        <button id="filterCompliance" onclick="filterTraining('Compliance')" class="badge" style="cursor:pointer; border:none; padding:4px 12px; font-size:0.8em; background:#7c3aed; color:#fff;">Compliance</button>
+                        <button id="filterTechnical" onclick="filterTraining('Technical')" class="badge" style="cursor:pointer; border:none; padding:4px 12px; font-size:0.8em; background:#0284c7; color:#fff;">Technical</button>
+                    </div>
                 </div>
                 <div class="table-container">
                     <table>
                         <thead>
                             <tr>
-                                <th style="width: 200px;">Employee</th>
-                                <th style="width: 450px;">Training Course</th>
-                                <th style="width: 120px;">Category</th>
-                                <th style="width: 120px;">Due Date</th>
-                                <th style="width: 120px;">Status</th>
+                                <th style="width: 180px;">Employee</th>
+                                <th style="width: 380px;">Training Course</th>
+                                <th style="width: 110px;">Type</th>
+                                <th style="width: 110px;">Due Date</th>
+                                <th style="width: 110px;">Status</th>
                             </tr>
                         </thead>
                         <tbody id="trainingDetail">
@@ -2277,6 +2282,78 @@
             }
         }
 
+        // Store all training data globally for filtering
+        let allTrainingData = [];
+
+        // Filter training detail table by category type
+        function filterTraining(filter) {
+            // Update button styles
+            document.getElementById('filterAll').className = filter === 'all' ? 'badge badge-blue' : 'badge badge-gray';
+            document.getElementById('filterCompliance').style.opacity = filter === 'Compliance' ? '1' : '0.5';
+            document.getElementById('filterTechnical').style.opacity = filter === 'Technical' ? '1' : '0.5';
+
+            const filtered = filter === 'all' ? allTrainingData :
+                             allTrainingData.filter(t => (t.category || 'Technical') === filter);
+            renderTrainingDetail(filtered);
+        }
+
+        function renderTrainingDetail(trainingList) {
+            if (trainingList.length === 0) {
+                document.getElementById('trainingDetail').innerHTML =
+                    '<tr><td colspan="5" style="text-align:center; color:#94a3b8;">No training assignments in this category</td></tr>';
+                return;
+            }
+
+            // Sort: Past Due first, then by employee, then by status
+            const sorted = [...trainingList].sort((a, b) => {
+                if (a.status === 'Past Due' && b.status !== 'Past Due') return -1;
+                if (a.status !== 'Past Due' && b.status === 'Past Due') return 1;
+                if (a.employee_name !== b.employee_name) return a.employee_name.localeCompare(b.employee_name);
+                const statusOrder = { 'Due Soon': 1, 'In Progress': 2, 'Pending': 3, 'Completed': 4 };
+                const aOrder = statusOrder[a.status] || 5;
+                const bOrder = statusOrder[b.status] || 5;
+                if (aOrder !== bOrder) return aOrder - bOrder;
+                return a.training_title.localeCompare(b.training_title);
+            });
+
+            let currentEmployee = '';
+            const detailHTML = sorted.map((t) => {
+                const showEmployee = t.employee_name !== currentEmployee;
+                if (showEmployee) currentEmployee = t.employee_name;
+
+                const badgeClass = t.status === 'Past Due' ? 'badge-red' :
+                                 t.status === 'Completed' ? 'badge-green' :
+                                 t.status === 'Due Soon' ? 'badge-amber' : 'badge-gray';
+
+                const cat = t.category || 'Technical';
+                const typeBadge = cat === 'Compliance'
+                    ? `<span class="badge" style="background:#7c3aed; color:#fff; font-size:0.75em;">Compliance</span>`
+                    : `<span class="badge" style="background:#0284c7; color:#fff; font-size:0.75em;">Technical</span>`;
+
+                const dueDateStr = t.due_date ?
+                    new Date(t.due_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) :
+                    '<span style="color: #64748b;">No date set</span>';
+
+                const shortTitle = t.training_title.length > 70 ?
+                    t.training_title.substring(0, 67) + '...' :
+                    t.training_title;
+
+                return `
+                    <tr ${showEmployee ? 'style="border-top: 2px solid #475569;"' : ''}>
+                        <td style="font-weight: ${showEmployee ? '700' : '400'}; color: ${showEmployee ? '#fff' : '#94a3b8'};">
+                            ${showEmployee ? t.employee_name : ''}
+                        </td>
+                        <td style="font-size: 0.9em;">${shortTitle}</td>
+                        <td style="font-size: 0.85em;">${typeBadge}</td>
+                        <td style="font-size: 0.85em;">${dueDateStr}</td>
+                        <td><span class="badge ${badgeClass}">${t.status}</span></td>
+                    </tr>
+                `;
+            }).join('');
+
+            document.getElementById('trainingDetail').innerHTML = detailHTML;
+        }
+
         // Load Training Data
         async function loadTrainingData() {
             try {
@@ -2287,6 +2364,9 @@
                     }
                 });
                 const training = await response.json();
+
+                // Store globally for filter buttons
+                allTrainingData = training;
 
                 const today = new Date();
                 today.setHours(0, 0, 0, 0);
@@ -2315,96 +2395,39 @@
                 document.getElementById('trainingBadge').textContent = badge.text;
                 document.getElementById('trainingBadge').className = `badge ${badge.class}`;
 
-                // Group by category
+                // Group by category for summary table
                 const categories = {};
+                // Ensure Compliance shows first
+                ['Compliance', 'Technical'].forEach(c => { categories[c] = { total: 0, completed: 0, pastDue: 0 }; });
                 training.forEach(t => {
-                    const cat = t.category || 'Other';
-                    if (!categories[cat]) {
-                        categories[cat] = { total: 0, completed: 0, pastDue: 0 };
-                    }
+                    const cat = t.category || 'Technical';
+                    if (!categories[cat]) categories[cat] = { total: 0, completed: 0, pastDue: 0 };
                     categories[cat].total++;
                     if (t.status === 'Completed') categories[cat].completed++;
                     if (t.status === 'Past Due') categories[cat].pastDue++;
                 });
 
-                // Load category summary
-                const categoryHTML = Object.entries(categories).map(([cat, stats]) => {
-                    const completionPct = stats.total > 0 ? ((stats.completed / stats.total) * 100).toFixed(1) : '0.0';
-                    return `
-                        <tr>
-                            <td><strong>${cat}</strong></td>
-                            <td>${stats.total}</td>
-                            <td>${stats.completed}</td>
-                            <td>${stats.pastDue}</td>
-                            <td>${completionPct}%</td>
-                        </tr>
-                    `;
-                }).join('');
+                // Load category summary with color coding
+                const categoryHTML = Object.entries(categories)
+                    .filter(([, stats]) => stats.total > 0)
+                    .map(([cat, stats]) => {
+                        const completionPct = stats.total > 0 ? ((stats.completed / stats.total) * 100).toFixed(1) : '0.0';
+                        const catColor = cat === 'Compliance' ? '#7c3aed' : '#0284c7';
+                        return `
+                            <tr>
+                                <td><span class="badge" style="background:${catColor}; color:#fff;">${cat}</span></td>
+                                <td>${stats.total}</td>
+                                <td>${stats.completed}</td>
+                                <td style="color: ${stats.pastDue > 0 ? '#ef4444' : 'inherit'};">${stats.pastDue}</td>
+                                <td>${completionPct}%</td>
+                            </tr>
+                        `;
+                    }).join('');
                 document.getElementById('trainingByCategory').innerHTML = categoryHTML ||
                     '<tr><td colspan="5" style="text-align:center;">No training data</td></tr>';
 
-                // Build Training Detail Table - Grouped by Employee, then Status Priority
-
-                if (training.length === 0) {
-                    document.getElementById('trainingDetail').innerHTML =
-                        '<tr><td colspan="5" style="text-align:center;">No training assignments</td></tr>';
-                    return;
-                }
-
-                // Sort training: Past Due first, then by employee, then by status
-                const sortedTraining = training.sort((a, b) => {
-                    // Priority 1: Past Due first
-                    if (a.status === 'Past Due' && b.status !== 'Past Due') return -1;
-                    if (a.status !== 'Past Due' && b.status === 'Past Due') return 1;
-
-                    // Priority 2: Sort by employee name
-                    if (a.employee_name !== b.employee_name) {
-                        return a.employee_name.localeCompare(b.employee_name);
-                    }
-
-                    // Priority 3: Within same employee, sort by status (Due Soon, In Progress, Completed)
-                    const statusOrder = { 'Due Soon': 1, 'In Progress': 2, 'Completed': 3 };
-                    const aOrder = statusOrder[a.status] || 4;
-                    const bOrder = statusOrder[b.status] || 4;
-                    if (aOrder !== bOrder) return aOrder - bOrder;
-
-                    // Priority 4: Sort by training title
-                    return a.training_title.localeCompare(b.training_title);
-                });
-
-                // Build table with employee grouping
-                let currentEmployee = '';
-                const detailHTML = sortedTraining.map((t, index) => {
-                    const showEmployee = t.employee_name !== currentEmployee;
-                    if (showEmployee) currentEmployee = t.employee_name;
-
-                    const badgeClass = t.status === 'Past Due' ? 'badge-red' :
-                                     t.status === 'Completed' ? 'badge-green' :
-                                     t.status === 'Due Soon' ? 'badge-amber' : 'badge-gray';
-
-                    const dueDateStr = t.due_date ?
-                        new Date(t.due_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) :
-                        '<span style="color: #64748b;">No date set</span>';
-
-                    // Truncate long training titles
-                    const shortTitle = t.training_title.length > 80 ?
-                        t.training_title.substring(0, 77) + '...' :
-                        t.training_title;
-
-                    return `
-                        <tr ${showEmployee ? 'style="border-top: 2px solid #475569;"' : ''}>
-                            <td style="font-weight: ${showEmployee ? '700' : '400'}; color: ${showEmployee ? '#fff' : '#94a3b8'};">
-                                ${showEmployee ? t.employee_name : ''}
-                            </td>
-                            <td style="font-size: 0.9em;">${shortTitle}</td>
-                            <td style="font-size: 0.85em;">${t.category || '<span style="color: #64748b;">Uncategorized</span>'}</td>
-                            <td style="font-size: 0.85em;">${dueDateStr}</td>
-                            <td><span class="badge ${badgeClass}">${t.status}</span></td>
-                        </tr>
-                    `;
-                }).join('');
-
-                document.getElementById('trainingDetail').innerHTML = detailHTML;
+                // Render detail table (default: show all)
+                renderTrainingDetail(allTrainingData);
 
             } catch (error) {
                 console.error('Error loading training data:', error);
