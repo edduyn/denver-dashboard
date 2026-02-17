@@ -1632,9 +1632,12 @@
             if (!isRotating) return;
 
             isPaused = true;
-            stopAutoScroll();
+            // Stop auto-scroll but leave tabSwitchInterval running so rotation resumes correctly
+            if (scrollInterval) { clearInterval(scrollInterval); scrollInterval = null; }
+            // Clear any existing pause timeout so clicking again resets the 30s timer
+            if (pauseTimeout) { clearTimeout(pauseTimeout); pauseTimeout = null; }
 
-            console.log('Paused for 30 seconds - manual scroll enabled');
+            console.log('Paused for 30 seconds - free scrolling enabled');
 
             // Auto-resume after 30 seconds
             pauseTimeout = setTimeout(() => {
@@ -1672,24 +1675,25 @@
 
         // Initialize event listeners after DOM is ready
         function initializeEventListeners() {
-            // Listen for scroll events to enable pause on manual scroll
-            document.addEventListener('wheel', (e) => {
-                if (isRotating && !isPaused) {
-                    // User is trying to scroll manually - pause auto-scroll
+            // Click anywhere pauses auto-scroll for 30 seconds and allows free scrolling
+            document.addEventListener('click', (e) => {
+                // Don't intercept the Stop/Auto rotate button itself
+                if (e.target.id === 'rotateBtn') return;
+                if (isRotating) {
                     pauseRotation();
                 }
             }, { passive: true });
 
-            // Tab click handlers
+            // Mouse wheel also pauses (resets 30s timer if already paused)
+            document.addEventListener('wheel', (e) => {
+                if (isRotating) {
+                    pauseRotation();
+                }
+            }, { passive: true });
+
+            // Tab click handlers — pause (not stop) rotation, switch to clicked tab
             document.querySelectorAll('.tab').forEach(tab => {
                 tab.addEventListener('click', () => {
-                    // Stop auto-scroll when manually clicking tabs
-                    if (isRotating) {
-                        isRotating = false;
-                        stopAutoScroll();
-                        document.getElementById('rotateBtn').textContent = '▶️ Auto';
-                        document.getElementById('rotateBtn').style.background = '#10b981';
-                    }
                     showTab(tab.dataset.tab);
                 });
             });
