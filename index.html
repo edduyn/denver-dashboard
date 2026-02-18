@@ -4213,58 +4213,35 @@
             console.log('loadIndividualAB: Starting...');
 
             try {
-                // Helper: get previous work day (skip weekends)
-                function getPreviousWorkDay(fromDate) {
-                    let d = new Date(fromDate);
-                    d.setDate(d.getDate() - 1);
-                    if (d.getDay() === 0) d.setDate(d.getDate() - 2); // Sunday → Friday
-                    else if (d.getDay() === 6) d.setDate(d.getDate() - 1); // Saturday → Friday
-                    return d;
-                }
-
+                // Calculate previous work day (skip weekends)
                 const today = new Date();
-                let targetDay = getPreviousWorkDay(today);
-                let timeEntries = [];
-                const MIN_ENTRIES = 5; // Minimum entries to consider data "complete"
-                const MAX_LOOKBACK = 5; // Don't go back more than 5 work days
+                let previousWorkDay = new Date(today);
+                previousWorkDay.setDate(previousWorkDay.getDate() - 1);
+                if (previousWorkDay.getDay() === 0) previousWorkDay.setDate(previousWorkDay.getDate() - 2);
+                else if (previousWorkDay.getDay() === 6) previousWorkDay.setDate(previousWorkDay.getDate() - 1);
 
-                // Try previous work days until we find one with sufficient data
-                for (let attempt = 0; attempt < MAX_LOOKBACK; attempt++) {
-                    const dateStr = targetDay.toISOString().split('T')[0];
-                    console.log(`loadIndividualAB: Trying ${dateStr} (attempt ${attempt + 1})`);
-
-                    const response = await fetch(`${SUPABASE_URL}/rest/v1/time_entries?entry_date=eq.${dateStr}&select=*`, {
-                        headers: HEADERS
-                    });
-
-                    if (response.ok) {
-                        const entries = await response.json();
-                        if (entries.length >= MIN_ENTRIES) {
-                            timeEntries = entries;
-                            break;
-                        }
-                        // If this is the last attempt, use whatever we have
-                        if (attempt === MAX_LOOKBACK - 1 && entries.length > 0) {
-                            timeEntries = entries;
-                        }
-                    }
-
-                    // Try the day before
-                    targetDay = getPreviousWorkDay(targetDay);
-                }
-
-                const displayDate = targetDay.toLocaleDateString('en-US', {
+                const previousWorkDayStr = previousWorkDay.toISOString().split('T')[0];
+                const displayDate = previousWorkDay.toLocaleDateString('en-US', {
                     weekday: 'short',
                     year: 'numeric',
                     month: 'short',
                     day: 'numeric'
                 });
 
-                // Update card title with actual date
+                // Update card title with previous work day date
                 document.getElementById('individualABTitle').textContent = `⏱️ Individual A/B Performance - ${displayDate}`;
 
-                if (timeEntries.length === 0) {
-                    document.getElementById('individualABTable').innerHTML = '<tr><td colspan="7" style="text-align:center; color:#94a3b8;">No time data available yet</td></tr>';
+                // Fetch time entries for previous work day
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/time_entries?entry_date=eq.${previousWorkDayStr}&select=*`, {
+                    headers: HEADERS
+                });
+
+                let timeEntries = response.ok ? await response.json() : [];
+
+                // If no data or very sparse data, show waiting message
+                if (timeEntries.length < 5) {
+                    const uniqueEmps = new Set(timeEntries.map(e => e.emp_code)).size;
+                    document.getElementById('individualABTable').innerHTML = `<tr><td colspan="7" style="text-align:center; color:#f59e0b;">⏳ Sold Hours report for ${displayDate} has not been processed yet (${uniqueEmps} of ~12 employees reported). Process the latest SOLD_HOURS report to update.</td></tr>`;
                     return;
                 }
 
