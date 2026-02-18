@@ -1166,18 +1166,15 @@
                 <table class="data-table">
                     <thead>
                         <tr>
-                            <th>WO Number</th>
-                            <th>Customer</th>
-                            <th>Tail #</th>
-                            <th>Open Date</th>
+                            <th>Shop</th>
+                            <th>WO#</th>
                             <th>Days Open</th>
-                            <th>Status</th>
-                            <th>Justification / Action Plan</th>
-                            <th>Owner</th>
+                            <th>Reason</th>
+                            <th>Explanation</th>
                         </tr>
                     </thead>
                     <tbody id="over30Table">
-                        <tr><td colspan="8" style="text-align:center;">No over 30 work orders</td></tr>
+                        <tr><td colspan="5" style="text-align:center;">No over 30 work orders</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -2208,21 +2205,41 @@
                 });
                 const over30WOs = await response.json();
 
+                // Valid BZ Reason options
+                const validReasons = [
+                    'Aircraft Schedule',
+                    'Vdr or Internal Dispute or Delay',
+                    'Customer Schedule',
+                    'Install with deposit',
+                    'In Work',
+                    'Will Bill By End of Month'
+                ];
+
                 if (over30WOs.length > 0) {
                     const tableHTML = over30WOs.map(wo => {
                         const daysOpen = wo.days_open || 0;
-                        const statusClass = daysOpen >= 60 ? 'badge-red' : daysOpen >= 45 ? 'badge-amber' : 'badge-green';
+                        const daysClass = daysOpen >= 180 ? 'badge-red' : daysOpen >= 60 ? 'badge-amber' : 'badge-green';
+                        const reason = wo.status || '--';
+
+                        // Color-code reason to match BZ spreadsheet
+                        let reasonStyle = 'color: #f8fafc;';
+                        if (reason === 'Will Bill By End of Month') {
+                            reasonStyle = 'color: #10b981; font-weight: bold;';
+                        } else if (reason === 'Vdr or Internal Dispute or Delay') {
+                            reasonStyle = 'color: #f59e0b;';
+                        } else if (reason === 'In Work') {
+                            reasonStyle = 'color: #60a5fa;';
+                        } else if (reason === 'Customer Schedule' || reason === 'Aircraft Schedule') {
+                            reasonStyle = 'color: #c084fc;';
+                        }
 
                         return `
                             <tr>
+                                <td><strong>${wo.shop || '--'}</strong></td>
                                 <td><strong>${wo.wo_number || '--'}</strong></td>
-                                <td>${wo.customer || '--'}</td>
-                                <td>${wo.tail_number || '--'}</td>
-                                <td>${wo.open_date ? new Date(wo.open_date).toLocaleDateString() : '--'}</td>
-                                <td><span class="badge ${statusClass}">${daysOpen} days</span></td>
-                                <td>${wo.status || '--'}</td>
-                                <td style="max-width: 300px; overflow: hidden; text-overflow: ellipsis;">${wo.justification || '--'}<br/><em style="color: #94a3b8;">${wo.action_plan || ''}</em></td>
-                                <td>${wo.owner || '--'}</td>
+                                <td><span class="badge ${daysClass}">${daysOpen}</span></td>
+                                <td style="${reasonStyle}">${reason}</td>
+                                <td style="max-width: 350px; font-size: 0.85em; color: #94a3b8;">${wo.explanation || '--'}</td>
                             </tr>
                         `;
                     }).join('');
@@ -2233,13 +2250,13 @@
                     document.getElementById('over30Badge').textContent = `${over30WOs.length} WOs`;
                     document.getElementById('over30Badge').className = over30WOs.length > 5 ? 'badge badge-red' : 'badge badge-amber';
                 } else {
-                    document.getElementById('over30Table').innerHTML = '<tr><td colspan="8" style="text-align:center; color: #10b981;">✅ No over 30 work orders - Great job!</td></tr>';
+                    document.getElementById('over30Table').innerHTML = '<tr><td colspan="5" style="text-align:center; color: #10b981;">✅ No over 30 work orders - Great job!</td></tr>';
                     document.getElementById('over30Badge').textContent = 'Clear';
                     document.getElementById('over30Badge').className = 'badge badge-green';
                 }
             } catch (error) {
                 console.error('Error loading over 30 WOs:', error);
-                document.getElementById('over30Table').innerHTML = '<tr><td colspan="8" style="text-align:center; color: #ef4444;">Error loading data</td></tr>';
+                document.getElementById('over30Table').innerHTML = '<tr><td colspan="5" style="text-align:center; color: #ef4444;">Error loading data</td></tr>';
             }
         }
 
