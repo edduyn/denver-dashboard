@@ -814,8 +814,8 @@
                     <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
                         <div style="background: #1e293b; border-radius: 8px; padding: 16px; text-align: center;">
                             <div style="color: #94a3b8; font-size: 14px; margin-bottom: 8px;">Today's Target</div>
-                            <div style="color: #f59e0b; font-size: 28px; font-weight: bold;">$9,642</div>
-                            <div style="color: #64748b; font-size: 12px; margin-top: 4px;">$702,471 / 21 days</div>
+                            <div style="color: #f59e0b; font-size: 28px; font-weight: bold;" id="budgetDailyTarget">$--</div>
+                            <div style="color: #64748b; font-size: 12px; margin-top: 4px;" id="budgetDailyLabel">-- / 21 days</div>
                         </div>
                         <div style="background: #1e293b; border-radius: 8px; padding: 16px; text-align: center;">
                             <div style="color: #94a3b8; font-size: 14px; margin-bottom: 8px;">MTD Revenue</div>
@@ -3168,6 +3168,9 @@
                 const dayOfMonth = currentDate.getDate();
                 const mtdTarget = dailyTarget * dayOfMonth;
 
+                document.getElementById('budgetDailyTarget').textContent = formatCurrency(dailyTarget);
+                document.getElementById('budgetDailyLabel').textContent = `${formatCurrency(monthlyBudgetRev)} / ${workingDays} days`;
+
                 document.getElementById('budgetMTDRevenue').textContent = formatCurrency(totalActualRev);
                 document.getElementById('budgetMTDRevenue').style.color = totalActualRev >= mtdTarget ? '#10b981' : '#ef4444';
 
@@ -3220,7 +3223,7 @@
                                 ${variance >= 0 ? '+' : ''}${formatCurrency(variance)} (${variancePct.toFixed(1)}%)
                             </td>
                             <td style="text-align: right; padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); color: ${marginDiff >= 0 ? '#10b981' : '#f59e0b'};">
-                                ${actualDeptMargin.toFixed(1)}% / ${data.budget_margin}%
+                                ${actualDeptMargin.toFixed(1)}% / ${data.budget_margin.toFixed(1)}%
                             </td>
                             <td style="text-align: center; padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.1);">
                                 ${statusBadge}
