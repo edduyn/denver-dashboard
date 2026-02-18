@@ -2254,7 +2254,7 @@
                     document.getElementById('wipShopCount').textContent = shopCount;
 
                     // Format month display
-                    const monthDate = new Date(latestMonth + '-01');
+                    const monthDate = new Date(latestMonth + '-01T12:00:00');
                     const monthName = monthDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
                     document.getElementById('wipMonth').textContent = monthName;
 
