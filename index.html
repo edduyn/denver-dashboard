@@ -3889,7 +3889,7 @@
 
                     return `
                         <tr style="${wo.alreadySurveyedThisMonth ? 'opacity:0.5;' : ''}">
-                            <td><strong>${displayName}</strong>${wo.customerId ? '<br><span style="color:#64748b;font-size:0.75em;">ID: ' + wo.customerId + '</span>' : ''}${monthBadge}</td>
+                            <td><strong>${displayName}</strong>${wo.customerId ? '<br><span style="color:#64748b;font-size:0.75em;">Cust# ' + wo.customerId + '</span>' : ''}${monthBadge}</td>
                             <td>${wo.tail_number || '--'}</td>
                             <td>${emailWarning}</td>
                             <td><strong style="color:#10b981;">${wo.work_order_number}</strong><br>
