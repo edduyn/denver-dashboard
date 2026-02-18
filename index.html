@@ -2117,22 +2117,40 @@
         // Load Billing Priority Work Orders (7-Day Tracking)
         async function loadBillingPriority() {
             try {
-                // Pull from work_orders table (pending_billing status)
-                const response = await fetch(`${SUPABASE_URL}/rest/v1/work_orders?select=*&status=eq.pending_billing&order=signoff_date.asc`, {
-                    headers: {
-                        'apikey': SUPABASE_KEY,
-                        'Authorization': `Bearer ${SUPABASE_KEY}`
-                    }
-                });
-                const workOrders = await response.json();
+                // Fetch pending and billed WOs in parallel
+                const [pendingResp, billedResp] = await Promise.all([
+                    fetch(`${SUPABASE_URL}/rest/v1/work_orders?select=*&status=eq.pending_billing&order=signoff_date.asc`, {
+                        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+                    }),
+                    fetch(`${SUPABASE_URL}/rest/v1/work_orders?select=work_order_number&status=eq.billed`, {
+                        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+                    })
+                ]);
+
+                const pendingWOs = await pendingResp.json();
+                const billedWOs = await billedResp.json();
+                const billedSet = new Set(billedWOs.map(wo => wo.work_order_number));
+
+                // Auto-reconcile: if any pending WO is actually in the billed list, update it
+                const staleWOs = pendingWOs.filter(wo => billedSet.has(wo.work_order_number));
+                const workOrders = pendingWOs.filter(wo => !billedSet.has(wo.work_order_number));
+
+                // Auto-update stale records in background
+                for (const wo of staleWOs) {
+                    console.log(`Auto-reconciling ${wo.work_order_number}: pending_billing → billed`);
+                    fetch(`${SUPABASE_URL}/rest/v1/work_orders?work_order_number=eq.${wo.work_order_number}`, {
+                        method: 'PATCH',
+                        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`, 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ status: 'billed', billed_date: new Date().toISOString().split('T')[0] })
+                    });
+                }
 
                 if (workOrders.length > 0) {
                     const today = new Date();
                     today.setHours(0, 0, 0, 0);
 
                     const tableHTML = workOrders.map(wo => {
-                        // Calculate days open since signoff
-                        const signoffDate = new Date(wo.signoff_date);
+                        const signoffDate = new Date(wo.signoff_date + 'T12:00:00');
                         const daysOpen = Math.floor((today - signoffDate) / (1000 * 60 * 60 * 24));
 
                         const priorityClass = daysOpen >= 7 ? 'badge-red' : daysOpen >= 5 ? 'badge-amber' : 'badge-green';
@@ -2141,9 +2159,9 @@
                         return `
                             <tr>
                                 <td><strong>${wo.work_order_number || '--'}</strong></td>
-                                <td>${wo.customer || '--'}</td>
+                                <td>${wo.customer_name || '--'}</td>
                                 <td>${wo.tail_number || '--'}</td>
-                                <td>${wo.signoff_date ? new Date(wo.signoff_date).toLocaleDateString() : '--'}</td>
+                                <td>${wo.signoff_date ? new Date(wo.signoff_date + 'T12:00:00').toLocaleDateString() : '--'}</td>
                                 <td><span class="badge ${priorityClass}">${daysOpen} days</span></td>
                                 <td>Pending Billing</td>
                                 <td><span class="badge ${priorityClass}">${priorityText}</span></td>
@@ -2155,11 +2173,9 @@
                     document.getElementById('billingPriorityTable').innerHTML = tableHTML;
 
                     // Update badge
-                    const today_date = new Date();
-                    today_date.setHours(0, 0, 0, 0);
                     const urgentCount = workOrders.filter(wo => {
-                        const signoffDate = new Date(wo.signoff_date);
-                        const daysOpen = Math.floor((today_date - signoffDate) / (1000 * 60 * 60 * 24));
+                        const signoffDate = new Date(wo.signoff_date + 'T12:00:00');
+                        const daysOpen = Math.floor((today - signoffDate) / (1000 * 60 * 60 * 24));
                         return daysOpen >= 7;
                     }).length;
 
@@ -2171,7 +2187,7 @@
                         document.getElementById('billingPriorityBadge').className = 'badge badge-amber';
                     }
                 } else {
-                    document.getElementById('billingPriorityTable').innerHTML = '<tr><td colspan="8" style="text-align:center;">No active work orders tracked</td></tr>';
+                    document.getElementById('billingPriorityTable').innerHTML = '<tr><td colspan="8" style="text-align:center; color:#10b981;">✅ All tracked work orders have been billed!</td></tr>';
                     document.getElementById('billingPriorityBadge').textContent = 'None';
                     document.getElementById('billingPriorityBadge').className = 'badge badge-green';
                 }
