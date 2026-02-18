@@ -1576,7 +1576,10 @@
                 const scrollHeight = document.body.scrollHeight - window.innerHeight;
                 if (scrollHeight <= 0) return; // Nothing to scroll
 
-                const scrollDuration = 31250; // ~31s to scroll (20% slower than original 25s)
+                // Consistent scroll speed: ~60 pixels/sec regardless of page length
+                // Short pages (~1000px) = ~17s, tall pages (~5000px) = ~83s
+                const pixelsPerSecond = 60;
+                const scrollDuration = (scrollHeight / pixelsPerSecond) * 1000;
                 const scrollStep = scrollHeight / (scrollDuration / 50); // Update every 50ms
 
                 scrollInterval = setInterval(() => {
@@ -1601,7 +1604,7 @@
                 scrollInterval = null;
             }
             if (tabSwitchInterval) {
-                clearInterval(tabSwitchInterval);
+                clearTimeout(tabSwitchInterval);
                 tabSwitchInterval = null;
             }
             if (pauseTimeout) {
@@ -1647,6 +1650,7 @@
                     isPaused = false;
                     console.log('Resuming auto-scroll...');
                     startAutoScroll();
+                    scheduleTabSwitch();
                 }
             }, 30000);
         }
@@ -1658,21 +1662,34 @@
             // Start scrolling current tab
             startAutoScroll();
 
-            // Switch tabs every 30 seconds
-            tabSwitchInterval = setInterval(() => {
+            // Schedule next tab switch based on page height
+            scheduleTabSwitch();
+        }
+
+        function scheduleTabSwitch() {
+            if (tabSwitchInterval) { clearTimeout(tabSwitchInterval); tabSwitchInterval = null; }
+
+            // Calculate how long this tab needs: scroll time + 3s buffer at bottom
+            const scrollHeight = document.body.scrollHeight - window.innerHeight;
+            const pixelsPerSecond = 60;
+            const scrollTime = scrollHeight > 0 ? (scrollHeight / pixelsPerSecond) * 1000 : 5000;
+            const tabTime = Math.max(scrollTime + 3000, 15000); // At least 15s per tab
+
+            tabSwitchInterval = setTimeout(() => {
                 if (!isRotating || isPaused) return;
 
                 currentTab = (currentTab + 1) % tabs.length;
                 showTab(tabs[currentTab]);
-                console.log(`Switched to tab: ${tabs[currentTab]}`);
+                console.log(`Switched to tab: ${tabs[currentTab]} (was ${Math.round(tabTime/1000)}s)`);
 
-                // Start scrolling the new tab
+                // Start scrolling the new tab and schedule next switch
                 setTimeout(() => {
                     if (isRotating && !isPaused) {
                         startAutoScroll();
+                        scheduleTabSwitch();
                     }
-                }, 100);
-            }, 30000);
+                }, 200);
+            }, tabTime);
         }
 
         // Initialize event listeners after DOM is ready
@@ -3113,7 +3130,8 @@
                 const revenueVariancePct = totalBudgetRev > 0 ? ((revenueVariance / totalBudgetRev) * 100) : 0;
                 const costVariance = totalActualCost - totalBudgetCost;
                 const profitVariance = totalGrossProfit - totalBudgetProfit;
-                const marginVariance = actualMargin - 28.1;
+                const ytdBudgetMargin = totalBudgetRev > 0 ? ((totalBudgetProfit / totalBudgetRev) * 100) : 28.1;
+                const marginVariance = actualMargin - ytdBudgetMargin;
 
                 document.getElementById('budgetTotalRevenue').textContent = formatCurrency(totalActualRev || 0);
                 document.getElementById('budgetTotalRevenueVar').textContent =
@@ -3131,12 +3149,14 @@
                 document.getElementById('budgetGrossProfitVar').style.color = profitVariance >= 0 ? '#93c5fd' : '#fca5a5';
 
                 document.getElementById('budgetMargin').textContent = `${actualMargin.toFixed(1)}%`;
-                document.getElementById('budgetMarginVar').textContent = `Target: 28.1% (${marginVariance >= 0 ? '+' : ''}${marginVariance.toFixed(1)}pp)`;
+                document.getElementById('budgetMarginVar').textContent = `Target: ${ytdBudgetMargin.toFixed(1)}% (${marginVariance >= 0 ? '+' : ''}${marginVariance.toFixed(1)}pp)`;
                 document.getElementById('budgetMarginVar').style.color = marginVariance >= 0 ? '#fcd34d' : '#fca5a5';
 
-                // Daily revenue tracker
-                const workingDays = 21; // average working days per month
-                const dailyTarget = 9642; // $702,471 / 21 days
+                // Daily revenue tracker — use current month's actual budget
+                const currentMonthBudgetRev = budgetData.find(r => r.period_month === currentMonth && r.category === 'total');
+                const monthlyBudgetRev = currentMonthBudgetRev ? parseFloat(currentMonthBudgetRev.budget_revenue) : 662328;
+                const workingDays = 21;
+                const dailyTarget = Math.round(monthlyBudgetRev / workingDays);
                 const dayOfMonth = currentDate.getDate();
                 const mtdTarget = dailyTarget * dayOfMonth;
 
