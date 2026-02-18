@@ -719,10 +719,10 @@
                         --
                     </div>
                     <div style="text-align: center; color: #fcd34d; margin-bottom: 8px;" id="mattPeriod">
-                        Jan Final (2/6 Update)
+                        Loading...
                     </div>
                     <div style="text-align: center; color: #fcd34d;" id="mattRank">
-                        Rank: 21st/21 | Gap: -20.9 pts
+                        Loading...
                     </div>
                 </div>
 
@@ -735,10 +735,10 @@
                         --
                     </div>
                     <div style="text-align: center; color: #6ee7b7; margin-bottom: 8px;" id="denverRolling">
-                        1-Month Rolling: 42.1%
+                        1-Month Rolling: --
                     </div>
                     <div style="text-align: center; color: #6ee7b7;" id="denverFebOnly">
-                        Feb-only: 54.0% ✅ Improving!
+                        Loading...
                     </div>
                 </div>
             </div>
@@ -746,34 +746,30 @@
             <!-- Comparison Stats Row -->
             <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 30px;">
                 <div style="background: #1e293b; border-radius: 8px; padding: 16px; text-align: center;">
-                    <div style="color: #ef4444; font-size: 24px; font-weight: bold;" id="janFinal">33.1%</div>
-                    <div style="color: #94a3b8; font-size: 14px;">Jan Final (Official)</div>
-                    <div style="color: #ef4444; font-size: 12px;" id="janRank">21st</div>
+                    <div style="color: #ef4444; font-size: 24px; font-weight: bold;" id="janFinal">--%</div>
+                    <div style="color: #94a3b8; font-size: 14px;">Previous Month</div>
+                    <div style="color: #ef4444; font-size: 12px;" id="janRank">--</div>
                 </div>
                 <div style="background: #1e293b; border-radius: 8px; padding: 16px; text-align: center;">
-                    <div style="color: #10b981; font-size: 24px; font-weight: bold;" id="febTrend">54.0%</div>
-                    <div style="color: #94a3b8; font-size: 14px;">Feb Trend (MTD)</div>
-                    <div style="color: #10b981; font-size: 12px;">📈📈</div>
+                    <div style="color: #10b981; font-size: 24px; font-weight: bold;" id="febTrend">--%</div>
+                    <div style="color: #94a3b8; font-size: 14px;">Current Month (MTD)</div>
+                    <div style="color: #10b981; font-size: 12px;" id="febTrendIcon">--</div>
                 </div>
                 <div style="background: #1e293b; border-radius: 8px; padding: 16px; text-align: center;">
-                    <div style="color: #10b981; font-size: 24px; font-weight: bold;" id="rollingAvg">42.1%</div>
+                    <div style="color: #10b981; font-size: 24px; font-weight: bold;" id="rollingAvg">--%</div>
                     <div style="color: #94a3b8; font-size: 14px;">1-Mo Rolling Avg</div>
-                    <div style="color: #10b981; font-size: 12px;">📈</div>
+                    <div style="color: #10b981; font-size: 12px;">--</div>
                 </div>
             </div>
 
             <!-- Status Message -->
-            <div id="abStatusMessage" style="background: #065f46; border-left: 4px solid #10b981; padding: 16px; border-radius: 8px; margin-bottom: 30px;">
-                <div style="color: #10b981; font-weight: bold;">
-                    ✅ Feb is STRONG! 54.0% Feb-only A/B vs 33.1% Jan final. Nearly at 58.5% target! Keep pushing.
-                </div>
+            <div id="abStatusMessage" style="background: #1e293b; border-left: 4px solid #94a3b8; padding: 16px; border-radius: 8px; margin-bottom: 30px;">
+                <div style="color: #94a3b8; font-weight: bold;">Loading A/B status...</div>
             </div>
 
-            <!-- Jan Final Details -->
-            <div style="background: #78350f; border-left: 4px solid #f59e0b; padding: 16px; border-radius: 8px; margin-bottom: 30px;">
-                <div style="color: #fbbf24; font-weight: bold;">
-                    📧 Jan Final: 33.1% A/B | 21st/21 | $310K Rev | -$1,305 NI
-                </div>
+            <!-- Previous Month Summary -->
+            <div id="abPrevMonthSummary" style="background: #78350f; border-left: 4px solid #f59e0b; padding: 16px; border-radius: 8px; margin-bottom: 30px;">
+                <div id="abPrevMonthText" style="color: #fbbf24; font-weight: bold;">Loading previous month data...</div>
             </div>
 
             <!-- Budget vs Actual Section -->
@@ -2853,6 +2849,12 @@
                                 document.getElementById('mattPeriod').textContent = `Latest (${monthName} ${dayNum} Update)`;
                                 document.getElementById('mattRank').textContent = `Rank: ${rank.denver_position}${getOrdinalSuffix(rank.denver_position)}/${rank.total_shops} | Gap: ${mattGap} pts`;
                                 document.getElementById('janRank').textContent = `${rank.denver_position}${getOrdinalSuffix(rank.denver_position)}`;
+
+                                // Update previous month summary from rankings
+                                const prevMonthEl = document.getElementById('abPrevMonthText');
+                                if (prevMonthEl) {
+                                    prevMonthEl.textContent = `📧 Latest: ${mattAB}% A/B | ${rank.denver_position}${getOrdinalSuffix(rank.denver_position)}/${rank.total_shops} shops | Gap: ${mattGap} pts vs budget ${mattBudget}%`;
+                                }
                             }
                         }
                     } catch (error) {
@@ -3101,10 +3103,10 @@
 
                 // Calculate YTD totals
                 const ytdData = {
-                    labor: { budget_revenue: 0, actual_revenue: 0, budget_cost: 0, actual_cost: 0, budget_margin: 43.1 },
-                    parts: { budget_revenue: 0, actual_revenue: 0, budget_cost: 0, actual_cost: 0, budget_margin: 25.0 },
-                    other: { budget_revenue: 0, actual_revenue: 0, budget_cost: 0, actual_cost: 0, budget_margin: 18.0 },
-                    total: { budget_revenue: 0, actual_revenue: 0, budget_cost: 0, actual_cost: 0, budget_margin: 28.1 }
+                    labor: { budget_revenue: 0, actual_revenue: 0, budget_cost: 0, actual_cost: 0, budget_margin: 0 },
+                    parts: { budget_revenue: 0, actual_revenue: 0, budget_cost: 0, actual_cost: 0, budget_margin: 0 },
+                    other: { budget_revenue: 0, actual_revenue: 0, budget_cost: 0, actual_cost: 0, budget_margin: 0 },
+                    total: { budget_revenue: 0, actual_revenue: 0, budget_cost: 0, actual_cost: 0, budget_margin: 0 }
                 };
 
                 // Sum up YTD (all months up to current month)
@@ -3115,6 +3117,12 @@
                         ytdData[row.category].budget_cost += parseFloat(row.budget_cost || 0);
                         ytdData[row.category].actual_cost += parseFloat(row.actual_cost || 0);
                     }
+                });
+
+                // Calculate YTD budget margins from actual budget data (not hardcoded)
+                ['labor', 'parts', 'other', 'total'].forEach(cat => {
+                    const d = ytdData[cat];
+                    d.budget_margin = d.budget_revenue > 0 ? (((d.budget_revenue - d.budget_cost) / d.budget_revenue) * 100) : 0;
                 });
 
                 // Update summary cards
@@ -3170,7 +3178,10 @@
                 // Revenue pace (projected to end of year)
                 const monthsElapsed = currentMonth;
                 const projectedAnnual = monthsElapsed > 0 ? (totalActualRev / monthsElapsed) * 12 : 0;
-                const annualBudget = 8429649; // from budget
+                // Calculate annual budget from all 12 months of total category
+                const annualBudget = budgetData
+                    .filter(r => r.category === 'total')
+                    .reduce((sum, r) => sum + parseFloat(r.budget_revenue || 0), 0);
 
                 document.getElementById('budgetRevenuePace').textContent = formatCurrency(projectedAnnual);
                 document.getElementById('budgetRevenuePace').style.color = projectedAnnual >= annualBudget ? '#10b981' : '#f59e0b';
@@ -3220,19 +3231,29 @@
 
                 document.getElementById('budgetDeptTable').innerHTML = deptHTML;
 
-                // A/B Ratio Impact Calculator
-                // This will be populated from actual A/B data
-                const currentAB = 38.8; // Get from rankings data
+                // A/B Ratio Impact Calculator — fetch latest A/B from rankings
+                let currentAB = 38.8; // fallback
+                try {
+                    const abResp = await fetch(`${SUPABASE_URL}/rest/v1/rankings?select=denver_ab_actual&order=week_ending.desc&limit=1`,
+                        { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } });
+                    const abData = await abResp.json();
+                    if (Array.isArray(abData) && abData.length > 0 && abData[0].denver_ab_actual) {
+                        currentAB = parseFloat(abData[0].denver_ab_actual);
+                    }
+                } catch(e) { /* use fallback */ }
+
                 const targetAB = 58.5;
                 const abGap = targetAB - currentAB;
 
-                // Calculate revenue impact if at target A/B
-                const laborBudget = 2429649; // annual labor revenue budget
+                // Calculate annual labor budget from DB
+                const annualLaborBudget = budgetData
+                    .filter(r => r.category === 'labor')
+                    .reduce((sum, r) => sum + parseFloat(r.budget_revenue || 0), 0);
                 const currentLaborRevenue = ytdData.labor.actual_revenue || 0;
                 const projectedLaborRevenue = monthsElapsed > 0 ? (currentLaborRevenue / monthsElapsed) * 12 : 0;
 
                 // If we were at 58.5% instead of current rate
-                const potentialRevenue = projectedLaborRevenue * (targetAB / currentAB);
+                const potentialRevenue = currentAB > 0 ? projectedLaborRevenue * (targetAB / currentAB) : 0;
                 const revenueImpact = potentialRevenue - projectedLaborRevenue;
 
                 document.getElementById('abCurrentRatio').textContent = `${currentAB}%`;
