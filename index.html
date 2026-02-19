@@ -346,7 +346,7 @@
                     <div class="goal-notes">
                         <strong>Objective:</strong> Success/Fail analysis of flat rate system<br>
                         <strong>Data Source:</strong> Hours Sold vs Hours Actual + <span style="color: #0ea5e9; cursor: pointer;" onclick="showTab('financials')">Flat Rate Calculator</span><br>
-                        <strong>2025 Freight:</strong> <span id="goal4Freight">$--</span> vs <span id="goal4FreightBudget">$--</span> budget |
+                        <strong>2026 Freight:</strong> <span id="goal4Freight">$--</span> vs <span id="goal4FreightBudget">$--</span> budget |
                         <strong>Flat Rate DB:</strong> <span id="goal4FlatRateCount">--</span> weight tiers loaded
                     </div>
 
@@ -417,7 +417,7 @@
                         <span class="goal-pct" id="expBudgetProgressPct">--</span>
                     </div>
                     <div class="goal-notes">
-                        <strong>2025 Expenses:</strong> <span id="goal6Expenses">$--</span> |
+                        <strong>2026 Expenses:</strong> <span id="goal6Expenses">$--</span> |
                         <strong>Budget:</strong> <span id="goal6Budget">$--</span> |
                         <strong>Variance:</strong> <span id="goal6Variance">$--</span><br>
                         <span id="goal6PaceText" class="pace-ontrack">● Loading expense data...</span>
@@ -1503,11 +1503,11 @@
 
         <!-- FINANCIALS TAB -->
         <div class="content" id="financials">
-            <!-- 2025 Annual Summary Header -->
+            <!-- Annual Summary Header -->
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                 <h2 style="margin: 0; color: #e2e8f0;">💵 Denver 889 Financial Performance</h2>
                 <div style="display: flex; gap: 8px;">
-                    <span class="badge badge-green" id="finYearBadge">2025 Full Year</span>
+                    <span class="badge badge-green" id="finYearBadge">2026 YTD</span>
                 </div>
             </div>
 
@@ -1631,7 +1631,7 @@
             <!-- Monthly P&L Trend Table -->
             <div class="card" style="margin-bottom: 20px;">
                 <div class="card-header">
-                    <span class="card-title">📈 Monthly Income Statement (2025)</span>
+                    <span class="card-title">📈 Monthly Income Statement (2026)</span>
                     <span style="color: #94a3b8; font-size: 12px;">Source: GL121 Reports</span>
                 </div>
                 <div class="table-container">
@@ -1658,7 +1658,7 @@
             <!-- Expense Breakdown -->
             <div class="card" style="margin-bottom: 20px;">
                 <div class="card-header">
-                    <span class="card-title">📋 Top Expenses (2025 Full Year)</span>
+                    <span class="card-title">📋 Top Expenses (2026 YTD)</span>
                 </div>
                 <div class="table-container">
                     <table style="font-size: 13px;">
@@ -1732,7 +1732,7 @@
             <!-- Freight Budget Monitor -->
             <div class="card" style="background: linear-gradient(135deg, #3f1219 0%, #4c0519 100%); border: 2px solid #f43f5e;">
                 <div class="card-header">
-                    <span class="card-title" style="color: #fda4af;">🚨 Freight Budget Monitor (2025)</span>
+                    <span class="card-title" style="color: #fda4af;">🚨 Freight Budget Monitor (2026)</span>
                     <span class="badge badge-red" id="finFreightStatus">Loading...</span>
                 </div>
                 <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 16px;">
@@ -2140,18 +2140,47 @@
 
                 console.log('loadFinancialData: Loaded', data.length, 'monthly records');
 
-                // Separate 2025 data (exclude Dec 2024)
-                const data2025 = data.filter(r => r.year === 2025);
-                const latestMonth = data2025.length > 0 ? data2025[data2025.length - 1] : null;
+                // Filter for 2026 data only
+                const data2026 = data.filter(r => r.year === 2026);
+                const latestMonth = data2026.length > 0 ? data2026[data2026.length - 1] : null;
 
-                // Calculate YTD totals for 2025
+                // If no 2026 data yet, show awaiting state
+                if (data2026.length === 0) {
+                    document.getElementById('finYearBadge').textContent = 'Awaiting 2026 Data';
+                    document.getElementById('finYearBadge').className = 'badge badge-amber';
+                    document.getElementById('finTotalRevenue').textContent = '--';
+                    document.getElementById('finRevenueVsBudget').textContent = 'No 2026 P&L data loaded yet';
+                    document.getElementById('finGrossProfit').textContent = '--';
+                    document.getElementById('finGPMargin').textContent = 'Awaiting GL121 reports';
+                    document.getElementById('finNetIncome').textContent = '--';
+                    document.getElementById('finNetVsBudget').textContent = 'Load 2026 GL121 to populate';
+                    document.getElementById('finTotalExpenses').textContent = '--';
+                    document.getElementById('finExpVsBudget').textContent = 'No data yet';
+                    document.getElementById('finFreightCost').textContent = '--';
+                    document.getElementById('finFreightVsBudget').textContent = 'No data yet';
+                    document.getElementById('finMonthlyTable').innerHTML =
+                        '<tr><td colspan="8" style="text-align:center; padding: 20px; color: #f59e0b;">No 2026 P&L data yet. Provide GL121 reports to populate.</td></tr>';
+                    document.getElementById('finExpenseTable').innerHTML =
+                        '<tr><td colspan="6" style="text-align:center; padding: 20px; color: #f59e0b;">Awaiting 2026 expense data from GL121 reports.</td></tr>';
+                    document.getElementById('finFreightYTD').textContent = '--';
+                    document.getElementById('finFreightBudgetAmt').textContent = '--';
+                    document.getElementById('finFreightVariance').textContent = '--';
+                    document.getElementById('finFreightMonthlyAvg').textContent = '--';
+                    document.getElementById('finFreightStatus').textContent = 'No Data';
+                    document.getElementById('finFreightStatus').className = 'badge badge-amber';
+                    document.getElementById('finFreightByMonth').innerHTML = '<div style="color: #fda4af; padding: 10px;">Awaiting 2026 freight data</div>';
+                    console.log('loadFinancialData: No 2026 data available, showing awaiting state');
+                    return;
+                }
+
+                // Calculate YTD totals for 2026
                 const ytd = {
                     rev_labor: 0, rev_parts_wo: 0, rev_other: 0, total_revenue: 0,
                     cos_labor: 0, cos_parts_wo: 0, cos_other: 0, cos_freight: 0, total_cos: 0,
                     gross_profit: 0, total_expenses: 0, net_income: 0
                 };
 
-                data2025.forEach(r => {
+                data2026.forEach(r => {
                     ytd.rev_labor += parseFloat(r.rev_labor || 0);
                     ytd.rev_parts_wo += parseFloat(r.rev_parts_wo || 0);
                     ytd.rev_other += parseFloat(r.rev_other || 0);
@@ -2166,7 +2195,8 @@
                     ytd.net_income += parseFloat(r.net_income || 0);
                 });
 
-                // Budget targets from GL121 (Full Year 2025 budget)
+                // Budget targets for 2026 (will be updated when 2026 budget is loaded)
+                // Using 2025 budget as placeholder until 2026 budget data is provided
                 const budget = {
                     total_revenue: 8832317,
                     gross_profit: 2112952,
@@ -2177,6 +2207,10 @@
                     rev_parts: 3200000,
                     rev_other: 3485000
                 };
+
+                // Update header badge with month count
+                document.getElementById('finYearBadge').textContent = `2026 YTD (${data2026.length} mo)`;
+                document.getElementById('finYearBadge').className = 'badge badge-green';
 
                 // Update Annual KPI Cards
                 document.getElementById('finTotalRevenue').textContent = formatCurrency(ytd.total_revenue);
@@ -2250,7 +2284,7 @@
                 let runningRevenue = 0, runningGP = 0, runningNI = 0, runningFreight = 0;
                 let tableHTML = '';
 
-                data2025.forEach(r => {
+                data2026.forEach(r => {
                     const rev = parseFloat(r.total_revenue || 0);
                     const cos = parseFloat(r.total_cos || 0);
                     const gp = parseFloat(r.gross_profit || 0);
@@ -2317,7 +2351,7 @@
 
                 let expHTML = '';
                 expenseCategories.forEach(cat => {
-                    const actual = data2025.reduce((sum, r) => sum + parseFloat(r[cat.key] || 0), 0);
+                    const actual = data2026.reduce((sum, r) => sum + parseFloat(r[cat.key] || 0), 0);
                     const variance = actual - cat.budget;
                     const pctOfRev = ytd.total_revenue > 0 ? (actual / ytd.total_revenue * 100) : 0;
 
@@ -2356,7 +2390,7 @@
                     `${freightVar >= 0 ? '+' : ''}${formatCurrency(freightVar)}`;
                 document.getElementById('finFreightVariance').style.color = freightVar <= 0 ? '#10b981' : '#f43f5e';
 
-                const freightMonthlyAvg = data2025.length > 0 ? ytd.cos_freight / data2025.length : 0;
+                const freightMonthlyAvg = data2026.length > 0 ? ytd.cos_freight / data2026.length : 0;
                 document.getElementById('finFreightMonthlyAvg').textContent = formatCurrency(freightMonthlyAvg);
 
                 // Freight status
@@ -2374,7 +2408,7 @@
 
                 // Freight by month
                 let freightByMonthHTML = '';
-                data2025.forEach(r => {
+                data2026.forEach(r => {
                     const frt = parseFloat(r.cos_freight || 0);
                     const frtColor = frt <= 0 ? '#10b981' : '#f43f5e';
                     freightByMonthHTML += `
@@ -4094,7 +4128,7 @@
                     const frcData = await frcResp.json();
                     const frcCount = Array.isArray(frcData) ? frcData.length : 0;
 
-                    const finResp4 = await fetch(`${SUPABASE_URL}/rest/v1/monthly_financials?select=cos_freight,year&year=eq.2025`, { headers: HEADERS });
+                    const finResp4 = await fetch(`${SUPABASE_URL}/rest/v1/monthly_financials?select=cos_freight,year&year=eq.2026`, { headers: HEADERS });
                     const finData4 = await finResp4.json();
                     const ytdFreight = Array.isArray(finData4) ? finData4.reduce((s,r) => s + parseFloat(r.cos_freight || 0), 0) : 0;
 
@@ -4127,12 +4161,12 @@
                 // GOAL #6: Expense Budget Management (Dynamic - from monthly_financials)
                 // ====================================
                 try {
-                    const finResp6 = await fetch(`${SUPABASE_URL}/rest/v1/monthly_financials?select=total_expenses,net_income,year&year=eq.2025`, { headers: HEADERS });
+                    const finResp6 = await fetch(`${SUPABASE_URL}/rest/v1/monthly_financials?select=total_expenses,net_income,year&year=eq.2026`, { headers: HEADERS });
                     const finData6 = await finResp6.json();
 
                     if (Array.isArray(finData6) && finData6.length > 0) {
                         const ytdExpenses = finData6.reduce((s,r) => s + parseFloat(r.total_expenses || 0), 0);
-                        const budgetExpenses = 1115865; // 2025 full-year budget
+                        const budgetExpenses = 1115865; // 2026 budget (using 2025 baseline until 2026 budget loaded)
                         const expVariance = ytdExpenses - budgetExpenses;
                         const expPct = budgetExpenses > 0 ? Math.min((ytdExpenses / budgetExpenses * 100), 120) : 0;
 
