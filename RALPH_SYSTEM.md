@@ -443,6 +443,17 @@ Just ask Ralph:
 
 ## Version History
 
+**v1.1** - 2026-02-19
+- **Ralph Hourly Validator** (`ralph-validator.py`)
+  - 12 automated checks: connectivity, row counts, data quality, days_open accuracy,
+    freshness, employee coverage, training, employee status, rankings, budget, cross-references, duplicates
+  - Runs every hour on the hour via cron (`0 * * * *`)
+  - Auto-fix mode (`--fix`) corrects stale `days_open` values automatically
+  - Logs to `logs/ralph_validation.log`
+  - Pushes validation records to `ralph_validations` Supabase table
+  - Dashboard badge shows latest validation status (click for details)
+- Employee PTB/LOA status tracking via `employees.status` field
+
 **v1.0** - 2026-02-16
 - Initial Ralph system design
 - Autonomous data processing
