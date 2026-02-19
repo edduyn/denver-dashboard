@@ -341,12 +341,13 @@
                 <div class="goal-card">
                     <div class="goal-header">
                         <span class="goal-title">🔧 #4: Flat Rate System Re-evaluation Using Hard Data</span>
-                        <span class="badge badge-gray">Analysis</span>
+                        <span class="badge" id="flatRateGoalBadge">Loading...</span>
                     </div>
                     <div class="goal-notes">
                         <strong>Objective:</strong> Success/Fail analysis of flat rate system<br>
-                        <strong>Data Source:</strong> Hours Sold vs Hours Actual<br>
-                        <strong>Status:</strong> Tracked via squawk_data.json
+                        <strong>Data Source:</strong> Hours Sold vs Hours Actual + <span style="color: #0ea5e9; cursor: pointer;" onclick="showTab('financials')">Flat Rate Calculator</span><br>
+                        <strong>2025 Freight:</strong> <span id="goal4Freight">$--</span> vs <span id="goal4FreightBudget">$--</span> budget |
+                        <strong>Flat Rate DB:</strong> <span id="goal4FlatRateCount">--</span> weight tiers loaded
                     </div>
 
                     <!-- 12-Month Progress Timeline -->
@@ -405,12 +406,21 @@
                 <div class="goal-card">
                     <div class="goal-header">
                         <span class="goal-title">💵 #6: Stay Within Expense Budget</span>
-                        <span class="badge badge-gray">Manual</span>
+                        <span class="badge" id="expBudgetGoalBadge">Loading...</span>
+                    </div>
+                    <div class="goal-progress">
+                        <div style="flex: 1;">
+                            <div class="progress-bar">
+                                <div class="progress-fill progress-green" id="expBudgetProgressBar" style="width: 0%;"></div>
+                            </div>
+                        </div>
+                        <span class="goal-pct" id="expBudgetProgressPct">--</span>
                     </div>
                     <div class="goal-notes">
-                        <strong>Status:</strong> Check Financial Reports vs Budget<br>
-                        <strong>Review:</strong> Monthly expense reports<br>
-                        <strong>Target:</strong> Budget compliance
+                        <strong>2025 Expenses:</strong> <span id="goal6Expenses">$--</span> |
+                        <strong>Budget:</strong> <span id="goal6Budget">$--</span> |
+                        <strong>Variance:</strong> <span id="goal6Variance">$--</span><br>
+                        <span id="goal6PaceText" class="pace-ontrack">● Loading expense data...</span>
                     </div>
 
                     <!-- 12-Month Progress Timeline -->
@@ -4077,9 +4087,36 @@
                 scorecard.push({ num: 3, name: 'Training Completion', target: '100% on time', current: `${completionRate.toFixed(0)}%`, status: pastDueCount > 0 ? 'red' : (completionRate === 100 ? 'green' : 'amber'), statusText: pastDueCount > 0 ? `${pastDueCount} past due` : `${completionRate.toFixed(0)}%` });
 
                 // ====================================
-                // GOAL #4: Flat-Rate System Re-evaluation (Manual/Static)
+                // GOAL #4: Flat-Rate System Re-evaluation (Dynamic - from flat_rate_chart + monthly_financials)
                 // ====================================
-                scorecard.push({ num: 4, name: 'Flat-Rate Re-evaluation', target: 'Data analysis', current: 'In Progress', status: 'amber', statusText: 'Analysis' });
+                try {
+                    const frcResp = await fetch(`${SUPABASE_URL}/rest/v1/flat_rate_chart?select=weight_lb&effective_date=eq.2025-01-06`, { headers: HEADERS });
+                    const frcData = await frcResp.json();
+                    const frcCount = Array.isArray(frcData) ? frcData.length : 0;
+
+                    const finResp4 = await fetch(`${SUPABASE_URL}/rest/v1/monthly_financials?select=cos_freight,year&year=eq.2025`, { headers: HEADERS });
+                    const finData4 = await finResp4.json();
+                    const ytdFreight = Array.isArray(finData4) ? finData4.reduce((s,r) => s + parseFloat(r.cos_freight || 0), 0) : 0;
+
+                    document.getElementById('goal4FlatRateCount').textContent = frcCount;
+                    document.getElementById('goal4Freight').textContent = formatCurrency(ytdFreight);
+                    document.getElementById('goal4FreightBudget').textContent = formatCurrency(-3000);
+
+                    const frcBadge = document.getElementById('flatRateGoalBadge');
+                    if (frcCount >= 30) {
+                        frcBadge.textContent = `${frcCount} Rates Loaded`;
+                        frcBadge.className = 'badge badge-green';
+                        scorecard.push({ num: 4, name: 'Flat-Rate Re-evaluation', target: 'Data analysis', current: `${frcCount} rates + freight data`, status: 'green', statusText: 'Data Ready' });
+                    } else {
+                        frcBadge.textContent = 'In Progress';
+                        frcBadge.className = 'badge badge-amber';
+                        scorecard.push({ num: 4, name: 'Flat-Rate Re-evaluation', target: 'Data analysis', current: 'In Progress', status: 'amber', statusText: 'Analysis' });
+                    }
+                } catch(e) {
+                    document.getElementById('flatRateGoalBadge').textContent = 'No Data';
+                    document.getElementById('flatRateGoalBadge').className = 'badge badge-gray';
+                    scorecard.push({ num: 4, name: 'Flat-Rate Re-evaluation', target: 'Data analysis', current: 'In Progress', status: 'amber', statusText: 'Analysis' });
+                }
 
                 // ====================================
                 // GOAL #5: Customer Experience - Communication (Manual/Static)
@@ -4087,9 +4124,56 @@
                 scorecard.push({ num: 5, name: 'Customer Communication', target: 'Prompt & Professional', current: 'Ongoing', status: 'green', statusText: 'Process-based' });
 
                 // ====================================
-                // GOAL #6: Expense Budget Management (Manual/Static)
+                // GOAL #6: Expense Budget Management (Dynamic - from monthly_financials)
                 // ====================================
-                scorecard.push({ num: 6, name: 'Expense Budget', target: 'Within budget', current: 'Monthly Review', status: 'amber', statusText: 'Tracking' });
+                try {
+                    const finResp6 = await fetch(`${SUPABASE_URL}/rest/v1/monthly_financials?select=total_expenses,net_income,year&year=eq.2025`, { headers: HEADERS });
+                    const finData6 = await finResp6.json();
+
+                    if (Array.isArray(finData6) && finData6.length > 0) {
+                        const ytdExpenses = finData6.reduce((s,r) => s + parseFloat(r.total_expenses || 0), 0);
+                        const budgetExpenses = 1115865; // 2025 full-year budget
+                        const expVariance = ytdExpenses - budgetExpenses;
+                        const expPct = budgetExpenses > 0 ? Math.min((ytdExpenses / budgetExpenses * 100), 120) : 0;
+
+                        document.getElementById('goal6Expenses').textContent = formatCurrency(ytdExpenses);
+                        document.getElementById('goal6Budget').textContent = formatCurrency(budgetExpenses);
+                        document.getElementById('goal6Variance').textContent = `${expVariance >= 0 ? '+' : ''}${formatCurrency(expVariance)}`;
+                        document.getElementById('goal6Variance').style.color = expVariance <= 0 ? '#10b981' : '#ef4444';
+
+                        let expBadge, expBadgeClass, expBarClass, expPctColor, expPaceText, expStatus, expStatusText;
+                        if (expVariance <= 0) {
+                            expBadge = '✅ Under Budget'; expBadgeClass = 'badge-green';
+                            expBarClass = 'progress-fill progress-green'; expPctColor = '#10b981';
+                            expPaceText = `▲ ${formatCurrency(Math.abs(expVariance))} under budget — excellent expense control`;
+                            expStatus = 'green'; expStatusText = 'Under Budget';
+                        } else if (expVariance / budgetExpenses <= 0.05) {
+                            expBadge = '⚠️ Near Budget'; expBadgeClass = 'badge-amber';
+                            expBarClass = 'progress-fill progress-amber'; expPctColor = '#f59e0b';
+                            expPaceText = `● ${formatCurrency(expVariance)} over budget (${(expVariance/budgetExpenses*100).toFixed(1)}%) — monitor closely`;
+                            expStatus = 'amber'; expStatusText = 'Near Budget';
+                        } else {
+                            expBadge = '🔴 Over Budget'; expBadgeClass = 'badge-red';
+                            expBarClass = 'progress-fill progress-red'; expPctColor = '#ef4444';
+                            expPaceText = `▼ ${formatCurrency(expVariance)} over budget (${(expVariance/budgetExpenses*100).toFixed(1)}%) — needs attention`;
+                            expStatus = 'red'; expStatusText = 'Over Budget';
+                        }
+
+                        setGoalStatus('expBudget', {
+                            value: formatCurrency(ytdExpenses), pct: Math.min(expPct, 100),
+                            badge: expBadge, badgeClass: expBadgeClass,
+                            barClass: expBarClass, pctColor: expPctColor,
+                            paceText: expPaceText, paceClass: expVariance <= 0 ? 'pace-ahead' : 'pace-behind'
+                        });
+
+                        scorecard.push({ num: 6, name: 'Expense Budget', target: formatCurrency(budgetExpenses), current: formatCurrency(ytdExpenses), status: expStatus, statusText: expStatusText });
+                    } else {
+                        throw new Error('No financial data');
+                    }
+                } catch(e) {
+                    setGoalStatus('expBudget', { value: '--', pct: 0, badge: 'No Data', badgeClass: 'badge-gray', barClass: 'progress-fill progress-green', pctColor: '#94a3b8', paceText: '● Expense data unavailable — see Financials tab', paceClass: 'pace-ontrack' });
+                    scorecard.push({ num: 6, name: 'Expense Budget', target: 'Within budget', current: '--', status: 'gray', statusText: 'No Data' });
+                }
 
                 // ====================================
                 // GOAL #7: FAA/Internal Audits - Zero Findings (Dynamic)
