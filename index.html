@@ -51,6 +51,7 @@
         .tab-rankings { border-left: 3px solid #eab308; }
         .tab-wip { border-left: 3px solid #22c55e; }
         .tab-training { border-left: 3px solid #a855f7; }
+        .tab-financials { border-left: 3px solid #22d3ee; }
         
         /* Content */
         .content { padding: 20px; display: none; }
@@ -192,6 +193,7 @@
             <div class="tab tab-quality" data-tab="quality">✅ Quality</div>
             <div class="tab tab-wip" data-tab="wip">💰 WIP</div>
             <div class="tab tab-rankings" data-tab="rankings">🏆 Rankings</div>
+            <div class="tab tab-financials" data-tab="financials">💵 Financials</div>
         </div>
         
         <!-- GOALS TAB -->
@@ -1488,8 +1490,267 @@
                 </div>
             </div>
         </div>
+
+        <!-- FINANCIALS TAB -->
+        <div class="content" id="financials">
+            <!-- 2025 Annual Summary Header -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 style="margin: 0; color: #e2e8f0;">💵 Denver 889 Financial Performance</h2>
+                <div style="display: flex; gap: 8px;">
+                    <span class="badge badge-green" id="finYearBadge">2025 Full Year</span>
+                </div>
+            </div>
+
+            <!-- Annual KPI Cards -->
+            <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; margin-bottom: 24px;">
+                <div class="card" style="background: linear-gradient(135deg, #065f46 0%, #047857 100%); border: 2px solid #10b981;">
+                    <div style="text-align: center;">
+                        <div style="color: #6ee7b7; font-size: 13px; margin-bottom: 6px;">Total Revenue</div>
+                        <div style="color: #10b981; font-size: 28px; font-weight: bold;" id="finTotalRevenue">$--</div>
+                        <div style="color: #6ee7b7; font-size: 11px; margin-top: 4px;" id="finRevenueVsBudget">-- vs budget</div>
+                    </div>
+                </div>
+                <div class="card" style="background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%); border: 2px solid #3b82f6;">
+                    <div style="text-align: center;">
+                        <div style="color: #93c5fd; font-size: 13px; margin-bottom: 6px;">Gross Profit</div>
+                        <div style="color: #3b82f6; font-size: 28px; font-weight: bold;" id="finGrossProfit">$--</div>
+                        <div style="color: #93c5fd; font-size: 11px; margin-top: 4px;" id="finGPMargin">--%  margin</div>
+                    </div>
+                </div>
+                <div class="card" style="background: linear-gradient(135deg, #78350f 0%, #92400e 100%); border: 2px solid #f59e0b;">
+                    <div style="text-align: center;">
+                        <div style="color: #fcd34d; font-size: 13px; margin-bottom: 6px;">Net Income</div>
+                        <div style="color: #f59e0b; font-size: 28px; font-weight: bold;" id="finNetIncome">$--</div>
+                        <div style="color: #fcd34d; font-size: 11px; margin-top: 4px;" id="finNetVsBudget">-- vs budget</div>
+                    </div>
+                </div>
+                <div class="card" style="background: linear-gradient(135deg, #581c87 0%, #6b21a8 100%); border: 2px solid #a855f7;">
+                    <div style="text-align: center;">
+                        <div style="color: #e9d5ff; font-size: 13px; margin-bottom: 6px;">Total Expenses</div>
+                        <div style="color: #a855f7; font-size: 28px; font-weight: bold;" id="finTotalExpenses">$--</div>
+                        <div style="color: #e9d5ff; font-size: 11px; margin-top: 4px;" id="finExpVsBudget">-- vs budget</div>
+                    </div>
+                </div>
+                <div class="card" style="background: linear-gradient(135deg, #7c2d12 0%, #991b1b 100%); border: 2px solid #ef4444;">
+                    <div style="text-align: center;">
+                        <div style="color: #fca5a5; font-size: 13px; margin-bottom: 6px;">Freight (COS)</div>
+                        <div style="color: #ef4444; font-size: 28px; font-weight: bold;" id="finFreightCost">$--</div>
+                        <div style="color: #fca5a5; font-size: 11px; margin-top: 4px;" id="finFreightVsBudget">-- vs budget</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Revenue Breakdown by Department -->
+            <div class="card" style="margin-bottom: 20px;">
+                <div class="card-header">
+                    <span class="card-title">📊 Revenue by Department (YTD)</span>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
+                    <!-- Labor -->
+                    <div style="background: #1e293b; border-radius: 10px; padding: 16px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                            <span style="color: #f59e0b; font-weight: 600;">Labor</span>
+                            <span class="badge" id="finLaborBadge">--</span>
+                        </div>
+                        <div style="color: #e2e8f0; font-size: 24px; font-weight: bold;" id="finLaborRevenue">$--</div>
+                        <div style="margin-top: 8px;">
+                            <div style="display: flex; justify-content: space-between; font-size: 12px; color: #94a3b8;">
+                                <span>Cost: <span id="finLaborCost">$--</span></span>
+                                <span>GP: <span id="finLaborGP" style="color: #10b981;">$--</span></span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; font-size: 12px; color: #94a3b8; margin-top: 4px;">
+                                <span>Margin: <span id="finLaborMargin">--%</span></span>
+                                <span>Budget: <span id="finLaborBudgetRev">$--</span></span>
+                            </div>
+                        </div>
+                        <div class="progress-container" style="margin-top: 8px;">
+                            <div class="progress-bar" style="height: 6px;">
+                                <div class="progress-fill" id="finLaborProgress" style="width: 0%; background: #10b981;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Parts -->
+                    <div style="background: #1e293b; border-radius: 10px; padding: 16px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                            <span style="color: #3b82f6; font-weight: 600;">Parts WO</span>
+                            <span class="badge" id="finPartsBadge">--</span>
+                        </div>
+                        <div style="color: #e2e8f0; font-size: 24px; font-weight: bold;" id="finPartsRevenue">$--</div>
+                        <div style="margin-top: 8px;">
+                            <div style="display: flex; justify-content: space-between; font-size: 12px; color: #94a3b8;">
+                                <span>Cost: <span id="finPartsCost">$--</span></span>
+                                <span>GP: <span id="finPartsGP" style="color: #10b981;">$--</span></span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; font-size: 12px; color: #94a3b8; margin-top: 4px;">
+                                <span>Margin: <span id="finPartsMargin">--%</span></span>
+                                <span>Budget: <span id="finPartsBudgetRev">$--</span></span>
+                            </div>
+                        </div>
+                        <div class="progress-container" style="margin-top: 8px;">
+                            <div class="progress-bar" style="height: 6px;">
+                                <div class="progress-fill" id="finPartsProgress" style="width: 0%; background: #3b82f6;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Other -->
+                    <div style="background: #1e293b; border-radius: 10px; padding: 16px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                            <span style="color: #a855f7; font-weight: 600;">Other (Avionics/Installs)</span>
+                            <span class="badge" id="finOtherBadge">--</span>
+                        </div>
+                        <div style="color: #e2e8f0; font-size: 24px; font-weight: bold;" id="finOtherRevenue">$--</div>
+                        <div style="margin-top: 8px;">
+                            <div style="display: flex; justify-content: space-between; font-size: 12px; color: #94a3b8;">
+                                <span>Cost: <span id="finOtherCost">$--</span></span>
+                                <span>GP: <span id="finOtherGP" style="color: #10b981;">$--</span></span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; font-size: 12px; color: #94a3b8; margin-top: 4px;">
+                                <span>Margin: <span id="finOtherMargin">--%</span></span>
+                                <span>Budget: <span id="finOtherBudgetRev">$--</span></span>
+                            </div>
+                        </div>
+                        <div class="progress-container" style="margin-top: 8px;">
+                            <div class="progress-bar" style="height: 6px;">
+                                <div class="progress-fill" id="finOtherProgress" style="width: 0%; background: #a855f7;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Monthly P&L Trend Table -->
+            <div class="card" style="margin-bottom: 20px;">
+                <div class="card-header">
+                    <span class="card-title">📈 Monthly Income Statement (2025)</span>
+                    <span style="color: #94a3b8; font-size: 12px;">Source: GL121 Reports</span>
+                </div>
+                <div class="table-container">
+                    <table style="font-size: 13px;">
+                        <thead>
+                            <tr>
+                                <th style="min-width: 120px;">Month</th>
+                                <th style="text-align: right;">Revenue</th>
+                                <th style="text-align: right;">COS</th>
+                                <th style="text-align: right;">Gross Profit</th>
+                                <th style="text-align: right;">GP %</th>
+                                <th style="text-align: right;">Expenses</th>
+                                <th style="text-align: right;">Net Income</th>
+                                <th style="text-align: right;">Freight</th>
+                            </tr>
+                        </thead>
+                        <tbody id="finMonthlyTable">
+                            <tr><td colspan="8" style="text-align:center; padding: 20px; color: #94a3b8;">Loading financial data...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Expense Breakdown -->
+            <div class="card" style="margin-bottom: 20px;">
+                <div class="card-header">
+                    <span class="card-title">📋 Top Expenses (2025 Full Year)</span>
+                </div>
+                <div class="table-container">
+                    <table style="font-size: 13px;">
+                        <thead>
+                            <tr>
+                                <th>Expense Category</th>
+                                <th style="text-align: right;">YTD Actual</th>
+                                <th style="text-align: right;">YTD Budget</th>
+                                <th style="text-align: right;">Variance</th>
+                                <th style="text-align: right;">% of Revenue</th>
+                                <th style="text-align: center;">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="finExpenseTable">
+                            <tr><td colspan="6" style="text-align:center; padding: 20px; color: #94a3b8;">Loading expense data...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Flat Rate Calculator -->
+            <div class="card" style="margin-bottom: 20px; background: linear-gradient(135deg, #0c4a6e 0%, #075985 100%); border: 2px solid #0ea5e9;">
+                <div class="card-header">
+                    <span class="card-title" style="color: #7dd3fc;">📦 Flat Rate Freight Calculator</span>
+                    <span style="color: #94a3b8; font-size: 12px;">2025 Duncan Aviation Rates (Eff. 1/6/2025)</span>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+                    <div>
+                        <label style="color: #7dd3fc; font-size: 13px; display: block; margin-bottom: 4px;">Weight (lbs)</label>
+                        <input type="number" id="freightWeight" min="1" max="80" value="5" style="width: 100%; padding: 10px; border: 2px solid #0ea5e9; background: #0c4a6e; color: #fff; border-radius: 8px; font-size: 16px;" oninput="calculateFreightRate()">
+                    </div>
+                    <div>
+                        <label style="color: #7dd3fc; font-size: 13px; display: block; margin-bottom: 4px;">Carrier</label>
+                        <select id="freightCarrier" style="width: 100%; padding: 10px; border: 2px solid #0ea5e9; background: #0c4a6e; color: #fff; border-radius: 8px; font-size: 14px;" onchange="calculateFreightRate()">
+                            <option value="fedex">FedEx</option>
+                            <option value="ups">UPS</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label style="color: #7dd3fc; font-size: 13px; display: block; margin-bottom: 4px;">Service Level</label>
+                        <select id="freightService" style="width: 100%; padding: 10px; border: 2px solid #0ea5e9; background: #0c4a6e; color: #fff; border-radius: 8px; font-size: 14px;" onchange="calculateFreightRate()">
+                            <option value="overnight_first">First Overnight / Early AM</option>
+                            <option value="overnight_priority">Priority Overnight / Next Day Air</option>
+                            <option value="overnight_standard">Standard Overnight / NDA Saver</option>
+                            <option value="2day">2-Day</option>
+                            <option value="3day">Express Saver / 3-Day Select</option>
+                            <option value="ground">Ground</option>
+                        </select>
+                    </div>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;">
+                    <div style="background: rgba(0,0,0,0.3); border-radius: 8px; padding: 14px; text-align: center;">
+                        <div style="color: #7dd3fc; font-size: 12px; margin-bottom: 4px;">Flat Rate Cost</div>
+                        <div style="color: #0ea5e9; font-size: 26px; font-weight: bold;" id="freightFlatRate">$--</div>
+                    </div>
+                    <div style="background: rgba(0,0,0,0.3); border-radius: 8px; padding: 14px; text-align: center;">
+                        <div style="color: #7dd3fc; font-size: 12px; margin-bottom: 4px;">20% Markup</div>
+                        <div style="color: #f59e0b; font-size: 26px; font-weight: bold;" id="freightMarkup">$--</div>
+                    </div>
+                    <div style="background: rgba(0,0,0,0.3); border-radius: 8px; padding: 14px; text-align: center;">
+                        <div style="color: #7dd3fc; font-size: 12px; margin-bottom: 4px;">Bill to Customer</div>
+                        <div style="color: #10b981; font-size: 26px; font-weight: bold;" id="freightBillAmount">$--</div>
+                    </div>
+                    <div style="background: rgba(0,0,0,0.3); border-radius: 8px; padding: 14px; text-align: center;">
+                        <div style="color: #7dd3fc; font-size: 12px; margin-bottom: 4px;">Loaner (x4)</div>
+                        <div style="color: #a855f7; font-size: 26px; font-weight: bold;" id="freightLoanerTotal">$--</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Freight Budget Monitor -->
+            <div class="card" style="background: linear-gradient(135deg, #3f1219 0%, #4c0519 100%); border: 2px solid #f43f5e;">
+                <div class="card-header">
+                    <span class="card-title" style="color: #fda4af;">🚨 Freight Budget Monitor (2025)</span>
+                    <span class="badge badge-red" id="finFreightStatus">Loading...</span>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 16px;">
+                    <div style="background: rgba(0,0,0,0.3); border-radius: 8px; padding: 14px; text-align: center;">
+                        <div style="color: #fda4af; font-size: 12px; margin-bottom: 4px;">YTD Freight (COS)</div>
+                        <div style="color: #f43f5e; font-size: 24px; font-weight: bold;" id="finFreightYTD">$--</div>
+                    </div>
+                    <div style="background: rgba(0,0,0,0.3); border-radius: 8px; padding: 14px; text-align: center;">
+                        <div style="color: #fda4af; font-size: 12px; margin-bottom: 4px;">Annual Budget</div>
+                        <div style="color: #fda4af; font-size: 24px; font-weight: bold;" id="finFreightBudgetAmt">$--</div>
+                    </div>
+                    <div style="background: rgba(0,0,0,0.3); border-radius: 8px; padding: 14px; text-align: center;">
+                        <div style="color: #fda4af; font-size: 12px; margin-bottom: 4px;">Variance</div>
+                        <div style="font-size: 24px; font-weight: bold;" id="finFreightVariance">$--</div>
+                    </div>
+                    <div style="background: rgba(0,0,0,0.3); border-radius: 8px; padding: 14px; text-align: center;">
+                        <div style="color: #fda4af; font-size: 12px; margin-bottom: 4px;">Monthly Avg</div>
+                        <div style="color: #fda4af; font-size: 24px; font-weight: bold;" id="finFreightMonthlyAvg">$--</div>
+                    </div>
+                </div>
+                <div style="background: rgba(0,0,0,0.3); border-radius: 8px; padding: 14px;">
+                    <div style="color: #fda4af; font-weight: bold; margin-bottom: 6px;">Freight by Month:</div>
+                    <div id="finFreightByMonth" style="display: flex; gap: 8px; flex-wrap: wrap; font-size: 12px; color: #fda4af;">Loading...</div>
+                </div>
+            </div>
+        </div>
     </div>
-    
+
     <script>
         const PASSWORD = 'denver889';
         let isRotating = false;
@@ -1498,7 +1759,7 @@
         let tabSwitchInterval = null;
         let pauseTimeout = null;
         let currentTab = 0;
-        const tabs = ['goals', 'actions', 'overview', 'employees', 'workorders', 'training', 'quality', 'wip', 'rankings'];
+        const tabs = ['goals', 'actions', 'overview', 'employees', 'workorders', 'training', 'quality', 'wip', 'rankings', 'financials'];
         
         // Login function (backup - button uses inline code)
         function login() {
@@ -1843,6 +2104,358 @@
             document.getElementById('anchorWorkOrdersList').innerHTML = tableHTML || '<tr><td colspan="10" style="text-align:center; color:#94a3b8;">No ANCHOR work orders found</td></tr>';
         }
 
+        // ============================================
+        // FINANCIAL DATA FUNCTIONS
+        // ============================================
+
+        // Global flat rate chart data
+        let flatRateData = [];
+
+        async function loadFinancialData() {
+            console.log('loadFinancialData: Loading financial performance data...');
+            try {
+                // Fetch all monthly financials
+                const resp = await fetch(
+                    `${SUPABASE_URL}/rest/v1/monthly_financials?select=*&order=year.asc,month.asc`,
+                    { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
+                );
+                const data = await resp.json();
+
+                if (!data || !Array.isArray(data) || data.length === 0 || data.code) {
+                    console.log('loadFinancialData: No monthly financial data available');
+                    document.getElementById('finMonthlyTable').innerHTML =
+                        '<tr><td colspan="8" style="text-align:center; padding: 20px; color: #94a3b8;">No financial data loaded yet. Run data import script.</td></tr>';
+                    return;
+                }
+
+                console.log('loadFinancialData: Loaded', data.length, 'monthly records');
+
+                // Separate 2025 data (exclude Dec 2024)
+                const data2025 = data.filter(r => r.year === 2025);
+                const latestMonth = data2025.length > 0 ? data2025[data2025.length - 1] : null;
+
+                // Calculate YTD totals for 2025
+                const ytd = {
+                    rev_labor: 0, rev_parts_wo: 0, rev_other: 0, total_revenue: 0,
+                    cos_labor: 0, cos_parts_wo: 0, cos_other: 0, cos_freight: 0, total_cos: 0,
+                    gross_profit: 0, total_expenses: 0, net_income: 0
+                };
+
+                data2025.forEach(r => {
+                    ytd.rev_labor += parseFloat(r.rev_labor || 0);
+                    ytd.rev_parts_wo += parseFloat(r.rev_parts_wo || 0);
+                    ytd.rev_other += parseFloat(r.rev_other || 0);
+                    ytd.total_revenue += parseFloat(r.total_revenue || 0);
+                    ytd.cos_labor += parseFloat(r.cos_labor || 0);
+                    ytd.cos_parts_wo += parseFloat(r.cos_parts_wo || 0);
+                    ytd.cos_other += parseFloat(r.cos_other || 0);
+                    ytd.cos_freight += parseFloat(r.cos_freight || 0);
+                    ytd.total_cos += parseFloat(r.total_cos || 0);
+                    ytd.gross_profit += parseFloat(r.gross_profit || 0);
+                    ytd.total_expenses += parseFloat(r.total_expenses || 0);
+                    ytd.net_income += parseFloat(r.net_income || 0);
+                });
+
+                // Budget targets from GL121 (Full Year 2025 budget)
+                const budget = {
+                    total_revenue: 8832317,
+                    gross_profit: 2112952,
+                    net_income: 997087,
+                    total_expenses: 1115865,
+                    freight: -3000,
+                    rev_labor: 2147317,
+                    rev_parts: 3200000,
+                    rev_other: 3485000
+                };
+
+                // Update Annual KPI Cards
+                document.getElementById('finTotalRevenue').textContent = formatCurrency(ytd.total_revenue);
+                const revVar = ytd.total_revenue - budget.total_revenue;
+                document.getElementById('finRevenueVsBudget').textContent =
+                    `${revVar >= 0 ? '+' : ''}${formatCurrency(revVar)} vs budget`;
+                document.getElementById('finRevenueVsBudget').style.color = revVar >= 0 ? '#6ee7b7' : '#fca5a5';
+
+                document.getElementById('finGrossProfit').textContent = formatCurrency(ytd.gross_profit);
+                const gpPct = ytd.total_revenue > 0 ? (ytd.gross_profit / ytd.total_revenue * 100) : 0;
+                document.getElementById('finGPMargin').textContent = `${gpPct.toFixed(1)}% margin`;
+
+                document.getElementById('finNetIncome').textContent = formatCurrency(ytd.net_income);
+                const niVar = ytd.net_income - budget.net_income;
+                document.getElementById('finNetVsBudget').textContent =
+                    `${niVar >= 0 ? '+' : ''}${formatCurrency(niVar)} vs budget`;
+                document.getElementById('finNetVsBudget').style.color = niVar >= 0 ? '#fcd34d' : '#fca5a5';
+
+                document.getElementById('finTotalExpenses').textContent = formatCurrency(ytd.total_expenses);
+                const expVar = ytd.total_expenses - budget.total_expenses;
+                document.getElementById('finExpVsBudget').textContent =
+                    `${expVar <= 0 ? '' : '+'}${formatCurrency(expVar)} vs budget`;
+                document.getElementById('finExpVsBudget').style.color = expVar <= 0 ? '#e9d5ff' : '#fca5a5';
+
+                document.getElementById('finFreightCost').textContent = formatCurrency(ytd.cos_freight);
+                const frtVar = ytd.cos_freight - budget.freight;
+                document.getElementById('finFreightVsBudget').textContent =
+                    `${frtVar >= 0 ? '+' : ''}${formatCurrency(frtVar)} vs budget`;
+                document.getElementById('finFreightVsBudget').style.color = frtVar <= 0 ? '#6ee7b7' : '#fca5a5';
+
+                // Revenue by Department
+                const depts = [
+                    { key: 'Labor', rev: ytd.rev_labor, cost: ytd.cos_labor, budgetRev: budget.rev_labor,
+                      elRev: 'finLaborRevenue', elCost: 'finLaborCost', elGP: 'finLaborGP', elMargin: 'finLaborMargin',
+                      elBudget: 'finLaborBudgetRev', elBadge: 'finLaborBadge', elProgress: 'finLaborProgress' },
+                    { key: 'Parts', rev: ytd.rev_parts_wo, cost: ytd.cos_parts_wo, budgetRev: budget.rev_parts,
+                      elRev: 'finPartsRevenue', elCost: 'finPartsCost', elGP: 'finPartsGP', elMargin: 'finPartsMargin',
+                      elBudget: 'finPartsBudgetRev', elBadge: 'finPartsBadge', elProgress: 'finPartsProgress' },
+                    { key: 'Other', rev: ytd.rev_other, cost: ytd.cos_other, budgetRev: budget.rev_other,
+                      elRev: 'finOtherRevenue', elCost: 'finOtherCost', elGP: 'finOtherGP', elMargin: 'finOtherMargin',
+                      elBudget: 'finOtherBudgetRev', elBadge: 'finOtherBadge', elProgress: 'finOtherProgress' }
+                ];
+
+                depts.forEach(d => {
+                    const gp = d.rev - d.cost;
+                    const margin = d.rev > 0 ? (gp / d.rev * 100) : 0;
+                    const pctOfBudget = d.budgetRev > 0 ? (d.rev / d.budgetRev * 100) : 0;
+
+                    document.getElementById(d.elRev).textContent = formatCurrency(d.rev);
+                    document.getElementById(d.elCost).textContent = formatCurrency(d.cost);
+                    document.getElementById(d.elGP).textContent = formatCurrency(gp);
+                    document.getElementById(d.elMargin).textContent = `${margin.toFixed(1)}%`;
+                    document.getElementById(d.elBudget).textContent = formatCurrency(d.budgetRev);
+                    document.getElementById(d.elProgress).style.width = `${Math.min(pctOfBudget, 100)}%`;
+
+                    const badge = document.getElementById(d.elBadge);
+                    if (pctOfBudget >= 100) {
+                        badge.textContent = 'Exceeded';
+                        badge.className = 'badge badge-green';
+                    } else if (pctOfBudget >= 80) {
+                        badge.textContent = `${pctOfBudget.toFixed(0)}%`;
+                        badge.className = 'badge badge-amber';
+                    } else {
+                        badge.textContent = `${pctOfBudget.toFixed(0)}%`;
+                        badge.className = 'badge badge-red';
+                    }
+                });
+
+                // Monthly P&L Table
+                const months = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                let runningRevenue = 0, runningGP = 0, runningNI = 0, runningFreight = 0;
+                let tableHTML = '';
+
+                data2025.forEach(r => {
+                    const rev = parseFloat(r.total_revenue || 0);
+                    const cos = parseFloat(r.total_cos || 0);
+                    const gp = parseFloat(r.gross_profit || 0);
+                    const gpPct = rev > 0 ? (gp / rev * 100) : 0;
+                    const exp = parseFloat(r.total_expenses || 0);
+                    const ni = parseFloat(r.net_income || 0);
+                    const frt = parseFloat(r.cos_freight || 0);
+
+                    runningRevenue += rev;
+                    runningGP += gp;
+                    runningNI += ni;
+                    runningFreight += frt;
+
+                    const niColor = ni >= 0 ? '#10b981' : '#ef4444';
+                    const frtColor = frt <= 0 ? '#10b981' : '#ef4444';
+
+                    tableHTML += `
+                        <tr>
+                            <td><strong>${months[r.month]} ${r.year}</strong></td>
+                            <td style="text-align: right;">${formatCurrency(rev)}</td>
+                            <td style="text-align: right; color: #94a3b8;">${formatCurrency(cos)}</td>
+                            <td style="text-align: right; color: #3b82f6;">${formatCurrency(gp)}</td>
+                            <td style="text-align: right; color: ${gpPct >= 25 ? '#10b981' : '#f59e0b'};">${gpPct.toFixed(1)}%</td>
+                            <td style="text-align: right; color: #a855f7;">${formatCurrency(exp)}</td>
+                            <td style="text-align: right; color: ${niColor}; font-weight: bold;">${formatCurrency(ni)}</td>
+                            <td style="text-align: right; color: ${frtColor};">${formatCurrency(frt)}</td>
+                        </tr>`;
+                });
+
+                // Add YTD total row
+                const ytdGPPct = ytd.total_revenue > 0 ? (ytd.gross_profit / ytd.total_revenue * 100) : 0;
+                tableHTML += `
+                    <tr style="border-top: 2px solid #f59e0b; font-weight: bold; background: rgba(245,158,11,0.1);">
+                        <td style="color: #f59e0b;">YTD TOTAL</td>
+                        <td style="text-align: right; color: #f59e0b;">${formatCurrency(ytd.total_revenue)}</td>
+                        <td style="text-align: right; color: #94a3b8;">${formatCurrency(ytd.total_cos)}</td>
+                        <td style="text-align: right; color: #3b82f6;">${formatCurrency(ytd.gross_profit)}</td>
+                        <td style="text-align: right; color: #10b981;">${ytdGPPct.toFixed(1)}%</td>
+                        <td style="text-align: right; color: #a855f7;">${formatCurrency(ytd.total_expenses)}</td>
+                        <td style="text-align: right; color: ${ytd.net_income >= 0 ? '#10b981' : '#ef4444'};">${formatCurrency(ytd.net_income)}</td>
+                        <td style="text-align: right; color: ${ytd.cos_freight <= 0 ? '#10b981' : '#ef4444'};">${formatCurrency(ytd.cos_freight)}</td>
+                    </tr>`;
+
+                document.getElementById('finMonthlyTable').innerHTML = tableHTML;
+
+                // Top Expenses Table
+                const expenseCategories = [
+                    { name: 'Rent', key: 'exp_rent', budget: 308964 },
+                    { name: 'Payroll', key: 'exp_payroll', budget: 315552 },
+                    { name: 'Benefits', key: 'exp_benefits', budget: 175490 },
+                    { name: 'Payroll Taxes', key: 'exp_payroll_taxes', budget: 136803 },
+                    { name: 'Maintenance', key: 'exp_maintenance', budget: 40000 },
+                    { name: 'Commissions', key: 'exp_commissions', budget: 32400 },
+                    { name: 'Equipment Lease', key: 'exp_equipment_lease', budget: 14065 },
+                    { name: 'Telephone', key: 'exp_telephone', budget: 16200 },
+                    { name: 'Travel', key: 'exp_travel', budget: 15000 },
+                    { name: 'Office Supplies', key: 'exp_office_supplies', budget: 12500 },
+                    { name: 'Customer Relations', key: 'exp_cust_relations', budget: 7000 },
+                    { name: 'Utilities', key: 'exp_utilities', budget: 20000 },
+                    { name: 'Depreciation', key: 'exp_depreciation', budget: 6102 },
+                    { name: 'Taxes', key: 'exp_taxes', budget: 5000 },
+                    { name: 'Auto', key: 'exp_travel', budget: 5000 }
+                ];
+
+                let expHTML = '';
+                expenseCategories.forEach(cat => {
+                    const actual = data2025.reduce((sum, r) => sum + parseFloat(r[cat.key] || 0), 0);
+                    const variance = actual - cat.budget;
+                    const pctOfRev = ytd.total_revenue > 0 ? (actual / ytd.total_revenue * 100) : 0;
+
+                    let statusBadge, statusClass;
+                    if (variance <= 0) {
+                        statusBadge = 'Under';
+                        statusClass = 'badge-green';
+                    } else if (variance / cat.budget <= 0.1) {
+                        statusBadge = 'Near';
+                        statusClass = 'badge-amber';
+                    } else {
+                        statusBadge = 'Over';
+                        statusClass = 'badge-red';
+                    }
+
+                    expHTML += `
+                        <tr>
+                            <td>${cat.name}</td>
+                            <td style="text-align: right;">${formatCurrency(actual)}</td>
+                            <td style="text-align: right; color: #94a3b8;">${formatCurrency(cat.budget)}</td>
+                            <td style="text-align: right; color: ${variance <= 0 ? '#10b981' : '#ef4444'};">
+                                ${variance >= 0 ? '+' : ''}${formatCurrency(variance)}
+                            </td>
+                            <td style="text-align: right; color: #94a3b8;">${pctOfRev.toFixed(1)}%</td>
+                            <td style="text-align: center;"><span class="badge ${statusClass}">${statusBadge}</span></td>
+                        </tr>`;
+                });
+
+                document.getElementById('finExpenseTable').innerHTML = expHTML;
+
+                // Freight Budget Monitor
+                document.getElementById('finFreightYTD').textContent = formatCurrency(ytd.cos_freight);
+                document.getElementById('finFreightBudgetAmt').textContent = formatCurrency(budget.freight);
+                const freightVar = ytd.cos_freight - budget.freight;
+                document.getElementById('finFreightVariance').textContent =
+                    `${freightVar >= 0 ? '+' : ''}${formatCurrency(freightVar)}`;
+                document.getElementById('finFreightVariance').style.color = freightVar <= 0 ? '#10b981' : '#f43f5e';
+
+                const freightMonthlyAvg = data2025.length > 0 ? ytd.cos_freight / data2025.length : 0;
+                document.getElementById('finFreightMonthlyAvg').textContent = formatCurrency(freightMonthlyAvg);
+
+                // Freight status
+                const freightStatus = document.getElementById('finFreightStatus');
+                if (ytd.cos_freight > 0) {
+                    freightStatus.textContent = 'Over Budget';
+                    freightStatus.className = 'badge badge-red';
+                } else if (ytd.cos_freight > budget.freight) {
+                    freightStatus.textContent = 'Over Budget';
+                    freightStatus.className = 'badge badge-red';
+                } else {
+                    freightStatus.textContent = 'Under Budget';
+                    freightStatus.className = 'badge badge-green';
+                }
+
+                // Freight by month
+                let freightByMonthHTML = '';
+                data2025.forEach(r => {
+                    const frt = parseFloat(r.cos_freight || 0);
+                    const frtColor = frt <= 0 ? '#10b981' : '#f43f5e';
+                    freightByMonthHTML += `
+                        <div style="background: rgba(0,0,0,0.3); padding: 6px 10px; border-radius: 6px; text-align: center;">
+                            <div style="font-weight: 600;">${months[r.month]}</div>
+                            <div style="color: ${frtColor}; font-weight: bold;">${formatCurrency(frt)}</div>
+                        </div>`;
+                });
+                document.getElementById('finFreightByMonth').innerHTML = freightByMonthHTML;
+
+                console.log('loadFinancialData: Complete');
+
+            } catch (error) {
+                console.error('Error loading financial data:', error);
+                document.getElementById('finMonthlyTable').innerHTML =
+                    '<tr><td colspan="8" style="text-align:center; color:#ef4444;">Error loading financial data</td></tr>';
+            }
+        }
+
+        // Load flat rate chart for calculator
+        async function loadFlatRateChart() {
+            try {
+                const resp = await fetch(
+                    `${SUPABASE_URL}/rest/v1/flat_rate_chart?select=*&order=weight_lb.asc`,
+                    { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
+                );
+                const data = await resp.json();
+                if (Array.isArray(data) && data.length > 0) {
+                    flatRateData = data;
+                    console.log('loadFlatRateChart: Loaded', data.length, 'weight tiers');
+                    calculateFreightRate(); // Initial calc
+                }
+            } catch (error) {
+                console.error('Error loading flat rate chart:', error);
+            }
+        }
+
+        function calculateFreightRate() {
+            if (flatRateData.length === 0) {
+                document.getElementById('freightFlatRate').textContent = 'No data';
+                return;
+            }
+
+            const weight = parseInt(document.getElementById('freightWeight').value) || 1;
+            const carrier = document.getElementById('freightCarrier').value;
+            const service = document.getElementById('freightService').value;
+
+            // Map service + carrier to column name
+            const columnMap = {
+                'fedex_overnight_first': 'fedex_first_overnight',
+                'ups_overnight_first': 'ups_early_am',
+                'fedex_overnight_priority': 'fedex_priority_overnight',
+                'ups_overnight_priority': 'ups_next_day_air',
+                'fedex_overnight_standard': 'fedex_standard_overnight',
+                'ups_overnight_standard': 'ups_next_day_saver',
+                'fedex_2day': 'fedex_2day',
+                'ups_2day': 'ups_2day_air',
+                'fedex_3day': 'fedex_express_saver',
+                'ups_3day': 'ups_3day_select',
+                'fedex_ground': 'fedex_ground',
+                'ups_ground': 'ups_ground'
+            };
+
+            const colKey = `${carrier}_${service}`;
+            const column = columnMap[colKey];
+
+            if (!column) {
+                document.getElementById('freightFlatRate').textContent = '$--';
+                return;
+            }
+
+            // Find the correct weight tier (round up to next tier)
+            let matchedRow = flatRateData[flatRateData.length - 1]; // default to max
+            for (let i = 0; i < flatRateData.length; i++) {
+                if (flatRateData[i].weight_lb >= weight) {
+                    matchedRow = flatRateData[i];
+                    break;
+                }
+            }
+
+            const flatRate = parseFloat(matchedRow[column] || 0);
+            const markup = flatRate * 0.20;
+            const billAmount = flatRate + markup;
+            const loanerTotal = billAmount * 4;
+
+            document.getElementById('freightFlatRate').textContent = `$${flatRate.toFixed(2)}`;
+            document.getElementById('freightMarkup').textContent = `$${markup.toFixed(2)}`;
+            document.getElementById('freightBillAmount').textContent = `$${billAmount.toFixed(2)}`;
+            document.getElementById('freightLoanerTotal').textContent = `$${loanerTotal.toFixed(2)}`;
+        }
+
         // Load all dashboard data
         async function loadDashboardData() {
             await loadAnchorWorkOrders();
@@ -1858,6 +2471,8 @@
             await loadEmployeeData();
             await loadWIP();
             await loadActionsData();
+            await loadFinancialData();
+            await loadFlatRateChart();
 
             // Update last refreshed timestamp
             const now = new Date();
