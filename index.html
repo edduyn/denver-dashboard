@@ -1759,6 +1759,66 @@
                     <div id="finFreightByMonth" style="display: flex; gap: 8px; flex-wrap: wrap; font-size: 12px; color: #fda4af;">Loading...</div>
                 </div>
             </div>
+
+            <!-- TFM Freight Invoice Detail -->
+            <div class="card" style="background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%); border: 1px solid #6366f1;">
+                <div class="card-header">
+                    <span class="card-title" style="color: #a5b4fc;">📦 TFM Invoice Detail — Denver (Dist 89)</span>
+                    <span class="badge badge-blue" id="tfmInvoiceCount">Loading...</span>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 16px;">
+                    <div style="background: rgba(0,0,0,0.3); border-radius: 8px; padding: 12px; text-align: center;">
+                        <div style="color: #a5b4fc; font-size: 11px; margin-bottom: 4px;">Total Shipments</div>
+                        <div style="color: #818cf8; font-size: 22px; font-weight: bold;" id="tfmTotalShipments">--</div>
+                    </div>
+                    <div style="background: rgba(0,0,0,0.3); border-radius: 8px; padding: 12px; text-align: center;">
+                        <div style="color: #a5b4fc; font-size: 11px; margin-bottom: 4px;">Total Charges</div>
+                        <div style="color: #f43f5e; font-size: 22px; font-weight: bold;" id="tfmTotalCharges">$--</div>
+                    </div>
+                    <div style="background: rgba(0,0,0,0.3); border-radius: 8px; padding: 12px; text-align: center;">
+                        <div style="color: #a5b4fc; font-size: 11px; margin-bottom: 4px;">Credits</div>
+                        <div style="color: #10b981; font-size: 22px; font-weight: bold;" id="tfmTotalCredits">$--</div>
+                    </div>
+                    <div style="background: rgba(0,0,0,0.3); border-radius: 8px; padding: 12px; text-align: center;">
+                        <div style="color: #a5b4fc; font-size: 11px; margin-bottom: 4px;">Avg per Shipment</div>
+                        <div style="color: #818cf8; font-size: 22px; font-weight: bold;" id="tfmAvgCharge">$--</div>
+                    </div>
+                </div>
+                <!-- Carrier & Weekly Breakdown -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;">
+                    <div style="background: rgba(0,0,0,0.3); border-radius: 8px; padding: 12px;">
+                        <div style="color: #a5b4fc; font-weight: bold; margin-bottom: 8px; font-size: 12px;">By Carrier</div>
+                        <div id="tfmByCarrier" style="font-size: 12px; color: #c7d2fe;">Loading...</div>
+                    </div>
+                    <div style="background: rgba(0,0,0,0.3); border-radius: 8px; padding: 12px;">
+                        <div style="color: #a5b4fc; font-weight: bold; margin-bottom: 8px; font-size: 12px;">By Invoice Week</div>
+                        <div id="tfmByWeek" style="font-size: 12px; color: #c7d2fe;">Loading...</div>
+                    </div>
+                </div>
+                <!-- Top Vendors -->
+                <div style="background: rgba(0,0,0,0.3); border-radius: 8px; padding: 12px; margin-bottom: 16px;">
+                    <div style="color: #a5b4fc; font-weight: bold; margin-bottom: 8px; font-size: 12px;">Top Vendors / Destinations</div>
+                    <div id="tfmTopVendors" style="font-size: 12px; color: #c7d2fe;">Loading...</div>
+                </div>
+                <!-- Recent Shipments Table -->
+                <div class="table-container" style="max-height: 300px;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="color: #a5b4fc;">Week</th>
+                                <th style="color: #a5b4fc;">Carrier</th>
+                                <th style="color: #a5b4fc;">Tracking</th>
+                                <th style="color: #a5b4fc;">Route</th>
+                                <th style="color: #a5b4fc; text-align: right;">Charge</th>
+                                <th style="color: #a5b4fc;">Ref</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tfmShipmentsTable">
+                            <tr><td colspan="6" style="text-align: center; color: #a5b4fc;">Loading...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -2203,7 +2263,7 @@
                     gross_profit: 2112952,
                     net_income: 997087,
                     total_expenses: 1115865,
-                    freight: -3000,
+                    freight: 0,  // Denver 889 has no specific freight budget per BZ scorecard Jan-26
                     rev_labor: 2147317,
                     rev_parts: 3200000,
                     rev_other: 3485000
@@ -2501,6 +2561,110 @@
             document.getElementById('freightLoanerTotal').textContent = `$${loanerTotal.toFixed(2)}`;
         }
 
+        // Load TFM freight invoice data from Supabase
+        async function loadFreightInvoices() {
+            try {
+                const resp = await fetch(
+                    `${SUPABASE_URL}/rest/v1/freight_invoices?select=*&dept_number=eq.889&order=invoice_date.desc,ship_date.desc`,
+                    { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
+                );
+                if (!resp.ok) { console.log('freight_invoices table not available'); return; }
+                const data = await resp.json();
+                if (!data || data.length === 0) return;
+
+                // KPI calculations
+                const charges = data.filter(r => parseFloat(r.actual_charge) > 0);
+                const credits = data.filter(r => parseFloat(r.actual_charge) < 0);
+                const totalCharges = charges.reduce((s, r) => s + parseFloat(r.actual_charge), 0);
+                const totalCredits = credits.reduce((s, r) => s + parseFloat(r.actual_charge), 0);
+                const avgCharge = charges.length > 0 ? totalCharges / charges.length : 0;
+
+                document.getElementById('tfmInvoiceCount').textContent = `${data.length} shipments`;
+                document.getElementById('tfmTotalShipments').textContent = data.length;
+                document.getElementById('tfmTotalCharges').textContent = formatCurrency(totalCharges);
+                document.getElementById('tfmTotalCredits').textContent = formatCurrency(Math.abs(totalCredits));
+                document.getElementById('tfmAvgCharge').textContent = formatCurrency(avgCharge);
+
+                // By Carrier
+                const byCarrier = {};
+                data.forEach(r => {
+                    const c = r.carrier || 'Unknown';
+                    if (!byCarrier[c]) byCarrier[c] = { count: 0, total: 0 };
+                    byCarrier[c].count++;
+                    byCarrier[c].total += parseFloat(r.actual_charge);
+                });
+                let carrierHTML = '';
+                Object.entries(byCarrier).sort((a, b) => b[1].total - a[1].total).forEach(([carrier, info]) => {
+                    carrierHTML += `<div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                        <span>${carrier}</span>
+                        <span style="color: #818cf8;">${info.count} shipments · ${formatCurrency(info.total)}</span>
+                    </div>`;
+                });
+                document.getElementById('tfmByCarrier').innerHTML = carrierHTML;
+
+                // By Invoice Week
+                const byWeek = {};
+                data.forEach(r => {
+                    const w = r.invoice_week || 'Unknown';
+                    if (!byWeek[w]) byWeek[w] = { count: 0, total: 0 };
+                    byWeek[w].count++;
+                    byWeek[w].total += parseFloat(r.actual_charge);
+                });
+                const weekOrder = ['Dec 26', 'Jan 9', 'Jan 16', 'Jan 23', 'Jan 30'];
+                let weekHTML = '';
+                weekOrder.forEach(w => {
+                    if (byWeek[w]) {
+                        const color = byWeek[w].total > 100 ? '#f43f5e' : byWeek[w].total > 50 ? '#fbbf24' : '#10b981';
+                        weekHTML += `<div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                            <span>${w}</span>
+                            <span style="color: ${color};">${byWeek[w].count} items · ${formatCurrency(byWeek[w].total)}</span>
+                        </div>`;
+                    }
+                });
+                document.getElementById('tfmByWeek').innerHTML = weekHTML;
+
+                // Top Vendors
+                const byVendor = {};
+                data.forEach(r => {
+                    let v = (r.reference_number && r.reference_number.includes('Credit')) ? 'CREDIT/REFUND' : 'Shipment';
+                    const route = `${r.origin || '??'} → ${r.destination || '??'}`;
+                    const key = route;
+                    if (!byVendor[key]) byVendor[key] = { count: 0, total: 0 };
+                    byVendor[key].count++;
+                    byVendor[key].total += parseFloat(r.actual_charge);
+                });
+                let vendorHTML = '';
+                Object.entries(byVendor).sort((a, b) => b[1].total - a[1].total).slice(0, 6).forEach(([route, info]) => {
+                    vendorHTML += `<div style="display: flex; justify-content: space-between; margin-bottom: 3px;">
+                        <span>${route}</span>
+                        <span style="color: #818cf8;">${info.count}x · ${formatCurrency(info.total)}</span>
+                    </div>`;
+                });
+                document.getElementById('tfmTopVendors').innerHTML = vendorHTML;
+
+                // Shipments Table
+                let tableHTML = '';
+                data.forEach(r => {
+                    const charge = parseFloat(r.actual_charge);
+                    const chargeColor = charge < 0 ? '#10b981' : charge > 40 ? '#f43f5e' : '#e2e8f0';
+                    const carrierShort = (r.carrier || '').replace('FedEx ', '');
+                    tableHTML += `<tr>
+                        <td style="font-size: 11px;">${r.invoice_week || ''}</td>
+                        <td style="font-size: 11px;">${carrierShort}</td>
+                        <td style="font-size: 11px; font-family: monospace;">${(r.tracking_number || '').slice(-8)}</td>
+                        <td style="font-size: 11px;">${r.origin || ''} → ${r.destination || ''}</td>
+                        <td style="font-size: 11px; text-align: right; color: ${chargeColor}; font-weight: 600;">${formatCurrency(charge)}</td>
+                        <td style="font-size: 11px; color: #94a3b8;">${r.reference_number || ''}</td>
+                    </tr>`;
+                });
+                document.getElementById('tfmShipmentsTable').innerHTML = tableHTML;
+
+                console.log('loadFreightInvoices: Complete -', data.length, 'records');
+            } catch (error) {
+                console.error('Error loading freight invoices:', error);
+            }
+        }
+
         // Load all dashboard data
         async function loadDashboardData() {
             await loadAnchorWorkOrders();
@@ -2518,6 +2682,7 @@
             await loadActionsData();
             await loadFinancialData();
             await loadFlatRateChart();
+            await loadFreightInvoices();
 
             // Update last refreshed timestamp
             const now = new Date();
