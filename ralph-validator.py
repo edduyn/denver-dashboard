@@ -465,6 +465,78 @@ def check_duplicate_records(result):
             result.ok('Duplicates: Anchor WOs', f'{len(wo_nums)} unique WOs, no duplicates')
 
 
+# Internal/cash customer IDs that don't need NPS surveys
+INTERNAL_CUSTOMER_IDS = {'103880', '108928', '108933'}
+
+def check_nps_email_coverage(result):
+    """Check 13: Active WO customers have email on file for NPS surveys."""
+    # Get all unique customer_ids from anchor_work_orders (active WOs)
+    status1, anchor = sb_get('/rest/v1/anchor_work_orders?select=customer_id,customer')
+    if status1 != 200 or not isinstance(anchor, list):
+        result.warn('NPS Email Coverage', 'Could not fetch anchor data')
+        return
+
+    # Get all customer_ids with emails
+    status2, emails = sb_get('/rest/v1/customer_emails?select=customer_id')
+    if status2 != 200 or not isinstance(emails, list):
+        result.warn('NPS Email Coverage', 'Could not fetch customer_emails')
+        return
+
+    # Build sets
+    email_ids = set(e['customer_id'] for e in emails if e.get('customer_id'))
+    anchor_customers = {}
+    for a in anchor:
+        cid = str(a.get('customer_id', ''))
+        if cid and cid not in INTERNAL_CUSTOMER_IDS:
+            anchor_customers[cid] = a.get('customer', 'Unknown')
+
+    # Find active WO customers missing emails
+    missing = {cid: name for cid, name in anchor_customers.items() if cid not in email_ids}
+
+    total_external = len(anchor_customers)
+    covered = total_external - len(missing)
+    pct = round(covered / total_external * 100, 1) if total_external > 0 else 0
+
+    if len(missing) > 10:
+        names = ', '.join(list(missing.values())[:5]) + f'... (+{len(missing)-5} more)'
+        result.warn('NPS Email Coverage',
+                     f'{covered}/{total_external} customers have emails ({pct}%) — '
+                     f'{len(missing)} missing: {names}')
+    elif len(missing) > 0:
+        names = ', '.join(missing.values())
+        result.warn('NPS Email Coverage',
+                     f'{covered}/{total_external} ({pct}%) — missing: {names}')
+    else:
+        result.ok('NPS Email Coverage', f'All {total_external} active WO customers have emails on file')
+
+
+def check_nps_survey_status(result):
+    """Check 14: NPS survey send rate and response tracking."""
+    current_month = date.today().strftime('%Y-%m')
+    status, surveys = sb_get(f'/rest/v1/nps_surveys?select=id,status,score,month,email')
+    if status != 200 or not isinstance(surveys, list):
+        result.warn('NPS Surveys', 'Could not fetch NPS survey data')
+        return
+
+    if len(surveys) == 0:
+        result.warn('NPS Surveys', 'No NPS surveys found')
+        return
+
+    # Current month stats
+    this_month = [s for s in surveys if s.get('month') == current_month]
+    completed = [s for s in surveys if s.get('status') == 'Completed' and s.get('score') is not None]
+    sent = [s for s in surveys if s.get('status') == 'Sent']
+    no_email = [s for s in surveys if not s.get('email')]
+
+    result.ok('NPS Surveys',
+               f'{len(surveys)} total — {len(this_month)} this month, '
+               f'{len(completed)} completed, {len(sent)} awaiting response')
+
+    if no_email:
+        result.warn('NPS: Missing Emails',
+                     f'{len(no_email)} surveys have no email address')
+
+
 # =============================================================================
 # PUSH VALIDATION RECORD TO SUPABASE
 # =============================================================================
@@ -509,7 +581,7 @@ def run_validation(auto_fix=False, quick=False):
     log.info('=' * 60)
 
     # Always check connectivity first
-    log.info('\n[1/12] Supabase Connectivity')
+    log.info('\n[1/14] Supabase Connectivity')
     connected = check_connectivity(result)
 
     if not connected:
@@ -523,38 +595,44 @@ def run_validation(auto_fix=False, quick=False):
         return result.summary()
 
     # Full validation suite
-    log.info('\n[2/12] Table Row Counts')
+    log.info('\n[2/14] Table Row Counts')
     check_table_row_counts(result)
 
-    log.info('\n[3/12] Anchor Data Quality')
+    log.info('\n[3/14] Anchor Data Quality')
     check_anchor_data_quality(result)
 
-    log.info('\n[4/12] Anchor Days Open Accuracy')
+    log.info('\n[4/14] Anchor Days Open Accuracy')
     check_anchor_days_open_accuracy(result, auto_fix=auto_fix)
 
-    log.info('\n[5/12] Time Entries Freshness')
+    log.info('\n[5/14] Time Entries Freshness')
     check_time_entries_freshness(result)
 
-    log.info('\n[6/12] Time Entries Employee Coverage')
+    log.info('\n[6/14] Time Entries Employee Coverage')
     check_time_entries_employee_count(result)
 
-    log.info('\n[7/12] Training Data')
+    log.info('\n[7/14] Training Data')
     check_training_data(result)
 
-    log.info('\n[8/12] Employee Status')
+    log.info('\n[8/14] Employee Status')
     check_employee_status(result)
 
-    log.info('\n[9/12] Rankings Freshness')
+    log.info('\n[9/14] Rankings Freshness')
     check_rankings_freshness(result)
 
-    log.info('\n[10/12] Budget Data')
+    log.info('\n[10/14] Budget Data')
     check_budget_data(result)
 
-    log.info('\n[11/12] Cross-Reference: Anchor vs Billed WOs')
+    log.info('\n[11/14] Cross-Reference: Anchor vs Billed WOs')
     check_cross_reference_wos(result)
 
-    log.info('\n[12/12] Duplicate Detection')
+    log.info('\n[12/14] Duplicate Detection')
     check_duplicate_records(result)
+
+    log.info('\n[13/14] NPS Email Coverage')
+    check_nps_email_coverage(result)
+
+    log.info('\n[14/14] NPS Survey Status')
+    check_nps_survey_status(result)
 
     # Summary
     summary = result.summary()
