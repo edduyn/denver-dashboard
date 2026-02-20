@@ -536,6 +536,56 @@ def check_nps_survey_status(result):
                      f'{len(no_email)} surveys have no email address')
 
 
+def check_eval_deadlines(result):
+    """Check 15: Flag employee evals due within 30 days or overdue.
+    Team leads must submit evals 2 weeks before the due date."""
+    status, employees = sb_get('/rest/v1/employees?select=name,eval_due_date,eval_responsible,eval_status&eval_due_date=not.is.null&order=eval_due_date.asc')
+    if status != 200 or not isinstance(employees, list):
+        result.warn('Eval Deadlines', 'Could not fetch employee eval data')
+        return
+
+    today = date.today()
+    overdue = []
+    tl_overdue = []   # team lead deadline overdue (2 weeks before eval due)
+    upcoming = []     # due within 30 days
+
+    for emp in employees:
+        if emp.get('eval_status') == 'completed':
+            continue
+        due = date.fromisoformat(emp['eval_due_date'])
+        days_left = (due - today).days
+        tl_deadline = due - timedelta(days=14)
+        tl_days_left = (tl_deadline - today).days
+        responsible = emp.get('eval_responsible', 'Unknown')
+
+        if days_left < 0:
+            overdue.append(f"{emp['name']} ({abs(days_left)}d overdue)")
+        elif days_left <= 30:
+            upcoming.append(f"{emp['name']} ({days_left}d, {responsible})")
+
+        # Team lead deadline check (only for TL-managed evals)
+        if responsible not in ('Edduyn Pita',) and tl_days_left < 0 and days_left >= 0:
+            tl_overdue.append(f"{emp['name']} → {responsible} ({abs(tl_days_left)}d past TL deadline)")
+
+    if overdue:
+        result.error('Eval Deadlines',
+                      f'{len(overdue)} OVERDUE: {", ".join(overdue)}')
+    elif tl_overdue:
+        result.warn('Eval Deadlines',
+                     f'{len(tl_overdue)} past TL submission deadline: {", ".join(tl_overdue)}')
+    elif upcoming:
+        result.warn('Eval Deadlines',
+                     f'{len(upcoming)} due within 30 days: {", ".join(upcoming)}')
+    else:
+        next_emp = next((e for e in employees if e.get('eval_status') != 'completed'), None)
+        if next_emp:
+            nxt = date.fromisoformat(next_emp['eval_due_date'])
+            result.ok('Eval Deadlines',
+                       f'Next: {next_emp["name"]} on {nxt.strftime("%b %d")} ({(nxt - today).days}d away)')
+        else:
+            result.ok('Eval Deadlines', 'All evals completed')
+
+
 # =============================================================================
 # PUSH VALIDATION RECORD TO SUPABASE
 # =============================================================================
@@ -580,7 +630,7 @@ def run_validation(auto_fix=False, quick=False):
     log.info('=' * 60)
 
     # Always check connectivity first
-    log.info('\n[1/14] Supabase Connectivity')
+    log.info('\n[1/15] Supabase Connectivity')
     connected = check_connectivity(result)
 
     if not connected:
@@ -594,44 +644,47 @@ def run_validation(auto_fix=False, quick=False):
         return result.summary()
 
     # Full validation suite
-    log.info('\n[2/14] Table Row Counts')
+    log.info('\n[2/15] Table Row Counts')
     check_table_row_counts(result)
 
-    log.info('\n[3/14] Anchor Data Quality')
+    log.info('\n[3/15] Anchor Data Quality')
     check_anchor_data_quality(result)
 
-    log.info('\n[4/14] Anchor Days Open Accuracy')
+    log.info('\n[4/15] Anchor Days Open Accuracy')
     check_anchor_days_open_accuracy(result, auto_fix=auto_fix)
 
-    log.info('\n[5/14] Time Entries Freshness')
+    log.info('\n[5/15] Time Entries Freshness')
     check_time_entries_freshness(result)
 
-    log.info('\n[6/14] Time Entries Employee Coverage')
+    log.info('\n[6/15] Time Entries Employee Coverage')
     check_time_entries_employee_count(result)
 
-    log.info('\n[7/14] Training Data')
+    log.info('\n[7/15] Training Data')
     check_training_data(result)
 
-    log.info('\n[8/14] Employee Status')
+    log.info('\n[8/15] Employee Status')
     check_employee_status(result)
 
-    log.info('\n[9/14] Rankings Freshness')
+    log.info('\n[9/15] Rankings Freshness')
     check_rankings_freshness(result)
 
-    log.info('\n[10/14] Budget Data')
+    log.info('\n[10/15] Budget Data')
     check_budget_data(result)
 
-    log.info('\n[11/14] Cross-Reference: Anchor vs Billed WOs')
+    log.info('\n[11/15] Cross-Reference: Anchor vs Billed WOs')
     check_cross_reference_wos(result)
 
-    log.info('\n[12/14] Duplicate Detection')
+    log.info('\n[12/15] Duplicate Detection')
     check_duplicate_records(result)
 
-    log.info('\n[13/14] NPS Email Coverage')
+    log.info('\n[13/15] NPS Email Coverage')
     check_nps_email_coverage(result)
 
-    log.info('\n[14/14] NPS Survey Status')
+    log.info('\n[14/15] NPS Survey Status')
     check_nps_survey_status(result)
+
+    log.info('\n[15/15] Eval Deadlines')
+    check_eval_deadlines(result)
 
     # Summary
     summary = result.summary()
