@@ -2784,7 +2784,7 @@
                     document.getElementById('abVariance').textContent = `${variance > 0 ? '+' : ''}${variance}%`;
                     document.getElementById('abVariance').style.color = variance >= 0 ? '#10b981' : '#ef4444';
 
-                    const weekDate = new Date(latest.week_ending).toLocaleDateString();
+                    const weekDate = new Date(latest.week_ending + 'T12:00:00').toLocaleDateString();
                     document.getElementById('positionDate').textContent = `Week of ${weekDate}`;
 
                     // Status badge
@@ -2799,7 +2799,7 @@
                         const statusText = v >= 0 ? 'On Target' : 'Below';
                         return `
                             <tr>
-                                <td>${new Date(r.week_ending).toLocaleDateString()}</td>
+                                <td>${new Date(r.week_ending + 'T12:00:00').toLocaleDateString()}</td>
                                 <td><strong>#${r.denver_position}</strong> of ${r.total_shops}</td>
                                 <td>${r.denver_ab_actual}%</td>
                                 <td>${r.denver_ab_budget}%</td>
