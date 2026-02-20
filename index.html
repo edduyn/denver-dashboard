@@ -958,28 +958,6 @@
                 </table>
             </div>
 
-            <!-- Team Roster -->
-            <div class="card">
-                <div class="card-title">📋 Complete Team Roster</div>
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Code</th>
-                            <th>Title</th>
-                            <th>QI</th>
-                            <th>RTS</th>
-                            <th>SRA</th>
-                            <th>Stamps</th>
-                            <th>Years Exp</th>
-                            <th>Rating</th>
-                        </tr>
-                    </thead>
-                    <tbody id="rosterTable">
-                        <tr><td colspan="9" style="text-align:center;">Loading...</td></tr>
-                    </tbody>
-                </table>
-            </div>
         </div>
         <div class="content" id="workorders">
             <!-- ANCHOR Open Work Orders Summary (Primary Source of Truth) -->
@@ -4955,27 +4933,6 @@
                 {name: 'Andrew Watson', code: 'WATAN', title: 'Sat Install Spec II', qi: 'N', rts: '', sra: 'Y', stamps: 'SRI 1412', exp: 0, rating: 'A&P'},
                 {name: 'John Watson', code: 'WATJO', title: 'Team Ldr - Sat Install', qi: 'Y', rts: '2', sra: 'Y', stamps: 'QI 2258, SRI 714', exp: 11, rating: 'R'}
             ];
-
-            // Team Roster
-            const rosterHTML = employees.map(emp => {
-                const qiBadge = emp.qi === 'Y' ? '<span class="badge badge-green">✓</span>' : '<span class="badge badge-gray">-</span>';
-                const rtsBadge = emp.rts === '2' ? '<span class="badge badge-green">✓</span>' : '<span class="badge badge-gray">-</span>';
-                const sraBadge = emp.sra === 'Y' ? '<span class="badge badge-green">✓</span>' : '<span class="badge badge-gray">-</span>';
-                return `
-                    <tr>
-                        <td><strong>${emp.name}</strong></td>
-                        <td>${emp.code}</td>
-                        <td>${emp.title}</td>
-                        <td>${qiBadge}</td>
-                        <td>${rtsBadge}</td>
-                        <td>${sraBadge}</td>
-                        <td style="color:#94a3b8; font-size:0.85em;">${emp.stamps}</td>
-                        <td>${emp.exp > 0 ? emp.exp : '-'}</td>
-                        <td>${emp.rating || '-'}</td>
-                    </tr>
-                `;
-            }).join('');
-            document.getElementById('rosterTable').innerHTML = rosterHTML;
 
             // Load A/B Performance data from Supabase
             loadYTDAB();
