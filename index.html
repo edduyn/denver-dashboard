@@ -2074,15 +2074,20 @@
         let anchorWorkOrdersData = [];
         // Demarest freight flag data (keyed by wo_number)
         let demarestFreightFlags = {};
+        // freight_tracking records (keyed by wo_number → array of records)
+        let freightTrackingByWO = {};
 
         // Load ANCHOR Work Orders (Primary Source of Truth)
         async function loadAnchorWorkOrders() {
             try {
-                const [response, demarestResp] = await Promise.all([
+                const [response, demarestResp, freightTrackResp] = await Promise.all([
                     fetch(`${SUPABASE_URL}/rest/v1/anchor_work_orders?select=*&order=days_open.desc.nullslast`, {
                         headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
                     }),
                     fetch(`${SUPABASE_URL}/rest/v1/demarest_open_wo?select=wo_number,shop,parts,outside_services,freight_flag,report_date&order=report_date.desc`, {
+                        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+                    }),
+                    fetch(`${SUPABASE_URL}/rest/v1/freight_tracking?select=wo_number,carrier,flat_rate_cost,status,tracking_number,notes,ship_date&order=created_at.desc`, {
                         headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
                     })
                 ]);
@@ -2099,6 +2104,17 @@
                         });
                     }
                 } catch (e) { console.log('Demarest data not available:', e); }
+                // Build freight_tracking lookup (wo_number → array of records)
+                freightTrackingByWO = {};
+                try {
+                    const ftData = await freightTrackResp.json();
+                    if (Array.isArray(ftData)) {
+                        ftData.forEach(r => {
+                            if (!freightTrackingByWO[r.wo_number]) freightTrackingByWO[r.wo_number] = [];
+                            freightTrackingByWO[r.wo_number].push(r);
+                        });
+                    }
+                } catch (e) { console.log('freight_tracking not available:', e); }
 
                 if (!Array.isArray(data)) {
                     console.log('anchor_work_orders returned non-array:', data);
@@ -2113,7 +2129,7 @@
                 const aogCount = data.filter(wo => wo.is_aog).length;
                 const totalExpHrs = data.reduce((sum, wo) => sum + (wo.expected_hours || 0), 0);
                 const over30Count = data.filter(wo => wo.days_open && wo.days_open > 30).length;
-                const freightMissing = data.filter(wo => demarestFreightFlags[wo.wo_number] && demarestFreightFlags[wo.wo_number].freight_flag === 'missing').length;
+                const freightMissing = data.filter(wo => demarestFreightFlags[wo.wo_number] && demarestFreightFlags[wo.wo_number].freight_flag === 'missing' && !freightTrackingByWO[wo.wo_number]).length;
                 const reportDate = data.length > 0 ? data[0].report_date : '--';
 
                 document.getElementById('anchorTotal').textContent = total;
@@ -2196,10 +2212,25 @@
                 const openDate = wo.open_date ? new Date(wo.open_date + 'T00:00:00').toLocaleDateString() : '--';
                 const desc = wo.description ? (wo.description.length > 35 ? wo.description.substring(0, 35) + '...' : wo.description) : '--';
 
-                // Freight flag from Demarest data
+                // Freight: layer freight_tracking records over Demarest flags
                 const dem = demarestFreightFlags[wo.wo_number];
+                const ftRecords = freightTrackingByWO[wo.wo_number];
                 let freightCell = '<span style="color:#475569;font-size:0.8em;">--</span>';
-                if (dem) {
+                if (ftRecords && ftRecords.length > 0) {
+                    const totalCost = ftRecords.reduce((s, r) => s + (parseFloat(r.flat_rate_cost) || 0), 0);
+                    const carriers = [...new Set(ftRecords.map(r => r.carrier).filter(Boolean))].join(', ');
+                    const trackNums = ftRecords.map(r => r.tracking_number).filter(Boolean).join(', ');
+                    const statuses = [...new Set(ftRecords.map(r => r.status).filter(Boolean))].join(', ');
+                    const notes = ftRecords.map(r => r.notes).filter(Boolean).join(' | ');
+                    const countLabel = ftRecords.length > 1 ? ` (${ftRecords.length})` : '';
+                    if (totalCost > 0) {
+                        const tip = `${carriers}${trackNums ? ' | ' + trackNums : ''} | Status: ${statuses}${notes ? ' | ' + notes : ''}`;
+                        freightCell = `<span title="${tip}" style="color:#22c55e;font-weight:bold;font-size:0.8em;cursor:help;">$${totalCost.toFixed(2)}${countLabel}</span>`;
+                    } else {
+                        const tip = `${carriers || 'Carrier TBD'}${notes ? ' | ' + notes : ''} | Status: ${statuses || 'pending'}`;
+                        freightCell = `<span title="${tip}" style="background:#3b82f6;color:#fff;padding:2px 6px;border-radius:4px;font-weight:bold;font-size:0.75em;cursor:help;">TRACKED${countLabel}</span>`;
+                    }
+                } else if (dem) {
                     if (dem.freight_flag === 'missing') {
                         freightCell = `<span title="Parts: $${Number(dem.parts).toLocaleString()} | O/S: $0 — Freight not captured" style="background:#ef4444;color:#fff;padding:2px 6px;border-radius:4px;font-weight:bold;font-size:0.75em;cursor:help;">NO FRT</span>`;
                     } else if (dem.freight_flag === 'ok') {
@@ -2208,7 +2239,7 @@
                 }
 
                 return `
-                    <tr style="${wo.is_aog ? 'background: rgba(239,68,68,0.15);' : dem && dem.freight_flag === 'missing' ? 'background: rgba(239,68,68,0.10);' : daysOpen >= 30 ? 'background: rgba(239,68,68,0.08);' : ''}">
+                    <tr style="${wo.is_aog ? 'background: rgba(239,68,68,0.15);' : dem && dem.freight_flag === 'missing' && !ftRecords ? 'background: rgba(239,68,68,0.10);' : daysOpen >= 30 ? 'background: rgba(239,68,68,0.08);' : ''}">
                         <td><strong>${wo.wo_number}</strong></td>
                         <td><span style="color:${shopColor};font-weight:600;">${wo.shop}</span></td>
                         <td>${wo.anchor_status || '--'}</td>
