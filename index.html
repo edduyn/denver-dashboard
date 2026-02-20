@@ -4257,7 +4257,7 @@
                 const sentYTD = npsYear.length;
                 const completedYTD = npsYear.filter(s => s.score !== null).length; // Only count responses received
                 const yearlyGoal = 12;
-                const expectedByNow = yr.monthsElapsed;
+                const expectedByNow = Math.max(1, yr.monthsElapsed - 1); // completed months (not counting current month in progress)
                 const npsProgress = Math.min((completedYTD / yearlyGoal * 100), 100);
 
                 document.getElementById('surveysSent').textContent = sentYTD;
