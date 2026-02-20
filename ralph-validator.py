@@ -27,7 +27,7 @@ import ssl
 import urllib.request
 import urllib.error
 import logging
-from datetime import datetime, date, timedelta
+from datetime import datetime, date, timedelta, timezone
 from pathlib import Path
 
 # =============================================================================
@@ -130,7 +130,7 @@ class ValidationResult:
         self.errors = []
         self.warnings = []
         self.fixes = []
-        self.start_time = datetime.now()
+        self.start_time = datetime.now(timezone.utc)
 
     def ok(self, check_name, detail=''):
         self.checks.append({'name': check_name, 'status': 'OK', 'detail': detail})
@@ -159,7 +159,7 @@ class ValidationResult:
         return len(self.errors) == 0
 
     def summary(self):
-        elapsed = (datetime.now() - self.start_time).total_seconds()
+        elapsed = (datetime.now(timezone.utc) - self.start_time).total_seconds()
         total = len(self.checks)
         ok_count = sum(1 for c in self.checks if c['status'] == 'OK')
         return {
