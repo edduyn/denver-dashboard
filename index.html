@@ -2212,6 +2212,20 @@
                 const openDate = wo.open_date ? new Date(wo.open_date + 'T00:00:00').toLocaleDateString() : '--';
                 const desc = wo.description ? (wo.description.length > 35 ? wo.description.substring(0, 35) + '...' : wo.description) : '--';
 
+                // BZ notes indicator
+                let notesIcon = '';
+                if (wo.manager_notes) {
+                    const bzLabel = wo.bz_status || '';
+                    const bzColors = {
+                        'In Work': '#3b82f6',
+                        'Will Bill By End of Month': '#22c55e',
+                        'Vdr or Internal Dispute or Delay': '#f59e0b',
+                    };
+                    const dotColor = bzColors[bzLabel] || '#94a3b8';
+                    const tip = (bzLabel ? `[${bzLabel}] ` : '') + wo.manager_notes;
+                    notesIcon = ` <span title="${tip.replace(/"/g, '&quot;')}" style="cursor:help;font-size:0.75em;background:${dotColor};color:#fff;padding:1px 5px;border-radius:4px;margin-left:4px;">${bzLabel === 'Will Bill By End of Month' ? 'BILL' : bzLabel === 'Vdr or Internal Dispute or Delay' ? 'DISP' : '📝'}</span>`;
+                }
+
                 // Freight: layer freight_tracking records over Demarest flags
                 const dem = demarestFreightFlags[wo.wo_number];
                 const ftRecords = freightTrackingByWO[wo.wo_number];
@@ -2245,7 +2259,7 @@
                         <td>${wo.anchor_status || '--'}</td>
                         <td>${wo.tail_number || '--'}</td>
                         <td>${wo.customer || '--'}</td>
-                        <td title="${wo.description || ''}" style="font-size:0.85em;">${desc}</td>
+                        <td title="${wo.description || ''}" style="font-size:0.85em;">${desc}${notesIcon}</td>
                         <td>${openDate}</td>
                         <td><span class="badge ${daysClass}">${daysOpen}d</span></td>
                         <td>${wo.expected_hours ? Math.round(wo.expected_hours) + 'h' : '0h'}</td>
