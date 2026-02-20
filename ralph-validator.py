@@ -60,7 +60,6 @@ logging.basicConfig(
     datefmt='%Y-%m-%d %H:%M:%S',
     handlers=[
         logging.StreamHandler(sys.stdout),
-        logging.FileHandler(LOG_FILE, mode='a'),
     ]
 )
 log = logging.getLogger('ralph-validator')

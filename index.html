@@ -1013,6 +1013,11 @@
                         <div class="metric-label">Over 30 Days</div>
                         <div class="metric-sub">Aging WOs</div>
                     </div>
+                    <div class="metric">
+                        <div class="metric-value" style="color: #ef4444;" id="anchorFreightWarn">--</div>
+                        <div class="metric-label">Missing Freight</div>
+                        <div class="metric-sub">Parts sold, no O/S</div>
+                    </div>
                 </div>
                 <!-- Shop Breakdown -->
                 <div class="card-grid" style="margin-top: 12px;">
@@ -1073,11 +1078,12 @@
                                 <th>Open Date</th>
                                 <th>Days Open</th>
                                 <th>Exp Hrs</th>
+                                <th>Freight</th>
                                 <th>AOG</th>
                             </tr>
                         </thead>
                         <tbody id="anchorWorkOrdersList">
-                            <tr><td colspan="10" style="text-align:center; color:#94a3b8;">Loading ANCHOR data...</td></tr>
+                            <tr><td colspan="11" style="text-align:center; color:#94a3b8;">Loading ANCHOR data...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -2054,17 +2060,34 @@
 
         // Global store for ANCHOR data (used by filter/sort)
         let anchorWorkOrdersData = [];
+        // Demarest freight flag data (keyed by wo_number)
+        let demarestFreightFlags = {};
 
         // Load ANCHOR Work Orders (Primary Source of Truth)
         async function loadAnchorWorkOrders() {
             try {
-                const response = await fetch(`${SUPABASE_URL}/rest/v1/anchor_work_orders?select=*&order=days_open.desc.nullslast`, {
-                    headers: {
-                        'apikey': SUPABASE_KEY,
-                        'Authorization': `Bearer ${SUPABASE_KEY}`
-                    }
-                });
+                const [response, demarestResp] = await Promise.all([
+                    fetch(`${SUPABASE_URL}/rest/v1/anchor_work_orders?select=*&order=days_open.desc.nullslast`, {
+                        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+                    }),
+                    fetch(`${SUPABASE_URL}/rest/v1/demarest_open_wo?select=wo_number,shop,parts,outside_services,freight_flag,report_date&order=report_date.desc`, {
+                        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+                    })
+                ]);
                 const data = await response.json();
+                // Build Demarest freight flag lookup (latest report per WO)
+                demarestFreightFlags = {};
+                try {
+                    const demarestData = await demarestResp.json();
+                    if (Array.isArray(demarestData)) {
+                        demarestData.forEach(d => {
+                            if (!demarestFreightFlags[d.wo_number]) {
+                                demarestFreightFlags[d.wo_number] = d;
+                            }
+                        });
+                    }
+                } catch (e) { console.log('Demarest data not available:', e); }
+
                 if (!Array.isArray(data)) {
                     console.log('anchor_work_orders returned non-array:', data);
                     document.getElementById('anchorBadge').textContent = 'No Data';
@@ -2078,12 +2101,17 @@
                 const aogCount = data.filter(wo => wo.is_aog).length;
                 const totalExpHrs = data.reduce((sum, wo) => sum + (wo.expected_hours || 0), 0);
                 const over30Count = data.filter(wo => wo.days_open && wo.days_open > 30).length;
+                const freightMissing = data.filter(wo => demarestFreightFlags[wo.wo_number] && demarestFreightFlags[wo.wo_number].freight_flag === 'missing').length;
                 const reportDate = data.length > 0 ? data[0].report_date : '--';
 
                 document.getElementById('anchorTotal').textContent = total;
                 document.getElementById('anchorAOG').textContent = aogCount;
                 document.getElementById('anchorExpHrs').textContent = Math.round(totalExpHrs) + 'h';
                 document.getElementById('anchorOver30').textContent = over30Count;
+                if (document.getElementById('anchorFreightWarn')) {
+                    document.getElementById('anchorFreightWarn').textContent = freightMissing;
+                    document.getElementById('anchorFreightWarn').style.color = freightMissing > 0 ? '#ef4444' : '#22c55e';
+                }
                 document.getElementById('anchorReportDate').textContent = reportDate ? new Date(reportDate + 'T00:00:00').toLocaleDateString() : '--';
 
                 // Shop breakdown
@@ -2156,8 +2184,19 @@
                 const openDate = wo.open_date ? new Date(wo.open_date + 'T00:00:00').toLocaleDateString() : '--';
                 const desc = wo.description ? (wo.description.length > 35 ? wo.description.substring(0, 35) + '...' : wo.description) : '--';
 
+                // Freight flag from Demarest data
+                const dem = demarestFreightFlags[wo.wo_number];
+                let freightCell = '<span style="color:#475569;font-size:0.8em;">--</span>';
+                if (dem) {
+                    if (dem.freight_flag === 'missing') {
+                        freightCell = `<span title="Parts: $${Number(dem.parts).toLocaleString()} | O/S: $0 — Freight not captured" style="background:#ef4444;color:#fff;padding:2px 6px;border-radius:4px;font-weight:bold;font-size:0.75em;cursor:help;">NO FRT</span>`;
+                    } else if (dem.freight_flag === 'ok') {
+                        freightCell = `<span title="Parts: $${Number(dem.parts).toLocaleString()} | O/S: $${Number(dem.outside_services).toLocaleString()}" style="color:#22c55e;font-size:0.8em;cursor:help;">OK</span>`;
+                    }
+                }
+
                 return `
-                    <tr style="${wo.is_aog ? 'background: rgba(239,68,68,0.15);' : daysOpen >= 30 ? 'background: rgba(239,68,68,0.08);' : ''}">
+                    <tr style="${wo.is_aog ? 'background: rgba(239,68,68,0.15);' : dem && dem.freight_flag === 'missing' ? 'background: rgba(239,68,68,0.10);' : daysOpen >= 30 ? 'background: rgba(239,68,68,0.08);' : ''}">
                         <td><strong>${wo.wo_number}</strong></td>
                         <td><span style="color:${shopColor};font-weight:600;">${wo.shop}</span></td>
                         <td>${wo.anchor_status || '--'}</td>
@@ -2167,12 +2206,13 @@
                         <td>${openDate}</td>
                         <td><span class="badge ${daysClass}">${daysOpen}d</span></td>
                         <td>${wo.expected_hours ? Math.round(wo.expected_hours) + 'h' : '0h'}</td>
+                        <td>${freightCell}</td>
                         <td>${aogFlag}</td>
                     </tr>
                 `;
             }).join('');
 
-            document.getElementById('anchorWorkOrdersList').innerHTML = tableHTML || '<tr><td colspan="10" style="text-align:center; color:#94a3b8;">No ANCHOR work orders found</td></tr>';
+            document.getElementById('anchorWorkOrdersList').innerHTML = tableHTML || '<tr><td colspan="11" style="text-align:center; color:#94a3b8;">No ANCHOR work orders found</td></tr>';
         }
 
         // ============================================
