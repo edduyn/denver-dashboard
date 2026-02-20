@@ -4848,7 +4848,7 @@
                 });
 
                 // 8. Render table
-                const recommendHTML = enriched.slice(0, 20).map(wo => {
+                const recommendHTML = enriched.slice(0, 5).map(wo => {
                     const hasEmail = !!wo.email;
                     const displayName = wo.customerName || `Unknown (${wo.tail_number || 'N/A'})`;
                     const displayEmail = hasEmail ? wo.email : '';
