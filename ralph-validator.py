@@ -22,6 +22,7 @@ Author: Ralph (Autonomous Dashboard Manager)
 
 import json
 import os
+import re
 import sys
 import ssl
 import urllib.request
@@ -38,6 +39,12 @@ API_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6
 
 LOG_DIR = Path(__file__).parent / 'logs'
 LOG_FILE = LOG_DIR / 'ralph_validation.log'
+
+FREIGHT_DROP_FILE = Path(
+    os.path.expanduser('~/Library/CloudStorage/GoogleDrive-edduyn@gmail.com/'
+                        'My Drive/2026_Goals_Project/Morning_Report/'
+                        'New_Freight_Information.MD')
+)
 
 ctx = ssl.create_default_context()
 ctx.check_hostname = False
@@ -586,6 +593,162 @@ def check_eval_deadlines(result):
             result.ok('Eval Deadlines', 'All evals completed')
 
 
+def process_freight_drop_file(result):
+    """Check 16: Process pending freight entries from New_Freight_Information.MD.
+    Reads the drop file, parses pending entries, posts them to freight_tracking
+    in Supabase, then marks them as completed in the file."""
+    if not FREIGHT_DROP_FILE.exists():
+        result.ok('Freight Drop File', 'File not found — skipping')
+        return
+
+    try:
+        content = FREIGHT_DROP_FILE.read_text(encoding='utf-8')
+    except Exception as e:
+        result.warn('Freight Drop File', f'Could not read file: {e}')
+        return
+
+    # Parse pending entries: - [ ] WO:XXXXX | $cost | carrier | tracking# | weight | description | notes
+    pending_pattern = re.compile(
+        r'^- \[ \] WO:(\S+)\s*\|?\s*'           # WO number (required)
+        r'(?:\$?([\d.]+))?\s*\|?\s*'              # cost (optional)
+        r'([^|]*)?\s*\|?\s*'                       # carrier (optional)
+        r'([^|]*)?\s*\|?\s*'                       # tracking number (optional)
+        r'([^|]*)?\s*\|?\s*'                       # weight (optional)
+        r'([^|]*)?\s*\|?\s*'                       # description (optional)
+        r'(.*)?$',                                  # notes (optional)
+        re.MULTILINE
+    )
+
+    matches = list(pending_pattern.finditer(content))
+
+    if not matches:
+        result.ok('Freight Drop File', 'No pending entries')
+        return
+
+    posted = 0
+    failed = 0
+    updated_content = content
+
+    for m in matches:
+        wo = m.group(1).strip().upper()
+        cost = float(m.group(2)) if m.group(2) else None
+        carrier = (m.group(3) or '').strip() or None
+        tracking = (m.group(4) or '').strip() or None
+        weight_raw = (m.group(5) or '').strip()
+        description = (m.group(6) or '').strip() or None
+        notes = (m.group(7) or '').strip() or None
+
+        # Parse weight (strip "lbs", "lb", etc.)
+        weight = None
+        if weight_raw:
+            w_match = re.search(r'([\d.]+)', weight_raw)
+            if w_match:
+                weight = float(w_match.group(1))
+
+        # Determine service level from carrier string
+        service = None
+        if carrier:
+            cl = carrier.lower()
+            if 'overnight' in cl or 'priority' in cl:
+                service = 'Priority Overnight'
+            elif 'express' in cl or 'saver' in cl:
+                service = 'Express Saver'
+            elif 'ground' in cl:
+                service = 'Ground'
+            elif '2 day' in cl or '2day' in cl:
+                service = '2-Day'
+            elif 'standard' in cl:
+                service = 'Standard Overnight'
+
+        # Build freight_tracking record
+        record = {
+            'wo_number': wo,
+            'carrier': carrier or 'FedEx',
+            'tracking_number': tracking,
+            'service_level': service,
+            'weight_lbs': weight,
+            'flat_rate_cost': cost,
+            'part_description': description,
+            'notes': notes,
+            'ship_date': date.today().isoformat(),
+            'direction': 'outbound',
+            'status': 'pending',
+            'posted_to_wo': False,
+        }
+        # Remove None values
+        record = {k: v for k, v in record.items() if v is not None}
+
+        post_status = sb_post('/rest/v1/freight_tracking', record)
+        if post_status in (200, 201):
+            posted += 1
+            # Mark as completed in the file
+            original_line = m.group(0)
+            completed_line = original_line.replace('- [ ]', '- [x]', 1)
+            updated_content = updated_content.replace(original_line, completed_line, 1)
+            log.info(f'  📦 Freight posted: WO:{wo} ${cost or 0:.2f}')
+        else:
+            failed += 1
+            log.warning(f'  📦 Freight FAILED: WO:{wo} (HTTP {post_status})')
+
+    # Move completed entries to COMPLETED section
+    if posted > 0:
+        # Extract completed lines and move them
+        completed_lines = []
+        new_lines = []
+        timestamp = datetime.now().strftime('%Y-%m-%d %H:%M')
+
+        for line in updated_content.split('\n'):
+            if line.startswith('- [x] WO:'):
+                completed_lines.append(f'- [x] {timestamp} — {line[6:]}')
+            else:
+                new_lines.append(line)
+
+        # Find the COMPLETED section marker and insert lines after it
+        final_lines = []
+        inserted = False
+        for line in new_lines:
+            final_lines.append(line)
+            if '## COMPLETED' in line and not inserted:
+                # Insert after the comment line that follows
+                final_lines.append('<!-- Ralph moves entries here after posting to Supabase freight_tracking table -->')
+                for cl in completed_lines:
+                    final_lines.append(cl)
+                inserted = True
+            elif 'Ralph moves entries here' in line and not inserted:
+                for cl in completed_lines:
+                    final_lines.append(cl)
+                inserted = True
+
+        # If no COMPLETED section found, append at end
+        if not inserted and completed_lines:
+            final_lines.append('')
+            final_lines.append('## COMPLETED')
+            for cl in completed_lines:
+                final_lines.append(cl)
+
+        # Remove duplicate comment lines
+        seen_comment = False
+        clean_lines = []
+        for line in final_lines:
+            if 'Ralph moves entries here' in line:
+                if seen_comment:
+                    continue
+                seen_comment = True
+            clean_lines.append(line)
+
+        try:
+            FREIGHT_DROP_FILE.write_text('\n'.join(clean_lines), encoding='utf-8')
+        except Exception as e:
+            log.warning(f'  Could not update freight file: {e}')
+
+    if failed > 0:
+        result.warn('Freight Drop File', f'{posted} posted, {failed} failed')
+    elif posted > 0:
+        result.ok('Freight Drop File', f'{posted} entries posted to freight_tracking')
+    else:
+        result.ok('Freight Drop File', 'No pending entries')
+
+
 # =============================================================================
 # PUSH VALIDATION RECORD TO SUPABASE
 # =============================================================================
@@ -630,7 +793,7 @@ def run_validation(auto_fix=False, quick=False):
     log.info('=' * 60)
 
     # Always check connectivity first
-    log.info('\n[1/15] Supabase Connectivity')
+    log.info('\n[1/16] Supabase Connectivity')
     connected = check_connectivity(result)
 
     if not connected:
@@ -644,47 +807,50 @@ def run_validation(auto_fix=False, quick=False):
         return result.summary()
 
     # Full validation suite
-    log.info('\n[2/15] Table Row Counts')
+    log.info('\n[2/16] Table Row Counts')
     check_table_row_counts(result)
 
-    log.info('\n[3/15] Anchor Data Quality')
+    log.info('\n[3/16] Anchor Data Quality')
     check_anchor_data_quality(result)
 
-    log.info('\n[4/15] Anchor Days Open Accuracy')
+    log.info('\n[4/16] Anchor Days Open Accuracy')
     check_anchor_days_open_accuracy(result, auto_fix=auto_fix)
 
-    log.info('\n[5/15] Time Entries Freshness')
+    log.info('\n[5/16] Time Entries Freshness')
     check_time_entries_freshness(result)
 
-    log.info('\n[6/15] Time Entries Employee Coverage')
+    log.info('\n[6/16] Time Entries Employee Coverage')
     check_time_entries_employee_count(result)
 
-    log.info('\n[7/15] Training Data')
+    log.info('\n[7/16] Training Data')
     check_training_data(result)
 
-    log.info('\n[8/15] Employee Status')
+    log.info('\n[8/16] Employee Status')
     check_employee_status(result)
 
-    log.info('\n[9/15] Rankings Freshness')
+    log.info('\n[9/16] Rankings Freshness')
     check_rankings_freshness(result)
 
-    log.info('\n[10/15] Budget Data')
+    log.info('\n[10/16] Budget Data')
     check_budget_data(result)
 
-    log.info('\n[11/15] Cross-Reference: Anchor vs Billed WOs')
+    log.info('\n[11/16] Cross-Reference: Anchor vs Billed WOs')
     check_cross_reference_wos(result)
 
-    log.info('\n[12/15] Duplicate Detection')
+    log.info('\n[12/16] Duplicate Detection')
     check_duplicate_records(result)
 
-    log.info('\n[13/15] NPS Email Coverage')
+    log.info('\n[13/16] NPS Email Coverage')
     check_nps_email_coverage(result)
 
-    log.info('\n[14/15] NPS Survey Status')
+    log.info('\n[14/16] NPS Survey Status')
     check_nps_survey_status(result)
 
-    log.info('\n[15/15] Eval Deadlines')
+    log.info('\n[15/16] Eval Deadlines')
     check_eval_deadlines(result)
+
+    log.info('\n[16/16] Freight Drop File')
+    process_freight_drop_file(result)
 
     # Summary
     summary = result.summary()
