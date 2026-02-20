@@ -712,34 +712,6 @@
                 </div>
             </div>
 
-            <!-- EVAL TRACKER -->
-            <div class="card">
-                <div class="card-header">
-                    <span class="card-title">📋 Employee Eval Tracker</span>
-                    <span class="badge" id="evalBadge">Loading...</span>
-                </div>
-                <div style="padding: 16px;">
-                    <!-- Timeline overview -->
-                    <div id="evalTimeline" style="display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap;"></div>
-                    <!-- Eval table -->
-                    <table class="table" style="font-size: 0.85em;">
-                        <thead>
-                            <tr>
-                                <th>Status</th>
-                                <th>Employee</th>
-                                <th>Title</th>
-                                <th>Due Date</th>
-                                <th>Days Left</th>
-                                <th>TL Deadline</th>
-                                <th>Responsible</th>
-                            </tr>
-                        </thead>
-                        <tbody id="evalTableBody">
-                            <tr><td colspan="7" style="text-align:center; color:#94a3b8;">Loading...</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
         </div>
         <div class="content" id="overview">
             <!-- A/B Ratio Comparison Header -->
@@ -925,6 +897,35 @@
             </div>
         </div>
         <div class="content" id="employees">
+            <!-- EVAL TRACKER -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">📋 Employee Eval Tracker</span>
+                    <span class="badge" id="evalBadge">Loading...</span>
+                </div>
+                <div style="padding: 16px;">
+                    <!-- Timeline overview -->
+                    <div id="evalTimeline" style="display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap;"></div>
+                    <!-- Eval table -->
+                    <table class="table" style="font-size: 0.85em;">
+                        <thead>
+                            <tr>
+                                <th>Status</th>
+                                <th>Employee</th>
+                                <th>Title</th>
+                                <th>Due Date</th>
+                                <th>Days Left</th>
+                                <th>TL Deadline</th>
+                                <th>Responsible</th>
+                            </tr>
+                        </thead>
+                        <tbody id="evalTableBody">
+                            <tr><td colspan="7" style="text-align:center; color:#94a3b8;">Loading...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
             <!-- YTD A/B Performance by Employee -->
             <div class="card">
                 <div class="card-title">📈 YTD A/B Performance (2026)</div>
@@ -1899,6 +1900,8 @@
             // Load tab-specific data
             if (tabId === 'actions') {
                 loadActionsData();
+            }
+            if (tabId === 'employees') {
                 loadEvalTracker();
             }
         }
