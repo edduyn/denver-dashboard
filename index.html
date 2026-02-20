@@ -711,6 +711,35 @@
                     </table>
                 </div>
             </div>
+
+            <!-- EVAL TRACKER -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">📋 Employee Eval Tracker</span>
+                    <span class="badge" id="evalBadge">Loading...</span>
+                </div>
+                <div style="padding: 16px;">
+                    <!-- Timeline overview -->
+                    <div id="evalTimeline" style="display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap;"></div>
+                    <!-- Eval table -->
+                    <table class="table" style="font-size: 0.85em;">
+                        <thead>
+                            <tr>
+                                <th>Status</th>
+                                <th>Employee</th>
+                                <th>Title</th>
+                                <th>Due Date</th>
+                                <th>Days Left</th>
+                                <th>TL Deadline</th>
+                                <th>Responsible</th>
+                            </tr>
+                        </thead>
+                        <tbody id="evalTableBody">
+                            <tr><td colspan="7" style="text-align:center; color:#94a3b8;">Loading...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
         <div class="content" id="overview">
             <!-- A/B Ratio Comparison Header -->
@@ -1870,6 +1899,7 @@
             // Load tab-specific data
             if (tabId === 'actions') {
                 loadActionsData();
+                loadEvalTracker();
             }
         }
         
@@ -2698,6 +2728,7 @@
             await loadEmployeeData();
             await loadWIP();
             await loadActionsData();
+            await loadEvalTracker();
             await loadFinancialData();
             await loadFlatRateChart();
             await loadFreightInvoices();
@@ -4909,6 +4940,120 @@
 
             } catch (error) {
                 console.error('Error loading actions data:', error);
+            }
+        }
+
+        // =====================================================================
+        // EVAL TRACKER — loads eval dates and renders timeline + table
+        // =====================================================================
+        async function loadEvalTracker() {
+            try {
+                const resp = await fetch(`${SUPABASE_URL}/rest/v1/employees?select=code,name,title,eval_due_date,eval_responsible,eval_status&eval_due_date=not.is.null&order=eval_due_date.asc`, {
+                    headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+                });
+                if (!resp.ok) return;
+                const evals = await resp.json();
+                if (!evals.length) return;
+
+                const today = new Date();
+                today.setHours(0,0,0,0);
+
+                let overdueCount = 0, urgentCount = 0, upcomingCount = 0;
+
+                const rows = evals.map(emp => {
+                    const due = new Date(emp.eval_due_date + 'T00:00:00');
+                    const daysLeft = Math.ceil((due - today) / 86400000);
+                    const tlDeadline = new Date(due);
+                    tlDeadline.setDate(tlDeadline.getDate() - 14);
+                    const tlDaysLeft = Math.ceil((tlDeadline - today) / 86400000);
+
+                    // Determine status and color
+                    let statusIcon, statusColor, rowBg;
+                    if (emp.eval_status === 'completed') {
+                        statusIcon = '✅'; statusColor = '#22c55e'; rowBg = '';
+                    } else if (daysLeft < 0) {
+                        statusIcon = '🔴'; statusColor = '#ef4444'; rowBg = 'background:rgba(239,68,68,0.08);'; overdueCount++;
+                    } else if (daysLeft <= 21) {
+                        statusIcon = '🟡'; statusColor = '#f59e0b'; rowBg = 'background:rgba(245,158,11,0.06);'; urgentCount++;
+                    } else if (daysLeft <= 60) {
+                        statusIcon = '🔵'; statusColor = '#3b82f6'; rowBg = ''; upcomingCount++;
+                    } else {
+                        statusIcon = '⚪'; statusColor = '#64748b'; rowBg = '';
+                    }
+
+                    // TL deadline display
+                    let tlStr;
+                    if (emp.eval_responsible === 'Edduyn Pita') {
+                        tlStr = '<span style="color:#64748b;">N/A (you)</span>';
+                    } else if (tlDaysLeft < 0) {
+                        tlStr = `<span style="color:#ef4444; font-weight:bold;">⚠️ ${Math.abs(tlDaysLeft)}d overdue</span>`;
+                    } else if (tlDaysLeft <= 7) {
+                        tlStr = `<span style="color:#f59e0b; font-weight:bold;">${tlDeadline.toLocaleDateString('en-US', {month:'short',day:'numeric'})} (${tlDaysLeft}d)</span>`;
+                    } else {
+                        tlStr = `<span style="color:#94a3b8;">${tlDeadline.toLocaleDateString('en-US', {month:'short',day:'numeric'})}</span>`;
+                    }
+
+                    // Days left display
+                    let daysStr;
+                    if (emp.eval_status === 'completed') {
+                        daysStr = '<span style="color:#22c55e;">Done</span>';
+                    } else if (daysLeft < 0) {
+                        daysStr = `<span style="color:#ef4444; font-weight:bold;">${Math.abs(daysLeft)}d OVERDUE</span>`;
+                    } else if (daysLeft <= 21) {
+                        daysStr = `<span style="color:#f59e0b; font-weight:bold;">${daysLeft}d</span>`;
+                    } else {
+                        daysStr = `<span style="color:#94a3b8;">${daysLeft}d</span>`;
+                    }
+
+                    // Responsible display
+                    const respName = emp.eval_responsible === 'Edduyn Pita' ? '<strong style="color:#818cf8;">You</strong>'
+                        : emp.eval_responsible === 'Ken Smith' ? '🔧 Ken'
+                        : emp.eval_responsible === 'John Watson' ? '🔧 John'
+                        : emp.eval_responsible;
+
+                    return `<tr style="${rowBg}">
+                        <td style="text-align:center;">${statusIcon}</td>
+                        <td style="color:${statusColor}; font-weight:500;">${emp.name}</td>
+                        <td style="color:#94a3b8; font-size:0.8em;">${emp.title || ''}</td>
+                        <td>${due.toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'})}</td>
+                        <td>${daysStr}</td>
+                        <td>${tlStr}</td>
+                        <td>${respName}</td>
+                    </tr>`;
+                }).join('');
+
+                document.getElementById('evalTableBody').innerHTML = rows;
+
+                // Badge
+                const badge = document.getElementById('evalBadge');
+                if (overdueCount > 0) {
+                    badge.textContent = `${overdueCount} Overdue!`;
+                    badge.className = 'badge badge-red';
+                } else if (urgentCount > 0) {
+                    badge.textContent = `${urgentCount} Due Soon`;
+                    badge.className = 'badge badge-amber';
+                } else {
+                    badge.textContent = `${evals.length} Tracked`;
+                    badge.className = 'badge badge-green';
+                }
+
+                // Timeline chips
+                const months = {};
+                evals.forEach(emp => {
+                    const due = new Date(emp.eval_due_date + 'T00:00:00');
+                    const key = due.toLocaleDateString('en-US', {month:'short', year:'2-digit'});
+                    if (!months[key]) months[key] = { count: 0, earliest: due };
+                    months[key].count++;
+                });
+                const timelineHTML = Object.entries(months).map(([month, info]) => {
+                    const dLeft = Math.ceil((info.earliest - today) / 86400000);
+                    const bg = dLeft < 0 ? '#dc2626' : dLeft <= 30 ? '#d97706' : dLeft <= 90 ? '#2563eb' : '#334155';
+                    return `<span style="background:${bg}; color:white; padding:4px 10px; border-radius:12px; font-size:0.8em; font-weight:500;">${month}: ${info.count}</span>`;
+                }).join('');
+                document.getElementById('evalTimeline').innerHTML = timelineHTML;
+
+            } catch (error) {
+                console.error('Error loading eval tracker:', error);
             }
         }
 
