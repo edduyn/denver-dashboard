@@ -46,11 +46,14 @@ ctx = ssl.create_default_context()
 ctx.check_hostname = False
 ctx.verify_mode = ssl.CERT_NONE
 
-# Default search directory for CSVs
-MORNING_REPORT_DIR = os.path.expanduser(
+# Primary: rclone-synced local copy (bypasses broken Google Drive FileProvider)
+# Fallback: Google Drive FUSE mount (unreliable after Mac migration)
+_MR_LOCAL = os.path.expanduser('~/Morning_Report')
+_MR_GDRIVE = os.path.expanduser(
     '~/Library/CloudStorage/GoogleDrive-edduyn@gmail.com/'
     'My Drive/2026_Goals_Project/Morning_Report'
 )
+MORNING_REPORT_DIR = _MR_LOCAL if os.path.isdir(_MR_LOCAL) else _MR_GDRIVE
 
 VALID_SHOPS = {'SDN', 'SDR', 'SHC', 'SDV', 'ADM'}
 
