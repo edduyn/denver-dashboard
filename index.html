@@ -3682,7 +3682,7 @@
 
             // Calculate A/B ratios from time_entries
             try {
-                const timeResponse = await fetch(`${SUPABASE_URL}/rest/v1/time_entries?select=*`, {
+                const timeResponse = await fetch(`${SUPABASE_URL}/rest/v1/time_entries?select=*&limit=5000`, {
                     headers: HEADERS
                 });
 
@@ -5142,7 +5142,7 @@
 
             try {
                 // Fetch all time entries
-                const response = await fetch(`${SUPABASE_URL}/rest/v1/time_entries?select=*`, {
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/time_entries?select=*&limit=5000`, {
                     headers: HEADERS
                 });
 
@@ -5231,7 +5231,7 @@
 
             try {
                 // Fetch all 2026 time entries
-                const response = await fetch(`${SUPABASE_URL}/rest/v1/time_entries?select=*`, {
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/time_entries?select=*&limit=5000`, {
                     headers: HEADERS
                 });
 
