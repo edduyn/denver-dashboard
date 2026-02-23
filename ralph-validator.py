@@ -40,11 +40,14 @@ API_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6
 LOG_DIR = Path(__file__).parent / 'logs'
 LOG_FILE = LOG_DIR / 'ralph_validation.log'
 
-FREIGHT_DROP_FILE = Path(
-    os.path.expanduser('~/Library/CloudStorage/GoogleDrive-edduyn@gmail.com/'
-                        'My Drive/2026_Goals_Project/Morning_Report/'
-                        'New_Freight_Information.MD')
-)
+# Primary: rclone-synced local copy (bypasses broken Google Drive FileProvider)
+# Fallback: Google Drive FUSE mount (unreliable after Mac migration)
+_MR_LOCAL = Path(os.path.expanduser('~/Morning_Report'))
+_MR_GDRIVE = Path(os.path.expanduser(
+    '~/Library/CloudStorage/GoogleDrive-edduyn@gmail.com/'
+    'My Drive/2026_Goals_Project/Morning_Report'))
+MORNING_REPORT_DIR = _MR_LOCAL if _MR_LOCAL.exists() else _MR_GDRIVE
+FREIGHT_DROP_FILE = MORNING_REPORT_DIR / 'New_Freight_Information.MD'
 
 ctx = ssl.create_default_context()
 ctx.check_hostname = False
