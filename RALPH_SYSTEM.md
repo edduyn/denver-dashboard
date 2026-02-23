@@ -452,7 +452,7 @@ Just ask Ralph:
   - Logs to `logs/ralph_validation.log`
   - Pushes validation records to `ralph_validations` Supabase table
   - Dashboard badge shows latest validation status (click for details)
-- Employee PTB/LOA status tracking via `employees.status` field
+- Employee status monitoring via `employees.status` field (LOA only — PTB is time accounting, not a status flag)
 
 **v1.0** - 2026-02-16
 - Initial Ralph system design
