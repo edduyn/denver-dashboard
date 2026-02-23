@@ -2070,6 +2070,25 @@
             'Content-Type': 'application/json'
         };
 
+        // Paginated fetch helper — Supabase caps responses at 1000 rows.
+        // Uses Range header to fetch all pages and merges into one array.
+        async function fetchAllRows(path) {
+            const PAGE = 1000;
+            let all = [];
+            let offset = 0;
+            while (true) {
+                const resp = await fetch(`${SUPABASE_URL}${path}`, {
+                    headers: { ...HEADERS, 'Range': `${offset}-${offset + PAGE - 1}` }
+                });
+                const batch = await resp.json();
+                if (!Array.isArray(batch) || batch.length === 0) break;
+                all = all.concat(batch);
+                if (batch.length < PAGE) break;   // last page
+                offset += PAGE;
+            }
+            return all;
+        }
+
         // Global store for ANCHOR data (used by filter/sort)
         let anchorWorkOrdersData = [];
         // Demarest freight flag data (keyed by wo_number)
@@ -3682,12 +3701,9 @@
 
             // Calculate A/B ratios from time_entries
             try {
-                const timeResponse = await fetch(`${SUPABASE_URL}/rest/v1/time_entries?select=*&limit=5000`, {
-                    headers: HEADERS
-                });
+                const timeEntries = await fetchAllRows('/rest/v1/time_entries?select=*');
 
-                if (timeResponse.status === 200) {
-                    const timeEntries = await timeResponse.json();
+                if (timeEntries.length > 0) {
 
                     // Calculate Denver real-time A/B
                     let totalHours = 0;
@@ -5141,17 +5157,13 @@
             console.log('loadYTDAB: Starting...');
 
             try {
-                // Fetch all time entries
-                const response = await fetch(`${SUPABASE_URL}/rest/v1/time_entries?select=*&limit=5000`, {
-                    headers: HEADERS
-                });
+                // Fetch all time entries (paginated — Supabase caps at 1000/request)
+                const timeEntries = await fetchAllRows('/rest/v1/time_entries?select=*');
 
-                if (response.status === 404) {
+                if (!timeEntries.length) {
                     document.getElementById('ytdABTable').innerHTML = '<tr><td colspan="6" style="text-align:center; color:#94a3b8;">No time data available yet</td></tr>';
                     return;
                 }
-
-                const timeEntries = await response.json();
 
                 // Group by employee
                 const employeeStats = {};
@@ -5230,17 +5242,13 @@
             console.log('loadMonthlyAB: Starting...');
 
             try {
-                // Fetch all 2026 time entries
-                const response = await fetch(`${SUPABASE_URL}/rest/v1/time_entries?select=*&limit=5000`, {
-                    headers: HEADERS
-                });
+                // Fetch all 2026 time entries (paginated)
+                const timeEntries = await fetchAllRows('/rest/v1/time_entries?select=*');
 
-                if (response.status === 404) {
+                if (!timeEntries.length) {
                     document.getElementById('monthlyABTable').innerHTML = '<tr><td colspan="7" style="text-align:center; color:#94a3b8;">No time data available yet</td></tr>';
                     return;
                 }
-
-                const timeEntries = await response.json();
 
                 // Group by employee and month
                 const employeeMonthly = {};
@@ -5339,11 +5347,7 @@
                 document.getElementById('individualABTitle').textContent = `⏱️ Individual A/B Performance - ${displayDate}`;
 
                 // Fetch time entries for previous work day
-                const response = await fetch(`${SUPABASE_URL}/rest/v1/time_entries?entry_date=eq.${previousWorkDayStr}&select=*`, {
-                    headers: HEADERS
-                });
-
-                let timeEntries = response.ok ? await response.json() : [];
+                const timeEntries = await fetchAllRows(`/rest/v1/time_entries?entry_date=eq.${previousWorkDayStr}&select=*`);
 
                 // If no data or very sparse data, show waiting message
                 if (timeEntries.length < 5) {
