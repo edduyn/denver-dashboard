@@ -492,7 +492,7 @@ def check_nps_email_coverage(result):
     email_ids = set(e['customer_id'] for e in emails if e.get('customer_id'))
     anchor_customers = {}
     for a in anchor:
-        cid = str(a.get('customer_id', ''))
+        cid = str(a.get('customer_id', '')).replace('.00', '')
         if cid and cid not in INTERNAL_CUSTOMER_IDS:
             anchor_customers[cid] = a.get('customer', 'Unknown')
 
