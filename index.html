@@ -92,9 +92,7 @@
         .badge-blue { background: #3b82f6; color: #fff; }
         .badge-gray { background: #64748b; color: #fff; }
 
-        /* Goal Cards */
-        .goal-card { background: rgba(0,0,0,0.2); border-radius: 12px; padding: 15px; margin-bottom: 12px; }
-        .goal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        /* Goal Cards — base styles (layout overridden by collapsible section below) */
         .goal-title { font-weight: 600; font-size: 0.95em; }
         .goal-progress { display: flex; align-items: center; gap: 10px; }
         .goal-pct { font-size: 1.2em; font-weight: bold; }
@@ -108,8 +106,6 @@
         .pace-ahead { color: #10b981; }
         .pace-behind { color: #ef4444; }
         .pace-ontrack { color: #f59e0b; }
-        .goal-section-header { color: #f59e0b; font-size: 0.85em; font-weight: 600; margin: 18px 0 8px 0; padding: 6px 12px; background: rgba(245,158,11,0.1); border-radius: 8px; display: flex; align-items: center; gap: 6px; }
-        .goal-section-header:first-of-type { margin-top: 0; }
 
         /* Month Timeline */
         .month-timeline { display: flex; gap: 4px; }
@@ -125,7 +121,173 @@
         .month-block.current span { color: #fff; }
         .month-block.future { background: #1e293b; } /* Dark gray - future */
         .month-block.future span { color: #475569; }
-        
+
+        /* ===== SCORECARD SUMMARY GRID ===== */
+        .scorecard-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+        @media (max-width: 900px) { .scorecard-grid { grid-template-columns: repeat(3, 1fr); } }
+        @media (max-width: 600px) { .scorecard-grid { grid-template-columns: repeat(2, 1fr); } }
+        .scorecard-card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 10px;
+            padding: 12px 14px;
+            cursor: pointer;
+            transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .scorecard-card:hover {
+            transform: translateY(-2px);
+            background: rgba(255,255,255,0.07);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+        }
+        .scorecard-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: #334155;
+            transition: background 0.3s ease;
+        }
+        .scorecard-card.sc-green::before { background: #10b981; }
+        .scorecard-card.sc-amber::before { background: #f59e0b; }
+        .scorecard-card.sc-red::before { background: #ef4444; }
+        .scorecard-card.sc-gray::before { background: #64748b; }
+        .scorecard-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+        .scorecard-number {
+            font-size: 0.7em;
+            font-weight: 700;
+            color: #64748b;
+            letter-spacing: 0.5px;
+        }
+        .scorecard-dot {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: #64748b;
+            flex-shrink: 0;
+        }
+        .scorecard-dot.dot-green { background: #10b981; box-shadow: 0 0 6px rgba(16,185,129,0.4); }
+        .scorecard-dot.dot-amber { background: #f59e0b; box-shadow: 0 0 6px rgba(245,158,11,0.4); }
+        .scorecard-dot.dot-red { background: #ef4444; box-shadow: 0 0 6px rgba(239,68,68,0.4); }
+        .scorecard-name {
+            font-size: 0.75em;
+            color: #94a3b8;
+            line-height: 1.3;
+            margin-bottom: 6px;
+            min-height: 2em;
+        }
+        .scorecard-metric {
+            font-size: 1.15em;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 6px;
+        }
+        .scorecard-sparkline {
+            width: 100%;
+            height: 28px;
+            opacity: 0.8;
+        }
+        .scorecard-sparkline svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* ===== CATEGORY SECTION HEADERS ===== */
+        .category-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 14px;
+            margin: 20px 0 10px 0;
+            border-radius: 8px;
+            background: rgba(0,0,0,0.15);
+            border-left: 3px solid #64748b;
+        }
+        .category-header:first-of-type { margin-top: 8px; }
+        .category-header .cat-icon { font-size: 1em; }
+        .category-header .cat-label {
+            font-size: 0.8em;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        .category-header .cat-count {
+            font-size: 0.7em;
+            color: #64748b;
+            margin-left: auto;
+        }
+        .cat-financial { border-left-color: #3b82f6; }
+        .cat-financial .cat-label { color: #3b82f6; }
+        .cat-customer { border-left-color: #10b981; }
+        .cat-customer .cat-label { color: #10b981; }
+        .cat-team { border-left-color: #8b5cf6; }
+        .cat-team .cat-label { color: #8b5cf6; }
+
+        /* ===== COLLAPSIBLE GOAL CARDS ===== */
+        .goal-card {
+            background: rgba(0,0,0,0.2);
+            border-radius: 12px;
+            padding: 0;
+            margin-bottom: 10px;
+            border-left: 3px solid #334155;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            overflow: hidden;
+        }
+        .goal-card.status-green { border-left-color: #10b981; }
+        .goal-card.status-amber { border-left-color: #f59e0b; }
+        .goal-card.status-red { border-left-color: #ef4444; }
+        .goal-card-summary {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 16px;
+            cursor: pointer;
+            user-select: none;
+            transition: background 0.2s ease;
+        }
+        .goal-card-summary:hover { background: rgba(255,255,255,0.03); }
+        .goal-card-summary-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+            min-width: 0;
+        }
+        .goal-card-summary-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+        .goal-card-chevron {
+            font-size: 0.75em;
+            color: #64748b;
+            transition: transform 0.3s ease;
+            flex-shrink: 0;
+        }
+        .goal-card.expanded .goal-card-chevron { transform: rotate(90deg); }
+        .goal-card-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.35s ease;
+        }
+        .goal-card.expanded .goal-card-details {
+            max-height: 500px;
+        }
+        .goal-card-details-inner {
+            padding: 0 16px 14px 16px;
+        }
+
         /* Action Items */
         .action-item { display: flex; align-items: center; gap: 12px; padding: 12px; background: rgba(0,0,0,0.2); border-radius: 8px; margin-bottom: 8px; }
         .action-check { width: 24px; height: 24px; border: 2px solid #64748b; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
@@ -223,393 +385,448 @@
                     </div>
                 </div>
 
-                <!-- Goal #1: Meet/Exceed Financial Objectives -->
-                <div class="goal-card">
-                    <div class="goal-header">
-                        <span class="goal-title">📊 #1: Meet/Exceed Financial Objectives (A/B Ratio 58.5%, ELR)</span>
-                        <span class="badge" id="abGoalBadge">Loading...</span>
+                <!-- ===== SCORECARD SUMMARY GRID ===== -->
+                <div class="scorecard-grid">
+                    <div class="scorecard-card" id="sc-1" onclick="document.getElementById('goalCard1').scrollIntoView({behavior:'smooth',block:'center'})">
+                        <div class="scorecard-top"><span class="scorecard-number">#1</span><span class="scorecard-dot" id="sc-1-dot"></span></div>
+                        <div class="scorecard-name">A/B Ratio & ELR</div>
+                        <div class="scorecard-metric" id="sc-1-metric">--</div>
+                        <div class="scorecard-sparkline" id="sc-1-sparkline"></div>
                     </div>
-                    <div class="goal-notes">
-                        <strong>Current A/B:</strong> <span id="currentAB">--</span> |
-                        <strong>Target:</strong> 58.5% |
-                        <strong>Rank:</strong> <span id="networkRank">--</span> of 21 shops |
-                        <strong>Gap:</strong> <span id="abGap">--</span>
+                    <div class="scorecard-card" id="sc-2" onclick="document.getElementById('goalCard2').scrollIntoView({behavior:'smooth',block:'center'})">
+                        <div class="scorecard-top"><span class="scorecard-number">#2</span><span class="scorecard-dot" id="sc-2-dot"></span></div>
+                        <div class="scorecard-name">NPS Program</div>
+                        <div class="scorecard-metric" id="sc-2-metric">--</div>
+                        <div class="scorecard-sparkline" id="sc-2-sparkline"></div>
                     </div>
-                    <div class="goal-pace" id="abPace">Tracked via Dashboard</div>
-                    <!-- 12-Month Progress Timeline -->
-                    <div style="margin-top: 10px;">
-                        <div style="font-size: 0.75em; color: #94a3b8; margin-bottom: 4px;">2026 Progress (Month <span id="abCurrentMonth">--</span>/12)</div>
-                        <div class="month-timeline" id="abMonthTimeline">
-                            <div class="month-block" data-month="1"><span>J</span></div>
-                            <div class="month-block" data-month="2"><span>F</span></div>
-                            <div class="month-block" data-month="3"><span>M</span></div>
-                            <div class="month-block" data-month="4"><span>A</span></div>
-                            <div class="month-block" data-month="5"><span>M</span></div>
-                            <div class="month-block" data-month="6"><span>J</span></div>
-                            <div class="month-block" data-month="7"><span>J</span></div>
-                            <div class="month-block" data-month="8"><span>A</span></div>
-                            <div class="month-block" data-month="9"><span>S</span></div>
-                            <div class="month-block" data-month="10"><span>O</span></div>
-                            <div class="month-block" data-month="11"><span>N</span></div>
-                            <div class="month-block" data-month="12"><span>D</span></div>
-                        </div>
+                    <div class="scorecard-card" id="sc-3" onclick="document.getElementById('goalCard3').scrollIntoView({behavior:'smooth',block:'center'})">
+                        <div class="scorecard-top"><span class="scorecard-number">#3</span><span class="scorecard-dot" id="sc-3-dot"></span></div>
+                        <div class="scorecard-name">Training</div>
+                        <div class="scorecard-metric" id="sc-3-metric">--</div>
+                        <div class="scorecard-sparkline" id="sc-3-sparkline"></div>
+                    </div>
+                    <div class="scorecard-card" id="sc-4" onclick="document.getElementById('goalCard4').scrollIntoView({behavior:'smooth',block:'center'})">
+                        <div class="scorecard-top"><span class="scorecard-number">#4</span><span class="scorecard-dot" id="sc-4-dot"></span></div>
+                        <div class="scorecard-name">Flat Rate Analysis</div>
+                        <div class="scorecard-metric" id="sc-4-metric">--</div>
+                        <div class="scorecard-sparkline" id="sc-4-sparkline"></div>
+                    </div>
+                    <div class="scorecard-card" id="sc-5" onclick="document.getElementById('goalCard5').scrollIntoView({behavior:'smooth',block:'center'})">
+                        <div class="scorecard-top"><span class="scorecard-number">#5</span><span class="scorecard-dot" id="sc-5-dot"></span></div>
+                        <div class="scorecard-name">Customer Comms</div>
+                        <div class="scorecard-metric" id="sc-5-metric">--</div>
+                        <div class="scorecard-sparkline" id="sc-5-sparkline"></div>
+                    </div>
+                    <div class="scorecard-card" id="sc-6" onclick="document.getElementById('goalCard6').scrollIntoView({behavior:'smooth',block:'center'})">
+                        <div class="scorecard-top"><span class="scorecard-number">#6</span><span class="scorecard-dot" id="sc-6-dot"></span></div>
+                        <div class="scorecard-name">Expense Budget</div>
+                        <div class="scorecard-metric" id="sc-6-metric">--</div>
+                        <div class="scorecard-sparkline" id="sc-6-sparkline"></div>
+                    </div>
+                    <div class="scorecard-card" id="sc-7" onclick="document.getElementById('goalCard7').scrollIntoView({behavior:'smooth',block:'center'})">
+                        <div class="scorecard-top"><span class="scorecard-number">#7</span><span class="scorecard-dot" id="sc-7-dot"></span></div>
+                        <div class="scorecard-name">Audits</div>
+                        <div class="scorecard-metric" id="sc-7-metric">--</div>
+                        <div class="scorecard-sparkline" id="sc-7-sparkline"></div>
+                    </div>
+                    <div class="scorecard-card" id="sc-8" onclick="document.getElementById('goalCard8').scrollIntoView({behavior:'smooth',block:'center'})">
+                        <div class="scorecard-top"><span class="scorecard-number">#8</span><span class="scorecard-dot" id="sc-8-dot"></span></div>
+                        <div class="scorecard-name">Monthly A/B Plan</div>
+                        <div class="scorecard-metric" id="sc-8-metric">--</div>
+                        <div class="scorecard-sparkline" id="sc-8-sparkline"></div>
+                    </div>
+                    <div class="scorecard-card" id="sc-9" onclick="document.getElementById('goalCard9').scrollIntoView({behavior:'smooth',block:'center'})">
+                        <div class="scorecard-top"><span class="scorecard-number">#9</span><span class="scorecard-dot" id="sc-9-dot"></span></div>
+                        <div class="scorecard-name">Dealer Programs</div>
+                        <div class="scorecard-metric" id="sc-9-metric">--</div>
+                        <div class="scorecard-sparkline" id="sc-9-sparkline"></div>
+                    </div>
+                    <div class="scorecard-card" id="sc-10" onclick="document.getElementById('goalCard10').scrollIntoView({behavior:'smooth',block:'center'})">
+                        <div class="scorecard-top"><span class="scorecard-number">#10</span><span class="scorecard-dot" id="sc-10-dot"></span></div>
+                        <div class="scorecard-name">Vendor Disputes</div>
+                        <div class="scorecard-metric" id="sc-10-metric">--</div>
+                        <div class="scorecard-sparkline" id="sc-10-sparkline"></div>
+                    </div>
+                    <div class="scorecard-card" id="sc-11" onclick="document.getElementById('goalCard11').scrollIntoView({behavior:'smooth',block:'center'})">
+                        <div class="scorecard-top"><span class="scorecard-number">#11</span><span class="scorecard-dot" id="sc-11-dot"></span></div>
+                        <div class="scorecard-name">Risk Areas</div>
+                        <div class="scorecard-metric" id="sc-11-metric">--</div>
+                        <div class="scorecard-sparkline" id="sc-11-sparkline"></div>
                     </div>
                 </div>
 
-                <!-- Goal #2: NPS Survey - 1 Entry per Month -->
-                <div class="goal-card">
-                    <div class="goal-header">
-                        <span class="goal-title">📧 #2: NPS Survey Program (1 entry per month minimum)</span>
-                        <span class="badge" id="npsGoalBadge">Loading...</span>
+                <!-- ===== FINANCIAL PERFORMANCE ===== -->
+                <div class="category-header cat-financial">
+                    <span class="cat-icon">💰</span>
+                    <span class="cat-label">Financial Performance</span>
+                    <span class="cat-count">Goals #1, #6, #8</span>
+                </div>
+
+                <!-- Goal #1 -->
+                <div class="goal-card" id="goalCard1" onclick="this.classList.toggle('expanded')">
+                    <div class="goal-card-summary">
+                        <div class="goal-card-summary-left">
+                            <span class="goal-card-chevron">&#9654;</span>
+                            <span class="goal-title">📊 #1: Financial Objectives (A/B 58.5%, ELR)</span>
+                        </div>
+                        <div class="goal-card-summary-right">
+                            <span class="goal-pct" id="abSummaryMetric" style="font-size:0.95em;">--</span>
+                            <span class="badge" id="abGoalBadge">Loading...</span>
+                        </div>
                     </div>
-                    <div class="goal-progress">
-                        <div style="flex: 1;">
-                            <div class="progress-bar">
-                                <div class="progress-fill" id="npsProgressBar" style="width: 0%;"></div>
+                    <div class="goal-card-details">
+                        <div class="goal-card-details-inner">
+                            <div class="goal-notes">
+                                <strong>Current A/B:</strong> <span id="currentAB">--</span> |
+                                <strong>Target:</strong> 58.5% |
+                                <strong>Rank:</strong> <span id="networkRank">--</span> of 21 shops |
+                                <strong>Gap:</strong> <span id="abGap">--</span>
+                            </div>
+                            <div class="goal-pace" id="abPace">Tracked via Dashboard</div>
+                            <div style="margin-top: 10px;">
+                                <div style="font-size: 0.75em; color: #94a3b8; margin-bottom: 4px;">2026 Progress (Month <span id="abCurrentMonth">--</span>/12)</div>
+                                <div class="month-timeline" id="abMonthTimeline">
+                                    <div class="month-block" data-month="1"><span>J</span></div><div class="month-block" data-month="2"><span>F</span></div><div class="month-block" data-month="3"><span>M</span></div><div class="month-block" data-month="4"><span>A</span></div><div class="month-block" data-month="5"><span>M</span></div><div class="month-block" data-month="6"><span>J</span></div><div class="month-block" data-month="7"><span>J</span></div><div class="month-block" data-month="8"><span>A</span></div><div class="month-block" data-month="9"><span>S</span></div><div class="month-block" data-month="10"><span>O</span></div><div class="month-block" data-month="11"><span>N</span></div><div class="month-block" data-month="12"><span>D</span></div>
+                                </div>
                             </div>
                         </div>
-                        <span class="goal-pct" id="npsProgressPct">--</span>
-                    </div>
-                    <div class="goal-notes">
-                        <strong>YTD Completed:</strong> <span id="pendingSurveys">--</span> of 12 |
-                        <strong>This Month Sent:</strong> <span id="surveysSent">--</span> |
-                        <strong>Network Goal:</strong> 200 total
-                    </div>
-                    <div class="goal-pace" id="npsPace">Check NET Promoter results folder</div>
-
-                    <!-- 12-Month Progress Timeline -->
-                    <div style="margin-top: 10px;">
-                        <div style="font-size: 0.75em; color: #94a3b8; margin-bottom: 4px;">2026 Progress (Month <span id="npsCurrentMonth">--</span>/12)</div>
-                        <div class="month-timeline" id="npsMonthTimeline">
-                            <div class="month-block" data-month="1"><span>J</span></div>
-                            <div class="month-block" data-month="2"><span>F</span></div>
-                            <div class="month-block" data-month="3"><span>M</span></div>
-                            <div class="month-block" data-month="4"><span>A</span></div>
-                            <div class="month-block" data-month="5"><span>M</span></div>
-                            <div class="month-block" data-month="6"><span>J</span></div>
-                            <div class="month-block" data-month="7"><span>J</span></div>
-                            <div class="month-block" data-month="8"><span>A</span></div>
-                            <div class="month-block" data-month="9"><span>S</span></div>
-                            <div class="month-block" data-month="10"><span>O</span></div>
-                            <div class="month-block" data-month="11"><span>N</span></div>
-                            <div class="month-block" data-month="12"><span>D</span></div>
-                        </div>
                     </div>
                 </div>
 
-                <!-- Goal #3: Complete Training On Time (100%) -->
-                <div class="goal-card">
-                    <div class="goal-header">
-                        <span class="goal-title">📚 #3: Complete Mandatory/Technical Training On Time (100%)</span>
-                        <span class="badge" id="trainingGoalBadge">Loading...</span>
+                <!-- Goal #6 -->
+                <div class="goal-card" id="goalCard6" onclick="this.classList.toggle('expanded')">
+                    <div class="goal-card-summary">
+                        <div class="goal-card-summary-left">
+                            <span class="goal-card-chevron">&#9654;</span>
+                            <span class="goal-title">💵 #6: Stay Within Expense Budget</span>
+                        </div>
+                        <div class="goal-card-summary-right">
+                            <span class="goal-pct" id="expBudgetSummaryMetric" style="font-size:0.95em;">--</span>
+                            <span class="badge" id="expBudgetGoalBadge">Loading...</span>
+                        </div>
                     </div>
-                    <div class="goal-progress">
-                        <div style="flex: 1;">
-                            <div class="progress-bar">
-                                <div class="progress-fill" id="trainingProgressBar" style="width: 0%;"></div>
+                    <div class="goal-card-details">
+                        <div class="goal-card-details-inner">
+                            <div class="goal-progress">
+                                <div style="flex: 1;">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill progress-green" id="expBudgetProgressBar" style="width: 0%;"></div>
+                                    </div>
+                                </div>
+                                <span class="goal-pct" id="expBudgetProgressPct">--</span>
+                            </div>
+                            <div class="goal-notes">
+                                <strong>2026 Expenses:</strong> <span id="goal6Expenses">$--</span> |
+                                <strong>Budget:</strong> <span id="goal6Budget">$--</span> |
+                                <strong>Variance:</strong> <span id="goal6Variance">$--</span><br>
+                                <span id="goal6PaceText" class="pace-ontrack">● Loading expense data...</span>
+                            </div>
+                            <div style="margin-top: 10px;">
+                                <div style="font-size: 0.75em; color: #94a3b8; margin-bottom: 4px;">2026 Progress (Month <span id="goal6CurrentMonth">--</span>/12)</div>
+                                <div class="month-timeline" id="goal6MonthTimeline">
+                                    <div class="month-block" data-month="1"><span>J</span></div><div class="month-block" data-month="2"><span>F</span></div><div class="month-block" data-month="3"><span>M</span></div><div class="month-block" data-month="4"><span>A</span></div><div class="month-block" data-month="5"><span>M</span></div><div class="month-block" data-month="6"><span>J</span></div><div class="month-block" data-month="7"><span>J</span></div><div class="month-block" data-month="8"><span>A</span></div><div class="month-block" data-month="9"><span>S</span></div><div class="month-block" data-month="10"><span>O</span></div><div class="month-block" data-month="11"><span>N</span></div><div class="month-block" data-month="12"><span>D</span></div>
+                                </div>
                             </div>
                         </div>
-                        <span class="goal-pct" id="trainingProgressPct">--</span>
-                    </div>
-                    <div class="goal-notes">
-                        <strong>Completed:</strong> <span id="completedTraining">--</span> |
-                        <strong>Past Due:</strong> <span id="pastDueTraining" style="color: #ef4444;">--</span> |
-                        <strong>Upcoming:</strong> <span id="upcomingTraining">--</span>
-                    </div>
-                    <div class="goal-pace" id="trainingPace">Includes NEO/NETO - Check Training Due Report</div>
-
-                    <!-- 12-Month Progress Timeline -->
-                    <div style="margin-top: 10px;">
-                        <div style="font-size: 0.75em; color: #94a3b8; margin-bottom: 4px;">2026 Progress (Month <span id="trainingCurrentMonth">--</span>/12)</div>
-                        <div class="month-timeline" id="trainingMonthTimeline">
-                            <div class="month-block" data-month="1"><span>J</span></div>
-                            <div class="month-block" data-month="2"><span>F</span></div>
-                            <div class="month-block" data-month="3"><span>M</span></div>
-                            <div class="month-block" data-month="4"><span>A</span></div>
-                            <div class="month-block" data-month="5"><span>M</span></div>
-                            <div class="month-block" data-month="6"><span>J</span></div>
-                            <div class="month-block" data-month="7"><span>J</span></div>
-                            <div class="month-block" data-month="8"><span>A</span></div>
-                            <div class="month-block" data-month="9"><span>S</span></div>
-                            <div class="month-block" data-month="10"><span>O</span></div>
-                            <div class="month-block" data-month="11"><span>N</span></div>
-                            <div class="month-block" data-month="12"><span>D</span></div>
-                        </div>
                     </div>
                 </div>
 
-                <!-- Goal #4: Flat Rate System Re-evaluation -->
-                <div class="goal-card">
-                    <div class="goal-header">
-                        <span class="goal-title">🔧 #4: Flat Rate System Re-evaluation Using Hard Data</span>
-                        <span class="badge" id="flatRateGoalBadge">Loading...</span>
-                    </div>
-                    <div class="goal-notes">
-                        <strong>Objective:</strong> Success/Fail analysis of flat rate system<br>
-                        <strong>Data Source:</strong> Hours Sold vs Hours Actual + <span style="color: #0ea5e9; cursor: pointer;" onclick="showTab('financials')">Flat Rate Calculator</span><br>
-                        <strong>2026 Freight:</strong> <span id="goal4Freight">$--</span> vs <span id="goal4FreightBudget">$--</span> budget |
-                        <strong>Flat Rate DB:</strong> <span id="goal4FlatRateCount">--</span> weight tiers loaded
-                    </div>
-
-                    <!-- 12-Month Progress Timeline -->
-                    <div style="margin-top: 10px;">
-                        <div style="font-size: 0.75em; color: #94a3b8; margin-bottom: 4px;">2026 Progress (Month <span id="goal4CurrentMonth">--</span>/12)</div>
-                        <div class="month-timeline" id="goal4MonthTimeline">
-                            <div class="month-block" data-month="1"><span>J</span></div>
-                            <div class="month-block" data-month="2"><span>F</span></div>
-                            <div class="month-block" data-month="3"><span>M</span></div>
-                            <div class="month-block" data-month="4"><span>A</span></div>
-                            <div class="month-block" data-month="5"><span>M</span></div>
-                            <div class="month-block" data-month="6"><span>J</span></div>
-                            <div class="month-block" data-month="7"><span>J</span></div>
-                            <div class="month-block" data-month="8"><span>A</span></div>
-                            <div class="month-block" data-month="9"><span>S</span></div>
-                            <div class="month-block" data-month="10"><span>O</span></div>
-                            <div class="month-block" data-month="11"><span>N</span></div>
-                            <div class="month-block" data-month="12"><span>D</span></div>
+                <!-- Goal #8 -->
+                <div class="goal-card" id="goalCard8" onclick="this.classList.toggle('expanded')">
+                    <div class="goal-card-summary">
+                        <div class="goal-card-summary-left">
+                            <span class="goal-card-chevron">&#9654;</span>
+                            <span class="goal-title">📈 #8: Plan to Meet A/B Ratio Monthly</span>
+                        </div>
+                        <div class="goal-card-summary-right">
+                            <span class="badge" id="abPlanGoalBadge">Loading...</span>
                         </div>
                     </div>
-                </div>
-
-                <!-- Goal #5: Customer Experience - Communication -->
-                <div class="goal-card">
-                    <div class="goal-header">
-                        <span class="goal-title">💬 #5: Customer Experience - Prompt & Professional Communication</span>
-                        <span class="badge badge-gray">Process</span>
-                    </div>
-                    <div class="goal-notes">
-                        <strong>Objective:</strong> Prompt, professional customer communication<br>
-                        <strong>Tracking:</strong> Manual/Process-based<br>
-                        <strong>Standard:</strong> Timely responses and updates
-                    </div>
-
-                    <!-- 12-Month Progress Timeline -->
-                    <div style="margin-top: 10px;">
-                        <div style="font-size: 0.75em; color: #94a3b8; margin-bottom: 4px;">2026 Progress (Month <span id="goal5CurrentMonth">--</span>/12)</div>
-                        <div class="month-timeline" id="goal5MonthTimeline">
-                            <div class="month-block" data-month="1"><span>J</span></div>
-                            <div class="month-block" data-month="2"><span>F</span></div>
-                            <div class="month-block" data-month="3"><span>M</span></div>
-                            <div class="month-block" data-month="4"><span>A</span></div>
-                            <div class="month-block" data-month="5"><span>M</span></div>
-                            <div class="month-block" data-month="6"><span>J</span></div>
-                            <div class="month-block" data-month="7"><span>J</span></div>
-                            <div class="month-block" data-month="8"><span>A</span></div>
-                            <div class="month-block" data-month="9"><span>S</span></div>
-                            <div class="month-block" data-month="10"><span>O</span></div>
-                            <div class="month-block" data-month="11"><span>N</span></div>
-                            <div class="month-block" data-month="12"><span>D</span></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Goal #6: Stay Within Expense Budget -->
-                <div class="goal-card">
-                    <div class="goal-header">
-                        <span class="goal-title">💵 #6: Stay Within Expense Budget</span>
-                        <span class="badge" id="expBudgetGoalBadge">Loading...</span>
-                    </div>
-                    <div class="goal-progress">
-                        <div style="flex: 1;">
-                            <div class="progress-bar">
-                                <div class="progress-fill progress-green" id="expBudgetProgressBar" style="width: 0%;"></div>
+                    <div class="goal-card-details">
+                        <div class="goal-card-details-inner">
+                            <div class="goal-notes">
+                                <strong>Status:</strong> Monthly planning and execution<br>
+                                <strong>Tracked:</strong> Via Dashboard A/B metrics<br>
+                                <strong>Target:</strong> Consistent 58.5% performance
+                            </div>
+                            <div style="margin-top: 10px;">
+                                <div style="font-size: 0.75em; color: #94a3b8; margin-bottom: 4px;">2026 Progress (Month <span id="goal8CurrentMonth">--</span>/12)</div>
+                                <div class="month-timeline" id="goal8MonthTimeline">
+                                    <div class="month-block" data-month="1"><span>J</span></div><div class="month-block" data-month="2"><span>F</span></div><div class="month-block" data-month="3"><span>M</span></div><div class="month-block" data-month="4"><span>A</span></div><div class="month-block" data-month="5"><span>M</span></div><div class="month-block" data-month="6"><span>J</span></div><div class="month-block" data-month="7"><span>J</span></div><div class="month-block" data-month="8"><span>A</span></div><div class="month-block" data-month="9"><span>S</span></div><div class="month-block" data-month="10"><span>O</span></div><div class="month-block" data-month="11"><span>N</span></div><div class="month-block" data-month="12"><span>D</span></div>
+                                </div>
                             </div>
                         </div>
-                        <span class="goal-pct" id="expBudgetProgressPct">--</span>
-                    </div>
-                    <div class="goal-notes">
-                        <strong>2026 Expenses:</strong> <span id="goal6Expenses">$--</span> |
-                        <strong>Budget:</strong> <span id="goal6Budget">$--</span> |
-                        <strong>Variance:</strong> <span id="goal6Variance">$--</span><br>
-                        <span id="goal6PaceText" class="pace-ontrack">● Loading expense data...</span>
-                    </div>
-
-                    <!-- 12-Month Progress Timeline -->
-                    <div style="margin-top: 10px;">
-                        <div style="font-size: 0.75em; color: #94a3b8; margin-bottom: 4px;">2026 Progress (Month <span id="goal6CurrentMonth">--</span>/12)</div>
-                        <div class="month-timeline" id="goal6MonthTimeline">
-                            <div class="month-block" data-month="1"><span>J</span></div>
-                            <div class="month-block" data-month="2"><span>F</span></div>
-                            <div class="month-block" data-month="3"><span>M</span></div>
-                            <div class="month-block" data-month="4"><span>A</span></div>
-                            <div class="month-block" data-month="5"><span>M</span></div>
-                            <div class="month-block" data-month="6"><span>J</span></div>
-                            <div class="month-block" data-month="7"><span>J</span></div>
-                            <div class="month-block" data-month="8"><span>A</span></div>
-                            <div class="month-block" data-month="9"><span>S</span></div>
-                            <div class="month-block" data-month="10"><span>O</span></div>
-                            <div class="month-block" data-month="11"><span>N</span></div>
-                            <div class="month-block" data-month="12"><span>D</span></div>
-                        </div>
                     </div>
                 </div>
 
-                <!-- Goal #7: FAA/Internal Audits - Zero Findings -->
-                <div class="goal-card">
-                    <div class="goal-header">
-                        <span class="goal-title">✅ #7: Complete FAA/Internal Audits with No Findings</span>
-                        <span class="badge" id="auditGoalBadge">Loading...</span>
+                <!-- ===== CUSTOMER & QUALITY ===== -->
+                <div class="category-header cat-customer">
+                    <span class="cat-icon">🎯</span>
+                    <span class="cat-label">Customer & Quality</span>
+                    <span class="cat-count">Goals #2, #4, #5, #7, #9, #10</span>
+                </div>
+
+                <!-- Goal #2 -->
+                <div class="goal-card" id="goalCard2" onclick="this.classList.toggle('expanded')">
+                    <div class="goal-card-summary">
+                        <div class="goal-card-summary-left">
+                            <span class="goal-card-chevron">&#9654;</span>
+                            <span class="goal-title">📧 #2: NPS Survey Program (1/month)</span>
+                        </div>
+                        <div class="goal-card-summary-right">
+                            <span class="goal-pct" id="npsSummaryMetric" style="font-size:0.95em;">--</span>
+                            <span class="badge" id="npsGoalBadge">Loading...</span>
+                        </div>
                     </div>
-                    <div class="goal-progress">
-                        <div style="flex: 1;">
-                            <div class="progress-bar">
-                                <div class="progress-fill progress-green" id="auditProgressBar" style="width: 0%;"></div>
+                    <div class="goal-card-details">
+                        <div class="goal-card-details-inner">
+                            <div class="goal-progress">
+                                <div style="flex: 1;">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" id="npsProgressBar" style="width: 0%;"></div>
+                                    </div>
+                                </div>
+                                <span class="goal-pct" id="npsProgressPct">--</span>
+                            </div>
+                            <div class="goal-notes">
+                                <strong>YTD Completed:</strong> <span id="pendingSurveys">--</span> of 12 |
+                                <strong>This Month Sent:</strong> <span id="surveysSent">--</span> |
+                                <strong>Network Goal:</strong> 200 total
+                            </div>
+                            <div class="goal-pace" id="npsPace">Check NET Promoter results folder</div>
+                            <div style="margin-top: 10px;">
+                                <div style="font-size: 0.75em; color: #94a3b8; margin-bottom: 4px;">2026 Progress (Month <span id="npsCurrentMonth">--</span>/12)</div>
+                                <div class="month-timeline" id="npsMonthTimeline">
+                                    <div class="month-block" data-month="1"><span>J</span></div><div class="month-block" data-month="2"><span>F</span></div><div class="month-block" data-month="3"><span>M</span></div><div class="month-block" data-month="4"><span>A</span></div><div class="month-block" data-month="5"><span>M</span></div><div class="month-block" data-month="6"><span>J</span></div><div class="month-block" data-month="7"><span>J</span></div><div class="month-block" data-month="8"><span>A</span></div><div class="month-block" data-month="9"><span>S</span></div><div class="month-block" data-month="10"><span>O</span></div><div class="month-block" data-month="11"><span>N</span></div><div class="month-block" data-month="12"><span>D</span></div>
+                                </div>
                             </div>
                         </div>
-                        <span class="goal-pct" id="auditProgressPct">--</span>
                     </div>
-                    <div class="goal-notes">
-                        <strong>Audits Completed:</strong> <span id="auditsCompleted">--</span> |
-                        <strong>Findings:</strong> <span id="auditFindings">--</span> |
-                        <strong>Target:</strong> Zero findings
-                    </div>
+                </div>
 
-                    <!-- 12-Month Progress Timeline -->
-                    <div style="margin-top: 10px;">
-                        <div style="font-size: 0.75em; color: #94a3b8; margin-bottom: 4px;">2026 Progress (Month <span id="goal7CurrentMonth">--</span>/12)</div>
-                        <div class="month-timeline" id="goal7MonthTimeline">
-                            <div class="month-block" data-month="1"><span>J</span></div>
-                            <div class="month-block" data-month="2"><span>F</span></div>
-                            <div class="month-block" data-month="3"><span>M</span></div>
-                            <div class="month-block" data-month="4"><span>A</span></div>
-                            <div class="month-block" data-month="5"><span>M</span></div>
-                            <div class="month-block" data-month="6"><span>J</span></div>
-                            <div class="month-block" data-month="7"><span>J</span></div>
-                            <div class="month-block" data-month="8"><span>A</span></div>
-                            <div class="month-block" data-month="9"><span>S</span></div>
-                            <div class="month-block" data-month="10"><span>O</span></div>
-                            <div class="month-block" data-month="11"><span>N</span></div>
-                            <div class="month-block" data-month="12"><span>D</span></div>
+                <!-- Goal #4 -->
+                <div class="goal-card" id="goalCard4" onclick="this.classList.toggle('expanded')">
+                    <div class="goal-card-summary">
+                        <div class="goal-card-summary-left">
+                            <span class="goal-card-chevron">&#9654;</span>
+                            <span class="goal-title">🔧 #4: Flat Rate Re-evaluation</span>
+                        </div>
+                        <div class="goal-card-summary-right">
+                            <span class="badge" id="flatRateGoalBadge">Loading...</span>
+                        </div>
+                    </div>
+                    <div class="goal-card-details">
+                        <div class="goal-card-details-inner">
+                            <div class="goal-notes">
+                                <strong>Objective:</strong> Success/Fail analysis of flat rate system<br>
+                                <strong>Data Source:</strong> Hours Sold vs Hours Actual + <span style="color: #0ea5e9; cursor: pointer;" onclick="event.stopPropagation(); showTab('financials')">Flat Rate Calculator</span><br>
+                                <strong>2026 Freight:</strong> <span id="goal4Freight">$--</span> vs <span id="goal4FreightBudget">$--</span> budget |
+                                <strong>Flat Rate DB:</strong> <span id="goal4FlatRateCount">--</span> weight tiers loaded
+                            </div>
+                            <div style="margin-top: 10px;">
+                                <div style="font-size: 0.75em; color: #94a3b8; margin-bottom: 4px;">2026 Progress (Month <span id="goal4CurrentMonth">--</span>/12)</div>
+                                <div class="month-timeline" id="goal4MonthTimeline">
+                                    <div class="month-block" data-month="1"><span>J</span></div><div class="month-block" data-month="2"><span>F</span></div><div class="month-block" data-month="3"><span>M</span></div><div class="month-block" data-month="4"><span>A</span></div><div class="month-block" data-month="5"><span>M</span></div><div class="month-block" data-month="6"><span>J</span></div><div class="month-block" data-month="7"><span>J</span></div><div class="month-block" data-month="8"><span>A</span></div><div class="month-block" data-month="9"><span>S</span></div><div class="month-block" data-month="10"><span>O</span></div><div class="month-block" data-month="11"><span>N</span></div><div class="month-block" data-month="12"><span>D</span></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Goal #8: Plan to Meet A/B Monthly -->
-                <div class="goal-card">
-                    <div class="goal-header">
-                        <span class="goal-title">📈 #8: Plan to Meet A/B Ratio Monthly</span>
-                        <span class="badge" id="abPlanGoalBadge">Loading...</span>
+                <!-- Goal #5 -->
+                <div class="goal-card" id="goalCard5" onclick="this.classList.toggle('expanded')">
+                    <div class="goal-card-summary">
+                        <div class="goal-card-summary-left">
+                            <span class="goal-card-chevron">&#9654;</span>
+                            <span class="goal-title">💬 #5: Customer Communication</span>
+                        </div>
+                        <div class="goal-card-summary-right">
+                            <span class="badge badge-green" id="goal5Badge">Process</span>
+                        </div>
                     </div>
-                    <div class="goal-notes">
-                        <strong>Status:</strong> Monthly planning and execution<br>
-                        <strong>Tracked:</strong> Via Dashboard A/B metrics<br>
-                        <strong>Target:</strong> Consistent 58.5% performance
-                    </div>
-
-                    <!-- 12-Month Progress Timeline -->
-                    <div style="margin-top: 10px;">
-                        <div style="font-size: 0.75em; color: #94a3b8; margin-bottom: 4px;">2026 Progress (Month <span id="goal8CurrentMonth">--</span>/12)</div>
-                        <div class="month-timeline" id="goal8MonthTimeline">
-                            <div class="month-block" data-month="1"><span>J</span></div>
-                            <div class="month-block" data-month="2"><span>F</span></div>
-                            <div class="month-block" data-month="3"><span>M</span></div>
-                            <div class="month-block" data-month="4"><span>A</span></div>
-                            <div class="month-block" data-month="5"><span>M</span></div>
-                            <div class="month-block" data-month="6"><span>J</span></div>
-                            <div class="month-block" data-month="7"><span>J</span></div>
-                            <div class="month-block" data-month="8"><span>A</span></div>
-                            <div class="month-block" data-month="9"><span>S</span></div>
-                            <div class="month-block" data-month="10"><span>O</span></div>
-                            <div class="month-block" data-month="11"><span>N</span></div>
-                            <div class="month-block" data-month="12"><span>D</span></div>
+                    <div class="goal-card-details">
+                        <div class="goal-card-details-inner">
+                            <div class="goal-notes">
+                                <strong>Objective:</strong> Prompt, professional customer communication<br>
+                                <strong>Tracking:</strong> Manual/Process-based<br>
+                                <strong>Standard:</strong> Timely responses and updates
+                            </div>
+                            <div style="margin-top: 10px;">
+                                <div style="font-size: 0.75em; color: #94a3b8; margin-bottom: 4px;">2026 Progress (Month <span id="goal5CurrentMonth">--</span>/12)</div>
+                                <div class="month-timeline" id="goal5MonthTimeline">
+                                    <div class="month-block" data-month="1"><span>J</span></div><div class="month-block" data-month="2"><span>F</span></div><div class="month-block" data-month="3"><span>M</span></div><div class="month-block" data-month="4"><span>A</span></div><div class="month-block" data-month="5"><span>M</span></div><div class="month-block" data-month="6"><span>J</span></div><div class="month-block" data-month="7"><span>J</span></div><div class="month-block" data-month="8"><span>A</span></div><div class="month-block" data-month="9"><span>S</span></div><div class="month-block" data-month="10"><span>O</span></div><div class="month-block" data-month="11"><span>N</span></div><div class="month-block" data-month="12"><span>D</span></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Goal #9: Use Dealer Programs Tab Exclusively -->
-                <div class="goal-card">
-                    <div class="goal-header">
-                        <span class="goal-title">📋 #9: Use Dealer Programs Tab Exclusively</span>
-                        <span class="badge badge-gray" id="goal9Badge">Loading...</span>
+                <!-- Goal #7 -->
+                <div class="goal-card" id="goalCard7" onclick="this.classList.toggle('expanded')">
+                    <div class="goal-card-summary">
+                        <div class="goal-card-summary-left">
+                            <span class="goal-card-chevron">&#9654;</span>
+                            <span class="goal-title">✅ #7: FAA/Internal Audits — Zero Findings</span>
+                        </div>
+                        <div class="goal-card-summary-right">
+                            <span class="goal-pct" id="auditSummaryMetric" style="font-size:0.95em;">--</span>
+                            <span class="badge" id="auditGoalBadge">Loading...</span>
+                        </div>
                     </div>
-                    <div class="goal-notes">
-                        <strong>Objective:</strong> All dealer program work through proper tab<br>
-                        <strong>Status:</strong> <span id="goal9Status">Loading...</span><br>
-                        <strong>YTD:</strong> Programs: <span id="dpTotalCount">--</span> | List: $<span id="dpTotalList">--</span> | Cost: $<span id="dpTotalCost">--</span> | Margin: <span id="dpMargin">--</span>%<br>
-                        <strong>Breakdown:</strong> <span id="dpBreakdown">--</span>
-                    </div>
-
-                    <!-- 12-Month Progress Timeline -->
-                    <div style="margin-top: 10px;">
-                        <div style="font-size: 0.75em; color: #94a3b8; margin-bottom: 4px;">2026 Progress (Month <span id="goal9CurrentMonth">--</span>/12)</div>
-                        <div class="month-timeline" id="goal9MonthTimeline">
-                            <div class="month-block" data-month="1"><span>J</span></div>
-                            <div class="month-block" data-month="2"><span>F</span></div>
-                            <div class="month-block" data-month="3"><span>M</span></div>
-                            <div class="month-block" data-month="4"><span>A</span></div>
-                            <div class="month-block" data-month="5"><span>M</span></div>
-                            <div class="month-block" data-month="6"><span>J</span></div>
-                            <div class="month-block" data-month="7"><span>J</span></div>
-                            <div class="month-block" data-month="8"><span>A</span></div>
-                            <div class="month-block" data-month="9"><span>S</span></div>
-                            <div class="month-block" data-month="10"><span>O</span></div>
-                            <div class="month-block" data-month="11"><span>N</span></div>
-                            <div class="month-block" data-month="12"><span>D</span></div>
+                    <div class="goal-card-details">
+                        <div class="goal-card-details-inner">
+                            <div class="goal-progress">
+                                <div style="flex: 1;">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill progress-green" id="auditProgressBar" style="width: 0%;"></div>
+                                    </div>
+                                </div>
+                                <span class="goal-pct" id="auditProgressPct">--</span>
+                            </div>
+                            <div class="goal-notes">
+                                <strong>Audits Completed:</strong> <span id="auditsCompleted">--</span> |
+                                <strong>Findings:</strong> <span id="auditFindings">--</span> |
+                                <strong>Target:</strong> Zero findings
+                            </div>
+                            <div style="margin-top: 10px;">
+                                <div style="font-size: 0.75em; color: #94a3b8; margin-bottom: 4px;">2026 Progress (Month <span id="goal7CurrentMonth">--</span>/12)</div>
+                                <div class="month-timeline" id="goal7MonthTimeline">
+                                    <div class="month-block" data-month="1"><span>J</span></div><div class="month-block" data-month="2"><span>F</span></div><div class="month-block" data-month="3"><span>M</span></div><div class="month-block" data-month="4"><span>A</span></div><div class="month-block" data-month="5"><span>M</span></div><div class="month-block" data-month="6"><span>J</span></div><div class="month-block" data-month="7"><span>J</span></div><div class="month-block" data-month="8"><span>A</span></div><div class="month-block" data-month="9"><span>S</span></div><div class="month-block" data-month="10"><span>O</span></div><div class="month-block" data-month="11"><span>N</span></div><div class="month-block" data-month="12"><span>D</span></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Goal #10: Vendor Disputes - Communicate Within 30 Days -->
-                <div class="goal-card">
-                    <div class="goal-header">
-                        <span class="goal-title">📞 #10: Vendor Disputes - Communicate to BZ Within 30 Days</span>
-                        <span class="badge badge-gray" id="goal10Badge">Loading...</span>
+                <!-- Goal #9 -->
+                <div class="goal-card" id="goalCard9" onclick="this.classList.toggle('expanded')">
+                    <div class="goal-card-summary">
+                        <div class="goal-card-summary-left">
+                            <span class="goal-card-chevron">&#9654;</span>
+                            <span class="goal-title">📋 #9: Dealer Programs</span>
+                        </div>
+                        <div class="goal-card-summary-right">
+                            <span class="goal-pct" id="dpSummaryMetric" style="font-size:0.95em;">--</span>
+                            <span class="badge badge-gray" id="goal9Badge">Loading...</span>
+                        </div>
                     </div>
-                    <div class="goal-notes">
-                        <strong>Objective:</strong> Report disputes to Brian Zitek within 30 days<br>
-                        <strong>Status:</strong> <span id="goal10Status">Loading...</span><br>
-                        <strong>YTD:</strong> Disputes: <span id="disputesCount">--</span> | Avg Response: <span id="disputesAvgDays">--</span> days | <span id="disputesResolved">--</span> resolved<br>
-                        <strong>Target:</strong> 100% on-time communication
-                    </div>
-
-                    <!-- 12-Month Progress Timeline -->
-                    <div style="margin-top: 10px;">
-                        <div style="font-size: 0.75em; color: #94a3b8; margin-bottom: 4px;">2026 Progress (Month <span id="goal10CurrentMonth">--</span>/12)</div>
-                        <div class="month-timeline" id="goal10MonthTimeline">
-                            <div class="month-block" data-month="1"><span>J</span></div>
-                            <div class="month-block" data-month="2"><span>F</span></div>
-                            <div class="month-block" data-month="3"><span>M</span></div>
-                            <div class="month-block" data-month="4"><span>A</span></div>
-                            <div class="month-block" data-month="5"><span>M</span></div>
-                            <div class="month-block" data-month="6"><span>J</span></div>
-                            <div class="month-block" data-month="7"><span>J</span></div>
-                            <div class="month-block" data-month="8"><span>A</span></div>
-                            <div class="month-block" data-month="9"><span>S</span></div>
-                            <div class="month-block" data-month="10"><span>O</span></div>
-                            <div class="month-block" data-month="11"><span>N</span></div>
-                            <div class="month-block" data-month="12"><span>D</span></div>
+                    <div class="goal-card-details">
+                        <div class="goal-card-details-inner">
+                            <div class="goal-notes">
+                                <strong>Objective:</strong> All dealer program work through proper tab<br>
+                                <strong>Status:</strong> <span id="goal9Status">Loading...</span><br>
+                                <strong>YTD:</strong> Programs: <span id="dpTotalCount">--</span> | List: $<span id="dpTotalList">--</span> | Cost: $<span id="dpTotalCost">--</span> | Margin: <span id="dpMargin">--</span>%<br>
+                                <strong>Breakdown:</strong> <span id="dpBreakdown">--</span>
+                            </div>
+                            <div style="margin-top: 10px;">
+                                <div style="font-size: 0.75em; color: #94a3b8; margin-bottom: 4px;">2026 Progress (Month <span id="goal9CurrentMonth">--</span>/12)</div>
+                                <div class="month-timeline" id="goal9MonthTimeline">
+                                    <div class="month-block" data-month="1"><span>J</span></div><div class="month-block" data-month="2"><span>F</span></div><div class="month-block" data-month="3"><span>M</span></div><div class="month-block" data-month="4"><span>A</span></div><div class="month-block" data-month="5"><span>M</span></div><div class="month-block" data-month="6"><span>J</span></div><div class="month-block" data-month="7"><span>J</span></div><div class="month-block" data-month="8"><span>A</span></div><div class="month-block" data-month="9"><span>S</span></div><div class="month-block" data-month="10"><span>O</span></div><div class="month-block" data-month="11"><span>N</span></div><div class="month-block" data-month="12"><span>D</span></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Goal #11: Identify Risk Areas to Reduce Assessment Score -->
-                <div class="goal-card">
-                    <div class="goal-header">
-                        <span class="goal-title">⚠️ #11: Identify Risk Areas to Reduce Assessment Score</span>
-                        <span class="badge badge-gray">Strategic</span>
+                <!-- Goal #10 -->
+                <div class="goal-card" id="goalCard10" onclick="this.classList.toggle('expanded')">
+                    <div class="goal-card-summary">
+                        <div class="goal-card-summary-left">
+                            <span class="goal-card-chevron">&#9654;</span>
+                            <span class="goal-title">📞 #10: Vendor Disputes (&lt;30 days)</span>
+                        </div>
+                        <div class="goal-card-summary-right">
+                            <span class="goal-pct" id="disputeSummaryMetric" style="font-size:0.95em;">--</span>
+                            <span class="badge badge-gray" id="goal10Badge">Loading...</span>
+                        </div>
                     </div>
-                    <div class="goal-notes">
-                        <strong>Objective:</strong> Proactive risk identification and mitigation<br>
-                        <strong>Focus:</strong> Safety, quality, compliance risk areas<br>
-                        <strong>Target:</strong> Reduce overall risk assessment score
+                    <div class="goal-card-details">
+                        <div class="goal-card-details-inner">
+                            <div class="goal-notes">
+                                <strong>Objective:</strong> Report disputes to Brian Zitek within 30 days<br>
+                                <strong>Status:</strong> <span id="goal10Status">Loading...</span><br>
+                                <strong>YTD:</strong> Disputes: <span id="disputesCount">--</span> | Avg Response: <span id="disputesAvgDays">--</span> days | <span id="disputesResolved">--</span> resolved<br>
+                                <strong>Target:</strong> 100% on-time communication
+                            </div>
+                            <div style="margin-top: 10px;">
+                                <div style="font-size: 0.75em; color: #94a3b8; margin-bottom: 4px;">2026 Progress (Month <span id="goal10CurrentMonth">--</span>/12)</div>
+                                <div class="month-timeline" id="goal10MonthTimeline">
+                                    <div class="month-block" data-month="1"><span>J</span></div><div class="month-block" data-month="2"><span>F</span></div><div class="month-block" data-month="3"><span>M</span></div><div class="month-block" data-month="4"><span>A</span></div><div class="month-block" data-month="5"><span>M</span></div><div class="month-block" data-month="6"><span>J</span></div><div class="month-block" data-month="7"><span>J</span></div><div class="month-block" data-month="8"><span>A</span></div><div class="month-block" data-month="9"><span>S</span></div><div class="month-block" data-month="10"><span>O</span></div><div class="month-block" data-month="11"><span>N</span></div><div class="month-block" data-month="12"><span>D</span></div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+                </div>
 
-                    <!-- 12-Month Progress Timeline -->
-                    <div style="margin-top: 10px;">
-                        <div style="font-size: 0.75em; color: #94a3b8; margin-bottom: 4px;">2026 Progress (Month <span id="goal11CurrentMonth">--</span>/12)</div>
-                        <div class="month-timeline" id="goal11MonthTimeline">
-                            <div class="month-block" data-month="1"><span>J</span></div>
-                            <div class="month-block" data-month="2"><span>F</span></div>
-                            <div class="month-block" data-month="3"><span>M</span></div>
-                            <div class="month-block" data-month="4"><span>A</span></div>
-                            <div class="month-block" data-month="5"><span>M</span></div>
-                            <div class="month-block" data-month="6"><span>J</span></div>
-                            <div class="month-block" data-month="7"><span>J</span></div>
-                            <div class="month-block" data-month="8"><span>A</span></div>
-                            <div class="month-block" data-month="9"><span>S</span></div>
-                            <div class="month-block" data-month="10"><span>O</span></div>
-                            <div class="month-block" data-month="11"><span>N</span></div>
-                            <div class="month-block" data-month="12"><span>D</span></div>
+                <!-- ===== TEAM & COMPLIANCE ===== -->
+                <div class="category-header cat-team">
+                    <span class="cat-icon">👥</span>
+                    <span class="cat-label">Team & Compliance</span>
+                    <span class="cat-count">Goals #3, #11</span>
+                </div>
+
+                <!-- Goal #3 -->
+                <div class="goal-card" id="goalCard3" onclick="this.classList.toggle('expanded')">
+                    <div class="goal-card-summary">
+                        <div class="goal-card-summary-left">
+                            <span class="goal-card-chevron">&#9654;</span>
+                            <span class="goal-title">📚 #3: Training Completion (100%)</span>
+                        </div>
+                        <div class="goal-card-summary-right">
+                            <span class="goal-pct" id="trainingSummaryMetric" style="font-size:0.95em;">--</span>
+                            <span class="badge" id="trainingGoalBadge">Loading...</span>
+                        </div>
+                    </div>
+                    <div class="goal-card-details">
+                        <div class="goal-card-details-inner">
+                            <div class="goal-progress">
+                                <div style="flex: 1;">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" id="trainingProgressBar" style="width: 0%;"></div>
+                                    </div>
+                                </div>
+                                <span class="goal-pct" id="trainingProgressPct">--</span>
+                            </div>
+                            <div class="goal-notes">
+                                <strong>Completed:</strong> <span id="completedTraining">--</span> |
+                                <strong>Past Due:</strong> <span id="pastDueTraining" style="color: #ef4444;">--</span> |
+                                <strong>Upcoming:</strong> <span id="upcomingTraining">--</span>
+                            </div>
+                            <div class="goal-pace" id="trainingPace">Includes NEO/NETO - Check Training Due Report</div>
+                            <div style="margin-top: 10px;">
+                                <div style="font-size: 0.75em; color: #94a3b8; margin-bottom: 4px;">2026 Progress (Month <span id="trainingCurrentMonth">--</span>/12)</div>
+                                <div class="month-timeline" id="trainingMonthTimeline">
+                                    <div class="month-block" data-month="1"><span>J</span></div><div class="month-block" data-month="2"><span>F</span></div><div class="month-block" data-month="3"><span>M</span></div><div class="month-block" data-month="4"><span>A</span></div><div class="month-block" data-month="5"><span>M</span></div><div class="month-block" data-month="6"><span>J</span></div><div class="month-block" data-month="7"><span>J</span></div><div class="month-block" data-month="8"><span>A</span></div><div class="month-block" data-month="9"><span>S</span></div><div class="month-block" data-month="10"><span>O</span></div><div class="month-block" data-month="11"><span>N</span></div><div class="month-block" data-month="12"><span>D</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Goal #11 -->
+                <div class="goal-card" id="goalCard11" onclick="this.classList.toggle('expanded')">
+                    <div class="goal-card-summary">
+                        <div class="goal-card-summary-left">
+                            <span class="goal-card-chevron">&#9654;</span>
+                            <span class="goal-title">⚠️ #11: Risk Area Identification</span>
+                        </div>
+                        <div class="goal-card-summary-right">
+                            <span class="badge badge-amber" id="goal11Badge">Strategic</span>
+                        </div>
+                    </div>
+                    <div class="goal-card-details">
+                        <div class="goal-card-details-inner">
+                            <div class="goal-notes">
+                                <strong>Objective:</strong> Proactive risk identification and mitigation<br>
+                                <strong>Focus:</strong> Safety, quality, compliance risk areas<br>
+                                <strong>Target:</strong> Reduce overall risk assessment score
+                            </div>
+                            <div style="margin-top: 10px;">
+                                <div style="font-size: 0.75em; color: #94a3b8; margin-bottom: 4px;">2026 Progress (Month <span id="goal11CurrentMonth">--</span>/12)</div>
+                                <div class="month-timeline" id="goal11MonthTimeline">
+                                    <div class="month-block" data-month="1"><span>J</span></div><div class="month-block" data-month="2"><span>F</span></div><div class="month-block" data-month="3"><span>M</span></div><div class="month-block" data-month="4"><span>A</span></div><div class="month-block" data-month="5"><span>M</span></div><div class="month-block" data-month="6"><span>J</span></div><div class="month-block" data-month="7"><span>J</span></div><div class="month-block" data-month="8"><span>A</span></div><div class="month-block" data-month="9"><span>S</span></div><div class="month-block" data-month="10"><span>O</span></div><div class="month-block" data-month="11"><span>N</span></div><div class="month-block" data-month="12"><span>D</span></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -3993,6 +4210,55 @@
             return { text: `▼ ${Math.abs(diff).toFixed(0)}% behind pace (Year: ${yearPct}% elapsed)`, cls: 'pace-behind' };
         }
 
+        // Render inline SVG sparkline into a container
+        function renderSparkline(containerId, dataPoints, color) {
+            const el = document.getElementById(containerId);
+            if (!el || !dataPoints || dataPoints.length < 2) return;
+            const w = 120, h = 28, pad = 2;
+            const vals = dataPoints.map(d => typeof d === 'number' ? d : 0);
+            const min = Math.min(...vals), max = Math.max(...vals);
+            const range = max - min || 1;
+            const points = vals.map((v, i) => {
+                const x = pad + (i / (vals.length - 1)) * (w - pad * 2);
+                const y = h - pad - ((v - min) / range) * (h - pad * 2);
+                return `${x.toFixed(1)},${y.toFixed(1)}`;
+            });
+            const lineId = containerId.replace(/[^a-z0-9]/gi, '') + 'grad';
+            el.innerHTML = `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none">
+                <defs><linearGradient id="${lineId}" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="${color}" stop-opacity="0.3"/>
+                    <stop offset="100%" stop-color="${color}" stop-opacity="0.02"/>
+                </linearGradient></defs>
+                <polygon points="${points[0].split(',')[0]},${h} ${points.join(' ')} ${points[points.length-1].split(',')[0]},${h}" fill="url(#${lineId})" />
+                <polyline points="${points.join(' ')}" fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>`;
+        }
+
+        // Update a scorecard mini-card with metric and status
+        function updateScorecardCard(goalNum, metric, status) {
+            const card = document.getElementById(`sc-${goalNum}`);
+            const dot = document.getElementById(`sc-${goalNum}-dot`);
+            const metricEl = document.getElementById(`sc-${goalNum}-metric`);
+            if (card) {
+                card.classList.remove('sc-green', 'sc-amber', 'sc-red', 'sc-gray');
+                card.classList.add(`sc-${status}`);
+            }
+            if (dot) {
+                dot.classList.remove('dot-green', 'dot-amber', 'dot-red');
+                dot.classList.add(`dot-${status}`);
+            }
+            if (metricEl) metricEl.textContent = metric;
+        }
+
+        // Set goal card border color based on status
+        function setGoalCardStatus(cardId, status) {
+            const card = document.getElementById(cardId);
+            if (card) {
+                card.classList.remove('status-green', 'status-amber', 'status-red');
+                card.classList.add(`status-${status}`);
+            }
+        }
+
         // Update 12-month timeline for a goal with performance-based coloring
         async function updateMonthTimeline(timelineId, currentMonthId, currentMonth, goalNumber) {
             const timeline = document.getElementById(timelineId);
@@ -4680,6 +4946,72 @@
                 // GOAL #11: Risk Area Identification (Manual/Static)
                 // ====================================
                 scorecard.push({ num: 11, name: 'Risk Identification', target: 'Reduce score', current: 'Strategic', status: 'amber', statusText: 'Ongoing' });
+
+                // ====================================
+                // UPDATE SCORECARD GRID + CARD BORDERS
+                // ====================================
+                const goalCardMap = {1:'goalCard1',2:'goalCard2',3:'goalCard3',4:'goalCard4',5:'goalCard5',6:'goalCard6',7:'goalCard7',8:'goalCard8',9:'goalCard9',10:'goalCard10',11:'goalCard11'};
+                scorecard.forEach(s => {
+                    updateScorecardCard(s.num, s.current, s.status);
+                    setGoalCardStatus(goalCardMap[s.num], s.status);
+                });
+
+                // Also set summary metrics on the collapsed card headers
+                const abSum = document.getElementById('abSummaryMetric');
+                if (abSum && rankings.length > 0) abSum.textContent = `${rankings[0].denver_ab_actual}%`;
+                const npsSum = document.getElementById('npsSummaryMetric');
+                if (npsSum) npsSum.textContent = `${npsYear.filter(s => s.score !== null).length}/12`;
+                const trainSum = document.getElementById('trainingSummaryMetric');
+                if (trainSum) trainSum.textContent = `${((training.filter(t => t.status === 'Completed').length / Math.max(training.length,1)) * 100).toFixed(0)}%`;
+                // Set remaining summary metrics from scorecard data
+                scorecard.forEach(s => {
+                    const metricMap = {6:'expBudgetSummaryMetric', 7:'auditSummaryMetric', 9:'dpSummaryMetric', 10:'disputeSummaryMetric'};
+                    if (metricMap[s.num]) {
+                        const el = document.getElementById(metricMap[s.num]);
+                        if (el) el.textContent = s.statusText;
+                    }
+                });
+
+                // ====================================
+                // RENDER SPARKLINES (from available data)
+                // ====================================
+                try {
+                    // Goal #1 sparkline — monthly A/B from time_entries
+                    const abSparkResp = await fetch(
+                        `${SUPABASE_URL}/rest/v1/rpc/get_monthly_ab_ratio?year_param=2026`,
+                        { method: 'POST', headers: { ...HEADERS, 'Content-Type': 'application/json' } }
+                    );
+                    if (abSparkResp.ok) {
+                        const abSparkData = await abSparkResp.json();
+                        if (Array.isArray(abSparkData) && abSparkData.length > 0) {
+                            renderSparkline('sc-1-sparkline', abSparkData.map(d => parseFloat(d.ab_ratio || 0)), '#f59e0b');
+                        }
+                    }
+                } catch(e) { console.log('Sparkline #1 skipped:', e.message); }
+
+                try {
+                    // Goal #2 sparkline — NPS surveys per month
+                    const npsByMonth = {};
+                    npsYear.forEach(s => { const m = new Date(s.date_sent).getMonth(); npsByMonth[m] = (npsByMonth[m] || 0) + 1; });
+                    const npsMonthly = [];
+                    for (let m = 0; m < yr.monthsElapsed; m++) npsMonthly.push(npsByMonth[m] || 0);
+                    if (npsMonthly.length >= 2) renderSparkline('sc-2-sparkline', npsMonthly, '#10b981');
+                } catch(e) {}
+
+                try {
+                    // Goal #3 sparkline — training completion cumulative
+                    const trCompleted = training.filter(t => t.status === 'Completed' && t.completed_date);
+                    const trByMonth = {};
+                    trCompleted.forEach(t => { const m = new Date(t.completed_date).getMonth(); trByMonth[m] = (trByMonth[m] || 0) + 1; });
+                    let trCum = 0;
+                    const trCumArr = [];
+                    for (let m = 0; m < yr.monthsElapsed; m++) { trCum += (trByMonth[m] || 0); trCumArr.push(trCum); }
+                    if (trCumArr.length >= 2) renderSparkline('sc-3-sparkline', trCumArr, '#8b5cf6');
+                } catch(e) {}
+
+                // Goal #5 — process-based, show flat line
+                updateScorecardCard(5, 'Ongoing', 'green');
+                setGoalCardStatus('goalCard5', 'green');
 
                 // ====================================
                 // UPDATE 12-MONTH TIMELINES FOR ALL GOALS
