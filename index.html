@@ -4119,14 +4119,14 @@
                 // Fetch ANCHOR work orders for open dates
                 let anchorWOs = [];
                 try {
-                    const anchorResponse = await fetch(`${SUPABASE_URL}/rest/v1/anchor_work_orders?select=wo_number,date_in`, {
+                    const anchorResponse = await fetch(`${SUPABASE_URL}/rest/v1/anchor_work_orders?select=wo_number,open_date`, {
                         headers: {
                             'apikey': SUPABASE_KEY,
                             'Authorization': `Bearer ${SUPABASE_KEY}`
                         }
                     });
                     const anchorData = await anchorResponse.json();
-                    anchorWOs = Array.isArray(anchorData) ? anchorData.map(a => ({ wo_number: a.wo_number, open_date: a.date_in })) : [];
+                    anchorWOs = Array.isArray(anchorData) ? anchorData.map(a => ({ wo_number: a.wo_number, open_date: a.open_date })) : [];
                 } catch (err) {
                     console.log('anchor_work_orders table not available yet, skipping...');
                 }
@@ -4168,6 +4168,11 @@
                     if (anchorData?.open_date) {
                         // Use ANCHOR open date (most reliable source - directly from AS400)
                         open_date = anchorData.open_date;
+                        const openDateObj = new Date(open_date);
+                        current_days_open = Math.floor((today - openDateObj) / (1000 * 60 * 60 * 24));
+                    } else if (wo.open_date) {
+                        // Fallback to work_orders table open_date (synced from anchor)
+                        open_date = wo.open_date;
                         const openDateObj = new Date(open_date);
                         current_days_open = Math.floor((today - openDateObj) / (1000 * 60 * 60 * 24));
                     } else if (over30Data?.open_date) {
