@@ -1225,9 +1225,9 @@
                         <div class="metric-sub">All Denver Shops</div>
                     </div>
                     <div class="metric">
-                        <div class="metric-value" style="color: #ef4444;" id="anchorAOG">--</div>
-                        <div class="metric-label">AOG</div>
-                        <div class="metric-sub">Aircraft on Ground</div>
+                        <div class="metric-value" style="color: #ef4444;" id="anchorFreightWarn">--</div>
+                        <div class="metric-label">Freight Warnings</div>
+                        <div class="metric-sub">Missing O/S Charges</div>
                     </div>
                     <div class="metric">
                         <div class="metric-value" style="color: #f59e0b;" id="anchorExpHrs">--</div>
@@ -1287,7 +1287,6 @@
                             <option value="days_open_asc">Days Open (Newest)</option>
                             <option value="exp_hrs_desc">Exp Hours (Highest)</option>
                             <option value="shop">By Shop</option>
-                            <option value="aog">AOG First</option>
                         </select>
                     </div>
                 </div>
@@ -1305,11 +1304,10 @@
                                 <th>Days Open</th>
                                 <th>Exp Hrs</th>
                                 <th>Freight</th>
-                                <th>AOG</th>
                             </tr>
                         </thead>
                         <tbody id="anchorWorkOrdersList">
-                            <tr><td colspan="11" style="text-align:center; color:#94a3b8;">Loading ANCHOR data...</td></tr>
+                            <tr><td colspan="10" style="text-align:center; color:#94a3b8;">Loading ANCHOR data...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -1992,6 +1990,312 @@
                 </div>
             </div>
 
+            <!-- Freight Tracking Management (Phase 3) -->
+            <div class="card" style="background: linear-gradient(135deg, #042f2e 0%, #065f46 100%); border: 1px solid #10b981;">
+                <div class="card-header">
+                    <span class="card-title" style="color: #6ee7b7;">🚛 Freight Tracking Management</span>
+                    <span class="badge badge-green" id="ftMgmtBadge">Loading...</span>
+                </div>
+                <!-- Summary KPIs -->
+                <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 16px;">
+                    <div style="background: rgba(0,0,0,0.3); border-radius: 8px; padding: 10px; text-align: center;">
+                        <div style="color: #6ee7b7; font-size: 10px; margin-bottom: 4px;">Tracked Shipments</div>
+                        <div style="color: #10b981; font-size: 22px; font-weight: bold;" id="ftTotalTracked">--</div>
+                    </div>
+                    <div style="background: rgba(0,0,0,0.3); border-radius: 8px; padding: 10px; text-align: center;">
+                        <div style="color: #6ee7b7; font-size: 10px; margin-bottom: 4px;">Pending Billing</div>
+                        <div style="color: #fbbf24; font-size: 22px; font-weight: bold;" id="ftPendingCount">--</div>
+                    </div>
+                    <div style="background: rgba(0,0,0,0.3); border-radius: 8px; padding: 10px; text-align: center;">
+                        <div style="color: #6ee7b7; font-size: 10px; margin-bottom: 4px;">Total to Bill</div>
+                        <div style="color: #10b981; font-size: 22px; font-weight: bold;" id="ftTotalToBill">$--</div>
+                    </div>
+                    <div style="background: rgba(0,0,0,0.3); border-radius: 8px; padding: 10px; text-align: center;">
+                        <div style="color: #6ee7b7; font-size: 10px; margin-bottom: 4px;">Posted to WO</div>
+                        <div style="color: #22d3ee; font-size: 22px; font-weight: bold;" id="ftPostedCount">--</div>
+                    </div>
+                    <div style="background: rgba(0,0,0,0.3); border-radius: 8px; padding: 10px; text-align: center;">
+                        <div style="color: #6ee7b7; font-size: 10px; margin-bottom: 4px;">Missing Freight WOs</div>
+                        <div style="color: #ef4444; font-size: 22px; font-weight: bold;" id="ftMissingWOs">--</div>
+                    </div>
+                </div>
+                <!-- Missing Freight Alerts -->
+                <div id="ftMissingAlerts" style="margin-bottom: 16px;"></div>
+                <!-- Tracking Records Table -->
+                <div style="color: #6ee7b7; font-weight: bold; margin-bottom: 8px; font-size: 12px;">📋 Active Freight Records (Pending Billing)</div>
+                <div class="table-container" style="max-height: 300px; margin-bottom: 16px;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="color: #6ee7b7;">WO#</th>
+                                <th style="color: #6ee7b7;">Carrier</th>
+                                <th style="color: #6ee7b7;">Weight</th>
+                                <th style="color: #6ee7b7; text-align: right;">Flat Rate</th>
+                                <th style="color: #6ee7b7; text-align: right;">+20%</th>
+                                <th style="color: #6ee7b7; text-align: right;">Bill Amount</th>
+                                <th style="color: #6ee7b7;">Status</th>
+                                <th style="color: #6ee7b7;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ftTrackingTable">
+                            <tr><td colspan="8" style="text-align: center; color: #6ee7b7;">Loading...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Unmatched Invoices -->
+                <div style="color: #fca5a5; font-weight: bold; margin-bottom: 8px; font-size: 12px;">⚠️ Unmatched Invoices (No WO# — Need Assignment)</div>
+                <div class="table-container" style="max-height: 250px;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="color: #fca5a5;">Date</th>
+                                <th style="color: #fca5a5;">Carrier</th>
+                                <th style="color: #fca5a5;">Tracking</th>
+                                <th style="color: #fca5a5;">Route</th>
+                                <th style="color: #fca5a5; text-align: right;">Charge</th>
+                                <th style="color: #fca5a5;">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ftUnmatchedTable">
+                            <tr><td colspan="6" style="text-align: center; color: #fca5a5;">Loading...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Parts Weight Database & Freight Calculator (Phase 4) -->
+            <div class="card" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); border: 1px solid #0ea5e9;">
+                <div class="card-header">
+                    <span class="card-title" style="color: #7dd3fc;">⚖️ Parts Weight Database & Freight Calculator</span>
+                    <span class="badge badge-blue" id="partsDbBadge">Loading...</span>
+                </div>
+
+                <!-- Freight Cost Calculator -->
+                <div style="background: rgba(14,165,233,0.1); border: 1px solid rgba(14,165,233,0.3); border-radius: 8px; padding: 12px; margin-bottom: 16px;">
+                    <div style="color: #7dd3fc; font-weight: bold; margin-bottom: 10px;">📐 Quick Freight Cost Calculator</div>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end;">
+                        <div style="flex: 1; min-width: 120px;">
+                            <label style="font-size: 11px; color: #94a3b8; display: block; margin-bottom: 4px;">Part Lookup</label>
+                            <input type="text" id="calcPartSearch" placeholder="Search part..."
+                                style="width: 100%; padding: 6px 8px; background: #0f172a; border: 1px solid #334155; border-radius: 4px; color: #e2e8f0; font-size: 12px;"
+                                oninput="searchPartsForCalc(this.value)" autocomplete="off">
+                            <div id="calcPartResults" style="display: none; position: absolute; z-index: 100; background: #1e293b; border: 1px solid #334155; border-radius: 4px; max-height: 150px; overflow-y: auto; width: 280px; margin-top: 2px;"></div>
+                        </div>
+                        <div style="min-width: 80px;">
+                            <label style="font-size: 11px; color: #94a3b8; display: block; margin-bottom: 4px;">Weight (lbs)</label>
+                            <input type="number" id="calcWeight" placeholder="lbs" min="1" max="80"
+                                style="width: 80px; padding: 6px 8px; background: #0f172a; border: 1px solid #334155; border-radius: 4px; color: #e2e8f0; font-size: 12px;"
+                                oninput="calculateFreightCost()">
+                        </div>
+                        <div style="min-width: 160px;">
+                            <label style="font-size: 11px; color: #94a3b8; display: block; margin-bottom: 4px;">Service Level</label>
+                            <select id="calcService"
+                                style="width: 100%; padding: 6px 8px; background: #0f172a; border: 1px solid #334155; border-radius: 4px; color: #e2e8f0; font-size: 12px;"
+                                onchange="calculateFreightCost()">
+                                <option value="">Select...</option>
+                                <option value="fedex_first_overnight">FedEx First Overnight</option>
+                                <option value="fedex_priority_overnight">FedEx Priority Overnight</option>
+                                <option value="fedex_standard_overnight">FedEx Standard Overnight</option>
+                                <option value="fedex_2day">FedEx 2Day</option>
+                                <option value="fedex_express_saver">FedEx Express Saver</option>
+                                <option value="fedex_ground">FedEx Ground</option>
+                                <option value="ups_early_am">UPS Early AM</option>
+                                <option value="ups_next_day_air">UPS Next Day Air</option>
+                                <option value="ups_next_day_saver">UPS Next Day Saver</option>
+                                <option value="ups_2day_air">UPS 2Day Air</option>
+                                <option value="ups_3day_select">UPS 3Day Select</option>
+                                <option value="ups_ground">UPS Ground</option>
+                            </select>
+                        </div>
+                        <div id="calcResult" style="min-width: 200px; padding: 8px 12px; background: rgba(16,185,129,0.15); border: 1px solid rgba(16,185,129,0.3); border-radius: 6px; display: none;">
+                            <div style="font-size: 11px; color: #6ee7b7;">Flat Rate → +20% Markup</div>
+                            <div style="font-size: 20px; font-weight: bold; color: #10b981;" id="calcTotal">—</div>
+                            <div style="font-size: 11px; color: #94a3b8;" id="calcBreakdown"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Category Filter & Add Part Button -->
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                        <button onclick="filterPartsDb('all')" class="parts-filter active" id="pfAll" style="padding: 4px 10px; border-radius: 12px; border: 1px solid #334155; background: #0ea5e9; color: #fff; font-size: 11px; cursor: pointer;">All</button>
+                        <button onclick="filterPartsDb('LRU')" class="parts-filter" id="pfLRU" style="padding: 4px 10px; border-radius: 12px; border: 1px solid #334155; background: transparent; color: #94a3b8; font-size: 11px; cursor: pointer;">LRU</button>
+                        <button onclick="filterPartsDb('Battery')" class="parts-filter" id="pfBattery" style="padding: 4px 10px; border-radius: 12px; border: 1px solid #334155; background: transparent; color: #94a3b8; font-size: 11px; cursor: pointer;">Battery</button>
+                        <button onclick="filterPartsDb('Safety Equipment')" class="parts-filter" id="pfSafety" style="padding: 4px 10px; border-radius: 12px; border: 1px solid #334155; background: transparent; color: #94a3b8; font-size: 11px; cursor: pointer;">Safety</button>
+                        <button onclick="filterPartsDb('Control Unit')" class="parts-filter" id="pfControl" style="padding: 4px 10px; border-radius: 12px; border: 1px solid #334155; background: transparent; color: #94a3b8; font-size: 11px; cursor: pointer;">Controls</button>
+                        <button onclick="filterPartsDb('Landing Gear')" class="parts-filter" id="pfGear" style="padding: 4px 10px; border-radius: 12px; border: 1px solid #334155; background: transparent; color: #94a3b8; font-size: 11px; cursor: pointer;">Gear</button>
+                        <button onclick="filterPartsDb('Component')" class="parts-filter" id="pfComponent" style="padding: 4px 10px; border-radius: 12px; border: 1px solid #334155; background: transparent; color: #94a3b8; font-size: 11px; cursor: pointer;">Components</button>
+                    </div>
+                    <button onclick="toggleAddPartForm()" style="padding: 5px 12px; background: #0ea5e9; color: #fff; border: none; border-radius: 4px; font-size: 11px; cursor: pointer; font-weight: bold;">+ Add Part</button>
+                </div>
+
+                <!-- Add Part Form (hidden by default) -->
+                <div id="addPartForm" style="display: none; background: rgba(14,165,233,0.08); border: 1px solid rgba(14,165,233,0.2); border-radius: 6px; padding: 12px; margin-bottom: 12px;">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 8px;">
+                        <div>
+                            <label style="font-size: 10px; color: #94a3b8; display: block;">Part Number *</label>
+                            <input type="text" id="newPartNumber" style="width: 100%; padding: 5px; background: #0f172a; border: 1px solid #334155; border-radius: 4px; color: #e2e8f0; font-size: 11px;">
+                        </div>
+                        <div style="grid-column: span 2;">
+                            <label style="font-size: 10px; color: #94a3b8; display: block;">Description</label>
+                            <input type="text" id="newPartDesc" style="width: 100%; padding: 5px; background: #0f172a; border: 1px solid #334155; border-radius: 4px; color: #e2e8f0; font-size: 11px;">
+                        </div>
+                        <div>
+                            <label style="font-size: 10px; color: #94a3b8; display: block;">Manufacturer</label>
+                            <input type="text" id="newPartMfr" style="width: 100%; padding: 5px; background: #0f172a; border: 1px solid #334155; border-radius: 4px; color: #e2e8f0; font-size: 11px;">
+                        </div>
+                        <div>
+                            <label style="font-size: 10px; color: #94a3b8; display: block;">Weight (lbs) *</label>
+                            <input type="number" id="newPartWeight" step="0.1" style="width: 100%; padding: 5px; background: #0f172a; border: 1px solid #334155; border-radius: 4px; color: #e2e8f0; font-size: 11px;">
+                        </div>
+                        <div>
+                            <label style="font-size: 10px; color: #94a3b8; display: block;">Pkg Weight (lbs)</label>
+                            <input type="number" id="newPartPkg" step="0.1" value="1" style="width: 100%; padding: 5px; background: #0f172a; border: 1px solid #334155; border-radius: 4px; color: #e2e8f0; font-size: 11px;">
+                        </div>
+                        <div>
+                            <label style="font-size: 10px; color: #94a3b8; display: block;">Category</label>
+                            <select id="newPartCategory" style="width: 100%; padding: 5px; background: #0f172a; border: 1px solid #334155; border-radius: 4px; color: #e2e8f0; font-size: 11px;">
+                                <option value="LRU">LRU</option>
+                                <option value="Battery">Battery</option>
+                                <option value="Safety Equipment">Safety Equipment</option>
+                                <option value="Control Unit">Control Unit</option>
+                                <option value="Landing Gear">Landing Gear</option>
+                                <option value="Component">Component</option>
+                                <option value="Antenna">Antenna</option>
+                                <option value="Instrument">Instrument</option>
+                                <option value="WiFi/Connectivity">WiFi/Connectivity</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="font-size: 10px; color: #94a3b8; display: block;">Aircraft Type</label>
+                            <input type="text" id="newPartAircraft" placeholder="Optional" style="width: 100%; padding: 5px; background: #0f172a; border: 1px solid #334155; border-radius: 4px; color: #e2e8f0; font-size: 11px;">
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 8px; margin-top: 10px; justify-content: flex-end;">
+                        <button onclick="toggleAddPartForm()" style="padding: 5px 12px; background: transparent; color: #94a3b8; border: 1px solid #334155; border-radius: 4px; font-size: 11px; cursor: pointer;">Cancel</button>
+                        <button onclick="saveNewPart()" style="padding: 5px 12px; background: #10b981; color: #fff; border: none; border-radius: 4px; font-size: 11px; cursor: pointer; font-weight: bold;">💾 Save Part</button>
+                    </div>
+                </div>
+
+                <!-- Parts Database Table -->
+                <div style="overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
+                        <thead>
+                            <tr style="border-bottom: 1px solid #334155; color: #94a3b8; text-align: left;">
+                                <th style="padding: 8px 6px;">Part #</th>
+                                <th style="padding: 8px 6px;">Description</th>
+                                <th style="padding: 8px 6px;">Category</th>
+                                <th style="padding: 8px 6px;">Manufacturer</th>
+                                <th style="padding: 8px 6px;">Part Wt</th>
+                                <th style="padding: 8px 6px;">Ship Wt</th>
+                                <th style="padding: 8px 6px;">Aircraft</th>
+                            </tr>
+                        </thead>
+                        <tbody id="partsDbTableBody">
+                            <tr><td colspan="7" style="padding: 16px; text-align: center; color: #64748b;">Loading parts database...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- AI Freight PDF Analyzer -->
+            <div class="card" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); border: 1px solid #e94560;">
+                <div class="card-header">
+                    <span class="card-title" style="color: #e94560;">🤖 AI Freight PDF Analyzer</span>
+                    <span class="badge" style="background: #e94560; color: white;" id="pdfAnalyzerBadge">Ready</span>
+                </div>
+
+                <!-- Smart Auto-Match -->
+                <div style="background: rgba(0,0,0,0.3); border-radius: 8px; padding: 14px; margin-bottom: 16px; border: 1px solid #334155;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <span style="color: #fbbf24; font-weight: bold; font-size: 13px;">⚡ Smart Auto-Match</span>
+                        <button onclick="runSmartMatch()" style="background: #f59e0b; color: #000; border: none; border-radius: 6px; padding: 6px 14px; font-size: 11px; font-weight: bold; cursor: pointer;">
+                            ⚡ Run Auto-Match
+                        </button>
+                    </div>
+                    <div style="color: #94a3b8; font-size: 11px; margin-bottom: 8px;">
+                        Cross-references tracking numbers between TFM invoices and freight tracking to auto-link WO numbers.
+                    </div>
+                    <div id="smartMatchResults" style="display: none; background: rgba(245,158,11,0.1); border-radius: 6px; padding: 10px; border: 1px solid rgba(245,158,11,0.3);">
+                        <div id="smartMatchText" style="color: #fbbf24; font-size: 12px;"></div>
+                    </div>
+                </div>
+
+                <!-- PDF Upload Area -->
+                <div id="pdfDropZone" ondragover="event.preventDefault(); this.style.borderColor='#e94560'; this.style.background='rgba(233,69,96,0.1)';"
+                     ondragleave="this.style.borderColor='#475569'; this.style.background='rgba(0,0,0,0.2)';"
+                     ondrop="handlePdfDrop(event)"
+                     style="background: rgba(0,0,0,0.2); border: 2px dashed #475569; border-radius: 10px; padding: 30px; text-align: center; margin-bottom: 16px; cursor: pointer; transition: all 0.2s;"
+                     onclick="document.getElementById('pdfFileInput').click();">
+                    <div style="color: #e94560; font-size: 32px; margin-bottom: 8px;">📄</div>
+                    <div style="color: #e2e8f0; font-size: 13px; font-weight: bold;">Drop TFM Invoice or WO PDF here</div>
+                    <div style="color: #64748b; font-size: 11px; margin-top: 4px;">or click to browse — PDF files only</div>
+                    <input type="file" id="pdfFileInput" accept=".pdf" style="display: none;" onchange="handlePdfSelect(event)">
+                </div>
+
+                <!-- Analysis Type Selector -->
+                <div style="display: flex; gap: 8px; margin-bottom: 16px;">
+                    <button id="typeWoInvoice" onclick="selectAnalysisType('wo_invoice')" class="analysis-type-btn"
+                        style="flex: 1; padding: 8px; border-radius: 6px; border: 1px solid #e94560; background: rgba(233,69,96,0.2); color: #e94560; font-size: 11px; font-weight: bold; cursor: pointer;">
+                        📋 WO Invoice
+                    </button>
+                    <button id="typeTfmInvoice" onclick="selectAnalysisType('tfm_invoice')" class="analysis-type-btn"
+                        style="flex: 1; padding: 8px; border-radius: 6px; border: 1px solid #475569; background: transparent; color: #94a3b8; font-size: 11px; font-weight: bold; cursor: pointer;">
+                        🚛 TFM Invoice
+                    </button>
+                    <button id="typeWoPackage" onclick="selectAnalysisType('wo_package')" class="analysis-type-btn"
+                        style="flex: 1; padding: 8px; border-radius: 6px; border: 1px solid #475569; background: transparent; color: #94a3b8; font-size: 11px; font-weight: bold; cursor: pointer;">
+                        📦 WO Package
+                    </button>
+                </div>
+
+                <!-- Analysis Progress -->
+                <div id="pdfAnalysisProgress" style="display: none; background: rgba(0,0,0,0.3); border-radius: 8px; padding: 16px; margin-bottom: 16px; text-align: center;">
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 10px;">
+                        <div class="spinner" style="width: 20px; height: 20px; border: 3px solid #334155; border-top: 3px solid #e94560; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+                        <span id="pdfProgressText" style="color: #e94560; font-size: 13px; font-weight: bold;">Analyzing PDF with AI...</span>
+                    </div>
+                    <div style="background: #1e293b; border-radius: 4px; height: 6px; overflow: hidden;">
+                        <div id="pdfProgressBar" style="background: linear-gradient(90deg, #e94560, #f97316); height: 100%; width: 30%; transition: width 0.5s; border-radius: 4px;"></div>
+                    </div>
+                </div>
+
+                <!-- Selected File Info -->
+                <div id="selectedFileInfo" style="display: none; background: rgba(233,69,96,0.1); border-radius: 8px; padding: 12px; margin-bottom: 16px; border: 1px solid rgba(233,69,96,0.3);">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <span style="color: #e94560; font-size: 12px; font-weight: bold;" id="selectedFileName">--</span>
+                            <span style="color: #64748b; font-size: 11px; margin-left: 8px;" id="selectedFileSize">--</span>
+                        </div>
+                        <div style="display: flex; gap: 6px;">
+                            <button onclick="analyzePdfFile()" style="background: #e94560; color: white; border: none; border-radius: 6px; padding: 6px 14px; font-size: 11px; font-weight: bold; cursor: pointer;">
+                                🤖 Analyze
+                            </button>
+                            <button onclick="clearAnalysis()" style="background: #334155; color: #94a3b8; border: none; border-radius: 6px; padding: 6px 14px; font-size: 11px; cursor: pointer;">
+                                ✕ Clear
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Analysis Results -->
+                <div id="pdfAnalysisResults" style="display: none; background: rgba(0,0,0,0.3); border-radius: 8px; padding: 16px; margin-bottom: 12px; border: 1px solid #334155;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                        <span style="color: #10b981; font-weight: bold; font-size: 13px;">✅ Analysis Complete</span>
+                        <button onclick="importAnalysisResults()" style="background: #10b981; color: white; border: none; border-radius: 6px; padding: 6px 14px; font-size: 11px; font-weight: bold; cursor: pointer;">
+                            📥 Import to Freight Tracking
+                        </button>
+                    </div>
+                    <div id="analysisResultsContent" style="color: #e2e8f0; font-size: 12px;"></div>
+                </div>
+
+                <!-- API Key Notice -->
+                <div style="background: rgba(245,158,11,0.1); border-radius: 6px; padding: 8px 12px; border: 1px solid rgba(245,158,11,0.2);">
+                    <span style="color: #fbbf24; font-size: 10px;">⚠️ Requires ANTHROPIC_API_KEY secret in Supabase Edge Function settings</span>
+                </div>
+            </div>
+
             <!-- TFM Freight Invoice Detail -->
             <div class="card" style="background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%); border: 1px solid #6366f1;">
                 <div class="card-header">
@@ -2362,20 +2666,16 @@
 
                 // Summary metrics
                 const total = data.length;
-                const aogCount = data.filter(wo => wo.is_aog).length;
                 const totalExpHrs = data.reduce((sum, wo) => sum + (wo.expected_hours || 0), 0);
                 const over30Count = data.filter(wo => wo.days_open && wo.days_open > 30).length;
                 const freightMissing = data.filter(wo => demarestFreightFlags[wo.wo_number] && demarestFreightFlags[wo.wo_number].freight_flag === 'missing' && !freightTrackingByWO[wo.wo_number]).length;
                 const reportDate = data.length > 0 ? data[0].report_date : '--';
 
                 document.getElementById('anchorTotal').textContent = total;
-                document.getElementById('anchorAOG').textContent = aogCount;
                 document.getElementById('anchorExpHrs').textContent = Math.round(totalExpHrs) + 'h';
                 document.getElementById('anchorOver30').textContent = over30Count;
-                if (document.getElementById('anchorFreightWarn')) {
-                    document.getElementById('anchorFreightWarn').textContent = freightMissing;
-                    document.getElementById('anchorFreightWarn').style.color = freightMissing > 0 ? '#ef4444' : '#22c55e';
-                }
+                document.getElementById('anchorFreightWarn').textContent = freightMissing;
+                document.getElementById('anchorFreightWarn').style.color = freightMissing > 0 ? '#ef4444' : '#22c55e';
                 document.getElementById('anchorReportDate').textContent = reportDate ? new Date(reportDate + 'T00:00:00').toLocaleDateString() : '--';
 
                 // Shop breakdown
@@ -2387,10 +2687,7 @@
                 document.getElementById('anchorSHC').textContent = shopCounts.SHC;
 
                 // Badge
-                if (aogCount > 0) {
-                    document.getElementById('anchorBadge').textContent = `${aogCount} AOG | ${total} WOs`;
-                    document.getElementById('anchorBadge').className = 'badge badge-red';
-                } else if (over30Count > 0) {
+                if (over30Count > 0) {
                     document.getElementById('anchorBadge').textContent = `${over30Count} Over 30d | ${total} WOs`;
                     document.getElementById('anchorBadge').className = 'badge badge-amber';
                 } else {
@@ -2434,9 +2731,6 @@
                 case 'shop':
                     filtered.sort((a, b) => (a.shop || '').localeCompare(b.shop || '') || (b.days_open || 0) - (a.days_open || 0));
                     break;
-                case 'aog':
-                    filtered.sort((a, b) => (b.is_aog ? 1 : 0) - (a.is_aog ? 1 : 0) || (b.days_open || 0) - (a.days_open || 0));
-                    break;
             }
 
             const tableHTML = filtered.map(wo => {
@@ -2444,7 +2738,6 @@
                 const daysClass = daysOpen >= 30 ? 'badge-red' : daysOpen >= 14 ? 'badge-amber' : 'badge-green';
                 const shopColors = { SDN: '#3b82f6', SDV: '#8b5cf6', SDR: '#f97316', SHC: '#06b6d4' };
                 const shopColor = shopColors[wo.shop] || '#64748b';
-                const aogFlag = wo.is_aog ? '<span style="background:#ef4444;color:#fff;padding:2px 6px;border-radius:4px;font-weight:bold;font-size:0.75em;">AOG</span>' : '';
                 const openDate = wo.open_date ? new Date(wo.open_date + 'T00:00:00').toLocaleDateString() : '--';
                 const desc = wo.description ? (wo.description.length > 35 ? wo.description.substring(0, 35) + '...' : wo.description) : '--';
 
@@ -2489,7 +2782,7 @@
                 }
 
                 return `
-                    <tr style="${wo.is_aog ? 'background: rgba(239,68,68,0.15);' : dem && dem.freight_flag === 'missing' && !ftRecords ? 'background: rgba(239,68,68,0.10);' : daysOpen >= 30 ? 'background: rgba(239,68,68,0.08);' : ''}">
+                    <tr style="${dem && dem.freight_flag === 'missing' && !ftRecords ? 'background: rgba(239,68,68,0.10);' : daysOpen >= 30 ? 'background: rgba(239,68,68,0.08);' : ''}">
                         <td><strong>${wo.wo_number}</strong></td>
                         <td><span style="color:${shopColor};font-weight:600;">${wo.shop}</span></td>
                         <td>${wo.anchor_status || '--'}</td>
@@ -2500,12 +2793,11 @@
                         <td><span class="badge ${daysClass}">${daysOpen}d</span></td>
                         <td>${wo.expected_hours ? Math.round(wo.expected_hours) + 'h' : '0h'}</td>
                         <td>${freightCell}</td>
-                        <td>${aogFlag}</td>
                     </tr>
                 `;
             }).join('');
 
-            document.getElementById('anchorWorkOrdersList').innerHTML = tableHTML || '<tr><td colspan="11" style="text-align:center; color:#94a3b8;">No ANCHOR work orders found</td></tr>';
+            document.getElementById('anchorWorkOrdersList').innerHTML = tableHTML || '<tr><td colspan="10" style="text-align:center; color:#94a3b8;">No ANCHOR work orders found</td></tr>';
         }
 
         // ============================================
@@ -2998,6 +3290,708 @@
             }
         }
 
+        // ============================================
+        // FREIGHT TRACKING MANAGEMENT (Phase 3)
+        // ============================================
+        async function loadFreightTracking() {
+            try {
+                // Fetch all three freight data sources in parallel
+                const [trackResp, invoiceResp, demarestResp] = await Promise.all([
+                    fetch(`${SUPABASE_URL}/rest/v1/freight_tracking?select=*&order=created_at.desc`, {
+                        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+                    }),
+                    fetch(`${SUPABASE_URL}/rest/v1/freight_invoices?select=*&dept_number=eq.889&order=ship_date.desc`, {
+                        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+                    }),
+                    fetch(`${SUPABASE_URL}/rest/v1/demarest_open_wo?select=wo_number,shop,customer,wo_description,parts,outside_services,freight_flag&freight_flag=eq.missing`, {
+                        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+                    })
+                ]);
+
+                const trackData = await trackResp.json();
+                const invoiceData = await invoiceResp.json();
+                const missingData = await demarestResp.json();
+
+                if (!Array.isArray(trackData)) { console.log('freight_tracking not available'); return; }
+
+                // --- KPI Calculations ---
+                const pending = trackData.filter(r => !r.posted_to_wo);
+                const posted = trackData.filter(r => r.posted_to_wo);
+                const totalToBill = pending.reduce((s, r) => s + (parseFloat(r.total_billed) || 0), 0);
+                const missingWOs = Array.isArray(missingData) ? missingData : [];
+
+                document.getElementById('ftMgmtBadge').textContent = `${trackData.length} records`;
+                document.getElementById('ftTotalTracked').textContent = trackData.length;
+                document.getElementById('ftPendingCount').textContent = pending.length;
+                document.getElementById('ftTotalToBill').textContent = formatCurrency(totalToBill);
+                document.getElementById('ftPostedCount').textContent = posted.length;
+                document.getElementById('ftMissingWOs').textContent = missingWOs.length;
+
+                // --- Missing Freight Alerts ---
+                if (missingWOs.length > 0) {
+                    // Check which missing WOs already have tracking records
+                    const trackedWOs = new Set(trackData.map(r => r.wo_number));
+                    let alertsHTML = '<div style="background: rgba(239,68,68,0.15); border: 1px solid #ef4444; border-radius: 8px; padding: 12px; margin-bottom: 8px;">';
+                    alertsHTML += '<div style="color: #fca5a5; font-weight: bold; margin-bottom: 8px; font-size: 12px;">🔴 WOs with Parts but NO Freight Charges</div>';
+                    missingWOs.forEach(wo => {
+                        const hasTracking = trackedWOs.has(wo.wo_number);
+                        const statusBadge = hasTracking
+                            ? '<span style="background:#3b82f6;color:#fff;padding:1px 5px;border-radius:4px;font-size:10px;margin-left:6px;">TRACKED</span>'
+                            : '<span style="background:#ef4444;color:#fff;padding:1px 5px;border-radius:4px;font-size:10px;margin-left:6px;">UNTRACKED</span>';
+                        alertsHTML += `<div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid rgba(239,68,68,0.2);">
+                            <span style="color:#fca5a5;font-size:12px;"><strong>${wo.wo_number}</strong> (${wo.shop}) — ${wo.customer || ''}${statusBadge}</span>
+                            <span style="color:#fca5a5;font-size:12px;">Parts: <strong>${formatCurrency(parseFloat(wo.parts))}</strong> | O/S: $0</span>
+                        </div>`;
+                    });
+                    alertsHTML += '</div>';
+                    document.getElementById('ftMissingAlerts').innerHTML = alertsHTML;
+                } else {
+                    document.getElementById('ftMissingAlerts').innerHTML = '<div style="background: rgba(16,185,129,0.1); border: 1px solid #10b981; border-radius: 8px; padding: 10px; text-align: center; color: #6ee7b7; font-size: 12px;">✅ No missing freight alerts — all WOs with parts have O/S charges</div>';
+                }
+
+                // --- Tracking Records Table (pending billing) ---
+                let trackHTML = '';
+                pending.forEach(r => {
+                    const flatRate = parseFloat(r.flat_rate_cost) || 0;
+                    const markup = parseFloat(r.markup_amount) || 0;
+                    const billAmt = parseFloat(r.total_billed) || 0;
+                    const carrier = (r.carrier || 'TBD').replace('FedEx ', 'FX ');
+                    const weight = r.weight_lbs ? `${r.weight_lbs} lbs` : '--';
+                    const desc = r.part_description ? ` title="${r.part_description}"` : '';
+                    trackHTML += `<tr>
+                        <td style="font-size:11px;font-weight:bold;"${desc}>${r.wo_number}</td>
+                        <td style="font-size:11px;">${carrier}</td>
+                        <td style="font-size:11px;">${weight}</td>
+                        <td style="font-size:11px;text-align:right;">${flatRate > 0 ? formatCurrency(flatRate) : '--'}</td>
+                        <td style="font-size:11px;text-align:right;color:#fbbf24;">${markup > 0 ? formatCurrency(markup) : '--'}</td>
+                        <td style="font-size:11px;text-align:right;color:#10b981;font-weight:bold;">${billAmt > 0 ? formatCurrency(billAmt) : '--'}</td>
+                        <td style="font-size:11px;"><span style="background:#fbbf24;color:#000;padding:1px 5px;border-radius:4px;font-size:10px;">PENDING</span></td>
+                        <td style="font-size:11px;"><button onclick="markFreightPosted(${r.id})" style="background:#10b981;color:#fff;border:none;padding:3px 8px;border-radius:4px;font-size:10px;cursor:pointer;">✓ Post</button></td>
+                    </tr>`;
+                });
+                if (posted.length > 0) {
+                    posted.forEach(r => {
+                        const billAmt = parseFloat(r.total_billed) || 0;
+                        const carrier = (r.carrier || 'TBD').replace('FedEx ', 'FX ');
+                        trackHTML += `<tr style="opacity:0.5;">
+                            <td style="font-size:11px;">${r.wo_number}</td>
+                            <td style="font-size:11px;">${carrier}</td>
+                            <td style="font-size:11px;">${r.weight_lbs ? r.weight_lbs + ' lbs' : '--'}</td>
+                            <td style="font-size:11px;text-align:right;">${formatCurrency(parseFloat(r.flat_rate_cost) || 0)}</td>
+                            <td style="font-size:11px;text-align:right;">--</td>
+                            <td style="font-size:11px;text-align:right;">${billAmt > 0 ? formatCurrency(billAmt) : '--'}</td>
+                            <td style="font-size:11px;"><span style="background:#22d3ee;color:#000;padding:1px 5px;border-radius:4px;font-size:10px;">POSTED</span></td>
+                            <td style="font-size:11px;">--</td>
+                        </tr>`;
+                    });
+                }
+                document.getElementById('ftTrackingTable').innerHTML = trackHTML || '<tr><td colspan="8" style="text-align:center;color:#6ee7b7;">No freight tracking records</td></tr>';
+
+                // --- Unmatched Invoices (no WO#) ---
+                const unmatchedInvoices = Array.isArray(invoiceData) ? invoiceData.filter(inv => !inv.wo_number || inv.wo_number.trim() === '') : [];
+                let unmatchedHTML = '';
+                unmatchedInvoices.forEach(inv => {
+                    const charge = parseFloat(inv.actual_charge) || 0;
+                    const chargeColor = charge < 0 ? '#10b981' : '#fca5a5';
+                    const statusColor = inv.recovery_status === 'unbilled' ? '#ef4444' : inv.recovery_status === 'internal' ? '#818cf8' : '#94a3b8';
+                    unmatchedHTML += `<tr>
+                        <td style="font-size:11px;">${inv.ship_date || inv.invoice_date || '--'}</td>
+                        <td style="font-size:11px;">${(inv.carrier || '').replace('FedEx ', 'FX ')}</td>
+                        <td style="font-size:11px;font-family:monospace;">${(inv.tracking_number || '').slice(-10)}</td>
+                        <td style="font-size:11px;">${inv.origin || '??'} → ${inv.destination || '??'}</td>
+                        <td style="font-size:11px;text-align:right;color:${chargeColor};font-weight:600;">${formatCurrency(charge)}</td>
+                        <td style="font-size:11px;"><span style="color:${statusColor};font-weight:bold;">${(inv.recovery_status || 'unknown').toUpperCase()}</span></td>
+                    </tr>`;
+                });
+                document.getElementById('ftUnmatchedTable').innerHTML = unmatchedHTML || '<tr><td colspan="6" style="text-align:center;color:#fca5a5;">All invoices matched ✅</td></tr>';
+
+                console.log('loadFreightTracking: Complete -', trackData.length, 'tracking,', unmatchedInvoices.length, 'unmatched invoices,', missingWOs.length, 'missing freight WOs');
+            } catch (error) {
+                console.error('Error loading freight tracking:', error);
+            }
+        }
+
+        // Mark a freight record as posted to WO
+        async function markFreightPosted(recordId) {
+            try {
+                const resp = await fetch(`${SUPABASE_URL}/rest/v1/freight_tracking?id=eq.${recordId}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': `Bearer ${SUPABASE_KEY}`,
+                        'Content-Type': 'application/json',
+                        'Prefer': 'return=minimal'
+                    },
+                    body: JSON.stringify({ posted_to_wo: true, posted_date: new Date().toISOString().split('T')[0], status: 'posted', updated_at: new Date().toISOString() })
+                });
+                if (resp.ok) {
+                    loadFreightTracking(); // Refresh the section
+                } else {
+                    alert('Error updating record');
+                }
+            } catch (error) {
+                console.error('Error marking freight as posted:', error);
+            }
+        }
+
+        // ===== PHASE 4: Parts Weight Database & Freight Calculator =====
+        let allPartsData = [];
+        // flatRateData already declared above (Phase 1 flat rate chart)
+        let currentPartsFilter = 'all';
+
+        async function loadPartsWeightDb() {
+            try {
+                // Fetch parts (flat rate chart already loaded by loadFlatRateChart)
+                const partsRes = await fetch(`${SUPABASE_URL}/rest/v1/parts_weight_db?order=category,part_number`, {
+                    headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+                });
+
+                allPartsData = await partsRes.json();
+
+                // Update badge
+                document.getElementById('partsDbBadge').textContent = `${allPartsData.length} parts`;
+
+                // Render table
+                renderPartsTable(allPartsData);
+
+                console.log(`loadPartsWeightDb: Complete - ${allPartsData.length} parts, ${flatRateData.length} rate tiers`);
+            } catch (error) {
+                console.error('Error loading parts weight db:', error);
+            }
+        }
+
+        function renderPartsTable(parts) {
+            const tbody = document.getElementById('partsDbTableBody');
+            if (!parts || parts.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="padding: 16px; text-align: center; color: #64748b;">No parts found</td></tr>';
+                return;
+            }
+
+            const catColors = {
+                'LRU': '#818cf8', 'Battery': '#fbbf24', 'Safety Equipment': '#34d399',
+                'Control Unit': '#f472b6', 'Landing Gear': '#fb923c', 'Component': '#94a3b8',
+                'Antenna': '#22d3ee', 'Instrument': '#c084fc', 'WiFi/Connectivity': '#2dd4bf'
+            };
+
+            tbody.innerHTML = parts.map(p => {
+                const catColor = catColors[p.category] || '#94a3b8';
+                return `<tr style="border-bottom: 1px solid #1e293b;">
+                    <td style="padding: 6px; color: #7dd3fc; font-weight: bold; font-family: monospace;">${p.part_number || '—'}</td>
+                    <td style="padding: 6px; color: #e2e8f0;">${p.description || '—'}</td>
+                    <td style="padding: 6px;"><span style="background: ${catColor}22; color: ${catColor}; padding: 2px 8px; border-radius: 10px; font-size: 10px; border: 1px solid ${catColor}44;">${p.category || '—'}</span></td>
+                    <td style="padding: 6px; color: #94a3b8; font-size: 11px;">${p.manufacturer || '—'}</td>
+                    <td style="padding: 6px; color: #e2e8f0; font-weight: bold;">${p.weight_lbs ? p.weight_lbs + ' lb' : '—'}</td>
+                    <td style="padding: 6px; color: #10b981; font-weight: bold;">${p.total_ship_weight_lbs ? p.total_ship_weight_lbs + ' lb' : '—'}</td>
+                    <td style="padding: 6px; color: #94a3b8; font-size: 11px;">${p.aircraft_type || '—'}</td>
+                </tr>`;
+            }).join('');
+        }
+
+        function filterPartsDb(category) {
+            currentPartsFilter = category;
+            // Update filter button styles
+            document.querySelectorAll('.parts-filter').forEach(btn => {
+                btn.style.background = 'transparent';
+                btn.style.color = '#94a3b8';
+            });
+            const activeBtn = category === 'all' ? document.getElementById('pfAll') :
+                document.querySelector(`.parts-filter[onclick="filterPartsDb('${category}')"]`);
+            if (activeBtn) {
+                activeBtn.style.background = '#0ea5e9';
+                activeBtn.style.color = '#fff';
+            }
+
+            if (category === 'all') {
+                renderPartsTable(allPartsData);
+            } else {
+                renderPartsTable(allPartsData.filter(p => p.category === category));
+            }
+        }
+
+        function toggleAddPartForm() {
+            const form = document.getElementById('addPartForm');
+            form.style.display = form.style.display === 'none' ? 'block' : 'none';
+        }
+
+        async function saveNewPart() {
+            const partNumber = document.getElementById('newPartNumber').value.trim().toUpperCase();
+            const weight = parseFloat(document.getElementById('newPartWeight').value);
+            if (!partNumber || isNaN(weight)) {
+                alert('Part number and weight are required');
+                return;
+            }
+
+            const pkgWeight = parseFloat(document.getElementById('newPartPkg').value) || 1;
+            const newPart = {
+                part_number: partNumber,
+                description: document.getElementById('newPartDesc').value.trim() || null,
+                manufacturer: document.getElementById('newPartMfr').value.trim() || null,
+                weight_lbs: weight,
+                packaging_weight_lbs: pkgWeight,
+                total_ship_weight_lbs: weight + pkgWeight,
+                category: document.getElementById('newPartCategory').value,
+                aircraft_type: document.getElementById('newPartAircraft').value.trim() || null,
+                source: 'manual'
+            };
+
+            try {
+                const res = await fetch(`${SUPABASE_URL}/rest/v1/parts_weight_db`, {
+                    method: 'POST',
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': `Bearer ${SUPABASE_KEY}`,
+                        'Content-Type': 'application/json',
+                        'Prefer': 'return=representation'
+                    },
+                    body: JSON.stringify(newPart)
+                });
+                if (res.ok) {
+                    toggleAddPartForm();
+                    // Clear form
+                    document.getElementById('newPartNumber').value = '';
+                    document.getElementById('newPartDesc').value = '';
+                    document.getElementById('newPartMfr').value = '';
+                    document.getElementById('newPartWeight').value = '';
+                    document.getElementById('newPartPkg').value = '1';
+                    document.getElementById('newPartAircraft').value = '';
+                    await loadPartsWeightDb();
+                } else {
+                    const err = await res.json();
+                    alert('Error saving part: ' + (err.message || 'Unknown error'));
+                }
+            } catch (error) {
+                console.error('Error saving new part:', error);
+            }
+        }
+
+        // Freight Cost Calculator — auto-lookup from flat_rate_chart
+        function calculateFreightCost() {
+            const weight = parseInt(document.getElementById('calcWeight').value);
+            const service = document.getElementById('calcService').value;
+            const resultDiv = document.getElementById('calcResult');
+
+            if (!weight || !service || weight < 1) {
+                resultDiv.style.display = 'none';
+                return;
+            }
+
+            // Find the matching rate tier (round up to next available weight)
+            const matchingTier = flatRateData.find(r => r.weight_lb >= weight) || flatRateData[flatRateData.length - 1];
+
+            if (!matchingTier) {
+                resultDiv.style.display = 'none';
+                return;
+            }
+
+            const flatRate = matchingTier[service];
+            if (!flatRate && flatRate !== 0) {
+                document.getElementById('calcTotal').textContent = 'N/A';
+                document.getElementById('calcBreakdown').textContent = 'Service not available at this weight';
+                resultDiv.style.display = 'block';
+                return;
+            }
+
+            const markup = flatRate * 0.20;
+            const total = flatRate + markup;
+
+            document.getElementById('calcTotal').textContent = `$${total.toFixed(2)}`;
+            document.getElementById('calcBreakdown').textContent = `Flat: $${flatRate.toFixed(2)} + Markup: $${markup.toFixed(2)} (${matchingTier.weight_lb}lb tier)`;
+            resultDiv.style.display = 'block';
+        }
+
+        // Part search for calculator — auto-fill weight
+        function searchPartsForCalc(query) {
+            const resultsDiv = document.getElementById('calcPartResults');
+            if (!query || query.length < 2) {
+                resultsDiv.style.display = 'none';
+                return;
+            }
+
+            const q = query.toLowerCase();
+            const matches = allPartsData.filter(p =>
+                (p.part_number && p.part_number.toLowerCase().includes(q)) ||
+                (p.description && p.description.toLowerCase().includes(q)) ||
+                (p.category && p.category.toLowerCase().includes(q))
+            ).slice(0, 8);
+
+            if (matches.length === 0) {
+                resultsDiv.style.display = 'none';
+                return;
+            }
+
+            resultsDiv.innerHTML = matches.map(p => `
+                <div onclick="selectPartForCalc('${p.part_number}', ${p.total_ship_weight_lbs || p.weight_lbs})"
+                    style="padding: 6px 10px; cursor: pointer; border-bottom: 1px solid #1e293b; font-size: 11px; color: #e2e8f0;"
+                    onmouseover="this.style.background='#334155'" onmouseout="this.style.background='transparent'">
+                    <span style="color: #7dd3fc; font-weight: bold;">${p.part_number}</span>
+                    <span style="color: #94a3b8; margin-left: 6px;">${p.description || ''}</span>
+                    <span style="color: #10b981; float: right;">${p.total_ship_weight_lbs || p.weight_lbs} lb</span>
+                </div>
+            `).join('');
+            resultsDiv.style.display = 'block';
+        }
+
+        function selectPartForCalc(partNumber, weight) {
+            document.getElementById('calcPartSearch').value = partNumber;
+            document.getElementById('calcWeight').value = Math.ceil(weight);
+            document.getElementById('calcPartResults').style.display = 'none';
+            calculateFreightCost();
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('#calcPartSearch') && !e.target.closest('#calcPartResults')) {
+                document.getElementById('calcPartResults').style.display = 'none';
+            }
+        });
+
+        // ===== Phase 5: AI Freight PDF Analyzer =====
+        let selectedPdfFile = null;
+        let currentAnalysisType = 'wo_invoice';
+        let lastAnalysisResults = null;
+
+        function selectAnalysisType(type) {
+            currentAnalysisType = type;
+            document.querySelectorAll('.analysis-type-btn, [id^="type"]').forEach(btn => {
+                if (btn.id === 'type' + type.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join('')) {
+                    btn.style.border = '1px solid #e94560';
+                    btn.style.background = 'rgba(233,69,96,0.2)';
+                    btn.style.color = '#e94560';
+                } else if (btn.id && btn.id.startsWith('type')) {
+                    btn.style.border = '1px solid #475569';
+                    btn.style.background = 'transparent';
+                    btn.style.color = '#94a3b8';
+                }
+            });
+        }
+
+        async function runSmartMatch() {
+            const resultsDiv = document.getElementById('smartMatchResults');
+            const textDiv = document.getElementById('smartMatchText');
+            resultsDiv.style.display = 'block';
+            textDiv.innerHTML = '⏳ Running smart match...';
+
+            try {
+                // Get unmatched freight invoices (no wo_number)
+                const invRes = await fetch(`${SUPABASE_URL}/rest/v1/freight_invoices?wo_number=is.null&select=id,tracking_number`, {
+                    headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+                });
+                const unmatchedInvoices = await invRes.json();
+
+                if (!unmatchedInvoices.length) {
+                    textDiv.innerHTML = '✅ All invoices are already matched to WOs!';
+                    return;
+                }
+
+                // Get freight tracking records with tracking numbers and WOs
+                const trackRes = await fetch(`${SUPABASE_URL}/rest/v1/freight_tracking?tracking_number=not.is.null&wo_number=not.is.null&select=tracking_number,wo_number`, {
+                    headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+                });
+                const trackingRecords = await trackRes.json();
+
+                // Build lookup map
+                const trackMap = {};
+                trackingRecords.forEach(t => { trackMap[t.tracking_number] = t.wo_number; });
+
+                // Find matches
+                let matched = 0;
+                for (const inv of unmatchedInvoices) {
+                    if (inv.tracking_number && trackMap[inv.tracking_number]) {
+                        const updateRes = await fetch(`${SUPABASE_URL}/rest/v1/freight_invoices?id=eq.${inv.id}`, {
+                            method: 'PATCH',
+                            headers: {
+                                'apikey': SUPABASE_KEY,
+                                'Authorization': `Bearer ${SUPABASE_KEY}`,
+                                'Content-Type': 'application/json',
+                                'Prefer': 'return=minimal'
+                            },
+                            body: JSON.stringify({ wo_number: trackMap[inv.tracking_number] })
+                        });
+                        if (updateRes.ok) matched++;
+                    }
+                }
+
+                const remaining = unmatchedInvoices.length - matched;
+                textDiv.innerHTML = matched > 0
+                    ? `✅ Matched <strong>${matched}</strong> invoice${matched > 1 ? 's' : ''} to WOs! <span style="color:#94a3b8;">(${remaining} still unmatched)</span>`
+                    : `⚠️ No new matches found. ${unmatchedInvoices.length} invoices still unmatched.`;
+
+                // Reload invoice data to reflect changes
+                if (matched > 0) await loadFreightInvoices();
+
+            } catch (err) {
+                textDiv.innerHTML = `❌ Error: ${err.message}`;
+            }
+        }
+
+        function handlePdfDrop(event) {
+            event.preventDefault();
+            const dropZone = document.getElementById('pdfDropZone');
+            dropZone.style.borderColor = '#475569';
+            dropZone.style.background = 'rgba(0,0,0,0.2)';
+
+            const file = event.dataTransfer.files[0];
+            if (file && file.type === 'application/pdf') {
+                setPdfFile(file);
+            } else {
+                alert('Please drop a PDF file.');
+            }
+        }
+
+        function handlePdfSelect(event) {
+            const file = event.target.files[0];
+            if (file) setPdfFile(file);
+        }
+
+        function setPdfFile(file) {
+            selectedPdfFile = file;
+            document.getElementById('selectedFileName').textContent = file.name;
+            document.getElementById('selectedFileSize').textContent = (file.size / 1024).toFixed(1) + ' KB';
+            document.getElementById('selectedFileInfo').style.display = 'block';
+            document.getElementById('pdfAnalysisResults').style.display = 'none';
+            document.getElementById('pdfAnalyzerBadge').textContent = 'File Ready';
+            document.getElementById('pdfAnalyzerBadge').style.background = '#f59e0b';
+        }
+
+        async function analyzePdfFile() {
+            if (!selectedPdfFile) return;
+
+            const progressDiv = document.getElementById('pdfAnalysisProgress');
+            const progressBar = document.getElementById('pdfProgressBar');
+            const progressText = document.getElementById('pdfProgressText');
+            const badge = document.getElementById('pdfAnalyzerBadge');
+
+            progressDiv.style.display = 'block';
+            progressBar.style.width = '10%';
+            progressText.textContent = 'Reading PDF file...';
+            badge.textContent = 'Analyzing...';
+            badge.style.background = '#e94560';
+
+            try {
+                // Convert file to base64
+                const base64 = await new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = () => resolve(reader.result.split(',')[1]);
+                    reader.onerror = reject;
+                    reader.readAsDataURL(selectedPdfFile);
+                });
+
+                progressBar.style.width = '30%';
+                progressText.textContent = 'Sending to AI for analysis...';
+
+                // Call Edge Function
+                const response = await fetch(`${SUPABASE_URL}/functions/v1/analyze-freight-pdf`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${SUPABASE_KEY}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        pdf_base64: base64,
+                        analysis_type: currentAnalysisType
+                    })
+                });
+
+                progressBar.style.width = '80%';
+                progressText.textContent = 'Processing results...';
+
+                if (!response.ok) {
+                    const errText = await response.text();
+                    throw new Error(`Edge Function error (${response.status}): ${errText}`);
+                }
+
+                const data = await response.json();
+                progressBar.style.width = '100%';
+                progressText.textContent = 'Analysis complete!';
+
+                lastAnalysisResults = data;
+                displayAnalysisResults(data);
+
+                badge.textContent = 'Complete';
+                badge.style.background = '#10b981';
+
+                setTimeout(() => { progressDiv.style.display = 'none'; }, 1500);
+
+            } catch (err) {
+                progressDiv.style.display = 'none';
+                badge.textContent = 'Error';
+                badge.style.background = '#ef4444';
+                alert('PDF Analysis Error: ' + err.message);
+                console.error('PDF analysis error:', err);
+            }
+        }
+
+        function displayAnalysisResults(data) {
+            const resultsDiv = document.getElementById('pdfAnalysisResults');
+            const contentDiv = document.getElementById('analysisResultsContent');
+            resultsDiv.style.display = 'block';
+
+            if (data.error) {
+                contentDiv.innerHTML = `<div style="color: #ef4444;">❌ ${data.error}</div>`;
+                return;
+            }
+
+            const extracted = data.extracted_data || data;
+
+            // Build summary based on analysis type
+            let html = '';
+
+            if (currentAnalysisType === 'wo_invoice') {
+                const items = extracted.freight_line_items || extracted.line_items || [];
+                html += `<div style="margin-bottom: 10px;">
+                    <span style="color: #a5b4fc;">WO:</span> <strong>${extracted.wo_number || '--'}</strong>
+                    <span style="color: #a5b4fc; margin-left: 12px;">Customer:</span> ${extracted.customer || '--'}
+                    <span style="color: #a5b4fc; margin-left: 12px;">Total:</span> <strong style="color: #10b981;">$${(extracted.total_amount || 0).toFixed(2)}</strong>
+                </div>`;
+                if (items.length) {
+                    html += `<div style="font-size: 11px; color: #fbbf24; margin-bottom: 6px;">📦 ${items.length} freight line item${items.length > 1 ? 's' : ''} found:</div>`;
+                    html += `<table style="width:100%;border-collapse:collapse;font-size:11px;"><thead><tr style="border-bottom:1px solid #334155;color:#94a3b8;">
+                        <th style="padding:4px 6px;text-align:left;">Description</th>
+                        <th style="padding:4px 6px;text-align:right;">Amount</th>
+                        <th style="padding:4px 6px;text-align:left;">Tracking #</th></tr></thead><tbody>`;
+                    items.forEach(item => {
+                        html += `<tr style="border-bottom:1px solid #1e293b;">
+                            <td style="padding:4px 6px;color:#e2e8f0;">${item.description || '--'}</td>
+                            <td style="padding:4px 6px;text-align:right;color:#10b981;">$${(item.amount || 0).toFixed(2)}</td>
+                            <td style="padding:4px 6px;color:#7dd3fc;">${item.tracking_number || '--'}</td></tr>`;
+                    });
+                    html += '</tbody></table>';
+                }
+            } else if (currentAnalysisType === 'tfm_invoice') {
+                const shipments = extracted.shipments || [];
+                html += `<div style="margin-bottom: 10px;">
+                    <span style="color: #a5b4fc;">Invoice #:</span> <strong>${extracted.invoice_number || '--'}</strong>
+                    <span style="color: #a5b4fc; margin-left: 12px;">Date:</span> ${extracted.invoice_date || '--'}
+                    <span style="color: #a5b4fc; margin-left: 12px;">Total:</span> <strong style="color: #f43f5e;">$${(extracted.total_charges || 0).toFixed(2)}</strong>
+                </div>`;
+                if (shipments.length) {
+                    html += `<div style="font-size: 11px; color: #fbbf24; margin-bottom: 6px;">🚛 ${shipments.length} shipment${shipments.length > 1 ? 's' : ''} found:</div>`;
+                    html += `<table style="width:100%;border-collapse:collapse;font-size:11px;"><thead><tr style="border-bottom:1px solid #334155;color:#94a3b8;">
+                        <th style="padding:4px 6px;text-align:left;">Tracking #</th>
+                        <th style="padding:4px 6px;text-align:left;">Carrier</th>
+                        <th style="padding:4px 6px;text-align:right;">Weight</th>
+                        <th style="padding:4px 6px;text-align:right;">Charges</th></tr></thead><tbody>`;
+                    shipments.forEach(s => {
+                        html += `<tr style="border-bottom:1px solid #1e293b;">
+                            <td style="padding:4px 6px;color:#7dd3fc;">${s.tracking_number || '--'}</td>
+                            <td style="padding:4px 6px;color:#e2e8f0;">${s.carrier || '--'}</td>
+                            <td style="padding:4px 6px;text-align:right;color:#fbbf24;">${s.weight || '--'} lb</td>
+                            <td style="padding:4px 6px;text-align:right;color:#f43f5e;">$${(s.charges || 0).toFixed(2)}</td></tr>`;
+                    });
+                    html += '</tbody></table>';
+                }
+            } else {
+                // wo_package
+                const parts = extracted.parts || [];
+                html += `<div style="margin-bottom: 10px;">
+                    <span style="color: #a5b4fc;">WO:</span> <strong>${extracted.wo_number || '--'}</strong>
+                    <span style="color: #a5b4fc; margin-left: 12px;">Parts:</span> ${parts.length}
+                </div>`;
+                if (parts.length) {
+                    html += `<table style="width:100%;border-collapse:collapse;font-size:11px;"><thead><tr style="border-bottom:1px solid #334155;color:#94a3b8;">
+                        <th style="padding:4px 6px;text-align:left;">Part #</th>
+                        <th style="padding:4px 6px;text-align:left;">Description</th>
+                        <th style="padding:4px 6px;text-align:right;">Weight</th>
+                        <th style="padding:4px 6px;text-align:left;">Tracking #</th></tr></thead><tbody>`;
+                    parts.forEach(p => {
+                        html += `<tr style="border-bottom:1px solid #1e293b;">
+                            <td style="padding:4px 6px;color:#7dd3fc;">${p.part_number || '--'}</td>
+                            <td style="padding:4px 6px;color:#e2e8f0;">${p.description || '--'}</td>
+                            <td style="padding:4px 6px;text-align:right;color:#fbbf24;">${p.weight || '--'} lb</td>
+                            <td style="padding:4px 6px;color:#94a3b8;">${p.tracking_number || '--'}</td></tr>`;
+                    });
+                    html += '</tbody></table>';
+                }
+            }
+
+            contentDiv.innerHTML = html || '<div style="color: #94a3b8;">No extractable freight data found in this PDF.</div>';
+        }
+
+        async function importAnalysisResults() {
+            if (!lastAnalysisResults) return;
+            const extracted = lastAnalysisResults.extracted_data || lastAnalysisResults;
+
+            try {
+                let imported = 0;
+
+                if (currentAnalysisType === 'wo_invoice') {
+                    const items = extracted.freight_line_items || extracted.line_items || [];
+                    for (const item of items) {
+                        const record = {
+                            wo_number: extracted.wo_number,
+                            part_number: item.part_number || null,
+                            tracking_number: item.tracking_number || null,
+                            carrier: item.carrier || 'Unknown',
+                            service_level: item.service || 'Standard',
+                            actual_cost: item.amount || 0,
+                            billed_amount: (item.amount || 0) * 1.20,
+                            status: 'pending',
+                            direction: item.direction || 'inbound',
+                            source: 'ai_pdf_analysis'
+                        };
+                        const res = await fetch(`${SUPABASE_URL}/rest/v1/freight_tracking`, {
+                            method: 'POST',
+                            headers: {
+                                'apikey': SUPABASE_KEY,
+                                'Authorization': `Bearer ${SUPABASE_KEY}`,
+                                'Content-Type': 'application/json',
+                                'Prefer': 'return=minimal'
+                            },
+                            body: JSON.stringify(record)
+                        });
+                        if (res.ok) imported++;
+                    }
+                } else if (currentAnalysisType === 'tfm_invoice') {
+                    const shipments = extracted.shipments || [];
+                    for (const s of shipments) {
+                        const record = {
+                            tracking_number: s.tracking_number || null,
+                            carrier: s.carrier || 'TFM',
+                            service_level: s.service_level || 'Standard',
+                            actual_cost: s.charges || 0,
+                            weight_lbs: s.weight || null,
+                            source: 'tfm_invoice_ai',
+                            status: 'pending'
+                        };
+                        // Insert into freight_invoices
+                        const res = await fetch(`${SUPABASE_URL}/rest/v1/freight_invoices`, {
+                            method: 'POST',
+                            headers: {
+                                'apikey': SUPABASE_KEY,
+                                'Authorization': `Bearer ${SUPABASE_KEY}`,
+                                'Content-Type': 'application/json',
+                                'Prefer': 'return=minimal'
+                            },
+                            body: JSON.stringify(record)
+                        });
+                        if (res.ok) imported++;
+                    }
+                }
+
+                alert(`✅ Imported ${imported} record${imported !== 1 ? 's' : ''} to freight tracking!`);
+                await loadFreightTracking();
+                await loadFreightInvoices();
+
+            } catch (err) {
+                alert('Import error: ' + err.message);
+                console.error('Import error:', err);
+            }
+        }
+
+        function clearAnalysis() {
+            selectedPdfFile = null;
+            lastAnalysisResults = null;
+            document.getElementById('selectedFileInfo').style.display = 'none';
+            document.getElementById('pdfAnalysisResults').style.display = 'none';
+            document.getElementById('pdfAnalysisProgress').style.display = 'none';
+            document.getElementById('pdfFileInput').value = '';
+            document.getElementById('pdfAnalyzerBadge').textContent = 'Ready';
+            document.getElementById('pdfAnalyzerBadge').style.background = '#e94560';
+            const dropZone = document.getElementById('pdfDropZone');
+            dropZone.style.borderColor = '#475569';
+            dropZone.style.background = 'rgba(0,0,0,0.2)';
+        }
+
         // Load all dashboard data
         async function loadDashboardData() {
             await loadAnchorWorkOrders();
@@ -3017,6 +4011,8 @@
             await loadFinancialData();
             await loadFlatRateChart();
             await loadFreightInvoices();
+            await loadFreightTracking();
+            await loadPartsWeightDb();
 
             // Update last refreshed timestamp
             const now = new Date();
