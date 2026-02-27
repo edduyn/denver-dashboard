@@ -425,6 +425,11 @@ def process_billed_wos(filepath, report_date, dry_run=False):
             if not wo_number:
                 continue
 
+            # Extract customer_id (col 4) and tail_number (col 8)
+            customer_id = raw_row[4].strip() if len(raw_row) > 4 else ''
+            shop = raw_row[7].strip() if len(raw_row) > 7 else ''
+            tail_number = raw_row[8].strip() if len(raw_row) > 8 else ''
+
             try:
                 billed_date_raw = raw_row[29].strip() if len(raw_row) > 29 else ''
                 # Parse date: MM/DD/YY
@@ -442,12 +447,18 @@ def process_billed_wos(filepath, report_date, dry_run=False):
                 total_gp = float(raw_row[27] or 0) if len(raw_row) > 27 else 0
 
                 if wo_number and billed_date:
-                    billed.append({
+                    record = {
                         "work_order_number": wo_number,
                         "status": "billed",
                         "billed_date": billed_date,
-                        "customer_name": None  # Could extract from CSV if needed
-                    })
+                    }
+                    # Include customer_id if present
+                    if customer_id:
+                        record["customer_id"] = customer_id
+                    # Include tail_number if present and not empty
+                    if tail_number:
+                        record["tail_number"] = tail_number
+                    billed.append(record)
             except (ValueError, IndexError) as e:
                 continue
 
@@ -456,7 +467,9 @@ def process_billed_wos(filepath, report_date, dry_run=False):
 
     if dry_run:
         for wo in unique_wos[:10]:
-            print(f"    {wo['work_order_number']} billed {wo['billed_date']}")
+            cid = wo.get('customer_id', '-')
+            tail = wo.get('tail_number', '-')
+            print(f"    {wo['work_order_number']} billed {wo['billed_date']}  cust={cid}  tail={tail}")
         if len(unique_wos) > 10:
             print(f"    ... and {len(unique_wos)-10} more")
         return len(unique_wos)
@@ -475,6 +488,51 @@ def process_billed_wos(filepath, report_date, dry_run=False):
             inserted += 1
 
     print(f"  ✅ Updated {inserted}/{len(unique_wos)} billed WOs in work_orders")
+
+    # Backfill customer_name from customers table + anchor_work_orders
+    # for any WOs that have customer_id but no customer_name
+    try:
+        # Get billed WOs missing customer_name
+        missing_url = f"{SUPABASE_URL}/rest/v1/work_orders?select=work_order_number,customer_id&status=eq.billed&customer_name=is.null&customer_id=not.is.null"
+        resp = requests.get(missing_url, headers=HEADERS)
+        if resp.status_code == 200:
+            missing = resp.json()
+            if missing:
+                # Get customer names from customers table
+                cust_url = f"{SUPABASE_URL}/rest/v1/customers?select=customer_number,customer_name&customer_name=not.is.null"
+                cust_resp = requests.get(cust_url, headers=HEADERS)
+                cust_map = {}
+                if cust_resp.status_code == 200:
+                    for c in cust_resp.json():
+                        if c.get('customer_number') and c.get('customer_name'):
+                            cust_map[c['customer_number']] = c['customer_name']
+
+                # Get customer names from anchor_work_orders
+                anchor_url = f"{SUPABASE_URL}/rest/v1/anchor_work_orders?select=wo_number,customer,customer_id"
+                anchor_resp = requests.get(anchor_url, headers=HEADERS)
+                anchor_map = {}
+                if anchor_resp.status_code == 200:
+                    for a in anchor_resp.json():
+                        if a.get('customer_id') and a.get('customer'):
+                            anchor_map[a['customer_id']] = a['customer']
+
+                # Patch missing customer names
+                patched = 0
+                for wo in missing:
+                    cid = wo['customer_id']
+                    name = cust_map.get(cid) or anchor_map.get(cid)
+                    if name:
+                        patch_url = f"{SUPABASE_URL}/rest/v1/work_orders?work_order_number=eq.{wo['work_order_number']}"
+                        patch_headers = dict(HEADERS)
+                        patch_headers["Prefer"] = "return=minimal"
+                        pr = requests.patch(patch_url, headers=patch_headers, json={"customer_name": name})
+                        if pr.status_code in (200, 204):
+                            patched += 1
+                if patched:
+                    print(f"  ✅ Backfilled {patched} customer names from customers/anchor tables")
+    except Exception as e:
+        print(f"  ⚠️ Customer name backfill warning: {e}")
+
     return inserted
 
 
