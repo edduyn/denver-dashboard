@@ -4607,8 +4607,8 @@
 
                 // Fetch all data in parallel
                 const [timeRes, anchorRes, sdvSpecialRes, wipEntriesRes, reconRes, billedRes] = await Promise.all([
-                    // Time entries for current month (non-shop WO)
-                    fetch(`${SUPABASE_URL}/rest/v1/time_entries?select=wo_number,shop,hours,emp_code,emp_name,entry_date,wo_description&entry_date=gte.${monthStart}&entry_date=lte.${monthEnd}&wo_number=neq.DUM0A&order=hours.desc`, {
+                    // Time entries for current month — exclude Shop WOs (DUM0A, DT39A, etc are internal cost, not WIP)
+                    fetch(`${SUPABASE_URL}/rest/v1/time_entries?select=wo_number,shop,hours,emp_code,emp_name,entry_date,wo_description,wo_type&entry_date=gte.${monthStart}&entry_date=lte.${monthEnd}&wo_type=neq.Shop&limit=5000&order=hours.desc`, {
                         headers: HEADERS
                     }),
                     // Current anchor snapshot (latest report date)
@@ -4617,7 +4617,7 @@
                             const dateRes = await fetch(`${SUPABASE_URL}/rest/v1/anchor_work_orders?select=report_date&order=report_date.desc&limit=1`, { headers: HEADERS });
                             const dateData = await dateRes.json();
                             const latestDate = dateData?.[0]?.report_date || monthEnd;
-                            const aRes = await fetch(`${SUPABASE_URL}/rest/v1/anchor_work_orders?select=wo_number,shop,customer,description,expected_hours,open_date&report_date=eq.${latestDate}&order=shop`, { headers: HEADERS });
+                            const aRes = await fetch(`${SUPABASE_URL}/rest/v1/anchor_work_orders?select=wo_number,shop,customer,description,expected_hours,open_date&report_date=eq.${latestDate}&order=shop&limit=500`, { headers: HEADERS });
                             return aRes;
                         } catch(e) { return { json: async () => [] }; }
                     })(),
@@ -4634,7 +4634,7 @@
                         headers: HEADERS
                     }),
                     // Billed WOs — these are OUT of WIP (already billed = no longer WIP factor)
-                    fetch(`${SUPABASE_URL}/rest/v1/work_orders?select=work_order_number,status,billed_date&status=eq.billed`, {
+                    fetch(`${SUPABASE_URL}/rest/v1/work_orders?select=work_order_number,status,billed_date&status=eq.billed&limit=500`, {
                         headers: HEADERS
                     })
                 ]);
