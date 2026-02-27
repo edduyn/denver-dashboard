@@ -1860,6 +1860,165 @@
 
         <!-- FINANCIALS TAB -->
         <div class="content" id="financials">
+
+            <!-- ===== FINANCIAL INTELLIGENCE ENGINE ===== -->
+
+            <!-- Card 1: Financial Intelligence Center (Header KPIs) -->
+            <div class="card" style="border-left: 3px solid #22d3ee; margin-bottom: 16px;">
+                <div class="card-header">
+                    <span class="card-title">🧠 Financial Intelligence Center</span>
+                    <span class="badge badge-blue" id="finIntelBadge">Loading...</span>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(145px, 1fr)); gap: 14px;">
+                    <div class="metric">
+                        <div class="metric-value" id="fiMTDRevenue" style="font-size: 1.5em;">--</div>
+                        <div class="metric-label">MTD Revenue</div>
+                        <div class="metric-sub" id="fiMTDRevVsBudget">-- vs budget</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" id="fiRevenuePace" style="font-size: 1.5em;">--</div>
+                        <div class="metric-label">Projected Month-End</div>
+                        <div class="metric-sub" id="fiPaceNote">daily avg × days left</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" id="fiABRatio" style="font-size: 1.5em;">--</div>
+                        <div class="metric-label">A/B Ratio MTD</div>
+                        <div class="metric-sub" id="fiABTarget">Target: 58.5%</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" id="fiBudgetPct" style="font-size: 1.5em;">--</div>
+                        <div class="metric-label">Budget Achievement</div>
+                        <div class="metric-sub" id="fiBudgetPctNote">MTD / monthly budget</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" id="fiBizDaysLeft" style="font-size: 1.5em;">--</div>
+                        <div class="metric-label">Biz Days Left</div>
+                        <div class="metric-sub" id="fiBizDaysMonth">in month</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" id="fiGapToBudget" style="font-size: 1.5em;">--</div>
+                        <div class="metric-label">Gap to Budget</div>
+                        <div class="metric-sub" id="fiGapNote">revenue needed</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2: What-If Scenario Engine -->
+            <div class="card" style="border-left: 3px solid #a855f7; margin-bottom: 16px;">
+                <div class="card-header">
+                    <span class="card-title">🎛️ What-If Scenario Engine</span>
+                    <span class="badge badge-blue">Interactive</span>
+                </div>
+                <p style="color: #94a3b8; font-size: 0.85em; margin-bottom: 16px;">
+                    Adjust sliders to model how specific changes could improve your month-end financial position.
+                </p>
+
+                <!-- Scenario 1: Close More WOs -->
+                <div style="background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.3); border-radius: 10px; padding: 16px; margin-bottom: 12px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <span style="color: #10b981; font-weight: 600;">📦 Scenario 1: Close Additional WOs</span>
+                        <span style="color: #10b981; font-size: 1.3em; font-weight: bold;" id="fiS1Impact">+$0</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                        <span style="color: #94a3b8; font-size: 0.85em; min-width: 110px;">Additional WOs:</span>
+                        <input type="range" id="fiS1Slider" min="0" max="20" value="0"
+                            style="flex: 1; accent-color: #10b981;"
+                            oninput="updateScenario1(this.value)">
+                        <span style="color: #e2e8f0; font-weight: bold; min-width: 30px;" id="fiS1Value">0</span>
+                    </div>
+                    <div style="color: #64748b; font-size: 0.8em;" id="fiS1Detail">
+                        Average WO value: calculating... | Based on billed WO data
+                    </div>
+                </div>
+
+                <!-- Scenario 2: Improve A/B Ratio -->
+                <div style="background: rgba(59,130,246,0.08); border: 1px solid rgba(59,130,246,0.3); border-radius: 10px; padding: 16px; margin-bottom: 12px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <span style="color: #3b82f6; font-weight: 600;">📊 Scenario 2: Improve A/B Ratio</span>
+                        <span style="color: #3b82f6; font-size: 1.3em; font-weight: bold;" id="fiS2Impact">+$0</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                        <span style="color: #94a3b8; font-size: 0.85em; min-width: 110px;">Target A/B:</span>
+                        <input type="range" id="fiS2Slider" min="30" max="75" value="58"
+                            style="flex: 1; accent-color: #3b82f6;"
+                            oninput="updateScenario2(this.value)">
+                        <span style="color: #e2e8f0; font-weight: bold; min-width: 50px;" id="fiS2Value">58%</span>
+                    </div>
+                    <div style="color: #64748b; font-size: 0.8em;" id="fiS2Detail">
+                        Current A/B: --% | Additional sold hours needed: --
+                    </div>
+                </div>
+
+                <!-- Scenario 3: Accelerate Billing -->
+                <div style="background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.3); border-radius: 10px; padding: 16px; margin-bottom: 12px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <span style="color: #f59e0b; font-weight: 600;">⚡ Scenario 3: Accelerate Billing (Select Open WOs)</span>
+                        <span style="color: #f59e0b; font-size: 1.3em; font-weight: bold;" id="fiS3Impact">+$0</span>
+                    </div>
+                    <div id="fiS3WOList" style="display: flex; flex-direction: column; gap: 6px; max-height: 220px; overflow-y: auto;">
+                        <div style="color: #94a3b8; font-size: 0.85em;">Loading open WOs...</div>
+                    </div>
+                    <div style="color: #64748b; font-size: 0.8em; margin-top: 8px;" id="fiS3Summary">
+                        Check WOs to see potential revenue impact
+                    </div>
+                </div>
+
+                <!-- Scenario 4: Revenue-to-Budget Bridge -->
+                <div style="background: rgba(168,85,247,0.08); border: 1px solid rgba(168,85,247,0.3); border-radius: 10px; padding: 16px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <span style="color: #a855f7; font-weight: 600;">🌉 Scenario 4: Revenue-to-Budget Bridge</span>
+                        <span class="badge" id="fiS4Badge">--</span>
+                    </div>
+                    <div id="fiS4Bridge" style="display: flex; flex-direction: column; gap: 8px;">
+                        <div style="color: #94a3b8; font-size: 0.85em;">Calculating bridge...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3: Smart Financial Recommendations -->
+            <div class="card" id="finIntelRecommendationsCard" style="border-left: 3px solid #f59e0b; margin-bottom: 16px;">
+                <div class="card-header">
+                    <span class="card-title">⚡ Financial Recommendations & Alerts</span>
+                    <span class="badge badge-amber" id="fiAlertCount">--</span>
+                </div>
+                <div id="fiRecommendations" style="display: flex; flex-direction: column; gap: 8px;">
+                    <div style="text-align: center; color: #64748b; padding: 10px;">Analyzing financial data...</div>
+                </div>
+            </div>
+
+            <!-- Card 4: Billing Opportunities Table -->
+            <div class="card" style="margin-bottom: 16px;">
+                <div class="card-header">
+                    <span class="card-title">📋 Billing Opportunities — Open WOs with Revenue Potential</span>
+                    <span style="color: #64748b; font-size: 0.8em;" id="fiBillingOppsNote">Top open WOs by estimated value</span>
+                </div>
+                <div class="table-container" style="max-height: 380px;">
+                    <table style="font-size: 13px;">
+                        <thead>
+                            <tr>
+                                <th>WO#</th>
+                                <th>Shop</th>
+                                <th>Customer</th>
+                                <th>Hours MTD</th>
+                                <th>Expected</th>
+                                <th>% Complete</th>
+                                <th>Est. Value</th>
+                                <th>Days Open</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="fiBillingOppsTable">
+                            <tr><td colspan="9" style="text-align:center;">Loading...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Separator between intelligence engine and existing P&L content -->
+            <div style="border-top: 2px solid rgba(34,211,238,0.3); margin: 24px 0 16px 0;"></div>
+
+            <!-- ===== END FINANCIAL INTELLIGENCE ENGINE ===== -->
+
             <!-- Annual Summary Header -->
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                 <h2 style="margin: 0; color: #e2e8f0;">💵 Denver 889 Financial Performance</h2>
@@ -3240,6 +3399,490 @@
             }
         }
 
+        // ===== FINANCIAL INTELLIGENCE ENGINE =====
+        const AB_TARGET = 58.5;
+        const DAYS_TO_BILL_GOAL = 7;
+
+        // Global state for scenario engine (populated on load, used by slider handlers)
+        let fiState = {
+            mtdRevenue: 0, monthlyBudget: 0, avgWOValue: 0,
+            currentAB: 0, mtdSoldHours: 0, mtdPaidHours: 0,
+            bizDaysLeft: 0, bizDaysElapsed: 0, totalBizDays: 0,
+            topOpenWOs: [], billedWOCount: 0
+        };
+
+        async function loadFinancialIntelligence() {
+            try {
+                const now = new Date();
+                const currentMonth = now.getMonth() + 1;
+                const currentYear = now.getFullYear();
+                const monthStart = `${currentYear}-${String(currentMonth).padStart(2,'0')}-01`;
+                const lastDayNum = new Date(currentYear, currentMonth, 0).getDate();
+                const monthEnd = `${currentYear}-${String(currentMonth).padStart(2,'0')}-${lastDayNum}`;
+                const monthName = now.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+
+                // ===== PARALLEL DATA FETCH (6 sources) =====
+                const [dailyMetricsRes, timeEntriesRes, anchorDateRes, billedWOsRes, budgetRes, wipRes] = await Promise.all([
+                    fetch(`${SUPABASE_URL}/rest/v1/daily_metrics?select=report_date,total_sold_hours,total_paid_hours,employee_count,billed_wo_count&report_date=gte.${monthStart}&report_date=lte.${monthEnd}&order=report_date.asc`, { headers: HEADERS }),
+                    fetch(`${SUPABASE_URL}/rest/v1/time_entries?select=wo_number,shop,hours,emp_code,emp_name,entry_date,wo_type&entry_date=gte.${monthStart}&entry_date=lte.${monthEnd}&limit=5000&order=hours.desc`, { headers: HEADERS }),
+                    fetch(`${SUPABASE_URL}/rest/v1/anchor_work_orders?select=report_date&order=report_date.desc&limit=1`, { headers: HEADERS }),
+                    fetch(`${SUPABASE_URL}/rest/v1/work_orders?select=work_order_number,status,billed_date,customer_name,customer_id,tail_number,open_date,total_amount,labor_amount,parts_amount,os_amount&status=eq.billed&billed_date=gte.${monthStart}&billed_date=lte.${monthEnd}&limit=500`, { headers: HEADERS }),
+                    fetch(`${SUPABASE_URL}/rest/v1/budget_vs_actual?period_year=eq.${currentYear}&period_month=eq.${currentMonth}&select=*`, { headers: HEADERS }),
+                    fetch(`${SUPABASE_URL}/rest/v1/wip_entries?select=*&order=month.desc&limit=12`, { headers: HEADERS })
+                ]);
+
+                const dailyMetrics = await dailyMetricsRes.json() || [];
+                const timeEntries = await timeEntriesRes.json() || [];
+                const anchorDateData = await anchorDateRes.json() || [];
+                const billedWOs = await billedWOsRes.json() || [];
+                const budgetData = await budgetRes.json() || [];
+                const wipEntries = await wipRes.json() || [];
+
+                // Fetch anchor WOs (need date first)
+                const latestAnchorDate = anchorDateData?.[0]?.report_date || monthEnd;
+                const anchorRes = await fetch(`${SUPABASE_URL}/rest/v1/anchor_work_orders?select=wo_number,shop,customer,description,expected_hours,open_date,days_open&report_date=eq.${latestAnchorDate}&limit=500`, { headers: HEADERS });
+                let anchorData = [];
+                try { anchorData = await anchorRes.json(); } catch(e) {}
+                if (!Array.isArray(anchorData)) anchorData = [];
+
+                // ===== AGGREGATION =====
+
+                // MTD Sold / Paid hours from daily_metrics
+                let mtdSoldHours = 0, mtdPaidHours = 0, daysWithData = 0;
+                (Array.isArray(dailyMetrics) ? dailyMetrics : []).forEach(d => {
+                    mtdSoldHours += parseFloat(d.total_sold_hours) || 0;
+                    mtdPaidHours += parseFloat(d.total_paid_hours) || 0;
+                    if (parseFloat(d.total_sold_hours) > 0) daysWithData++;
+                });
+                const currentAB = mtdPaidHours > 0 ? (mtdSoldHours / mtdPaidHours * 100) : 0;
+
+                // Business days
+                const bizDaysLeft = getBusinessDaysLeft();
+                const totalBizDays = getBizDaysInMonth();
+                const bizDaysElapsed = totalBizDays - bizDaysLeft;
+
+                // Budget for current month
+                const budgetTotal = budgetData.find(r => r.category === 'total') || {};
+                const monthlyBudget = parseFloat(budgetTotal.budget_revenue) || 662328;
+                const actualRevFromGL = parseFloat(budgetTotal.actual_revenue) || 0;
+
+                // MTD Revenue — prefer actual from GL (budget_vs_actual), fallback to WO amounts
+                let mtdRevenueFromWOs = 0;
+                let woWithAmounts = 0;
+                billedWOs.forEach(wo => {
+                    const amt = parseFloat(wo.total_amount) || 0;
+                    if (amt > 0) { mtdRevenueFromWOs += amt; woWithAmounts++; }
+                });
+
+                // Use the HIGHER of GL actual vs WO sum (GL may have entries not in our WO table)
+                const estimatedMTDRevenue = Math.max(actualRevFromGL, mtdRevenueFromWOs);
+                const billedWOCount = billedWOs.length;
+                const avgWOValue = billedWOCount > 0 && mtdRevenueFromWOs > 0
+                    ? mtdRevenueFromWOs / woWithAmounts : 2700;
+
+                // Revenue pace
+                const dailyRevAvg = bizDaysElapsed > 0 ? estimatedMTDRevenue / bizDaysElapsed : 0;
+                const projectedMonthEnd = estimatedMTDRevenue + (dailyRevAvg * bizDaysLeft);
+                const gapToBudget = monthlyBudget - estimatedMTDRevenue;
+                const budgetAchievementPct = monthlyBudget > 0 ? (estimatedMTDRevenue / monthlyBudget * 100) : 0;
+
+                // Open WOs enriched with hours (for scenarios)
+                const billedSet = new Set(billedWOs.map(b => b.work_order_number));
+                const woHoursMap = {};
+                (Array.isArray(timeEntries) ? timeEntries : []).forEach(t => {
+                    if (!billedSet.has(t.wo_number) && t.wo_type !== 'Shop') {
+                        if (!woHoursMap[t.wo_number]) woHoursMap[t.wo_number] = { hours: 0, shop: t.shop || '??' };
+                        woHoursMap[t.wo_number].hours += parseFloat(t.hours) || 0;
+                    }
+                });
+
+                const topOpenWOs = anchorData.map(a => {
+                    const hd = woHoursMap[a.wo_number] || { hours: 0, shop: a.shop };
+                    const expectedHrs = parseFloat(a.expected_hours) || 0;
+                    const actualHrs = hd.hours;
+                    const pctComplete = expectedHrs > 0 ? Math.min((actualHrs / expectedHrs) * 100, 150) : 0;
+                    const rate = (WIP_RATES[a.shop || hd.shop] || WIP_RATES.SDN).labor;
+                    return {
+                        wo_number: a.wo_number, shop: a.shop || hd.shop || '??',
+                        customer: a.customer || '--', description: a.description || '',
+                        expected_hours: expectedHrs, actual_hours: actualHrs,
+                        pct_complete: pctComplete, est_value: actualHrs * rate,
+                        days_open: parseInt(a.days_open) || 0
+                    };
+                }).filter(wo => wo.actual_hours > 0).sort((a, b) => b.est_value - a.est_value);
+
+                // Employee top biller
+                const empMap = {};
+                (Array.isArray(timeEntries) ? timeEntries : []).forEach(t => {
+                    const emp = t.emp_name || t.emp_code;
+                    if (!emp) return;
+                    if (!empMap[emp]) empMap[emp] = { total: 0, billable: 0 };
+                    const hrs = parseFloat(t.hours) || 0;
+                    empMap[emp].total += hrs;
+                    if (t.wo_type !== 'Shop') empMap[emp].billable += hrs;
+                });
+                const topBiller = Object.entries(empMap)
+                    .map(([name, d]) => ({ name, billable: d.billable }))
+                    .sort((a, b) => b.billable - a.billable)[0];
+
+                // Shop hours distribution
+                const shopHrsMap = {};
+                (Array.isArray(timeEntries) ? timeEntries : []).forEach(t => {
+                    const s = t.shop || '??';
+                    if (!shopHrsMap[s]) shopHrsMap[s] = 0;
+                    shopHrsMap[s] += parseFloat(t.hours) || 0;
+                });
+                const totalShopHrs = Object.values(shopHrsMap).reduce((a,b) => a+b, 0);
+
+                // Days to bill
+                let totalDTB = 0, dtbCount = 0;
+                billedWOs.forEach(wo => {
+                    if (wo.billed_date && wo.open_date) {
+                        const diff = Math.round((new Date(wo.billed_date) - new Date(wo.open_date)) / 86400000);
+                        if (diff >= 0 && diff < 365) { totalDTB += diff; dtbCount++; }
+                    }
+                });
+                const avgDaysToBill = dtbCount > 0 ? totalDTB / dtbCount : 0;
+
+                // Revenue concentration
+                const custRevMap = {};
+                billedWOs.forEach(wo => {
+                    const cust = wo.customer_name || wo.customer_id || 'Unknown';
+                    custRevMap[cust] = (custRevMap[cust] || 0) + (parseFloat(wo.total_amount) || 0);
+                });
+                const topCustRev = Object.entries(custRevMap).sort((a, b) => b[1] - a[1]);
+                const topCustPct = estimatedMTDRevenue > 0 && topCustRev.length > 0
+                    ? (topCustRev[0][1] / estimatedMTDRevenue * 100) : 0;
+
+                // Store global state for sliders
+                fiState = {
+                    mtdRevenue: estimatedMTDRevenue, monthlyBudget, avgWOValue,
+                    currentAB, mtdSoldHours, mtdPaidHours,
+                    bizDaysLeft, bizDaysElapsed, totalBizDays,
+                    topOpenWOs, billedWOCount
+                };
+
+                // ===== UPDATE HEADER KPIs =====
+                const mtdBudgetProrated = monthlyBudget * (bizDaysElapsed / totalBizDays);
+                const mtdVsBudgetDiff = estimatedMTDRevenue - mtdBudgetProrated;
+
+                document.getElementById('fiMTDRevenue').textContent = fmtCurrency(estimatedMTDRevenue);
+                document.getElementById('fiMTDRevenue').style.color = mtdVsBudgetDiff >= 0 ? '#10b981' : '#ef4444';
+                document.getElementById('fiMTDRevVsBudget').textContent =
+                    `${mtdVsBudgetDiff >= 0 ? '+' : ''}${fmtCurrency(mtdVsBudgetDiff)} vs prorated budget`;
+                document.getElementById('fiMTDRevVsBudget').style.color = mtdVsBudgetDiff >= 0 ? '#10b981' : '#ef4444';
+
+                document.getElementById('fiRevenuePace').textContent = fmtCurrency(projectedMonthEnd);
+                document.getElementById('fiRevenuePace').style.color = projectedMonthEnd >= monthlyBudget ? '#10b981' : '#ef4444';
+                document.getElementById('fiPaceNote').textContent = `${fmtCurrency(dailyRevAvg)}/day × ${bizDaysLeft} remaining`;
+
+                document.getElementById('fiABRatio').textContent = `${currentAB.toFixed(1)}%`;
+                document.getElementById('fiABRatio').style.color = currentAB >= 55 ? '#10b981' : currentAB >= 45 ? '#f59e0b' : '#ef4444';
+                document.getElementById('fiABTarget').textContent = `Target: ${AB_TARGET}% | Gap: ${(AB_TARGET - currentAB).toFixed(1)} pts`;
+
+                document.getElementById('fiBudgetPct').textContent = `${budgetAchievementPct.toFixed(0)}%`;
+                document.getElementById('fiBudgetPct').style.color = budgetAchievementPct >= 90 ? '#10b981' : budgetAchievementPct >= 70 ? '#f59e0b' : '#ef4444';
+                document.getElementById('fiBudgetPctNote').textContent = `${fmtCurrency(estimatedMTDRevenue)} / ${fmtCurrency(monthlyBudget)}`;
+
+                document.getElementById('fiBizDaysLeft').textContent = bizDaysLeft;
+                document.getElementById('fiBizDaysLeft').style.color = bizDaysLeft <= 3 ? '#ef4444' : bizDaysLeft <= 5 ? '#f59e0b' : '#10b981';
+                document.getElementById('fiBizDaysMonth').textContent = `${bizDaysElapsed} elapsed / ${totalBizDays} total`;
+
+                document.getElementById('fiGapToBudget').textContent = gapToBudget > 0 ? fmtCurrency(gapToBudget) : 'Met! ✅';
+                document.getElementById('fiGapToBudget').style.color = gapToBudget <= 0 ? '#10b981' : '#ef4444';
+                document.getElementById('fiGapNote').textContent = gapToBudget > 0 ? `~${Math.ceil(gapToBudget / avgWOValue)} WOs at avg value` : 'Budget achieved';
+
+                document.getElementById('finIntelBadge').textContent = monthName;
+                document.getElementById('finIntelBadge').className = 'badge badge-blue';
+
+                // ===== SMART FINANCIAL RECOMMENDATIONS =====
+                const recommendations = [];
+
+                // Rule 1: Revenue Pace
+                const pacePct = monthlyBudget > 0 ? (projectedMonthEnd / monthlyBudget * 100) : 0;
+                if (pacePct < 70) {
+                    recommendations.push({ severity: 'red', icon: '🚨',
+                        text: `At current billing pace, you'll miss budget by <strong>${fmtCurrency(monthlyBudget - projectedMonthEnd)}</strong>. Pace: ${fmtCurrency(dailyRevAvg)}/day, need ${fmtCurrency(monthlyBudget / totalBizDays)}/day.` });
+                } else if (pacePct < 90) {
+                    recommendations.push({ severity: 'amber', icon: '📈',
+                        text: `Billing pace is ${fmtCurrency(dailyRevAvg)}/day (${pacePct.toFixed(0)}% of target). Need <strong>${fmtCurrency((monthlyBudget - estimatedMTDRevenue) / Math.max(bizDaysLeft, 1))}/day</strong> for remaining ${bizDaysLeft} days to hit budget.` });
+                } else {
+                    recommendations.push({ severity: 'green', icon: '✅',
+                        text: `Revenue on track! Projecting <strong>${fmtCurrency(projectedMonthEnd)}</strong> vs ${fmtCurrency(monthlyBudget)} budget (${pacePct.toFixed(0)}%).` });
+                }
+
+                // Rule 2: A/B Ratio Health
+                if (currentAB < 45) {
+                    recommendations.push({ severity: 'red', icon: '⚠️',
+                        text: `A/B ratio is <strong>${currentAB.toFixed(1)}%</strong> — critically below ${AB_TARGET}% target. ${(AB_TARGET - currentAB).toFixed(1)} points to recover. Reduce shop WO time and maximize billable hours.` });
+                } else if (currentAB < 55) {
+                    recommendations.push({ severity: 'amber', icon: '📊',
+                        text: `A/B ratio at <strong>${currentAB.toFixed(1)}%</strong> (target ${AB_TARGET}%). Need ${((AB_TARGET/100) * mtdPaidHours - mtdSoldHours).toFixed(0)} more sold hours to reach target.` });
+                } else {
+                    recommendations.push({ severity: 'green', icon: '💪',
+                        text: `A/B ratio strong at <strong>${currentAB.toFixed(1)}%</strong> ${currentAB >= AB_TARGET ? '— AT TARGET!' : `(${(AB_TARGET - currentAB).toFixed(1)} pts to goal)`}` });
+                }
+
+                // Rule 3: Billing Opportunities (80%+ complete)
+                const readyToBill = topOpenWOs.filter(wo => wo.pct_complete >= 80 && wo.expected_hours > 0);
+                if (readyToBill.length > 0) {
+                    const readyValue = readyToBill.reduce((s, wo) => s + wo.est_value, 0);
+                    recommendations.push({ severity: 'amber', icon: '💰',
+                        text: `<strong>${readyToBill.length} WO${readyToBill.length > 1 ? 's' : ''}</strong> at 80%+ completion — estimated <strong>${fmtCurrency(readyValue)}</strong> billable: ${readyToBill.slice(0,3).map(w => w.wo_number).join(', ')}${readyToBill.length > 3 ? '...' : ''}.` });
+                }
+
+                // Rule 4: Month-End Push
+                if (bizDaysLeft <= 2 && gapToBudget > 0) {
+                    recommendations.push({ severity: 'red', icon: '📅',
+                        text: `Only <strong>${bizDaysLeft} business day${bizDaysLeft > 1 ? 's' : ''}</strong> left! Need ${fmtCurrency(gapToBudget)} more to hit budget — push to close billable WOs NOW.` });
+                } else if (bizDaysLeft <= 5 && gapToBudget > 0) {
+                    recommendations.push({ severity: 'amber', icon: '📅',
+                        text: `${bizDaysLeft} business days left. <strong>${fmtCurrency(gapToBudget)}</strong> gap to budget — that's ~${Math.ceil(gapToBudget / avgWOValue)} WOs at average value.` });
+                }
+
+                // Rule 5: Top Biller Recognition
+                if (topBiller && topBiller.billable > 0) {
+                    recommendations.push({ severity: 'green', icon: '🏆',
+                        text: `Top biller this month: <strong>${topBiller.name}</strong> with ${topBiller.billable.toFixed(1)} sold hours.` });
+                }
+
+                // Rule 6: Shop Utilization Imbalance
+                const shopEntries = Object.entries(shopHrsMap).filter(([s]) => ['SDN','SDR','SHC','SDV'].includes(s));
+                shopEntries.forEach(([shop, hours]) => {
+                    const pct = totalShopHrs > 0 ? (hours / totalShopHrs) * 100 : 0;
+                    if (pct < 10 && hours < 30) {
+                        recommendations.push({ severity: 'amber', icon: '⚖️',
+                            text: `${shop} only has <strong>${hours.toFixed(0)} hrs</strong> (${pct.toFixed(0)}% of total). Potential underutilization — check scheduling.` });
+                    }
+                });
+
+                // Rule 7: Days to Bill
+                if (avgDaysToBill > 0) {
+                    if (avgDaysToBill > 21) {
+                        recommendations.push({ severity: 'red', icon: '⏱️',
+                            text: `Average days to bill is <strong>${avgDaysToBill.toFixed(0)} days</strong> — goal is ${DAYS_TO_BILL_GOAL}. Revenue recognition is severely delayed.` });
+                    } else if (avgDaysToBill > DAYS_TO_BILL_GOAL) {
+                        recommendations.push({ severity: 'amber', icon: '⏱️',
+                            text: `Average days to bill: <strong>${avgDaysToBill.toFixed(0)} days</strong> (goal: ${DAYS_TO_BILL_GOAL}). Faster billing = faster revenue recognition.` });
+                    } else {
+                        recommendations.push({ severity: 'green', icon: '⚡',
+                            text: `Average days to bill: <strong>${avgDaysToBill.toFixed(0)} days</strong> — within the ${DAYS_TO_BILL_GOAL}-day goal!` });
+                    }
+                }
+
+                // Rule 8: Revenue Concentration
+                if (topCustPct > 40 && topCustRev.length > 0) {
+                    recommendations.push({ severity: 'amber', icon: '🎯',
+                        text: `Revenue concentration: <strong>${topCustRev[0][0]}</strong> represents ${topCustPct.toFixed(0)}% of MTD revenue (${fmtCurrency(topCustRev[0][1])}). Monitor customer diversification.` });
+                }
+
+                // Rule 9: WIP Conversion Opportunity
+                const totalOpenWIPValue = topOpenWOs.reduce((s, wo) => s + wo.est_value, 0);
+                if (totalOpenWIPValue > 0) {
+                    recommendations.push({ severity: 'green', icon: '💡',
+                        text: `Open WO pipeline holds <strong>${fmtCurrency(totalOpenWIPValue)}</strong> in estimated value across ${topOpenWOs.length} WOs. Converting 80% = ${fmtCurrency(totalOpenWIPValue * 0.8)} in potential billing.` });
+                }
+
+                // Rule 10: Budget vs Actual (prorated)
+                const proratedBudget = monthlyBudget * (bizDaysElapsed / totalBizDays);
+                const behindBy = proratedBudget - estimatedMTDRevenue;
+                if (behindBy > proratedBudget * 0.15) {
+                    recommendations.push({ severity: 'red', icon: '📉',
+                        text: `<strong>${fmtCurrency(behindBy)} behind</strong> prorated budget (${fmtCurrency(estimatedMTDRevenue)} actual vs ${fmtCurrency(proratedBudget)} prorated). Accelerate billing to close the gap.` });
+                } else if (behindBy > 0) {
+                    recommendations.push({ severity: 'amber', icon: '📊',
+                        text: `Slightly behind prorated budget by ${fmtCurrency(behindBy)} — ${fmtCurrency(estimatedMTDRevenue)} actual vs ${fmtCurrency(proratedBudget)} prorated. Within recovery range.` });
+                }
+
+                // ===== RENDER RECOMMENDATIONS =====
+                if (recommendations.length > 0) {
+                    const sorted = recommendations.sort((a, b) => {
+                        const order = { red: 0, amber: 1, green: 2 };
+                        return (order[a.severity] ?? 9) - (order[b.severity] ?? 9);
+                    });
+                    document.getElementById('fiRecommendations').innerHTML = sorted.map(r => {
+                        const bg = r.severity === 'red' ? 'rgba(239,68,68,0.15)' :
+                                   r.severity === 'amber' ? 'rgba(245,158,11,0.12)' : 'rgba(16,185,129,0.12)';
+                        const bc = r.severity === 'red' ? '#ef4444' :
+                                   r.severity === 'amber' ? '#f59e0b' : '#10b981';
+                        return `<div style="padding: 10px 14px; background: ${bg}; border-left: 3px solid ${bc}; border-radius: 6px;">
+                            <span>${r.icon}</span> <span style="color: #e2e8f0; font-size: 0.9em;">${r.text}</span>
+                        </div>`;
+                    }).join('');
+
+                    const redC = sorted.filter(r => r.severity === 'red').length;
+                    const ambC = sorted.filter(r => r.severity === 'amber').length;
+                    const alertEl = document.getElementById('fiAlertCount');
+                    alertEl.textContent = `${redC > 0 ? redC + ' critical' : ''}${redC > 0 && ambC > 0 ? ' · ' : ''}${ambC > 0 ? ambC + ' watch' : ''}${redC === 0 && ambC === 0 ? 'All Clear ✅' : ''}`;
+                    alertEl.className = `badge ${redC > 0 ? 'badge-red' : ambC > 0 ? 'badge-amber' : 'badge-green'}`;
+                } else {
+                    document.getElementById('fiRecommendations').innerHTML =
+                        '<div style="text-align:center; color:#10b981; padding:15px;">✅ All clear — no financial concerns this month.</div>';
+                    document.getElementById('fiAlertCount').textContent = 'All Clear ✅';
+                    document.getElementById('fiAlertCount').className = 'badge badge-green';
+                }
+
+                // ===== RENDER BILLING OPPORTUNITIES TABLE =====
+                const opps = topOpenWOs.slice(0, 15);
+                document.getElementById('fiBillingOppsTable').innerHTML = opps.length > 0
+                    ? opps.map(wo => {
+                        const pctLabel = wo.pct_complete > 0 ? `${wo.pct_complete.toFixed(0)}%` : '--';
+                        const pctColor = wo.pct_complete >= 80 ? '#10b981' : wo.pct_complete >= 50 ? '#f59e0b' : '#94a3b8';
+                        let badge = '';
+                        if (wo.pct_complete >= 80) badge = '<span class="badge badge-green">Ready</span>';
+                        else if (wo.pct_complete >= 50) badge = '<span class="badge badge-amber">In Progress</span>';
+                        else if (wo.days_open > 30) badge = '<span class="badge badge-red">Aging</span>';
+                        else badge = '<span class="badge badge-gray">Open</span>';
+                        return `<tr>
+                            <td><strong>${wo.wo_number}</strong></td>
+                            <td><span class="badge ${wo.shop === 'SDV' ? 'badge-blue' : 'badge-green'}">${wo.shop}</span></td>
+                            <td style="max-width:140px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${wo.customer}</td>
+                            <td>${wo.actual_hours.toFixed(1)}</td>
+                            <td>${wo.expected_hours > 0 ? wo.expected_hours.toFixed(0) : '--'}</td>
+                            <td style="color: ${pctColor};">${pctLabel}</td>
+                            <td><strong>${fmtCurrency(wo.est_value)}</strong></td>
+                            <td>${wo.days_open}d</td>
+                            <td>${badge}</td>
+                        </tr>`;
+                    }).join('')
+                    : '<tr><td colspan="9" style="text-align:center; color:#64748b;">No open WOs with hours found</td></tr>';
+                document.getElementById('fiBillingOppsNote').textContent =
+                    `${opps.length} WOs | Total estimated pipeline: ${fmtCurrency(topOpenWOs.reduce((s,w) => s + w.est_value, 0))}`;
+
+                // ===== RENDER SCENARIOS =====
+                renderScenario3();
+                renderScenario4();
+                document.getElementById('fiS1Detail').textContent =
+                    `Average WO value: ${fmtCurrency(avgWOValue)} | ${billedWOCount} WOs billed MTD (${woWithAmounts} with amounts)`;
+                document.getElementById('fiS2Slider').value = Math.round(AB_TARGET);
+                updateScenario2(Math.round(AB_TARGET));
+
+                console.log('loadFinancialIntelligence: Complete');
+            } catch (error) {
+                console.error('Error loading Financial Intelligence:', error);
+                document.getElementById('fiRecommendations').innerHTML =
+                    '<div style="text-align:center; color:#ef4444; padding:15px;">Error loading financial intelligence data.</div>';
+                document.getElementById('finIntelBadge').textContent = 'Error';
+                document.getElementById('finIntelBadge').className = 'badge badge-red';
+            }
+        }
+
+        // ===== SCENARIO SLIDER HANDLERS =====
+
+        function updateScenario1(count) {
+            count = parseInt(count) || 0;
+            document.getElementById('fiS1Value').textContent = count;
+            const impact = count * fiState.avgWOValue;
+            document.getElementById('fiS1Impact').textContent = `+${fmtCurrency(impact)}`;
+            const newTotal = fiState.mtdRevenue + impact;
+            const newPct = fiState.monthlyBudget > 0 ? (newTotal / fiState.monthlyBudget * 100).toFixed(0) : '--';
+            document.getElementById('fiS1Detail').textContent =
+                `Avg WO value: ${fmtCurrency(fiState.avgWOValue)} | Projected: ${fmtCurrency(newTotal)} (${newPct}% of budget)`;
+        }
+
+        function updateScenario2(targetPct) {
+            targetPct = parseInt(targetPct) || 58;
+            document.getElementById('fiS2Value').textContent = `${targetPct}%`;
+            const currentSold = fiState.mtdSoldHours;
+            const currentPaid = fiState.mtdPaidHours;
+            const curAB = currentPaid > 0 ? (currentSold / currentPaid * 100) : 0;
+
+            if (targetPct <= curAB || currentPaid <= 0) {
+                document.getElementById('fiS2Impact').textContent = curAB > 0 ? 'At/above' : '--';
+                document.getElementById('fiS2Impact').style.color = '#10b981';
+                document.getElementById('fiS2Detail').textContent = `Current A/B: ${curAB.toFixed(1)}% | Already at or above ${targetPct}%`;
+                return;
+            }
+            const addlSold = (targetPct / 100) * currentPaid - currentSold;
+            const revenueImpact = addlSold * 155;
+            const hrsPerDay = fiState.bizDaysLeft > 0 ? (addlSold / fiState.bizDaysLeft).toFixed(1) : addlSold.toFixed(0);
+            document.getElementById('fiS2Impact').textContent = `+${fmtCurrency(revenueImpact)}`;
+            document.getElementById('fiS2Impact').style.color = '#3b82f6';
+            document.getElementById('fiS2Detail').textContent =
+                `Current A/B: ${curAB.toFixed(1)}% | Need ${addlSold.toFixed(0)} more sold hrs (${hrsPerDay} hrs/day × ${fiState.bizDaysLeft} days) | Revenue: +${fmtCurrency(revenueImpact)} at $155/hr`;
+        }
+
+        function renderScenario3() {
+            const container = document.getElementById('fiS3WOList');
+            const topWOs = fiState.topOpenWOs.slice(0, 10);
+            if (topWOs.length === 0) {
+                container.innerHTML = '<div style="color:#94a3b8; font-size:0.85em;">No open WOs with hours found.</div>';
+                return;
+            }
+            container.innerHTML = topWOs.map((wo, i) => {
+                const pctLabel = wo.pct_complete > 0 ? `${wo.pct_complete.toFixed(0)}%` : '--';
+                const pctColor = wo.pct_complete >= 80 ? '#10b981' : wo.pct_complete >= 50 ? '#f59e0b' : '#94a3b8';
+                return `<label style="display: flex; align-items: center; gap: 8px; padding: 6px 8px; background: rgba(0,0,0,0.2); border-radius: 6px; cursor: pointer;">
+                    <input type="checkbox" onchange="updateScenario3()" data-idx="${i}" data-value="${wo.est_value}"
+                        style="accent-color: #f59e0b; width: 16px; height: 16px;">
+                    <span style="color: #e2e8f0; font-weight: 600; min-width: 65px;">${wo.wo_number}</span>
+                    <span style="color: #94a3b8; font-size: 0.8em; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                        ${wo.shop} | ${wo.customer} | ${wo.actual_hours.toFixed(0)} hrs
+                    </span>
+                    <span style="color: ${pctColor}; font-size: 0.8em; min-width: 40px;">${pctLabel}</span>
+                    <span style="color: #f59e0b; font-weight: bold; min-width: 70px; text-align: right;">${fmtCurrency(wo.est_value)}</span>
+                </label>`;
+            }).join('');
+        }
+
+        function updateScenario3() {
+            const boxes = document.querySelectorAll('#fiS3WOList input[type="checkbox"]:checked');
+            let total = 0, count = 0;
+            boxes.forEach(cb => { total += parseFloat(cb.dataset.value) || 0; count++; });
+            document.getElementById('fiS3Impact').textContent = `+${fmtCurrency(total)}`;
+            document.getElementById('fiS3Summary').textContent = count > 0
+                ? `${count} WO${count > 1 ? 's' : ''} selected | If billed this month: +${fmtCurrency(total)} → ${fmtCurrency(fiState.mtdRevenue + total)} total (${fiState.monthlyBudget > 0 ? ((fiState.mtdRevenue + total) / fiState.monthlyBudget * 100).toFixed(0) : '--'}% of budget)`
+                : 'Check WOs above to see potential revenue impact';
+        }
+
+        function renderScenario4() {
+            const gap = fiState.monthlyBudget - fiState.mtdRevenue;
+            const container = document.getElementById('fiS4Bridge');
+            const badge = document.getElementById('fiS4Badge');
+
+            if (gap <= 0) {
+                badge.textContent = 'Budget Met! ✅';
+                badge.className = 'badge badge-green';
+                container.innerHTML = `<div style="padding: 12px; background: rgba(16,185,129,0.15); border-left: 3px solid #10b981; border-radius: 6px;">
+                    <span style="color: #10b981;">MTD revenue of <strong>${fmtCurrency(fiState.mtdRevenue)}</strong> has met the ${fmtCurrency(fiState.monthlyBudget)} budget target.</span></div>`;
+                return;
+            }
+
+            badge.textContent = fmtCurrency(gap) + ' gap';
+            badge.className = 'badge badge-red';
+
+            const avgWO = fiState.avgWOValue;
+            const wosNeeded = Math.ceil(gap / avgWO);
+            const hoursNeeded = gap / 155;
+            const hrsPerDay = fiState.bizDaysLeft > 0 ? (hoursNeeded / fiState.bizDaysLeft).toFixed(1) : '--';
+            const dailyRevNeeded = fiState.bizDaysLeft > 0 ? gap / fiState.bizDaysLeft : gap;
+
+            let cumValue = 0, wosToCoverGap = 0;
+            for (const wo of fiState.topOpenWOs) {
+                cumValue += wo.est_value;
+                wosToCoverGap++;
+                if (cumValue >= gap) break;
+            }
+
+            container.innerHTML = `
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px;">
+                    <div style="padding: 10px; background: rgba(239,68,68,0.1); border-radius: 8px; text-align: center;">
+                        <div style="color: #fca5a5; font-size: 0.75em;">Revenue Gap</div>
+                        <div style="color: #ef4444; font-size: 1.4em; font-weight: bold;">${fmtCurrency(gap)}</div>
+                    </div>
+                    <div style="padding: 10px; background: rgba(245,158,11,0.1); border-radius: 8px; text-align: center;">
+                        <div style="color: #fcd34d; font-size: 0.75em;">Daily Revenue Needed</div>
+                        <div style="color: #f59e0b; font-size: 1.4em; font-weight: bold;">${fmtCurrency(dailyRevNeeded)}/day</div>
+                    </div>
+                </div>
+                <div style="color: #94a3b8; font-size: 0.85em; line-height: 1.8;">
+                    <strong style="color: #e2e8f0;">Paths to close the gap:</strong><br>
+                    <span style="color: #10b981;">Path A:</span> Bill <strong>${wosNeeded}</strong> additional WOs at avg value of ${fmtCurrency(avgWO)}<br>
+                    <span style="color: #3b82f6;">Path B:</span> Sell <strong>${hoursNeeded.toFixed(0)}</strong> more hours (${hrsPerDay} hrs/day × ${fiState.bizDaysLeft} days) at $155/hr<br>
+                    <span style="color: #a855f7;">Path C:</span> Bill top <strong>${wosToCoverGap}</strong> open WOs from anchor (combined est. value: ${fmtCurrency(cumValue)})
+                </div>`;
+        }
+
         // Load flat rate chart for calculator
         async function loadFlatRateChart() {
             try {
@@ -4135,6 +4778,7 @@
             await loadActionsData();
             await loadEvalTracker();
             await loadFinancialData();
+            await loadFinancialIntelligence();
             await loadFlatRateChart();
             await loadFreightInvoices();
             await loadFreightTracking();
@@ -4583,6 +5227,20 @@
             const lastDay = new Date(year, month + 1, 0).getDate();
             let bizDays = 0;
             for (let d = now.getDate() + 1; d <= lastDay; d++) {
+                const day = new Date(year, month, d).getDay();
+                if (day !== 0 && day !== 6) bizDays++;
+            }
+            return bizDays;
+        }
+
+        // Calculate total business days in current month
+        function getBizDaysInMonth() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = now.getMonth();
+            const lastDay = new Date(year, month + 1, 0).getDate();
+            let bizDays = 0;
+            for (let d = 1; d <= lastDay; d++) {
                 const day = new Date(year, month, d).getDay();
                 if (day !== 0 && day !== 6) bizDays++;
             }
