@@ -3447,12 +3447,18 @@
 
                 // ===== AGGREGATION =====
 
-                // MTD Sold / Paid hours from daily_metrics
+                // MTD A/B Ratio — from time_entries (same method as Overview tab)
+                // Billable = non-Shop WOs, Total = all hours
                 let mtdSoldHours = 0, mtdPaidHours = 0, daysWithData = 0;
+                (Array.isArray(timeEntries) ? timeEntries : []).forEach(entry => {
+                    const hours = parseFloat(entry.hours) || 0;
+                    if (hours <= 0) return;
+                    mtdPaidHours += hours;
+                    if (entry.wo_type !== 'Shop') mtdSoldHours += hours;
+                });
+                // Also count data days from daily_metrics for pace calculation
                 (Array.isArray(dailyMetrics) ? dailyMetrics : []).forEach(d => {
-                    mtdSoldHours += parseFloat(d.total_sold_hours) || 0;
-                    mtdPaidHours += parseFloat(d.total_paid_hours) || 0;
-                    if (parseFloat(d.total_sold_hours) > 0) daysWithData++;
+                    if (parseFloat(d.total_sold_hours) > 0 || parseFloat(d.total_paid_hours) > 0) daysWithData++;
                 });
                 const currentAB = mtdPaidHours > 0 ? (mtdSoldHours / mtdPaidHours * 100) : 0;
 
