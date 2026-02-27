@@ -821,6 +821,22 @@ def process_shop_billed(filepath, dry_run=False):
             open_date = parse_anchor_date(row[10] if len(row) > 10 else '')
             billed_date = parse_anchor_date(row[11] if len(row) > 11 else '')
 
+            # Financial amounts (cols 12-15) — strip $, commas, parse to float
+            # Col 11 = Billed DATE (not amount), Col 12 = Parts, 13 = Labor, 14 = O/S, 15 = Total
+            def parse_currency(val):
+                if not val or not val.strip():
+                    return None
+                clean = val.strip().replace('$', '').replace(',', '').replace('(', '-').replace(')', '')
+                try:
+                    return round(float(clean), 2)
+                except (ValueError, TypeError):
+                    return None
+
+            parts_amt = parse_currency(row[12] if len(row) > 12 else '')
+            labor_amt = parse_currency(row[13] if len(row) > 13 else '')
+            os_amt = parse_currency(row[14] if len(row) > 14 else '')
+            total_amt = parse_currency(row[15] if len(row) > 15 else '')
+
             record = {
                 "work_order_number": wo_number,
                 "status": "billed",
@@ -835,6 +851,14 @@ def process_shop_billed(filepath, dry_run=False):
                 record["tail_number"] = tail_number
             if open_date:
                 record["open_date"] = open_date
+            if parts_amt is not None:
+                record["parts_amount"] = parts_amt
+            if labor_amt is not None:
+                record["labor_amount"] = labor_amt
+            if os_amt is not None:
+                record["os_amount"] = os_amt
+            if total_amt is not None:
+                record["total_amount"] = total_amt
 
             billed.append(record)
 
