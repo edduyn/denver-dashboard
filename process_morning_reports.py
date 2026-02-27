@@ -389,35 +389,75 @@ def process_paid_hours(filepath, report_date, dry_run=False):
 # ============================================================
 # BILLED_WO → work_orders
 # ============================================================
+def safe_float(val):
+    """Parse numeric value from AS400 CSV, handling commas, %, blanks."""
+    if not val or not str(val).strip():
+        return 0
+    s = str(val).strip().replace(',', '').replace('%', '')
+    try:
+        return float(s)
+    except ValueError:
+        return 0
+
+
+def parse_billed_date(date_str):
+    """Parse MM/DD/YY date from BILLED_WO CSV, return 'YYYY-MM-DD' or None."""
+    if not date_str or date_str.strip() in ('', '01/01/01'):
+        return None
+    parts = date_str.strip().split('/')
+    if len(parts) == 3:
+        mm, dd, yy = parts
+        return f"20{yy}-{mm}-{dd}"
+    return None
+
+
 def process_billed_wos(filepath, report_date, dry_run=False):
-    """Parse BILLED_WO CSV and update work_orders status."""
+    """
+    Parse BILLED_WO / WO Financial Report CSV.
+    Extracts FULL financial data from 'Total for' summary rows.
+    Writes to: work_orders (basic), wo_financial_reports (full detail).
+    """
     print(f"\n{'='*60}")
     print(f"Processing BILLED_WO: {os.path.basename(filepath)}")
     print(f"{'='*60}")
 
-    billed = []
+    billed = []         # work_orders records
+    fin_reports = []    # wo_financial_reports records (full detail)
+    report_period = None
 
     with open(filepath, 'r', encoding='utf-8-sig') as f:
         reader = csv.reader(f)
         header = None
         for raw_row in reader:
-            # Skip metadata lines
+            # Skip metadata lines, but extract report period
             if not raw_row or len(raw_row) < 10:
                 continue
-            if raw_row[0] in ('Selection', '----------', 'From date', 'Thru date', 'Department', 'Warranty', 'Time acct', 'Dist code', '==========', ''):
+
+            first = raw_row[0].strip()
+
+            # Extract report period from header metadata
+            if first == 'From date':
+                from_date_raw = raw_row[1].strip() if len(raw_row) > 1 else ''
+                try:
+                    fd = datetime.strptime(from_date_raw, "%m/%d/%Y")
+                    report_period = fd.strftime("%Y-%m")
+                except (ValueError, TypeError):
+                    pass
                 continue
-            # Detect header
-            if not header and raw_row[0] == 'Record Status':
+
+            if first in ('Selection', '----------', 'Thru date', 'Department',
+                         'Warranty', 'Time acct', 'Dist code', '==========', ''):
+                continue
+
+            # Detect header row
+            if not header and first == 'Record Status':
                 header = raw_row
                 continue
             if not header:
                 continue
 
-            status = raw_row[0].strip()
             # "Total for" text appears in column 6 (A/C Model), e.g. "Total for CUC9A"
             ac_model = raw_row[6].strip() if len(raw_row) > 6 else ''
-
-            # Only process "Total for" summary rows (one per WO)
             if 'Total for' not in ac_model:
                 continue
 
@@ -425,51 +465,144 @@ def process_billed_wos(filepath, report_date, dry_run=False):
             if not wo_number:
                 continue
 
-            # Extract customer_id (col 4) and tail_number (col 8)
+            # Skip shop/department totals (Total for SDN, Total for 889, etc.)
+            total_for_name = ac_model.replace('Total for ', '').strip()
+            if total_for_name in ('SDN', 'SDR', 'SDV', 'SHC', 'ELM', 'HSI', 'GY1', '889'):
+                continue
+
+            # Extract all columns
+            job_number = raw_row[2].strip() if len(raw_row) > 2 else ''
             customer_id = raw_row[4].strip() if len(raw_row) > 4 else ''
+            ac_make = raw_row[5].strip() if len(raw_row) > 5 else ''
             shop = raw_row[7].strip() if len(raw_row) > 7 else ''
             tail_number = raw_row[8].strip() if len(raw_row) > 8 else ''
 
-            try:
-                billed_date_raw = raw_row[29].strip() if len(raw_row) > 29 else ''
-                # Parse date: MM/DD/YY
-                if billed_date_raw and billed_date_raw != '01/01/01':
-                    parts = billed_date_raw.split('/')
-                    if len(parts) == 3:
-                        mm, dd, yy = parts
-                        billed_date = f"20{yy}-{mm}-{dd}"
-                    else:
-                        billed_date = None
-                else:
-                    billed_date = None
+            # Financial columns (all numeric)
+            actual_hours = safe_float(raw_row[10]) if len(raw_row) > 10 else 0
+            std_hours = safe_float(raw_row[11]) if len(raw_row) > 11 else 0
+            billed_hours = safe_float(raw_row[13]) if len(raw_row) > 13 else 0
+            billed_actual_pct = safe_float(raw_row[14]) if len(raw_row) > 14 else 0
+            labor_revenue = safe_float(raw_row[15]) if len(raw_row) > 15 else 0
+            labor_gp = safe_float(raw_row[16]) if len(raw_row) > 16 else 0
+            elr = safe_float(raw_row[17]) if len(raw_row) > 17 else 0
+            slr = safe_float(raw_row[18]) if len(raw_row) > 18 else 0
+            parts_revenue = safe_float(raw_row[19]) if len(raw_row) > 19 else 0
+            parts_gp = safe_float(raw_row[20]) if len(raw_row) > 20 else 0
+            parts_margin = safe_float(raw_row[21]) if len(raw_row) > 21 else 0
+            os_revenue = safe_float(raw_row[22]) if len(raw_row) > 22 else 0
+            cost_of_promotions = safe_float(raw_row[23]) if len(raw_row) > 23 else 0
+            os_gp = safe_float(raw_row[24]) if len(raw_row) > 24 else 0
+            os_margin = safe_float(raw_row[25]) if len(raw_row) > 25 else 0
+            total_revenue = safe_float(raw_row[26]) if len(raw_row) > 26 else 0
+            total_gp = safe_float(raw_row[27]) if len(raw_row) > 27 else 0
+            profit_per_hour = safe_float(raw_row[28]) if len(raw_row) > 28 else 0
 
-                total_revenue = float(raw_row[26] or 0) if len(raw_row) > 26 else 0
-                total_gp = float(raw_row[27] or 0) if len(raw_row) > 27 else 0
+            billed_date = parse_billed_date(raw_row[29] if len(raw_row) > 29 else '')
+            date_reopened = parse_billed_date(raw_row[30] if len(raw_row) > 30 else '')
+            project_manager = raw_row[31].strip() if len(raw_row) > 31 else ''
+            team_leader = raw_row[32].strip() if len(raw_row) > 32 else ''
+            lead_tech = raw_row[33].strip() if len(raw_row) > 33 else ''
+            customer_gl_code = raw_row[34].strip() if len(raw_row) > 34 else ''
+            is_netjets = (raw_row[35].strip().upper() == 'Y') if len(raw_row) > 35 else False
+            is_work_away = (raw_row[36].strip().upper() == 'Y') if len(raw_row) > 36 else False
+            worked_at_airport = raw_row[37].strip() if len(raw_row) > 37 else ''
+            airport_description = raw_row[38].strip() if len(raw_row) > 38 else ''
+            product_type = raw_row[39].strip() if len(raw_row) > 39 else ''
+            product_type_desc = raw_row[40].strip() if len(raw_row) > 40 else ''
+            is_aog = (raw_row[41].strip().upper() == 'Y') if len(raw_row) > 41 else False
 
-                if wo_number and billed_date:
-                    record = {
-                        "work_order_number": wo_number,
-                        "status": "billed",
-                        "billed_date": billed_date,
-                    }
-                    # Include customer_id if present
-                    if customer_id:
-                        record["customer_id"] = customer_id
-                    # Include tail_number if present and not empty
-                    if tail_number:
-                        record["tail_number"] = tail_number
-                    billed.append(record)
-            except (ValueError, IndexError) as e:
+            if not billed_date:
                 continue
 
+            # Build work_orders record (basic) — all keys must be present for batch upsert
+            wo_record = {
+                "work_order_number": wo_number,
+                "status": "billed",
+                "billed_date": billed_date,
+                "total_amount": total_revenue,
+                "labor_amount": labor_revenue,
+                "parts_amount": parts_revenue,
+                "os_amount": os_revenue,
+                "customer_id": customer_id or None,
+                "tail_number": tail_number or None,
+            }
+            billed.append(wo_record)
+
+            # Build wo_financial_reports record (full detail)
+            period = report_period or (billed_date[:7] if billed_date else None)
+            if period:
+                fin_record = {
+                    "report_period": period,
+                    "wo_number": wo_number,
+                    "job_number": job_number or None,
+                    "customer_id": customer_id or None,
+                    "shop": shop or None,
+                    "tail_number": tail_number or None,
+                    "ac_make": ac_make or None,
+                    "ac_model": total_for_name,  # The WO# from "Total for XXX"
+                    "actual_hours": actual_hours,
+                    "std_hours": std_hours,
+                    "billed_hours": billed_hours,
+                    "billed_actual_pct": billed_actual_pct,
+                    "labor_revenue": labor_revenue,
+                    "labor_gp": labor_gp,
+                    "elr": elr,
+                    "slr": slr,
+                    "parts_revenue": parts_revenue,
+                    "parts_gp": parts_gp,
+                    "parts_margin": parts_margin,
+                    "os_revenue": os_revenue,
+                    "cost_of_promotions": cost_of_promotions,
+                    "os_gp": os_gp,
+                    "os_margin": os_margin,
+                    "total_revenue": total_revenue,
+                    "total_gp": total_gp,
+                    "profit_per_hour": profit_per_hour,
+                    "date_billed": billed_date,
+                    "date_reopened": date_reopened,
+                    "project_manager": project_manager or None,
+                    "team_leader": team_leader or None,
+                    "lead_tech": lead_tech or None,
+                    "customer_gl_code": customer_gl_code or None,
+                    "is_netjets": is_netjets,
+                    "is_work_away": is_work_away,
+                    "worked_at_airport": worked_at_airport or None,
+                    "airport_description": airport_description or None,
+                    "product_type": product_type or None,
+                    "product_type_desc": product_type_desc or None,
+                    "is_aog": is_aog,
+                }
+                fin_reports.append(fin_record)
+
+    # Deduplicate by WO number (keep last occurrence — most complete)
     unique_wos = list({b['work_order_number']: b for b in billed}.values())
+    unique_fins = list({f['wo_number']: f for f in fin_reports}.values())
     print(f"\n  Billed WOs found: {len(unique_wos)}")
+    print(f"  Financial detail records: {len(unique_fins)}")
+
+    if report_period:
+        # Show summary by shop
+        shop_totals = {}
+        for f in unique_fins:
+            s = f.get('shop', '??')
+            if s not in shop_totals:
+                shop_totals[s] = {'count': 0, 'revenue': 0, 'labor': 0, 'parts': 0, 'os': 0, 'gp': 0}
+            shop_totals[s]['count'] += 1
+            shop_totals[s]['revenue'] += f['total_revenue']
+            shop_totals[s]['labor'] += f['labor_revenue']
+            shop_totals[s]['parts'] += f['parts_revenue']
+            shop_totals[s]['os'] += f['os_revenue']
+            shop_totals[s]['gp'] += f['total_gp']
+        print(f"  Period: {report_period}")
+        for s, t in sorted(shop_totals.items()):
+            print(f"    {s}: {t['count']} WOs | Rev: ${t['revenue']:,.0f} (Labor: ${t['labor']:,.0f} + Parts: ${t['parts']:,.0f} + O/S: ${t['os']:,.0f}) | GP: ${t['gp']:,.0f}")
 
     if dry_run:
         for wo in unique_wos[:10]:
             cid = wo.get('customer_id', '-')
             tail = wo.get('tail_number', '-')
-            print(f"    {wo['work_order_number']} billed {wo['billed_date']}  cust={cid}  tail={tail}")
+            amt = wo.get('total_amount', 0)
+            print(f"    {wo['work_order_number']} billed {wo['billed_date']}  ${amt:,.0f}  cust={cid}  tail={tail}")
         if len(unique_wos) > 10:
             print(f"    ... and {len(unique_wos)-10} more")
         return len(unique_wos)
@@ -477,28 +610,26 @@ def process_billed_wos(filepath, report_date, dry_run=False):
     if not unique_wos:
         return 0
 
-    # Upsert into work_orders
-    headers_up = dict(HEADERS)
-    headers_up["Prefer"] = "return=minimal,resolution=merge-duplicates"
-    inserted = 0
-    for wo in unique_wos:
-        url = f"{SUPABASE_URL}/rest/v1/work_orders?on_conflict=work_order_number"
-        r = requests.post(url, headers=headers_up, json=wo)
-        if r.status_code in (200, 201):
-            inserted += 1
+    # 1. Upsert into work_orders (basic financial data)
+    wo_count = supabase_upsert("work_orders", unique_wos, on_conflict="work_order_number")
+    print(f"  ✅ Updated {wo_count}/{len(unique_wos)} billed WOs in work_orders")
 
-    print(f"  ✅ Updated {inserted}/{len(unique_wos)} billed WOs in work_orders")
+    # 2. Upsert into wo_financial_reports (full detail)
+    if unique_fins:
+        fin_count = supabase_upsert("wo_financial_reports", unique_fins, on_conflict="report_period,wo_number")
+        print(f"  ✅ Saved {fin_count}/{len(unique_fins)} records to wo_financial_reports")
 
-    # Backfill customer_name from customers table + anchor_work_orders
-    # for any WOs that have customer_id but no customer_name
+    # 3. Auto-generate reconciliation snapshot for AS400 source
+    if report_period and unique_fins:
+        generate_reconciliation_snapshot(report_period, unique_fins)
+
+    # 4. Backfill customer_name from customers table + anchor_work_orders
     try:
-        # Get billed WOs missing customer_name
         missing_url = f"{SUPABASE_URL}/rest/v1/work_orders?select=work_order_number,customer_id&status=eq.billed&customer_name=is.null&customer_id=not.is.null"
         resp = requests.get(missing_url, headers=HEADERS)
         if resp.status_code == 200:
             missing = resp.json()
             if missing:
-                # Get customer names from customers table
                 cust_url = f"{SUPABASE_URL}/rest/v1/customers?select=customer_number,customer_name&customer_name=not.is.null"
                 cust_resp = requests.get(cust_url, headers=HEADERS)
                 cust_map = {}
@@ -507,7 +638,6 @@ def process_billed_wos(filepath, report_date, dry_run=False):
                         if c.get('customer_number') and c.get('customer_name'):
                             cust_map[c['customer_number']] = c['customer_name']
 
-                # Get customer names from anchor_work_orders
                 anchor_url = f"{SUPABASE_URL}/rest/v1/anchor_work_orders?select=wo_number,customer,customer_id"
                 anchor_resp = requests.get(anchor_url, headers=HEADERS)
                 anchor_map = {}
@@ -516,7 +646,6 @@ def process_billed_wos(filepath, report_date, dry_run=False):
                         if a.get('customer_id') and a.get('customer'):
                             anchor_map[a['customer_id']] = a['customer']
 
-                # Patch missing customer names
                 patched = 0
                 for wo in missing:
                     cid = wo['customer_id']
@@ -533,7 +662,176 @@ def process_billed_wos(filepath, report_date, dry_run=False):
     except Exception as e:
         print(f"  ⚠️ Customer name backfill warning: {e}")
 
-    return inserted
+    return wo_count
+
+
+def generate_reconciliation_snapshot(period, fin_records=None):
+    """
+    Generate revenue reconciliation snapshot comparing AS400, Dashboard, and GL sources.
+    Called after processing WO Financial Report.
+    """
+    print(f"\n  📊 Generating reconciliation snapshot for {period}...")
+
+    snapshot_rows = []
+    today_str = date.today().isoformat()
+
+    # --- SOURCE 1: AS400 (from fin_records or wo_financial_reports table) ---
+    if fin_records:
+        # Build from provided records
+        shop_data = {}
+        for f in fin_records:
+            s = f.get('shop', '??')
+            if s not in shop_data:
+                shop_data[s] = {'rev': 0, 'labor': 0, 'parts': 0, 'os': 0, 'gp': 0,
+                                'count': 0, 'act_hrs': 0, 'bld_hrs': 0}
+            shop_data[s]['rev'] += f.get('total_revenue', 0)
+            shop_data[s]['labor'] += f.get('labor_revenue', 0)
+            shop_data[s]['parts'] += f.get('parts_revenue', 0)
+            shop_data[s]['os'] += f.get('os_revenue', 0)
+            shop_data[s]['gp'] += f.get('total_gp', 0)
+            shop_data[s]['count'] += 1
+            shop_data[s]['act_hrs'] += f.get('actual_hours', 0)
+            shop_data[s]['bld_hrs'] += f.get('billed_hours', 0)
+
+        # Per-shop rows
+        for s, d in shop_data.items():
+            avg_elr = d['labor'] / d['act_hrs'] if d['act_hrs'] > 0 else 0
+            plr = d['parts'] / d['labor'] if d['labor'] > 0 else 0
+            bar = d['bld_hrs'] / d['act_hrs'] * 100 if d['act_hrs'] > 0 else 0
+            gp_pct = d['gp'] / d['rev'] * 100 if d['rev'] > 0 else 0
+            snapshot_rows.append({
+                "period": period, "shop": s, "source": "as400",
+                "total_revenue": round(d['rev'], 2),
+                "labor_revenue": round(d['labor'], 2),
+                "parts_revenue": round(d['parts'], 2),
+                "os_revenue": round(d['os'], 2),
+                "total_gp": round(d['gp'], 2),
+                "gp_pct": round(gp_pct, 2),
+                "wo_count": d['count'],
+                "actual_hours": round(d['act_hrs'], 2),
+                "billed_hours": round(d['bld_hrs'], 2),
+                "avg_elr": round(avg_elr, 2),
+                "parts_labor_ratio": round(plr, 4),
+                "billed_actual_ratio": round(bar, 2),
+                "snapshot_date": today_str,
+                "notes": None,
+            })
+
+        # ALL rollup
+        totals = {k: sum(d[k] for d in shop_data.values()) for k in
+                  ['rev', 'labor', 'parts', 'os', 'gp', 'count', 'act_hrs', 'bld_hrs']}
+        avg_elr_all = totals['labor'] / totals['act_hrs'] if totals['act_hrs'] > 0 else 0
+        plr_all = totals['parts'] / totals['labor'] if totals['labor'] > 0 else 0
+        bar_all = totals['bld_hrs'] / totals['act_hrs'] * 100 if totals['act_hrs'] > 0 else 0
+        gp_pct_all = totals['gp'] / totals['rev'] * 100 if totals['rev'] > 0 else 0
+        snapshot_rows.append({
+            "period": period, "shop": "ALL", "source": "as400",
+            "total_revenue": round(totals['rev'], 2),
+            "labor_revenue": round(totals['labor'], 2),
+            "parts_revenue": round(totals['parts'], 2),
+            "os_revenue": round(totals['os'], 2),
+            "total_gp": round(totals['gp'], 2),
+            "gp_pct": round(gp_pct_all, 2),
+            "wo_count": totals['count'],
+            "actual_hours": round(totals['act_hrs'], 2),
+            "billed_hours": round(totals['bld_hrs'], 2),
+            "avg_elr": round(avg_elr_all, 2),
+            "parts_labor_ratio": round(plr_all, 4),
+            "billed_actual_ratio": round(bar_all, 2),
+            "snapshot_date": today_str,
+            "notes": None,
+        })
+
+    # --- SOURCE 2: Dashboard (from work_orders table) ---
+    try:
+        # Parse period into date range
+        year, month = period.split('-')
+        start_date = f"{period}-01"
+        # End date: first day of next month
+        m = int(month)
+        y = int(year)
+        if m == 12:
+            end_date = f"{y+1}-01-01"
+        else:
+            end_date = f"{y}-{m+1:02d}-01"
+
+        wo_url = (f"{SUPABASE_URL}/rest/v1/work_orders"
+                  f"?select=work_order_number,total_amount,labor_amount,parts_amount,os_amount"
+                  f"&status=eq.billed&billed_date=gte.{start_date}&billed_date=lt.{end_date}")
+        wo_resp = requests.get(wo_url, headers=HEADERS)
+        if wo_resp.status_code == 200:
+            wos = wo_resp.json()
+            db_rev = sum(safe_float(w.get('total_amount')) for w in wos)
+            db_labor = sum(safe_float(w.get('labor_amount')) for w in wos)
+            db_parts = sum(safe_float(w.get('parts_amount')) for w in wos)
+            db_os = sum(safe_float(w.get('os_amount')) for w in wos)
+            db_count = len(wos)
+            db_plr = db_parts / db_labor if db_labor > 0 else 0
+            snapshot_rows.append({
+                "period": period, "shop": "ALL", "source": "dashboard",
+                "total_revenue": round(db_rev, 2),
+                "labor_revenue": round(db_labor, 2),
+                "parts_revenue": round(db_parts, 2),
+                "os_revenue": round(db_os, 2),
+                "total_gp": 0,
+                "gp_pct": 0,
+                "wo_count": db_count,
+                "actual_hours": 0,
+                "billed_hours": 0,
+                "avg_elr": 0,
+                "parts_labor_ratio": round(db_plr, 4),
+                "billed_actual_ratio": 0,
+                "snapshot_date": today_str,
+                "notes": None,
+            })
+    except Exception as e:
+        print(f"  ⚠️ Dashboard reconciliation warning: {e}")
+
+    # --- SOURCE 3: GL (from budget_vs_actual table) ---
+    try:
+        year, month = period.split('-')
+        gl_url = (f"{SUPABASE_URL}/rest/v1/budget_vs_actual"
+                  f"?select=category,budget_revenue,actual_revenue"
+                  f"&period_year=eq.{year}&period_month=eq.{int(month)}")
+        gl_resp = requests.get(gl_url, headers=HEADERS)
+        if gl_resp.status_code == 200:
+            gl_data = gl_resp.json()
+            gl_by_cat = {}
+            for g in gl_data:
+                cat = g.get('category', '')
+                gl_by_cat[cat] = {
+                    'budget': safe_float(g.get('budget_revenue')),
+                    'actual': safe_float(g.get('actual_revenue'))
+                }
+            gl_total = gl_by_cat.get('total', {})
+            gl_labor = gl_by_cat.get('labor', {})
+            gl_parts = gl_by_cat.get('parts', {})
+            gl_other = gl_by_cat.get('other', {})
+            snapshot_rows.append({
+                "period": period, "shop": "ALL", "source": "gl",
+                "total_revenue": round(gl_total.get('actual', 0), 2),
+                "labor_revenue": round(gl_labor.get('actual', 0), 2),
+                "parts_revenue": round(gl_parts.get('actual', 0), 2),
+                "os_revenue": round(gl_other.get('actual', 0), 2),
+                "total_gp": 0,
+                "gp_pct": 0,
+                "wo_count": 0,
+                "actual_hours": 0,
+                "billed_hours": 0,
+                "avg_elr": 0,
+                "parts_labor_ratio": 0,
+                "billed_actual_ratio": 0,
+                "snapshot_date": today_str,
+                "notes": f"Budget: ${gl_total.get('budget', 0):,.0f}",
+            })
+    except Exception as e:
+        print(f"  ⚠️ GL reconciliation warning: {e}")
+
+    # Upsert all reconciliation rows
+    if snapshot_rows:
+        count = supabase_upsert("revenue_reconciliation", snapshot_rows,
+                                on_conflict="period,shop,source,snapshot_date")
+        print(f"  ✅ Reconciliation: {count} rows saved ({len(snapshot_rows)} total for {period})")
 
 
 # ============================================================
