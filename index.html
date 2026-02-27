@@ -4606,7 +4606,7 @@
                 const monthName = now.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
 
                 // Fetch all data in parallel
-                const [timeRes, anchorRes, sdvSpecialRes, wipEntriesRes, reconRes] = await Promise.all([
+                const [timeRes, anchorRes, sdvSpecialRes, wipEntriesRes, reconRes, billedRes] = await Promise.all([
                     // Time entries for current month (non-shop WO)
                     fetch(`${SUPABASE_URL}/rest/v1/time_entries?select=wo_number,shop,hours,emp_code,emp_name,entry_date,wo_description&entry_date=gte.${monthStart}&entry_date=lte.${monthEnd}&wo_number=neq.DUM0A&order=hours.desc`, {
                         headers: HEADERS
@@ -4632,6 +4632,10 @@
                     // Reconciliation data
                     fetch(`${SUPABASE_URL}/rest/v1/wip_reconciliation?select=*&order=wip_month.desc&limit=20`, {
                         headers: HEADERS
+                    }),
+                    // Billed WOs — these are OUT of WIP (already billed = no longer WIP factor)
+                    fetch(`${SUPABASE_URL}/rest/v1/work_orders?select=work_order_number,status,billed_date&status=eq.billed`, {
+                        headers: HEADERS
                     })
                 ]);
 
@@ -4642,11 +4646,25 @@
                 const sdvSpecialData = await sdvSpecialRes.json();
                 const wipHistorical = await wipEntriesRes.json();
                 const reconData = await reconRes.json();
+                let billedWOs = [];
+                try { billedWOs = await billedRes.json(); } catch(e) {}
+                if (!Array.isArray(billedWOs)) billedWOs = [];
 
-                // ===== AGGREGATE BY WO =====
+                // Build set of billed WO numbers for fast lookup
+                const billedSet = new Set(billedWOs.map(b => b.work_order_number));
+
+                // ===== AGGREGATE BY WO (exclude billed WOs) =====
                 const woMap = {};
+                let billedOutHours = 0;
+                let billedOutCount = 0;
                 (Array.isArray(timeEntries) ? timeEntries : []).forEach(t => {
                     const key = t.wo_number;
+                    // Skip billed WOs — they are NOT a WIP factor anymore
+                    if (billedSet.has(key)) {
+                        billedOutHours += parseFloat(t.hours) || 0;
+                        billedOutCount++;
+                        return;
+                    }
                     if (!woMap[key]) {
                         woMap[key] = {
                             wo_number: key,
@@ -4714,11 +4732,15 @@
                 document.getElementById('wipDaysLeft').style.color = bizDaysLeft <= 3 ? '#ef4444' : bizDaysLeft <= 5 ? '#f59e0b' : '#10b981';
                 document.getElementById('wipDeadlineNote').textContent = bizDaysLeft <= 1 ? '⚠️ Month ending!' : `in ${monthName.split(' ')[0]}`;
 
-                // Special WIP deadline
+                // Special WIP deadline — also check if already sent
                 const specialDeadline = getSpecialWIPDeadline();
                 const daysToDeadline = Math.ceil((specialDeadline - now) / (1000 * 60 * 60 * 24));
                 const deadlineEl = document.getElementById('wipSpecialDeadline');
-                if (daysToDeadline <= 0) {
+                const sdvAlreadySent = Array.isArray(sdvSpecialData) && sdvSpecialData.some(s => s.sent_to_matt);
+                if (daysToDeadline <= 0 && sdvAlreadySent) {
+                    deadlineEl.textContent = 'SENT ✅';
+                    deadlineEl.style.color = '#10b981';
+                } else if (daysToDeadline <= 0) {
                     deadlineEl.textContent = 'OVERDUE';
                     deadlineEl.style.color = '#ef4444';
                 } else if (daysToDeadline <= 2) {
@@ -4733,9 +4755,17 @@
                 }
                 document.getElementById('wipSpecialDeadlineDate').textContent = specialDeadline.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 
-                // Badge
+                // Badge + calc note
                 document.getElementById('wipBadge').textContent = monthName;
                 document.getElementById('wipBadge').className = 'badge badge-green';
+                const billedUniqueCount = new Set(
+                    (Array.isArray(timeEntries) ? timeEntries : [])
+                        .filter(t => billedSet.has(t.wo_number))
+                        .map(t => t.wo_number)
+                ).size;
+                document.getElementById('wipCalcNote').textContent = billedUniqueCount > 0
+                    ? `Open WOs only (${billedUniqueCount} billed WOs excluded)`
+                    : 'From time_entries + rates';
 
                 // ===== SHOP BREAKDOWN TABLE =====
                 const shopRows = Object.values(shopTotals)
@@ -4853,9 +4883,21 @@
                 // ===== SMART RECOMMENDATIONS =====
                 const recommendations = [];
 
-                // 1. Special WIP deadline
-                if (daysToDeadline <= 0) {
+                // 0. Billed WOs excluded notice (informational)
+                const billedUniqueWOs = new Set();
+                (Array.isArray(timeEntries) ? timeEntries : []).forEach(t => {
+                    if (billedSet.has(t.wo_number)) billedUniqueWOs.add(t.wo_number);
+                });
+                if (billedUniqueWOs.size > 0) {
+                    recommendations.push({ severity: 'green', icon: '✅', text: `${billedUniqueWOs.size} billed WOs excluded from WIP (${Math.round(billedOutHours)} hrs already billed out). Only open WOs count toward WIP.` });
+                }
+
+                // 1. Special WIP deadline — check if email was already sent this month
+                const sdvSentThisMonth = Array.isArray(sdvSpecialData) && sdvSpecialData.some(s => s.sent_to_matt);
+                if (daysToDeadline <= 0 && !sdvSentThisMonth) {
                     recommendations.push({ severity: 'red', icon: '🚨', text: 'Special WIP email to Matt is OVERDUE! Send now.', action: 'email' });
+                } else if (daysToDeadline <= 0 && sdvSentThisMonth) {
+                    recommendations.push({ severity: 'green', icon: '📧', text: 'Special WIP email to Matt — already sent this month. ✅' });
                 } else if (daysToDeadline <= 3) {
                     recommendations.push({ severity: 'amber', icon: '⏰', text: `Special WIP due in ${daysToDeadline} day${daysToDeadline > 1 ? 's' : ''} (${specialDeadline.toLocaleDateString('en-US', {month:'short',day:'numeric'})}). Prepare SDV list for Matt.`, action: 'email' });
                 }
@@ -4867,7 +4909,7 @@
                     }
                 });
 
-                // 3. High-hour WOs that might need attention
+                // 3. High-hour OPEN WOs that might need attention (billed already excluded above)
                 allWOs.filter(wo => wo.hours >= 100 && wo.shop !== 'SDV').forEach(wo => {
                     recommendations.push({ severity: 'amber', icon: '📊', text: `${wo.wo_number} (${wo.shop}) has ${wo.hours.toFixed(0)} hrs — WIP value ${fmtCurrency(wo.hours * (WIP_RATES[wo.shop]?.labor || 155))}. Monitor for month-end carry-over.` });
                 });
