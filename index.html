@@ -1903,6 +1903,72 @@
                 </div>
             </div>
 
+            <!-- Card 1.5: Projected Financials Including WIP Revenue -->
+            <div class="card" style="border-left: 3px solid #06b6d4; margin-bottom: 16px;">
+                <div class="card-header">
+                    <span class="card-title">📊 Projected Financials — Billed + WIP Revenue</span>
+                    <span class="badge badge-blue" id="fiProjBadge">Loading...</span>
+                </div>
+
+                <!-- Revenue Bridge: Billed → WIP → Projected → vs Budget -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 16px;">
+                    <div style="background: rgba(16,185,129,0.12); border: 1px solid rgba(16,185,129,0.3); border-radius: 10px; padding: 14px; text-align: center;">
+                        <div style="color: #6ee7b7; font-size: 0.75em; margin-bottom: 4px;">✅ Billed Revenue</div>
+                        <div style="color: #10b981; font-size: 1.6em; font-weight: bold;" id="fiProjBilled">--</div>
+                        <div style="color: #64748b; font-size: 0.75em;" id="fiProjBilledNote">WOs invoiced this month</div>
+                    </div>
+                    <div style="background: rgba(59,130,246,0.12); border: 1px solid rgba(59,130,246,0.3); border-radius: 10px; padding: 14px; text-align: center;">
+                        <div style="color: #93c5fd; font-size: 0.75em; margin-bottom: 4px;">🔄 WIP Pipeline Value</div>
+                        <div style="color: #3b82f6; font-size: 1.6em; font-weight: bold;" id="fiProjWIP">--</div>
+                        <div style="color: #64748b; font-size: 0.75em;" id="fiProjWIPNote">Open WO labor at WIP rates</div>
+                    </div>
+                    <div style="background: rgba(168,85,247,0.12); border: 1px solid rgba(168,85,247,0.3); border-radius: 10px; padding: 14px; text-align: center;">
+                        <div style="color: #c4b5fd; font-size: 0.75em; margin-bottom: 4px;">🎯 Projected Total</div>
+                        <div style="color: #a855f7; font-size: 1.6em; font-weight: bold;" id="fiProjTotal">--</div>
+                        <div style="color: #64748b; font-size: 0.75em;" id="fiProjTotalNote">Billed + WIP combined</div>
+                    </div>
+                    <div style="background: rgba(245,158,11,0.12); border: 1px solid rgba(245,158,11,0.3); border-radius: 10px; padding: 14px; text-align: center;">
+                        <div style="color: #fcd34d; font-size: 0.75em; margin-bottom: 4px;">📐 vs Budget</div>
+                        <div style="font-size: 1.6em; font-weight: bold;" id="fiProjVsBudget">--</div>
+                        <div style="color: #64748b; font-size: 0.75em;" id="fiProjVsBudgetNote">remaining gap</div>
+                    </div>
+                </div>
+
+                <!-- Visual Progress Bar -->
+                <div style="margin-bottom: 16px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                        <span style="color: #94a3b8; font-size: 0.8em;">Revenue Progress to Budget</span>
+                        <span style="color: #94a3b8; font-size: 0.8em;" id="fiProjBarPct">--%</span>
+                    </div>
+                    <div style="height: 24px; background: rgba(30,41,59,0.8); border-radius: 12px; overflow: hidden; position: relative;">
+                        <div id="fiProjBarBilled" style="position:absolute; height:100%; background: linear-gradient(90deg, #059669, #10b981); border-radius: 12px 0 0 12px; transition: width 0.6s ease;"></div>
+                        <div id="fiProjBarWIP" style="position:absolute; height:100%; background: linear-gradient(90deg, #2563eb, #3b82f6); border-radius: 0; transition: all 0.6s ease; opacity: 0.75;"></div>
+                        <div style="position:absolute; height:100%; width:100%; display:flex; align-items:center; justify-content:center;">
+                            <span style="color: white; font-size: 0.75em; font-weight: bold; text-shadow: 0 1px 3px rgba(0,0,0,0.6);" id="fiProjBarLabel">--</span>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 16px; margin-top: 6px; font-size: 0.75em; color: #94a3b8;">
+                        <span>🟢 Billed</span><span>🔵 WIP Pipeline</span><span>⬜ Gap to Budget</span>
+                    </div>
+                </div>
+
+                <!-- WIP Breakdown by Shop -->
+                <div style="margin-bottom: 16px;">
+                    <div style="color: #94a3b8; font-size: 0.85em; margin-bottom: 8px; font-weight: 600;">WIP Breakdown by Shop</div>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px;" id="fiProjShopBreakdown">
+                        <div style="color: #64748b; text-align: center; padding: 8px;">Loading...</div>
+                    </div>
+                </div>
+
+                <!-- WIP Conversion Scenarios -->
+                <div style="background: rgba(15,23,42,0.5); border-radius: 10px; padding: 14px;">
+                    <div style="color: #94a3b8; font-size: 0.85em; margin-bottom: 10px; font-weight: 600;">WIP Conversion Scenarios — What If We Bill...</div>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px;" id="fiProjScenarios">
+                        <div style="color: #64748b; text-align: center;">Loading...</div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Card 2: What-If Scenario Engine -->
             <div class="card" style="border-left: 3px solid #a855f7; margin-bottom: 16px;">
                 <div class="card-header">
@@ -3502,6 +3568,22 @@
                     }
                 });
 
+                // ===== WIP CALCULATION BY SHOP =====
+                const wipByShop = {};
+                let totalWIPValue = 0, totalWIPHours = 0, totalWIPWOs = 0;
+                Object.entries(woHoursMap).forEach(([woNum, data]) => {
+                    const shop = data.shop || '??';
+                    const rate = (WIP_RATES[shop] || WIP_RATES.SDN).labor;
+                    const wipVal = data.hours * rate;
+                    if (!wipByShop[shop]) wipByShop[shop] = { hours: 0, value: 0, count: 0, rate };
+                    wipByShop[shop].hours += data.hours;
+                    wipByShop[shop].value += wipVal;
+                    wipByShop[shop].count++;
+                    totalWIPValue += wipVal;
+                    totalWIPHours += data.hours;
+                    totalWIPWOs++;
+                });
+
                 const topOpenWOs = anchorData.map(a => {
                     const hd = woHoursMap[a.wo_number] || { hours: 0, shop: a.shop };
                     const expectedHrs = parseFloat(a.expected_hours) || 0;
@@ -3763,7 +3845,87 @@
                 document.getElementById('fiS2Slider').value = Math.round(AB_TARGET);
                 updateScenario2(Math.round(AB_TARGET));
 
-                console.log('loadFinancialIntelligence: Complete');
+                // ===== RENDER PROJECTED FINANCIALS (BILLED + WIP) =====
+                const projTotal = estimatedMTDRevenue + totalWIPValue;
+                const projGap = monthlyBudget - projTotal;
+                const projPct = monthlyBudget > 0 ? (projTotal / monthlyBudget * 100) : 0;
+                const billedPct = monthlyBudget > 0 ? (estimatedMTDRevenue / monthlyBudget * 100) : 0;
+                const wipPct = monthlyBudget > 0 ? (totalWIPValue / monthlyBudget * 100) : 0;
+
+                // Header metrics
+                document.getElementById('fiProjBilled').textContent = fmtCurrency(estimatedMTDRevenue);
+                document.getElementById('fiProjBilledNote').textContent = `${billedWOCount} WOs invoiced this month`;
+                document.getElementById('fiProjWIP').textContent = fmtCurrency(totalWIPValue);
+                document.getElementById('fiProjWIPNote').textContent = `${totalWIPWOs} open WOs | ${totalWIPHours.toFixed(0)} hrs`;
+                document.getElementById('fiProjTotal').textContent = fmtCurrency(projTotal);
+                document.getElementById('fiProjTotal').style.color = projTotal >= monthlyBudget ? '#10b981' : '#a855f7';
+                document.getElementById('fiProjTotalNote').textContent =
+                    projTotal >= monthlyBudget ? 'Covers budget! ✅' : `${projPct.toFixed(0)}% of ${fmtCurrency(monthlyBudget)} budget`;
+
+                // vs Budget
+                const vsBudgetEl = document.getElementById('fiProjVsBudget');
+                if (projGap <= 0) {
+                    vsBudgetEl.textContent = 'Covered! ✅';
+                    vsBudgetEl.style.color = '#10b981';
+                    document.getElementById('fiProjVsBudgetNote').textContent = `${fmtCurrency(Math.abs(projGap))} surplus`;
+                } else {
+                    vsBudgetEl.textContent = fmtCurrency(projGap);
+                    vsBudgetEl.style.color = projGap > monthlyBudget * 0.3 ? '#ef4444' : '#f59e0b';
+                    document.getElementById('fiProjVsBudgetNote').textContent = `still needed beyond WIP`;
+                }
+
+                // Badge
+                const projBadge = document.getElementById('fiProjBadge');
+                if (projPct >= 100) { projBadge.textContent = 'On Track ✅'; projBadge.className = 'badge badge-green'; }
+                else if (projPct >= 70) { projBadge.textContent = `${projPct.toFixed(0)}% Coverage`; projBadge.className = 'badge badge-amber'; }
+                else { projBadge.textContent = `${projPct.toFixed(0)}% Coverage`; projBadge.className = 'badge badge-red'; }
+
+                // Progress bar
+                const cappedBilled = Math.min(billedPct, 100);
+                const cappedWip = Math.min(wipPct, 100 - cappedBilled);
+                document.getElementById('fiProjBarBilled').style.width = `${cappedBilled}%`;
+                document.getElementById('fiProjBarWIP').style.left = `${cappedBilled}%`;
+                document.getElementById('fiProjBarWIP').style.width = `${cappedWip}%`;
+                document.getElementById('fiProjBarPct').textContent = `${Math.min(projPct, 100).toFixed(0)}% of budget`;
+                document.getElementById('fiProjBarLabel').textContent =
+                    `${fmtCurrency(estimatedMTDRevenue)} billed + ${fmtCurrency(totalWIPValue)} WIP = ${fmtCurrency(projTotal)}`;
+
+                // WIP Breakdown by Shop
+                const shopOrder = ['SDN', 'SDR', 'SHC', 'SDV'];
+                const shopColors = { SDN: '#10b981', SDR: '#f59e0b', SHC: '#3b82f6', SDV: '#a855f7' };
+                document.getElementById('fiProjShopBreakdown').innerHTML = shopOrder.map(s => {
+                    const d = wipByShop[s] || { hours: 0, value: 0, count: 0, rate: WIP_RATES[s]?.labor || 155 };
+                    const pctOfWip = totalWIPValue > 0 ? (d.value / totalWIPValue * 100).toFixed(0) : 0;
+                    return `<div style="background: rgba(${s==='SDN'?'16,185,129':s==='SDR'?'245,158,11':s==='SHC'?'59,130,246':'168,85,247'},0.1); border: 1px solid rgba(${s==='SDN'?'16,185,129':s==='SDR'?'245,158,11':s==='SHC'?'59,130,246':'168,85,247'},0.3); border-radius: 8px; padding: 10px; text-align: center;">
+                        <div style="color: ${shopColors[s]}; font-weight: 700; font-size: 0.9em;">${s}</div>
+                        <div style="color: #e2e8f0; font-size: 1.1em; font-weight: bold;">${fmtCurrency(d.value)}</div>
+                        <div style="color: #94a3b8; font-size: 0.75em;">${d.hours.toFixed(1)} hrs × $${d.rate}/hr</div>
+                        <div style="color: #64748b; font-size: 0.7em;">${d.count} WOs | ${pctOfWip}% of WIP</div>
+                    </div>`;
+                }).join('');
+
+                // WIP Conversion Scenarios
+                const convRates = [
+                    { pct: 60, label: 'Conservative (60%)', color: '#f59e0b' },
+                    { pct: 80, label: 'Expected (80%)', color: '#3b82f6' },
+                    { pct: 100, label: 'Full Conversion (100%)', color: '#10b981' },
+                    { pct: 120, label: 'Above WIP (120%)*', color: '#a855f7' }
+                ];
+                document.getElementById('fiProjScenarios').innerHTML = convRates.map(sc => {
+                    const wipConverted = totalWIPValue * (sc.pct / 100);
+                    const scTotal = estimatedMTDRevenue + wipConverted;
+                    const scPct = monthlyBudget > 0 ? (scTotal / monthlyBudget * 100) : 0;
+                    const scGap = monthlyBudget - scTotal;
+                    const hitsBudget = scGap <= 0;
+                    return `<div style="background: rgba(30,41,59,0.6); border: 1px solid rgba(${sc.color === '#f59e0b' ? '245,158,11' : sc.color === '#3b82f6' ? '59,130,246' : sc.color === '#10b981' ? '16,185,129' : '168,85,247'},0.3); border-radius: 8px; padding: 12px; text-align: center;">
+                        <div style="color: ${sc.color}; font-weight: 600; font-size: 0.8em; margin-bottom: 4px;">${sc.label}</div>
+                        <div style="color: #e2e8f0; font-size: 1.3em; font-weight: bold;">${fmtCurrency(scTotal)}</div>
+                        <div style="color: #94a3b8; font-size: 0.75em;">${scPct.toFixed(0)}% of budget</div>
+                        <div style="color: ${hitsBudget ? '#10b981' : '#ef4444'}; font-size: 0.75em; margin-top: 2px;">${hitsBudget ? '✅ Covers budget' : `Gap: ${fmtCurrency(scGap)}`}</div>
+                    </div>`;
+                }).join('') + '<div style="color: #64748b; font-size: 0.7em; padding: 8px;">*120% accounts for billing at actual ELR ($178.70/hr) vs WIP rate ($155/hr)</div>';
+
+                console.log('loadFinancialIntelligence: Complete, WIP:', fmtCurrency(totalWIPValue), 'Projected:', fmtCurrency(projTotal));
             } catch (error) {
                 console.error('Error loading Financial Intelligence:', error);
                 document.getElementById('fiRecommendations').innerHTML =
