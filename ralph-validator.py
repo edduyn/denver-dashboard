@@ -596,8 +596,215 @@ def check_eval_deadlines(result):
             result.ok('Eval Deadlines', 'All evals completed')
 
 
+def check_morning_report_files(result):
+    """Check 17: Today's morning report CSV files are present in the report folder.
+    Checks for SOLD_HOURS, PAID_HRS, BILLED_WO, and ANCHOR files matching today's date.
+    Only checks during business hours (Mon-Fri, 7 AM-6 PM MT)."""
+    now = datetime.now()
+    today = date.today()
+
+    # Only alert on weekdays during business hours
+    if today.weekday() >= 5:  # Saturday or Sunday
+        result.ok('Morning Files', f'Weekend — no files expected')
+        return
+    if now.hour < 7:
+        result.ok('Morning Files', f'Before 7 AM — files not expected yet')
+        return
+
+    # Check both possible directories
+    report_dir = None
+    for d in [
+        Path(os.path.expanduser('~/My Drive/2026_Goals_Project/Morning_Report')),
+        Path(os.path.expanduser('~/Library/CloudStorage/GoogleDrive-edduyn@gmail.com/My Drive/2026_Goals_Project/Morning_Report')),
+        Path(os.path.expanduser('~/Morning_Report')),
+    ]:
+        if d.is_dir():
+            report_dir = d
+            break
+
+    if not report_dir:
+        result.error('Morning Files', 'No Morning_Report directory found')
+        return
+
+    # Today's date in file format: MM-DD-YY
+    date_str = today.strftime('%m-%d-%y')  # e.g., 02-27-26
+
+    required_files = ['SOLD_HOURS', 'PAID_HRS', 'BILLED_WO', 'ANCHOR']
+    found = []
+    missing = []
+
+    for prefix in required_files:
+        # Search for files matching this prefix and date
+        import glob as g
+        pattern1 = str(report_dir / f'{prefix} {date_str}*.csv')
+        pattern2 = str(report_dir / f'{prefix}* {date_str}*.csv')
+        matches = g.glob(pattern1) + g.glob(pattern2)
+        # Also check for PAID_HRRS typo variant
+        if prefix == 'PAID_HRS':
+            matches += g.glob(str(report_dir / f'PAID_HRRS {date_str}*.csv'))
+
+        if matches:
+            found.append(prefix)
+        else:
+            missing.append(prefix)
+
+    if missing:
+        if now.hour < 9:
+            # Before 9 AM, missing files are just a warning (user may not have uploaded yet)
+            result.warn('Morning Files',
+                        f'{len(found)}/4 present for {date_str} — '
+                        f'missing: {", ".join(missing)} (before 9 AM)')
+        else:
+            result.error('Morning Files',
+                         f'{len(found)}/4 present for {date_str} — '
+                         f'MISSING: {", ".join(missing)}')
+    else:
+        result.ok('Morning Files', f'All 4 files present for {date_str}')
+
+
+def check_processing_pipeline(result):
+    """Check 18: Morning report auto-processor ran successfully today.
+    Reads the auto_process.sh log to verify data was actually processed."""
+    log_file = Path(os.path.expanduser('~/logs/morning_report_processor.log'))
+
+    if not log_file.exists():
+        result.error('Processing Pipeline', 'No processor log found — auto_process.sh may not be running')
+        return
+
+    try:
+        content = log_file.read_text(encoding='utf-8', errors='replace')
+    except Exception as e:
+        result.warn('Processing Pipeline', f'Cannot read log: {e}')
+        return
+
+    # Find the last "Processing completed successfully" line with timestamp
+    success_pattern = re.compile(r'\[(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})\] === Processing completed successfully ===')
+    matches = list(success_pattern.finditer(content))
+
+    if not matches:
+        result.warn('Processing Pipeline', 'No successful processing runs found in log')
+        return
+
+    last_success = matches[-1]
+    last_time_str = last_success.group(1)
+
+    try:
+        last_time = datetime.strptime(last_time_str, '%Y-%m-%d %H:%M:%S')
+        now = datetime.now()
+        hours_ago = (now - last_time).total_seconds() / 3600
+        today = date.today()
+
+        if last_time.date() == today:
+            result.ok('Processing Pipeline',
+                       f'Last successful run: {last_time_str} ({hours_ago:.1f}h ago)')
+        elif last_time.date() == today - timedelta(days=1):
+            result.warn('Processing Pipeline',
+                        f'Last success was yesterday: {last_time_str} ({hours_ago:.1f}h ago)')
+        else:
+            # Only error on weekdays
+            if today.weekday() < 5:
+                result.error('Processing Pipeline',
+                             f'Last success was {last_time_str} ({hours_ago:.0f}h ago) — STALE')
+            else:
+                result.warn('Processing Pipeline',
+                            f'Weekend — last success: {last_time_str} ({hours_ago:.0f}h ago)')
+    except ValueError:
+        result.warn('Processing Pipeline', f'Could not parse timestamp: {last_time_str}')
+
+
+def check_billed_wos_freshness(result):
+    """Check 19: Billed WOs in work_orders table have recent entries (current month)."""
+    current_month_start = date.today().replace(day=1).isoformat()
+    status, data = sb_get(
+        f'/rest/v1/work_orders?select=work_order_number,billed_date'
+        f'&status=eq.billed&billed_date=gte.{current_month_start}'
+        f'&order=billed_date.desc&limit=5'
+    )
+    if status != 200:
+        result.warn('Billed WOs Freshness', f'Could not fetch billed WOs (HTTP {status})')
+        return
+
+    if not isinstance(data, list) or len(data) == 0:
+        # Only warn on weekdays after the 3rd of the month
+        if date.today().day > 3 and date.today().weekday() < 5:
+            result.warn('Billed WOs Freshness',
+                        f'No billed WOs found for current month ({current_month_start}+)')
+        else:
+            result.ok('Billed WOs Freshness', f'No billed WOs yet this month (early in month)')
+        return
+
+    latest = data[0].get('billed_date', 'unknown')
+    result.ok('Billed WOs Freshness',
+               f'{len(data)}+ WOs billed this month — latest: {latest}')
+
+
+def check_launchd_processor(result):
+    """Check 21b: LaunchAgent for morning report processor is loaded."""
+    import subprocess
+    try:
+        proc = subprocess.run(
+            ['launchctl', 'list', 'com.denver.morning-report-processor'],
+            capture_output=True, text=True, timeout=5
+        )
+        if proc.returncode == 0:
+            # Parse exit status from output
+            output = proc.stdout
+            if 'LastExitStatus' in output:
+                exit_match = re.search(r'"LastExitStatus"\s*=\s*(\d+)', output)
+                exit_code = int(exit_match.group(1)) if exit_match else -1
+                if exit_code == 0:
+                    result.ok('LaunchAgent', 'com.denver.morning-report-processor loaded (exit 0)')
+                else:
+                    result.warn('LaunchAgent', f'Loaded but last exit code: {exit_code}')
+            else:
+                result.ok('LaunchAgent', 'com.denver.morning-report-processor is loaded')
+        else:
+            result.error('LaunchAgent',
+                         'com.denver.morning-report-processor NOT loaded — '
+                         'run: launchctl load ~/Library/LaunchAgents/com.denver.morning-report-processor.plist')
+    except FileNotFoundError:
+        result.warn('LaunchAgent', 'launchctl not available (not macOS?)')
+    except subprocess.TimeoutExpired:
+        result.warn('LaunchAgent', 'launchctl timed out')
+    except Exception as e:
+        result.warn('LaunchAgent', f'Check failed: {e}')
+
+
+def check_daily_metrics_freshness(result):
+    """Check 20: daily_metrics has recent data (today or last business day)."""
+    status, data = sb_get(
+        '/rest/v1/daily_metrics?select=report_date,total_paid_hours,employee_count'
+        '&order=report_date.desc&limit=1'
+    )
+    if status != 200 or not isinstance(data, list) or len(data) == 0:
+        result.warn('Daily Metrics Freshness', 'No daily_metrics data found')
+        return
+
+    latest = data[0]
+    latest_date = latest.get('report_date', '')
+    paid_hrs = latest.get('total_paid_hours', 0)
+    emp_count = latest.get('employee_count', 0)
+
+    today = date.today()
+    try:
+        latest_dt = date.fromisoformat(latest_date)
+        gap = (today - latest_dt).days
+
+        # Account for weekends
+        max_gap = 3 if today.weekday() == 0 else 2
+
+        if gap > max_gap:
+            result.warn('Daily Metrics Freshness',
+                        f'Latest: {latest_date} ({gap}d ago, {paid_hrs}h/{emp_count} emp) — STALE')
+        else:
+            result.ok('Daily Metrics Freshness',
+                       f'Latest: {latest_date} ({gap}d ago, {paid_hrs}h paid, {emp_count} employees)')
+    except ValueError:
+        result.warn('Daily Metrics Freshness', f'Invalid date: {latest_date}')
+
+
 def process_freight_drop_file(result):
-    """Check 16: Process pending freight entries from New_Freight_Information.MD.
+    """Check 21: Process pending freight entries from New_Freight_Information.MD.
     Reads the drop file, parses pending entries, posts them to freight_tracking
     in Supabase, then marks them as completed in the file."""
     if not FREIGHT_DROP_FILE.exists():
@@ -788,6 +995,7 @@ def push_validation_record(summary):
 def run_validation(auto_fix=False, quick=False):
     """Run the full validation suite."""
     result = ValidationResult()
+    TOTAL_CHECKS = 21
 
     log.info('=' * 60)
     log.info('🤖 RALPH DATA VALIDATOR — Denver 889 Dashboard')
@@ -796,7 +1004,7 @@ def run_validation(auto_fix=False, quick=False):
     log.info('=' * 60)
 
     # Always check connectivity first
-    log.info('\n[1/16] Supabase Connectivity')
+    log.info(f'\n[1/{TOTAL_CHECKS}] Supabase Connectivity')
     connected = check_connectivity(result)
 
     if not connected:
@@ -810,50 +1018,67 @@ def run_validation(auto_fix=False, quick=False):
         return result.summary()
 
     # Full validation suite
-    log.info('\n[2/16] Table Row Counts')
+    log.info(f'\n[2/{TOTAL_CHECKS}] Table Row Counts')
     check_table_row_counts(result)
 
-    log.info('\n[3/16] Anchor Data Quality')
+    log.info(f'\n[3/{TOTAL_CHECKS}] Anchor Data Quality')
     check_anchor_data_quality(result)
 
-    log.info('\n[4/16] Anchor Days Open Accuracy')
+    log.info(f'\n[4/{TOTAL_CHECKS}] Anchor Days Open Accuracy')
     check_anchor_days_open_accuracy(result, auto_fix=auto_fix)
 
-    log.info('\n[5/16] Time Entries Freshness')
+    log.info(f'\n[5/{TOTAL_CHECKS}] Time Entries Freshness')
     check_time_entries_freshness(result)
 
-    log.info('\n[6/16] Time Entries Employee Coverage')
+    log.info(f'\n[6/{TOTAL_CHECKS}] Time Entries Employee Coverage')
     check_time_entries_employee_count(result)
 
-    log.info('\n[7/16] Training Data')
+    log.info(f'\n[7/{TOTAL_CHECKS}] Training Data')
     check_training_data(result)
 
-    log.info('\n[8/16] Employee Status')
+    log.info(f'\n[8/{TOTAL_CHECKS}] Employee Status')
     check_employee_status(result)
 
-    log.info('\n[9/16] Rankings Freshness')
+    log.info(f'\n[9/{TOTAL_CHECKS}] Rankings Freshness')
     check_rankings_freshness(result)
 
-    log.info('\n[10/16] Budget Data')
+    log.info(f'\n[10/{TOTAL_CHECKS}] Budget Data')
     check_budget_data(result)
 
-    log.info('\n[11/16] Cross-Reference: Anchor vs Billed WOs')
+    log.info(f'\n[11/{TOTAL_CHECKS}] Cross-Reference: Anchor vs Billed WOs')
     check_cross_reference_wos(result)
 
-    log.info('\n[12/16] Duplicate Detection')
+    log.info(f'\n[12/{TOTAL_CHECKS}] Duplicate Detection')
     check_duplicate_records(result)
 
-    log.info('\n[13/16] NPS Email Coverage')
+    log.info(f'\n[13/{TOTAL_CHECKS}] NPS Email Coverage')
     check_nps_email_coverage(result)
 
-    log.info('\n[14/16] NPS Survey Status')
+    log.info(f'\n[14/{TOTAL_CHECKS}] NPS Survey Status')
     check_nps_survey_status(result)
 
-    log.info('\n[15/16] Eval Deadlines')
+    log.info(f'\n[15/{TOTAL_CHECKS}] Eval Deadlines')
     check_eval_deadlines(result)
 
-    log.info('\n[16/16] Freight Drop File')
+    log.info(f'\n[16/{TOTAL_CHECKS}] Freight Drop File')
     process_freight_drop_file(result)
+
+    # --- Morning Report Pipeline Monitoring ---
+    log.info(f'\n[17/{TOTAL_CHECKS}] Morning Report Files')
+    check_morning_report_files(result)
+
+    log.info(f'\n[18/{TOTAL_CHECKS}] Processing Pipeline')
+    check_processing_pipeline(result)
+
+    log.info(f'\n[19/{TOTAL_CHECKS}] Billed WOs Freshness')
+    check_billed_wos_freshness(result)
+
+    log.info(f'\n[20/{TOTAL_CHECKS}] Daily Metrics Freshness')
+    check_daily_metrics_freshness(result)
+
+    # --- LaunchAgent Health ---
+    log.info(f'\n[21/{TOTAL_CHECKS}] LaunchAgent Status')
+    check_launchd_processor(result)
 
     # Summary
     summary = result.summary()
