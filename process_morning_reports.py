@@ -868,6 +868,96 @@ def process_shop_billed(filepath, dry_run=False):
 
 
 # ============================================================
+# CUSTOMERS_EMAILS.CSV → customers table
+# ============================================================
+CUSTOMER_EMAIL_PATHS = [
+    os.path.expanduser("~/My Drive/2026_Goals_Project/NET_Promoter_results/Customers_emails.csv"),
+    os.path.expanduser("~/Library/CloudStorage/GoogleDrive-edduyn@gmail.com/My Drive/2026_Goals_Project/NET_Promoter_results/Customers_emails.csv"),
+]
+
+
+def process_customer_emails(dry_run=False):
+    """Sync Customers_emails.csv to the customers Supabase table."""
+    filepath = None
+    for p in CUSTOMER_EMAIL_PATHS:
+        if os.path.exists(p):
+            filepath = p
+            break
+    if not filepath:
+        return 0
+
+    print(f"\n{'='*60}")
+    print(f"Processing Customer Emails: {os.path.basename(filepath)}")
+    print(f"{'='*60}")
+
+    records = []
+    with open(filepath, 'r', encoding='utf-8-sig') as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            cust_num = row.get('Customer#', '').strip()
+            email = row.get('email', '').strip()
+            if cust_num and email:
+                records.append({"customer_number": cust_num, "email": email})
+
+    print(f"  Customer emails in CSV: {len(records)}")
+
+    if dry_run:
+        for r in records[:5]:
+            print(f"    {r['customer_number']} → {r['email']}")
+        if len(records) > 5:
+            print(f"    ... and {len(records)-5} more")
+        return len(records)
+
+    if not records:
+        return 0
+
+    headers_up = dict(HEADERS)
+    headers_up["Prefer"] = "return=minimal,resolution=merge-duplicates"
+    inserted = 0
+    for rec in records:
+        url = f"{SUPABASE_URL}/rest/v1/customers?on_conflict=customer_number"
+        r = requests.post(url, headers=headers_up, json=rec)
+        if r.status_code in (200, 201):
+            inserted += 1
+
+    print(f"  ✅ Synced {inserted}/{len(records)} customer emails")
+
+    # Backfill customer_name from work_orders where missing
+    try:
+        resp = requests.get(
+            f"{SUPABASE_URL}/rest/v1/customers?select=customer_number&customer_name=is.null",
+            headers=HEADERS)
+        if resp.status_code == 200:
+            missing = resp.json()
+            if missing:
+                wo_resp = requests.get(
+                    f"{SUPABASE_URL}/rest/v1/work_orders?select=customer_id,customer_name&customer_name=not.is.null",
+                    headers=HEADERS)
+                name_map = {}
+                if wo_resp.status_code == 200:
+                    for wo in wo_resp.json():
+                        if wo.get('customer_id') and wo.get('customer_name'):
+                            name_map[wo['customer_id']] = wo['customer_name']
+                patched = 0
+                for c in missing:
+                    name = name_map.get(c['customer_number'])
+                    if name:
+                        patch_headers = dict(HEADERS)
+                        patch_headers["Prefer"] = "return=minimal"
+                        pr = requests.patch(
+                            f"{SUPABASE_URL}/rest/v1/customers?customer_number=eq.{c['customer_number']}",
+                            headers=patch_headers, json={"customer_name": name})
+                        if pr.status_code in (200, 204):
+                            patched += 1
+                if patched:
+                    print(f"  ✅ Backfilled {patched} customer names from work_orders")
+    except Exception as e:
+        print(f"  ⚠️ Customer name backfill warning: {e}")
+
+    return inserted
+
+
+# ============================================================
 # MAIN
 # ============================================================
 def main():
@@ -954,6 +1044,11 @@ def main():
             shop_billed_total += count
     if shop_billed_total > 0:
         results['shop_billed'] = shop_billed_total
+
+    # 6. Customers_emails.csv → customers table
+    cust_count = process_customer_emails(args.dry_run)
+    if cust_count > 0:
+        results['customer_emails'] = cust_count
 
     # Summary
     print(f"\n{'='*60}")
