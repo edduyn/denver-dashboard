@@ -767,6 +767,107 @@ def process_anchor(filepath, report_date, dry_run=False):
 
 
 # ============================================================
+# SHOP BILLED WO BROWSE → work_orders (enriched)
+# ============================================================
+SHOP_BILLED_PREFIXES = ["SDN_BILLED", "SDV_BILLED", "SDR_BILLED", "SHC_BILLED"]
+
+
+def process_shop_billed(filepath, dry_run=False):
+    """Parse shop-specific WO Browse CSV (e.g. SDN_BILLED.csv) and enrich work_orders.
+
+    These files have richer data than the daily BILLED_WO report:
+    customer name, WO description, financials, ELR, open date, etc.
+    """
+    basename = os.path.basename(filepath)
+    shop_label = basename.replace("_BILLED.csv", "").replace("_BILLED.CSV", "")
+    print(f"\n{'='*60}")
+    print(f"Processing {shop_label} Billed WO Browse: {basename}")
+    print(f"{'='*60}")
+
+    # CSV: Status,Shop,Cust#,Customer,WO Desc,PO#,Project,Tech,Job#,WO#,
+    #       Date In,Billed,Parts,Labor,O/S,Total,Reg#,AC Make,AC Model,...
+    billed = []
+    with open(filepath, 'r', encoding='utf-8-sig') as f:
+        reader = csv.reader(f)
+        header = None
+        for row in reader:
+            if not row or len(row) < 10:
+                continue
+            if row[0] == 'Status' and row[1] == 'Shop':
+                header = row
+                continue
+            if not header:
+                continue
+            if row[0].strip() != 'B':
+                continue
+
+            wo_number = row[9].strip() if len(row) > 9 else ''
+            if not wo_number:
+                continue
+
+            # Customer ID — strip .00 suffix
+            cust_raw = row[2].strip() if len(row) > 2 else ''
+            customer_id = cust_raw.replace('.00', '').strip() if cust_raw else ''
+
+            # Customer name — clean markers
+            cust_name = row[3].strip() if len(row) > 3 else ''
+            if cust_name:
+                cust_name = re.sub(r'\s*\(C\)\s*', '', cust_name).strip()
+                cust_name = cust_name.replace('*', '').strip()
+
+            tail_number = row[16].strip() if len(row) > 16 else ''
+
+            # Dates
+            open_date = parse_anchor_date(row[10] if len(row) > 10 else '')
+            billed_date = parse_anchor_date(row[11] if len(row) > 11 else '')
+
+            record = {
+                "work_order_number": wo_number,
+                "status": "billed",
+            }
+            if billed_date:
+                record["billed_date"] = billed_date
+            if customer_id:
+                record["customer_id"] = customer_id
+            if cust_name:
+                record["customer_name"] = cust_name
+            if tail_number:
+                record["tail_number"] = tail_number
+            if open_date:
+                record["open_date"] = open_date
+
+            billed.append(record)
+
+    # Deduplicate by WO#
+    unique = {b['work_order_number']: b for b in billed}
+    unique_wos = list(unique.values())
+    print(f"  Billed WOs found: {len(unique_wos)}")
+
+    if dry_run:
+        for wo in unique_wos[:10]:
+            print(f"    {wo['work_order_number']}  {wo.get('customer_name','?'):35s}  tail={wo.get('tail_number','--')}")
+        if len(unique_wos) > 10:
+            print(f"    ... and {len(unique_wos)-10} more")
+        return len(unique_wos)
+
+    if not unique_wos:
+        return 0
+
+    # Upsert into work_orders
+    headers_up = dict(HEADERS)
+    headers_up["Prefer"] = "return=minimal,resolution=merge-duplicates"
+    inserted = 0
+    for wo in unique_wos:
+        url = f"{SUPABASE_URL}/rest/v1/work_orders?on_conflict=work_order_number"
+        r = requests.post(url, headers=headers_up, json=wo)
+        if r.status_code in (200, 201):
+            inserted += 1
+
+    print(f"  ✅ Updated {inserted}/{len(unique_wos)} billed WOs in work_orders")
+    return inserted
+
+
+# ============================================================
 # MAIN
 # ============================================================
 def main():
@@ -836,6 +937,23 @@ def main():
         results['anchor'] = process_anchor(anchor_file, report_date, args.dry_run)
     else:
         print(f"\n⚠️  ANCHOR file not found for {target_date}")
+
+    # 5. Shop Billed WO Browse files (SDN_BILLED, SDV_BILLED, SDR_BILLED, SHC_BILLED)
+    #    Check report_dir, then ~/Downloads/
+    search_dirs = [report_dir, os.path.expanduser("~/Downloads")]
+    shop_billed_total = 0
+    for prefix in SHOP_BILLED_PREFIXES:
+        shop_file = None
+        for sdir in search_dirs:
+            candidates = glob.glob(os.path.join(sdir, f"{prefix}*.[cC][sS][vV]"))
+            if candidates:
+                shop_file = max(candidates, key=os.path.getmtime)
+                break
+        if shop_file:
+            count = process_shop_billed(shop_file, args.dry_run)
+            shop_billed_total += count
+    if shop_billed_total > 0:
+        results['shop_billed'] = shop_billed_total
 
     # Summary
     print(f"\n{'='*60}")
