@@ -1950,6 +1950,7 @@
                     <div style="display: flex; gap: 16px; margin-top: 6px; font-size: 0.75em; color: #94a3b8;">
                         <span>🟢 Billed</span><span>🔵 WIP Pipeline</span><span>⬜ Gap to Budget</span>
                     </div>
+                    <div id="fiProjCarryoverNote" style="color: #64748b; font-size: 0.75em; margin-top: 6px; font-style: italic; display: none;"></div>
                 </div>
 
                 <!-- WIP Breakdown by Shop -->
@@ -3568,21 +3569,45 @@
                     }
                 });
 
-                // ===== WIP CALCULATION BY SHOP =====
+                // ===== WIP CALCULATION BY SHOP (from wip_entries — authoritative cumulative data) =====
+                // wip_entries has TOTAL hours on open WOs including prior month carryover
                 const wipByShop = {};
                 let totalWIPValue = 0, totalWIPHours = 0, totalWIPWOs = 0;
+                let janWIPTotal = 0;
+                const janWIPByShop = {};
+                const currentMonthStr = `${currentYear}-${String(currentMonth).padStart(2,'0')}`;
+                const prevMonthDate = new Date(currentYear, currentMonth - 2, 1);
+                const prevMonthStr = `${prevMonthDate.getFullYear()}-${String(prevMonthDate.getMonth()+1).padStart(2,'0')}`;
+
+                (Array.isArray(wipEntries) ? wipEntries : []).forEach(w => {
+                    const shop = w.shop || '??';
+                    const hrs = parseFloat(w.hours) || 0;
+                    const val = parseFloat(w.wip_value) || 0;
+                    const rate = parseFloat(w.rate) || (WIP_RATES[shop] || WIP_RATES.SDN).labor;
+                    if (w.month === currentMonthStr) {
+                        wipByShop[shop] = { hours: hrs, value: val, count: 0, rate };
+                        totalWIPValue += val;
+                        totalWIPHours += hrs;
+                    } else if (w.month === prevMonthStr) {
+                        janWIPByShop[shop] = { hours: hrs, value: val, rate };
+                        janWIPTotal += val;
+                    }
+                });
+
+                // Enrich WO counts from woHoursMap (Feb time_entries open WOs)
                 Object.entries(woHoursMap).forEach(([woNum, data]) => {
                     const shop = data.shop || '??';
-                    const rate = (WIP_RATES[shop] || WIP_RATES.SDN).labor;
-                    const wipVal = data.hours * rate;
-                    if (!wipByShop[shop]) wipByShop[shop] = { hours: 0, value: 0, count: 0, rate };
-                    wipByShop[shop].hours += data.hours;
-                    wipByShop[shop].value += wipVal;
-                    wipByShop[shop].count++;
-                    totalWIPValue += wipVal;
-                    totalWIPHours += data.hours;
+                    if (wipByShop[shop]) wipByShop[shop].count++;
                     totalWIPWOs++;
                 });
+
+                // Feb-only WIP (from time_entries) for comparison
+                let febOnlyWIP = 0;
+                Object.entries(woHoursMap).forEach(([woNum, data]) => {
+                    const rate = (WIP_RATES[data.shop] || WIP_RATES.SDN).labor;
+                    febOnlyWIP += data.hours * rate;
+                });
+                const janCarryover = totalWIPValue - febOnlyWIP;
 
                 const topOpenWOs = anchorData.map(a => {
                     const hd = woHoursMap[a.wo_number] || { hours: 0, shop: a.shop };
@@ -3856,7 +3881,8 @@
                 document.getElementById('fiProjBilled').textContent = fmtCurrency(estimatedMTDRevenue);
                 document.getElementById('fiProjBilledNote').textContent = `${billedWOCount} WOs invoiced this month`;
                 document.getElementById('fiProjWIP').textContent = fmtCurrency(totalWIPValue);
-                document.getElementById('fiProjWIPNote').textContent = `${totalWIPWOs} open WOs | ${totalWIPHours.toFixed(0)} hrs`;
+                const carryoverNote = janCarryover > 0 ? ` (incl. ${fmtCurrency(janCarryover)} Jan carryover)` : '';
+                document.getElementById('fiProjWIPNote').textContent = `${totalWIPHours.toFixed(0)} hrs across open WOs${carryoverNote}`;
                 document.getElementById('fiProjTotal').textContent = fmtCurrency(projTotal);
                 document.getElementById('fiProjTotal').style.color = projTotal >= monthlyBudget ? '#10b981' : '#a855f7';
                 document.getElementById('fiProjTotalNote').textContent =
@@ -3890,17 +3916,29 @@
                 document.getElementById('fiProjBarLabel').textContent =
                     `${fmtCurrency(estimatedMTDRevenue)} billed + ${fmtCurrency(totalWIPValue)} WIP = ${fmtCurrency(projTotal)}`;
 
+                // Show Jan carryover context under progress bar
+                const carryoverEl = document.getElementById('fiProjCarryoverNote');
+                if (janCarryover > 0 && carryoverEl) {
+                    carryoverEl.style.display = 'block';
+                    carryoverEl.textContent = `WIP includes ${fmtCurrency(janCarryover)} from Jan open WOs carried forward + ${fmtCurrency(febOnlyWIP)} new Feb labor`;
+                }
+
                 // WIP Breakdown by Shop
                 const shopOrder = ['SDN', 'SDR', 'SHC', 'SDV'];
                 const shopColors = { SDN: '#10b981', SDR: '#f59e0b', SHC: '#3b82f6', SDV: '#a855f7' };
                 document.getElementById('fiProjShopBreakdown').innerHTML = shopOrder.map(s => {
                     const d = wipByShop[s] || { hours: 0, value: 0, count: 0, rate: WIP_RATES[s]?.labor || 155 };
+                    const janD = janWIPByShop[s] || null;
                     const pctOfWip = totalWIPValue > 0 ? (d.value / totalWIPValue * 100).toFixed(0) : 0;
+                    const janLine = janD && janD.value > 0
+                        ? `<div style="color: #475569; font-size: 0.65em; margin-top: 2px;">↳ Jan carryover: ${janD.hours.toFixed(1)} hrs (${fmtCurrency(janD.value)})</div>`
+                        : '';
                     return `<div style="background: rgba(${s==='SDN'?'16,185,129':s==='SDR'?'245,158,11':s==='SHC'?'59,130,246':'168,85,247'},0.1); border: 1px solid rgba(${s==='SDN'?'16,185,129':s==='SDR'?'245,158,11':s==='SHC'?'59,130,246':'168,85,247'},0.3); border-radius: 8px; padding: 10px; text-align: center;">
                         <div style="color: ${shopColors[s]}; font-weight: 700; font-size: 0.9em;">${s}</div>
                         <div style="color: #e2e8f0; font-size: 1.1em; font-weight: bold;">${fmtCurrency(d.value)}</div>
                         <div style="color: #94a3b8; font-size: 0.75em;">${d.hours.toFixed(1)} hrs × $${d.rate}/hr</div>
                         <div style="color: #64748b; font-size: 0.7em;">${d.count} WOs | ${pctOfWip}% of WIP</div>
+                        ${janLine}
                     </div>`;
                 }).join('');
 
