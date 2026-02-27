@@ -1618,62 +1618,188 @@
             </div>
         </div>
         <div class="content" id="wip">
-            <!-- Current Month WIP Summary -->
-            <div class="card">
+            <!-- WIP Health Dashboard -->
+            <div class="card" style="border-left: 3px solid #22c55e;">
                 <div class="card-header">
-                    <span class="card-title">💰 Work in Progress (WIP) Summary</span>
+                    <span class="card-title">🧠 WIP Intelligence Center</span>
                     <span class="badge" id="wipBadge">Loading...</span>
                 </div>
-                <div class="card-grid">
+                <div class="card-grid" style="grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));">
                     <div class="metric">
-                        <div class="metric-value" id="wipTotalValue">--</div>
+                        <div class="metric-value" id="wipTotalValue" style="font-size: 1.6em;">--</div>
                         <div class="metric-label">Total WIP Value</div>
                         <div class="metric-sub" id="wipMonth">--</div>
                     </div>
                     <div class="metric">
-                        <div class="metric-value" id="wipTotalHours">--</div>
-                        <div class="metric-label">Total Hours</div>
+                        <div class="metric-value" id="wipTotalHours" style="font-size: 1.6em;">--</div>
+                        <div class="metric-label">WIP Hours</div>
                         <div class="metric-sub">Current Month</div>
                     </div>
                     <div class="metric">
-                        <div class="metric-value" id="wipShopCount">--</div>
-                        <div class="metric-label">Active Shops</div>
-                        <div class="metric-sub">With WIP</div>
+                        <div class="metric-value" id="wipStdValue" style="font-size: 1.6em;">--</div>
+                        <div class="metric-label">Standard WIP</div>
+                        <div class="metric-sub">SDN / SDR / SHC @ $155/hr</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" id="wipSpecialValue" style="font-size: 1.6em;">--</div>
+                        <div class="metric-label">Special WIP (SDV)</div>
+                        <div class="metric-sub">$80/hr + 12% parts</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" id="wipDaysLeft" style="font-size: 1.6em;">--</div>
+                        <div class="metric-label">Business Days Left</div>
+                        <div class="metric-sub" id="wipDeadlineNote">in month</div>
+                    </div>
+                    <div class="metric" id="wipSpecialDeadlineCard">
+                        <div class="metric-value" id="wipSpecialDeadline" style="font-size: 1.6em;">--</div>
+                        <div class="metric-label">Special WIP Due</div>
+                        <div class="metric-sub" id="wipSpecialDeadlineDate">2 biz days before EOM</div>
                     </div>
                 </div>
             </div>
 
-            <!-- WIP by Shop -->
-            <div class="card">
+            <!-- Smart Recommendations -->
+            <div class="card" id="wipRecommendationsCard" style="border-left: 3px solid #f59e0b;">
                 <div class="card-header">
-                    <span class="card-title">📊 WIP by Shop</span>
+                    <span class="card-title">⚡ Recommendations & Alerts</span>
+                    <span class="badge badge-amber" id="wipAlertCount">--</span>
                 </div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Shop</th>
-                            <th>Hours</th>
-                            <th>Rate</th>
-                            <th>WIP Value</th>
-                            <th>% of Total</th>
-                        </tr>
-                    </thead>
-                    <tbody id="wipShopDetails">
-                        <tr><td colspan="5" style="text-align:center;">Loading...</td></tr>
-                    </tbody>
-                </table>
+                <div id="wipRecommendations" style="display: flex; flex-direction: column; gap: 8px;">
+                    <div style="text-align: center; color: #64748b; padding: 10px;">Analyzing WIP data...</div>
+                </div>
             </div>
 
-            <!-- WIP Explanation -->
+            <!-- WIP by Shop Breakdown -->
             <div class="card">
-                <div class="card-title">ℹ️ About WIP</div>
-                <p><strong>Work in Progress (WIP)</strong> smooths out billing peaks by accounting for labor and parts sold to work orders on a monthly basis.</p>
-                <ul style="margin-left: 20px; line-height: 1.8;">
-                    <li><strong>Standard WIP:</strong> SDN, SDR, SHC @ $145/hr (2026 rate)</li>
-                    <li><strong>Special WIP:</strong> SDV installs @ $80/hr + 15% parts margin</li>
-                    <li><strong>Scope:</strong> Only work orders opened in the current month (or with additional hours sold)</li>
-                    <li><strong>Goal:</strong> Stay ahead of the curve and avoid hills/valleys in billing</li>
-                </ul>
+                <div class="card-header">
+                    <span class="card-title">📊 WIP by Shop — Live Calculation</span>
+                    <span style="color: #64748b; font-size: 0.8em;" id="wipCalcNote">From time_entries + rates</span>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Shop</th>
+                                <th>WOs</th>
+                                <th>Hours</th>
+                                <th>Rate</th>
+                                <th>Labor WIP</th>
+                                <th>Parts WIP</th>
+                                <th>Total WIP</th>
+                                <th>% of Total</th>
+                            </tr>
+                        </thead>
+                        <tbody id="wipShopDetails">
+                            <tr><td colspan="8" style="text-align:center;">Loading...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Per-WO WIP Detail (Top WOs by WIP Value) -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">📋 Top Work Orders by WIP Impact</span>
+                    <span style="font-size: 0.8em; color: #64748b;">WIP-eligible WOs with hours sold this month</span>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>WO</th>
+                                <th>Shop</th>
+                                <th>Customer</th>
+                                <th>Description</th>
+                                <th>Feb Hours</th>
+                                <th>WIP Value</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="wipWODetails">
+                            <tr><td colspan="7" style="text-align:center;">Loading...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- SDV Special WIP Tracker -->
+            <div class="card" style="border-left: 3px solid #3b82f6;">
+                <div class="card-header">
+                    <span class="card-title">🔷 SDV Special WIP Tracker</span>
+                    <span class="badge badge-blue" id="sdvSpecialBadge">Loading...</span>
+                </div>
+                <p style="color: #94a3b8; font-size: 0.85em; margin-bottom: 12px;">
+                    Install WOs with significant hours — submit to Matt Nelson (<a href="mailto:matt.nelson@duncanaviation.com" style="color: #3b82f6;">matt.nelson@duncanaviation.com</a>) 2 business days before month-end.
+                </p>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>WO</th>
+                                <th>Customer</th>
+                                <th>Description</th>
+                                <th>Feb Hours</th>
+                                <th>Expected</th>
+                                <th>WIP @ $80/hr</th>
+                                <th>Risk</th>
+                            </tr>
+                        </thead>
+                        <tbody id="sdvSpecialWIPDetails">
+                            <tr><td colspan="7" style="text-align:center;">Loading...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div id="sdvSpecialActions" style="margin-top: 12px; display: none;">
+                    <button onclick="generateSpecialWIPEmail()" style="padding: 10px 20px; background: #3b82f6; color: #fff; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">
+                        📧 Draft Special WIP Email to Matt
+                    </button>
+                </div>
+            </div>
+
+            <!-- WIP Reconciliation History -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">📈 WIP Position — Are We Ahead?</span>
+                    <span style="color: #64748b; font-size: 0.8em;">WIP accrued vs actual billing when WOs close</span>
+                </div>
+                <div class="card-grid" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); margin-bottom: 12px;">
+                    <div class="metric">
+                        <div class="metric-value" id="wipAccrued" style="font-size: 1.4em;">--</div>
+                        <div class="metric-label">WIP Accrued (Jan)</div>
+                        <div class="metric-sub">Labor + Parts WIP booked</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" id="wipActualBilled" style="font-size: 1.4em;">--</div>
+                        <div class="metric-label">Actual Billed</div>
+                        <div class="metric-sub">From closed WOs</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" id="wipVariance" style="font-size: 1.4em;">--</div>
+                        <div class="metric-label">Position</div>
+                        <div class="metric-sub" id="wipPositionNote">Ahead = green, Hole = red</div>
+                    </div>
+                </div>
+                <div id="wipReconciliationTable" style="margin-top: 8px;">
+                    <p style="color: #64748b; font-size: 0.85em; text-align: center;">Reconciliation data populated as WOs bill. Jan data from AS400: Labor WIP $13,996, Parts WIP $12,662.</p>
+                </div>
+            </div>
+
+            <!-- WIP Reference -->
+            <div class="card" style="opacity: 0.85;">
+                <div class="card-title" style="cursor: pointer;" onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'none' ? 'block' : 'none';">
+                    ℹ️ About WIP <span style="font-size: 0.7em; color: #64748b;">(tap to expand)</span>
+                </div>
+                <div style="display: none;">
+                    <p style="margin-top: 10px;"><strong>Work in Progress (WIP)</strong> smooths out billing peaks by accounting for labor and parts sold to work orders on a monthly basis.</p>
+                    <ul style="margin-left: 20px; line-height: 1.8; margin-top: 8px;">
+                        <li><strong>Standard WIP:</strong> SDN, SDR, SHC @ $155/hr + 23% parts (2026 rate per Jan analysis)</li>
+                        <li><strong>Special WIP:</strong> SDV installs @ $80/hr + 12% parts margin (conservative)</li>
+                        <li><strong>Scope:</strong> Only WOs opened in current month (or with additional hours sold this month)</li>
+                        <li><strong>Goal:</strong> Always be AHEAD — WIP accrued > actual billing = good</li>
+                        <li><strong>Special WIP deadline:</strong> Email to Matt 2 business days before month-end</li>
+                        <li><strong>Key risk:</strong> SDV special showing -18.61% parts margin in Jan analysis</li>
+                    </ul>
+                </div>
             </div>
         </div>
         <div class="content" id="rankings">
@@ -4420,84 +4546,422 @@
             }
         }
 
-        // Load WIP Data
+        // ===== INTELLIGENT WIP ENGINE =====
+        // WIP Rates (2026 — from Jan WIP Rate Analysis)
+        const WIP_RATES = {
+            SDN: { labor: 155, partsPct: 23 },
+            SDR: { labor: 155, partsPct: 23 },
+            SHC: { labor: 155, partsPct: 23 },
+            SDV: { labor: 80, partsPct: 12 }  // Special WIP - conservative
+        };
+
+        // Calculate business days remaining in month
+        function getBusinessDaysLeft() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = now.getMonth();
+            const lastDay = new Date(year, month + 1, 0).getDate();
+            let bizDays = 0;
+            for (let d = now.getDate() + 1; d <= lastDay; d++) {
+                const day = new Date(year, month, d).getDay();
+                if (day !== 0 && day !== 6) bizDays++;
+            }
+            return bizDays;
+        }
+
+        // Get Special WIP deadline (2 business days before end of month)
+        function getSpecialWIPDeadline() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = now.getMonth();
+            const lastDay = new Date(year, month + 1, 0).getDate();
+            let bizDaysFromEnd = 0;
+            for (let d = lastDay; d >= 1; d--) {
+                const day = new Date(year, month, d).getDay();
+                if (day !== 0 && day !== 6) {
+                    bizDaysFromEnd++;
+                    if (bizDaysFromEnd === 3) { // 2 biz days BEFORE last biz day
+                        return new Date(year, month, d);
+                    }
+                }
+            }
+            return new Date(year, month, lastDay - 3);
+        }
+
+        // Format currency
+        function fmtCurrency(val) {
+            return '$' + (val || 0).toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0});
+        }
+        function fmtCurrency2(val) {
+            return '$' + (val || 0).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        }
+
+        // Load WIP Data — Intelligent Engine
         async function loadWIP() {
             try {
-                const response = await fetch(`${SUPABASE_URL}/rest/v1/wip_entries?select=*&order=month.desc`, {
-                    headers: {
-                        'apikey': SUPABASE_KEY,
-                        'Authorization': `Bearer ${SUPABASE_KEY}`
+                const now = new Date();
+                const currentMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+                const monthStart = `${currentMonth}-01`;
+                const monthEnd = `${currentMonth}-${new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate()}`;
+                const monthName = now.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+
+                // Fetch all data in parallel
+                const [timeRes, anchorRes, sdvSpecialRes, wipEntriesRes, reconRes] = await Promise.all([
+                    // Time entries for current month (non-shop WO)
+                    fetch(`${SUPABASE_URL}/rest/v1/time_entries?select=wo_number,shop,hours,emp_code,emp_name,entry_date,wo_description&entry_date=gte.${monthStart}&entry_date=lte.${monthEnd}&wo_number=neq.DUM0A&order=hours.desc`, {
+                        headers: HEADERS
+                    }),
+                    // Current anchor snapshot (latest report date)
+                    (async () => {
+                        try {
+                            const dateRes = await fetch(`${SUPABASE_URL}/rest/v1/anchor_work_orders?select=report_date&order=report_date.desc&limit=1`, { headers: HEADERS });
+                            const dateData = await dateRes.json();
+                            const latestDate = dateData?.[0]?.report_date || monthEnd;
+                            const aRes = await fetch(`${SUPABASE_URL}/rest/v1/anchor_work_orders?select=wo_number,shop,customer,description,expected_hours,open_date&report_date=eq.${latestDate}&order=shop`, { headers: HEADERS });
+                            return aRes;
+                        } catch(e) { return { json: async () => [] }; }
+                    })(),
+                    // SDV Special WIP entries
+                    fetch(`${SUPABASE_URL}/rest/v1/sdv_special_wip?select=*&month=eq.${currentMonth}&order=sold_hours.desc`, {
+                        headers: HEADERS
+                    }),
+                    // Historical WIP entries
+                    fetch(`${SUPABASE_URL}/rest/v1/wip_entries?select=*&order=month.desc&limit=12`, {
+                        headers: HEADERS
+                    }),
+                    // Reconciliation data
+                    fetch(`${SUPABASE_URL}/rest/v1/wip_reconciliation?select=*&order=wip_month.desc&limit=20`, {
+                        headers: HEADERS
+                    })
+                ]);
+
+                const timeEntries = await timeRes.json();
+                let anchorData = [];
+                try { anchorData = await anchorRes.json(); } catch(e) {}
+                if (!Array.isArray(anchorData)) anchorData = [];
+                const sdvSpecialData = await sdvSpecialRes.json();
+                const wipHistorical = await wipEntriesRes.json();
+                const reconData = await reconRes.json();
+
+                // ===== AGGREGATE BY WO =====
+                const woMap = {};
+                (Array.isArray(timeEntries) ? timeEntries : []).forEach(t => {
+                    const key = t.wo_number;
+                    if (!woMap[key]) {
+                        woMap[key] = {
+                            wo_number: key,
+                            shop: t.shop || '??',
+                            hours: 0,
+                            techs: new Set(),
+                            description: t.wo_description || ''
+                        };
+                    }
+                    woMap[key].hours += parseFloat(t.hours) || 0;
+                    if (t.emp_code) woMap[key].techs.add(t.emp_code);
+                });
+
+                // Enrich with anchor data (customer, open_date, expected_hours)
+                const anchorMap = {};
+                anchorData.forEach(a => { anchorMap[a.wo_number] = a; });
+                Object.values(woMap).forEach(wo => {
+                    const anchor = anchorMap[wo.wo_number];
+                    if (anchor) {
+                        wo.customer = anchor.customer || '';
+                        wo.open_date = anchor.open_date;
+                        wo.expected_hours = parseFloat(anchor.expected_hours) || 0;
+                        if (!wo.shop || wo.shop === '??') wo.shop = anchor.shop;
+                        if (!wo.description) wo.description = anchor.description || '';
                     }
                 });
-                const wipData = await response.json();
 
-                if (wipData.length > 0) {
-                    // Get current month data (most recent month)
-                    const latestMonth = wipData[0].month;
-                    const currentMonthData = wipData.filter(w => w.month === latestMonth);
+                // ===== CALCULATE WIP PER SHOP =====
+                const shopTotals = {};
+                const allWOs = Object.values(woMap).sort((a, b) => b.hours - a.hours);
 
-                    // Calculate totals
-                    const totalWIP = currentMonthData.reduce((sum, w) => sum + (w.wip_value || 0), 0);
-                    const totalHours = currentMonthData.reduce((sum, w) => sum + (w.hours || 0), 0);
-                    const shopCount = currentMonthData.length;
+                allWOs.forEach(wo => {
+                    const shop = wo.shop;
+                    const rates = WIP_RATES[shop] || WIP_RATES.SDN; // default to SDN rate
+                    const laborWIP = wo.hours * rates.labor;
 
-                    // Update summary metrics
-                    document.getElementById('wipTotalValue').textContent = `$${totalWIP.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-                    document.getElementById('wipTotalHours').textContent = totalHours.toLocaleString('en-US', {minimumFractionDigits: 1, maximumFractionDigits: 1});
-                    document.getElementById('wipShopCount').textContent = shopCount;
+                    if (!shopTotals[shop]) {
+                        shopTotals[shop] = { shop, hours: 0, woCount: 0, laborWIP: 0, partsWIP: 0, totalWIP: 0, rate: rates.labor };
+                    }
+                    shopTotals[shop].hours += wo.hours;
+                    shopTotals[shop].woCount++;
+                    shopTotals[shop].laborWIP += laborWIP;
+                    shopTotals[shop].totalWIP += laborWIP;
+                });
 
-                    // Format month display
-                    const monthDate = new Date(latestMonth + '-01T12:00:00');
-                    const monthName = monthDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-                    document.getElementById('wipMonth').textContent = monthName;
+                // Compute grand totals
+                const stdShops = ['SDN', 'SDR', 'SHC'];
+                let totalWIP = 0, totalHours = 0, stdWIP = 0, specialWIP = 0;
+                Object.values(shopTotals).forEach(s => {
+                    totalWIP += s.totalWIP;
+                    totalHours += s.hours;
+                    if (stdShops.includes(s.shop)) stdWIP += s.totalWIP;
+                    if (s.shop === 'SDV') specialWIP += s.totalWIP;
+                });
 
-                    // Update badge
-                    document.getElementById('wipBadge').textContent = monthName;
-                    document.getElementById('wipBadge').className = 'badge badge-green';
+                // ===== UPDATE HEADER METRICS =====
+                document.getElementById('wipTotalValue').textContent = fmtCurrency(totalWIP);
+                document.getElementById('wipTotalHours').textContent = totalHours.toFixed(1);
+                document.getElementById('wipMonth').textContent = monthName;
+                document.getElementById('wipStdValue').textContent = fmtCurrency(stdWIP);
+                document.getElementById('wipSpecialValue').textContent = fmtCurrency(specialWIP);
 
-                    // Build shop details table
-                    const tableHTML = currentMonthData
-                        .sort((a, b) => (b.wip_value || 0) - (a.wip_value || 0))
-                        .map(shop => {
-                            const wipValue = shop.wip_value || 0;
-                            const percentage = ((wipValue / totalWIP) * 100).toFixed(1);
-                            const hours = shop.hours || 0;
-                            const rate = shop.rate || 0;
+                const bizDaysLeft = getBusinessDaysLeft();
+                document.getElementById('wipDaysLeft').textContent = bizDaysLeft;
+                document.getElementById('wipDaysLeft').style.color = bizDaysLeft <= 3 ? '#ef4444' : bizDaysLeft <= 5 ? '#f59e0b' : '#10b981';
+                document.getElementById('wipDeadlineNote').textContent = bizDaysLeft <= 1 ? '⚠️ Month ending!' : `in ${monthName.split(' ')[0]}`;
 
-                            // Color-code based on shop
-                            let shopBadge = '';
-                            if (shop.shop === 'SDV') {
-                                shopBadge = '<span class="badge badge-blue">SDV</span>';
-                            } else if (['SDN', 'SDR', 'SHC'].includes(shop.shop)) {
-                                shopBadge = `<span class="badge badge-green">${shop.shop}</span>`;
-                            } else {
-                                shopBadge = shop.shop;
-                            }
-
-                            return `
-                                <tr>
-                                    <td>${shopBadge}</td>
-                                    <td>${hours.toLocaleString('en-US', {minimumFractionDigits: 1, maximumFractionDigits: 1})} hrs</td>
-                                    <td>$${rate.toFixed(2)}/hr</td>
-                                    <td><strong>$${wipValue.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</strong></td>
-                                    <td>${percentage}%</td>
-                                </tr>
-                            `;
-                        }).join('');
-
-                    document.getElementById('wipShopDetails').innerHTML = tableHTML;
+                // Special WIP deadline
+                const specialDeadline = getSpecialWIPDeadline();
+                const daysToDeadline = Math.ceil((specialDeadline - now) / (1000 * 60 * 60 * 24));
+                const deadlineEl = document.getElementById('wipSpecialDeadline');
+                if (daysToDeadline <= 0) {
+                    deadlineEl.textContent = 'OVERDUE';
+                    deadlineEl.style.color = '#ef4444';
+                } else if (daysToDeadline <= 2) {
+                    deadlineEl.textContent = `${daysToDeadline}d`;
+                    deadlineEl.style.color = '#ef4444';
+                } else if (daysToDeadline <= 5) {
+                    deadlineEl.textContent = `${daysToDeadline}d`;
+                    deadlineEl.style.color = '#f59e0b';
                 } else {
-                    document.getElementById('wipShopDetails').innerHTML = '<tr><td colspan="5" style="text-align:center;">No WIP data available</td></tr>';
-                    document.getElementById('wipBadge').textContent = 'No Data';
-                    document.getElementById('wipBadge').className = 'badge badge-gray';
+                    deadlineEl.textContent = `${daysToDeadline}d`;
+                    deadlineEl.style.color = '#10b981';
                 }
+                document.getElementById('wipSpecialDeadlineDate').textContent = specialDeadline.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+
+                // Badge
+                document.getElementById('wipBadge').textContent = monthName;
+                document.getElementById('wipBadge').className = 'badge badge-green';
+
+                // ===== SHOP BREAKDOWN TABLE =====
+                const shopRows = Object.values(shopTotals)
+                    .sort((a, b) => b.totalWIP - a.totalWIP)
+                    .map(s => {
+                        const pct = totalWIP > 0 ? ((s.totalWIP / totalWIP) * 100).toFixed(1) : '0.0';
+                        const shopBadge = s.shop === 'SDV'
+                            ? '<span class="badge badge-blue">SDV</span>'
+                            : stdShops.includes(s.shop)
+                                ? `<span class="badge badge-green">${s.shop}</span>`
+                                : `<span class="badge badge-gray">${s.shop}</span>`;
+                        return `<tr>
+                            <td>${shopBadge}</td>
+                            <td>${s.woCount}</td>
+                            <td>${s.hours.toFixed(1)} hrs</td>
+                            <td>$${s.rate}/hr</td>
+                            <td>${fmtCurrency(s.laborWIP)}</td>
+                            <td>${fmtCurrency(s.partsWIP)}</td>
+                            <td><strong>${fmtCurrency(s.totalWIP)}</strong></td>
+                            <td>${pct}%</td>
+                        </tr>`;
+                    }).join('');
+                const shopTotal = `<tr style="border-top: 2px solid rgba(255,255,255,0.2); font-weight: bold;">
+                    <td>TOTAL</td><td>${Object.values(shopTotals).reduce((s,x) => s+x.woCount, 0)}</td>
+                    <td>${totalHours.toFixed(1)} hrs</td><td></td>
+                    <td>${fmtCurrency(Object.values(shopTotals).reduce((s,x) => s+x.laborWIP, 0))}</td>
+                    <td>${fmtCurrency(Object.values(shopTotals).reduce((s,x) => s+x.partsWIP, 0))}</td>
+                    <td><strong>${fmtCurrency(totalWIP)}</strong></td><td>100%</td>
+                </tr>`;
+                document.getElementById('wipShopDetails').innerHTML = shopRows + shopTotal;
+
+                // ===== TOP WOs TABLE =====
+                const topWOs = allWOs.slice(0, 20);
+                const woRows = topWOs.map(wo => {
+                    const rates = WIP_RATES[wo.shop] || WIP_RATES.SDN;
+                    const wipVal = wo.hours * rates.labor;
+                    const isSDV = wo.shop === 'SDV';
+                    const hasExpected = wo.expected_hours > 0;
+                    const overExpected = hasExpected && wo.hours > wo.expected_hours;
+                    let statusBadge = '';
+                    if (isSDV && wo.hours >= 40) {
+                        statusBadge = '<span class="badge badge-blue">Special WIP</span>';
+                    } else if (overExpected) {
+                        statusBadge = '<span class="badge badge-red">Over Expected</span>';
+                    } else if (wo.hours >= 100) {
+                        statusBadge = '<span class="badge badge-amber">High Hours</span>';
+                    } else {
+                        statusBadge = '<span class="badge badge-green">OK</span>';
+                    }
+
+                    const shopBadge = isSDV ? '<span class="badge badge-blue">SDV</span>' : `<span class="badge badge-green">${wo.shop}</span>`;
+                    return `<tr>
+                        <td><strong>${wo.wo_number}</strong></td>
+                        <td>${shopBadge}</td>
+                        <td style="max-width:150px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${wo.customer || '--'}</td>
+                        <td style="max-width:180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${wo.description || '--'}</td>
+                        <td>${wo.hours.toFixed(1)}</td>
+                        <td><strong>${fmtCurrency(wipVal)}</strong></td>
+                        <td>${statusBadge}</td>
+                    </tr>`;
+                }).join('');
+                document.getElementById('wipWODetails').innerHTML = woRows || '<tr><td colspan="7" style="text-align:center;">No WIP-eligible WOs found</td></tr>';
+
+                // ===== SDV SPECIAL WIP =====
+                const sdvWOs = allWOs.filter(wo => wo.shop === 'SDV' && wo.hours >= 10)
+                    .sort((a, b) => b.hours - a.hours);
+                if (sdvWOs.length > 0) {
+                    const sdvRows = sdvWOs.map(wo => {
+                        const wipVal = wo.hours * 80;
+                        const expected = wo.expected_hours || 0;
+                        let riskBadge = '';
+                        if (expected > 0 && wo.hours > expected * 1.1) {
+                            riskBadge = '<span class="badge badge-red">⚠️ Over</span>';
+                        } else if (expected > 0 && wo.hours > expected * 0.8) {
+                            riskBadge = '<span class="badge badge-amber">Near Limit</span>';
+                        } else if (wo.hours >= 200) {
+                            riskBadge = '<span class="badge badge-amber">High Hours</span>';
+                        } else {
+                            riskBadge = '<span class="badge badge-green">OK</span>';
+                        }
+                        return `<tr>
+                            <td><strong>${wo.wo_number}</strong></td>
+                            <td style="max-width:140px; overflow:hidden; text-overflow:ellipsis;">${wo.customer || '--'}</td>
+                            <td style="max-width:160px; overflow:hidden; text-overflow:ellipsis;">${wo.description || '--'}</td>
+                            <td>${wo.hours.toFixed(1)}</td>
+                            <td>${expected > 0 ? expected.toFixed(0) : '--'}</td>
+                            <td><strong>${fmtCurrency(wipVal)}</strong></td>
+                            <td>${riskBadge}</td>
+                        </tr>`;
+                    }).join('');
+                    document.getElementById('sdvSpecialWIPDetails').innerHTML = sdvRows;
+                    document.getElementById('sdvSpecialBadge').textContent = `${sdvWOs.length} WOs`;
+                    document.getElementById('sdvSpecialActions').style.display = 'block';
+                } else {
+                    document.getElementById('sdvSpecialWIPDetails').innerHTML = '<tr><td colspan="7" style="text-align:center; color: #64748b;">No SDV WOs with 10+ hours this month</td></tr>';
+                    document.getElementById('sdvSpecialBadge').textContent = 'None';
+                    document.getElementById('sdvSpecialActions').style.display = 'none';
+                }
+
+                // ===== RECONCILIATION =====
+                // Use January AS400 data as baseline
+                const janLaborWIP = 13996.16;  // from 45015 COST OF LABOR-CUST (WIP) Jan net
+                const janPartsWIP = 12661.88;  // from 45115 COST OF PARTS-CUST (WIP) Jan net
+                const janLaborActual = 19098.52; // from 45010 COST OF LABOR SALES-CUST Jan end bal
+                const janPartsActual = 19179.24; // from 45110 COST OF PART SALES-CUST Jan end bal
+
+                document.getElementById('wipAccrued').textContent = fmtCurrency(janLaborWIP + janPartsWIP);
+                document.getElementById('wipActualBilled').textContent = fmtCurrency(janLaborActual + janPartsActual);
+                const janVariance = (janLaborActual + janPartsActual) - (janLaborWIP + janPartsWIP);
+                const varianceEl = document.getElementById('wipVariance');
+                varianceEl.textContent = (janVariance >= 0 ? '+' : '') + fmtCurrency(janVariance);
+                varianceEl.style.color = janVariance >= 0 ? '#10b981' : '#ef4444';
+                document.getElementById('wipPositionNote').textContent = janVariance >= 0 ? '✅ Ahead — billed more than WIP' : '🔴 In the hole — WIP exceeded billing';
+
+                // ===== SMART RECOMMENDATIONS =====
+                const recommendations = [];
+
+                // 1. Special WIP deadline
+                if (daysToDeadline <= 0) {
+                    recommendations.push({ severity: 'red', icon: '🚨', text: 'Special WIP email to Matt is OVERDUE! Send now.', action: 'email' });
+                } else if (daysToDeadline <= 3) {
+                    recommendations.push({ severity: 'amber', icon: '⏰', text: `Special WIP due in ${daysToDeadline} day${daysToDeadline > 1 ? 's' : ''} (${specialDeadline.toLocaleDateString('en-US', {month:'short',day:'numeric'})}). Prepare SDV list for Matt.`, action: 'email' });
+                }
+
+                // 2. SDV WOs over expected hours
+                sdvWOs.forEach(wo => {
+                    if (wo.expected_hours > 0 && wo.hours > wo.expected_hours * 1.1) {
+                        recommendations.push({ severity: 'red', icon: '⚠️', text: `${wo.wo_number} (${wo.description}) at ${wo.hours.toFixed(0)}hrs vs ${wo.expected_hours.toFixed(0)} expected — ${((wo.hours/wo.expected_hours - 1)*100).toFixed(0)}% over. Review WIP rate.` });
+                    }
+                });
+
+                // 3. High-hour WOs that might need attention
+                allWOs.filter(wo => wo.hours >= 100 && wo.shop !== 'SDV').forEach(wo => {
+                    recommendations.push({ severity: 'amber', icon: '📊', text: `${wo.wo_number} (${wo.shop}) has ${wo.hours.toFixed(0)} hrs — WIP value ${fmtCurrency(wo.hours * (WIP_RATES[wo.shop]?.labor || 155))}. Monitor for month-end carry-over.` });
+                });
+
+                // 4. Month-end urgency
+                if (bizDaysLeft <= 2) {
+                    recommendations.push({ severity: 'red', icon: '📅', text: `Only ${bizDaysLeft} business day${bizDaysLeft > 1 ? 's' : ''} left! Push to close billable WOs before month-end to maximize revenue recognition.` });
+                } else if (bizDaysLeft <= 5) {
+                    recommendations.push({ severity: 'amber', icon: '📅', text: `${bizDaysLeft} business days left. Review open WOs — can any be billed this month?` });
+                }
+
+                // 5. SDV WOs without expected hours
+                const sdvNoExpected = allWOs.filter(wo => wo.shop === 'SDV' && wo.hours >= 20 && (!wo.expected_hours || wo.expected_hours === 0));
+                if (sdvNoExpected.length > 0) {
+                    recommendations.push({ severity: 'amber', icon: '📝', text: `${sdvNoExpected.length} SDV WO${sdvNoExpected.length > 1 ? 's' : ''} with 20+ hrs but NO expected hours set: ${sdvNoExpected.map(w=>w.wo_number).join(', ')}. Add expected hours for proper WIP tracking.` });
+                }
+
+                // 6. WIP position health
+                if (janVariance < 0) {
+                    recommendations.push({ severity: 'red', icon: '💰', text: `January WIP was in the hole by ${fmtCurrency(Math.abs(janVariance))}. Focus on closing WOs at or above WIP-estimated value this month.` });
+                }
+
+                // 7. Rate comparison — are we billing above WIP rate?
+                if (stdWIP > 0) {
+                    const stdHours = Object.values(shopTotals).filter(s => stdShops.includes(s.shop)).reduce((sum,s) => sum + s.hours, 0);
+                    if (stdHours > 0) {
+                        const effectiveRate = stdWIP / stdHours;
+                        recommendations.push({ severity: 'green', icon: '💡', text: `Standard shops averaging $${effectiveRate.toFixed(0)}/hr WIP rate. Jan analysis showed actual ELR of $178.70 — billing above WIP rate is good margin.` });
+                    }
+                }
+
+                // Render recommendations
+                if (recommendations.length > 0) {
+                    const recHTML = recommendations
+                        .sort((a,b) => {
+                            const order = {red: 0, amber: 1, green: 2};
+                            return (order[a.severity] || 9) - (order[b.severity] || 9);
+                        })
+                        .map(r => {
+                            const bgColor = r.severity === 'red' ? 'rgba(239,68,68,0.15)' : r.severity === 'amber' ? 'rgba(245,158,11,0.12)' : 'rgba(16,185,129,0.12)';
+                            const borderColor = r.severity === 'red' ? '#ef4444' : r.severity === 'amber' ? '#f59e0b' : '#10b981';
+                            let actionBtn = '';
+                            if (r.action === 'email') {
+                                actionBtn = ' <button onclick="generateSpecialWIPEmail()" style="padding:3px 10px; background:#3b82f6; color:#fff; border:none; border-radius:5px; cursor:pointer; font-size:0.8em; margin-left:8px;">Draft Email</button>';
+                            }
+                            return `<div style="padding: 10px 14px; background: ${bgColor}; border-left: 3px solid ${borderColor}; border-radius: 6px;">
+                                <span>${r.icon}</span> <span style="color: #e2e8f0; font-size: 0.9em;">${r.text}</span>${actionBtn}
+                            </div>`;
+                        }).join('');
+                    document.getElementById('wipRecommendations').innerHTML = recHTML;
+                    const redCount = recommendations.filter(r => r.severity === 'red').length;
+                    const amberCount = recommendations.filter(r => r.severity === 'amber').length;
+                    const alertEl = document.getElementById('wipAlertCount');
+                    alertEl.textContent = `${redCount > 0 ? redCount + ' critical' : ''}${redCount > 0 && amberCount > 0 ? ' · ' : ''}${amberCount > 0 ? amberCount + ' watch' : ''}${redCount === 0 && amberCount === 0 ? 'All Clear ✅' : ''}`;
+                    alertEl.className = `badge ${redCount > 0 ? 'badge-red' : amberCount > 0 ? 'badge-amber' : 'badge-green'}`;
+                } else {
+                    document.getElementById('wipRecommendations').innerHTML = '<div style="text-align:center; color:#10b981; padding:15px;">✅ All clear — no WIP concerns this month.</div>';
+                    document.getElementById('wipAlertCount').textContent = 'All Clear ✅';
+                    document.getElementById('wipAlertCount').className = 'badge badge-green';
+                }
+
             } catch (error) {
                 console.error('Error loading WIP data:', error);
-                document.getElementById('wipShopDetails').innerHTML = '<tr><td colspan="5" style="text-align:center; color: #ef4444;">Error loading WIP data</td></tr>';
+                document.getElementById('wipShopDetails').innerHTML = '<tr><td colspan="8" style="text-align:center; color: #ef4444;">Error loading WIP data</td></tr>';
                 document.getElementById('wipBadge').textContent = 'Error';
                 document.getElementById('wipBadge').className = 'badge badge-red';
             }
         }
+
+        // Generate Special WIP Email draft
+        function generateSpecialWIPEmail() {
+            const now = new Date();
+            const monthName = now.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+            // Collect SDV WO data from the table
+            const sdvTable = document.getElementById('sdvSpecialWIPDetails');
+            const rows = sdvTable.querySelectorAll('tr');
+            let woList = '';
+            rows.forEach(row => {
+                const cells = row.querySelectorAll('td');
+                if (cells.length >= 6) {
+                    const wo = cells[0].textContent.trim();
+                    const customer = cells[1].textContent.trim();
+                    const desc = cells[2].textContent.trim();
+                    const hours = cells[3].textContent.trim();
+                    const wip = cells[5].textContent.trim();
+                    woList += `  • ${wo} — ${customer} — ${desc} — ${hours} hrs — ${wip}\n`;
+                }
+            });
+            const subject = encodeURIComponent(`Denver 889 SDV Special WIP — ${monthName}`);
+            const body = encodeURIComponent(`Hi Matt,\n\nBelow are the Denver 889 SDV Special WIP work orders for ${monthName}:\n\n${woList}\nRate: $80/hr + 12% parts margin\n\nPlease let me know if you need any adjustments.\n\nThank you,\nEdduyn`);
+            window.open(`mailto:matt.nelson@duncanaviation.com?subject=${subject}&body=${body}`, '_blank');
+        }
+
+        // (anchor date fetched inside loadWIP directly)
 
         // Store all training data globally for filtering
         let allTrainingData = [];
