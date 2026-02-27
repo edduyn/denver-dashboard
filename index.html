@@ -4483,13 +4483,24 @@
         // Load Over 30 Days Work Orders
         async function loadOver30WOs() {
             try {
-                const response = await fetch(`${SUPABASE_URL}/rest/v1/over_30_wos?select=*&order=days_open.desc`, {
-                    headers: {
-                        'apikey': SUPABASE_KEY,
-                        'Authorization': `Bearer ${SUPABASE_KEY}`
-                    }
-                });
-                const over30WOs = await response.json();
+                // Fetch over-30 WOs and billed WOs in parallel
+                const [over30Response, billedResponse] = await Promise.all([
+                    fetch(`${SUPABASE_URL}/rest/v1/over_30_wos?select=*&order=days_open.desc`, {
+                        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+                    }),
+                    fetch(`${SUPABASE_URL}/rest/v1/work_orders?select=work_order_number&status=eq.billed&limit=500`, {
+                        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+                    })
+                ]);
+                const allOver30 = await over30Response.json();
+                const billedWOs = await billedResponse.json();
+
+                // Build set of billed WO numbers for fast lookup
+                const billedSet = new Set(billedWOs.map(wo => wo.work_order_number));
+
+                // Filter out billed WOs from the over-30 list
+                const over30WOs = allOver30.filter(wo => !billedSet.has(wo.wo_number));
+                const excludedCount = allOver30.length - over30WOs.length;
 
                 // Valid BZ Reason options
                 const validReasons = [
@@ -4530,13 +4541,22 @@
                         `;
                     }).join('');
 
-                    document.getElementById('over30Table').innerHTML = tableHTML;
+                    // Add note about excluded billed WOs if any
+                    let excludedNote = '';
+                    if (excludedCount > 0) {
+                        excludedNote = `<tr><td colspan="5" style="text-align:center; padding: 8px; color: #10b981; font-size: 0.85em; background: #0f172a; border-top: 1px solid #1e293b;">✅ ${excludedCount} billed WO${excludedCount > 1 ? 's' : ''} excluded from this list</td></tr>`;
+                    }
+                    document.getElementById('over30Table').innerHTML = tableHTML + excludedNote;
 
                     // Update badge
                     document.getElementById('over30Badge').textContent = `${over30WOs.length} WOs`;
                     document.getElementById('over30Badge').className = over30WOs.length > 5 ? 'badge badge-red' : 'badge badge-amber';
                 } else {
-                    document.getElementById('over30Table').innerHTML = '<tr><td colspan="5" style="text-align:center; color: #10b981;">✅ No over 30 work orders - Great job!</td></tr>';
+                    let msg = '✅ No over 30 work orders - Great job!';
+                    if (excludedCount > 0) {
+                        msg = `✅ All ${excludedCount} over-30 WO${excludedCount > 1 ? 's have' : ' has'} been billed!`;
+                    }
+                    document.getElementById('over30Table').innerHTML = `<tr><td colspan="5" style="text-align:center; color: #10b981;">${msg}</td></tr>`;
                     document.getElementById('over30Badge').textContent = 'Clear';
                     document.getElementById('over30Badge').className = 'badge badge-green';
                 }
