@@ -3027,6 +3027,43 @@
             'Content-Type': 'application/json'
         };
 
+        // =====================================================================
+        // SUPABASE API CACHE — reduces redundant calls within the free tier
+        // Caches responses in sessionStorage for 10 minutes to prevent
+        // duplicate fetches on tab switches, rapid refreshes, or cascading loads.
+        // =====================================================================
+        const CACHE_TTL_MS = 10 * 60 * 1000; // 10-minute cache window
+
+        function cachedFetch(url, options = {}) {
+            const cacheKey = 'sb_cache_' + url.replace(SUPABASE_URL, '');
+            try {
+                const cached = sessionStorage.getItem(cacheKey);
+                if (cached) {
+                    const { data, ts } = JSON.parse(cached);
+                    if (Date.now() - ts < CACHE_TTL_MS) {
+                        return Promise.resolve({ ok: true, json: () => Promise.resolve(data), cached: true });
+                    }
+                    sessionStorage.removeItem(cacheKey);
+                }
+            } catch (e) { /* ignore parse errors */ }
+
+            return fetch(url, options).then(async resp => {
+                if (resp.ok) {
+                    try {
+                        const data = await resp.clone().json();
+                        sessionStorage.setItem(cacheKey, JSON.stringify({ data, ts: Date.now() }));
+                    } catch (e) { /* ignore cache write errors */ }
+                }
+                return resp;
+            });
+        }
+
+        // Force-clear cache (used before a full refresh cycle)
+        function clearApiCache() {
+            const keys = Object.keys(sessionStorage).filter(k => k.startsWith('sb_cache_'));
+            keys.forEach(k => sessionStorage.removeItem(k));
+        }
+
         // Paginated fetch helper — Supabase caps responses at 1000 rows.
         // Uses Range header to fetch all pages and merges into one array.
         async function fetchAllRows(path) {
@@ -8441,8 +8478,8 @@
             console.log('Auto-login: No saved auth, showing login screen');
         }
 
-        // Refresh data every 5 minutes
-        setInterval(loadDashboardData, 5 * 60 * 1000);
+        // Refresh data every 30 minutes (reduced from 5min to stay within Supabase free tier)
+        setInterval(loadDashboardData, 30 * 60 * 1000);
 
         // =====================================================================
         // RALPH VALIDATOR STATUS — checks ralph_validations table hourly
@@ -8490,7 +8527,7 @@
         function showRalphDetails() {
             const v = window._ralphLatestValidation;
             if (!v) {
-                alert('Ralph Validator: No validation data yet.\n\nThe validator runs every hour on the hour via cron.\nRun manually: python3 ~/denver-dashboard/ralph-validator.py');
+                alert('Ralph Validator: No validation data yet.\n\nThe validator runs 2x daily (6 AM + 5 PM) via cron.\nRun manually: python3 ~/denver-dashboard/ralph-validator.py');
                 return;
             }
             const details = JSON.parse(v.details || '[]');
@@ -8514,9 +8551,9 @@
             alert(msg);
         }
 
-        // Load Ralph status on dashboard load and every 15 minutes
+        // Load Ralph status on dashboard load and every 60 minutes (reduced from 15min for free tier)
         setTimeout(loadRalphValidationStatus, 3000);
-        setInterval(loadRalphValidationStatus, 15 * 60 * 1000);
+        setInterval(loadRalphValidationStatus, 60 * 60 * 1000);
     </script>
 </body>
 </html>

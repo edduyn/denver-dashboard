@@ -5,7 +5,7 @@ class RalphSelfHeal {
     constructor() {
         this.healingLog = [];
         this.errorThreshold = 3; // Trigger healing after 3 consecutive errors
-        this.checkInterval = 60000; // Check every 60 seconds
+        this.checkInterval = 300000; // Check every 5 minutes (reduced from 60s to stay within Supabase free tier)
         this.lastHealthCheck = null;
         this.consecutiveErrors = {};
         this.autoRepairEnabled = true;
@@ -78,12 +78,13 @@ class RalphSelfHeal {
 
         console.log('🏥 Ralph: Running health check...');
 
-        // Check 1: Supabase connectivity
+        // Check 1: Supabase connectivity (uses cachedFetch if available to avoid wasting API calls)
         try {
             const SUPABASE_URL = 'https://pjielffstfzqffrpmyyt.supabase.co';
             const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBqaWVsZmZzdGZ6cWZmcnBteXl0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA2NTQzOTgsImV4cCI6MjA4NjIzMDM5OH0.uAu8sr_oZcAuysJTWUg3CuAnfbXMsPqQ-UzH43BxPSw';
 
-            const response = await fetch(`${SUPABASE_URL}/rest/v1/daily_metrics?limit=1`, {
+            const fetchFn = typeof cachedFetch === 'function' ? cachedFetch : fetch;
+            const response = await fetchFn(`${SUPABASE_URL}/rest/v1/daily_metrics?limit=1`, {
                 headers: { 'apikey': SUPABASE_KEY }
             });
 
