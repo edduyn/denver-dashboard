@@ -7816,7 +7816,7 @@
             try {
                 // 1. Get billed work orders (now includes customer_id from AS400 Billed WO report)
                 const [billedWOsResp, custEmailsResp, anchorResp] = await Promise.all([
-                    fetch(`${SUPABASE_URL}/rest/v1/work_orders?select=work_order_number,tail_number,billed_date,customer_id,customer_name&status=eq.billed&order=billed_date.desc&limit=50`, {
+                    fetch(`${SUPABASE_URL}/rest/v1/work_orders?select=work_order_number,tail_number,billed_date,customer_id,customer_name&status=eq.billed&work_order_number=neq.DUM0A&order=billed_date.desc&limit=50`, {
                         headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
                     }),
                     fetch(`${SUPABASE_URL}/rest/v1/customers?select=customer_number,email,customer_name`, {
@@ -7866,8 +7866,9 @@
                     }
                 });
 
-                // 6. Filter unsurveyed WOs
-                const unsurveyed = billedWOs.filter(wo => !surveyedWOs.has(wo.work_order_number));
+                // 6. Filter unsurveyed WOs (also exclude shop/internal WOs — DUM0A, tail=SHOP, etc.)
+                const isShopWO = (wo) => wo.work_order_number === 'DUM0A' || wo.tail_number === 'SHOP' || (wo.customer_name && wo.customer_name.toUpperCase().includes('SHOP WORKORDER'));
+                const unsurveyed = billedWOs.filter(wo => !surveyedWOs.has(wo.work_order_number) && !isShopWO(wo));
 
                 if (unsurveyed.length === 0) {
                     document.getElementById('customerRecommendations').innerHTML = '<tr><td colspan="6" style="text-align:center; color:#10b981;">✅ All billed work orders have been surveyed!</td></tr>';
