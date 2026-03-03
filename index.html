@@ -5292,15 +5292,15 @@
         const MIN_LOAD_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes minimum between full reloads
 
         async function loadDashboardData() {
-            const now = Date.now();
+            const loadTs = Date.now();
             try {
                 const lastLoad = parseInt(sessionStorage.getItem('sb_last_full_load') || '0');
-                if (now - lastLoad < MIN_LOAD_INTERVAL_MS) {
-                    console.log(`[Throttle] Skipping reload — last load was ${Math.round((now - lastLoad)/1000)}s ago (min ${MIN_LOAD_INTERVAL_MS/1000}s)`);
+                if (loadTs - lastLoad < MIN_LOAD_INTERVAL_MS) {
+                    console.log(`[Throttle] Skipping reload — last load was ${Math.round((loadTs - lastLoad)/1000)}s ago (min ${MIN_LOAD_INTERVAL_MS/1000}s)`);
                     return;
                 }
             } catch (e) { /* ignore */ }
-            sessionStorage.setItem('sb_last_full_load', now.toString());
+            sessionStorage.setItem('sb_last_full_load', loadTs.toString());
             // Clear shared caches so this cycle fetches fresh data
             _timeEntriesCache = null;
             _timeEntriesCacheTs = 0;
