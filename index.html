@@ -3066,7 +3066,18 @@
 
         // Paginated fetch helper — Supabase caps responses at 1000 rows.
         // Uses Range header to fetch all pages and merges into one array.
+        // Now uses cachedFetch to avoid redundant API calls within cache window.
         async function fetchAllRows(path) {
+            const cacheKey = 'sb_pag_' + path;
+            try {
+                const cached = sessionStorage.getItem(cacheKey);
+                if (cached) {
+                    const { data, ts } = JSON.parse(cached);
+                    if (Date.now() - ts < CACHE_TTL_MS) return data;
+                    sessionStorage.removeItem(cacheKey);
+                }
+            } catch (e) { /* ignore */ }
+
             const PAGE = 1000;
             let all = [];
             let offset = 0;
@@ -3080,7 +3091,24 @@
                 if (batch.length < PAGE) break;   // last page
                 offset += PAGE;
             }
+            try { sessionStorage.setItem(cacheKey, JSON.stringify({ data: all, ts: Date.now() })); } catch (e) { /* ignore */ }
             return all;
+        }
+
+        // =====================================================================
+        // SHARED DATA CACHE — fetch expensive tables ONCE per cycle, share globally
+        // =====================================================================
+        let _timeEntriesCache = null;
+        let _timeEntriesCacheTs = 0;
+
+        async function getTimeEntries() {
+            if (_timeEntriesCache && (Date.now() - _timeEntriesCacheTs < CACHE_TTL_MS)) {
+                return _timeEntriesCache;
+            }
+            const year = new Date().getFullYear();
+            _timeEntriesCache = await fetchAllRows(`/rest/v1/time_entries?select=*&entry_date=gte.${year}-01-01&order=entry_date.desc`);
+            _timeEntriesCacheTs = Date.now();
+            return _timeEntriesCache;
         }
 
         // Global store for ANCHOR data (used by filter/sort)
@@ -5259,8 +5287,24 @@
             dropZone.style.background = 'rgba(0,0,0,0.2)';
         }
 
-        // Load all dashboard data
+        // Load all dashboard data — throttled to prevent rapid-fire reloads
+        // Uses sessionStorage so throttle survives full page reloads (Fire tablet kiosk)
+        const MIN_LOAD_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes minimum between full reloads
+
         async function loadDashboardData() {
+            const now = Date.now();
+            try {
+                const lastLoad = parseInt(sessionStorage.getItem('sb_last_full_load') || '0');
+                if (now - lastLoad < MIN_LOAD_INTERVAL_MS) {
+                    console.log(`[Throttle] Skipping reload — last load was ${Math.round((now - lastLoad)/1000)}s ago (min ${MIN_LOAD_INTERVAL_MS/1000}s)`);
+                    return;
+                }
+            } catch (e) { /* ignore */ }
+            sessionStorage.setItem('sb_last_full_load', now.toString());
+            // Clear shared caches so this cycle fetches fresh data
+            _timeEntriesCache = null;
+            _timeEntriesCacheTs = 0;
+
             await loadAnchorWorkOrders();
             await loadRankings();
             await loadWorkOrders();
@@ -6600,9 +6644,9 @@
                 console.error('Error loading daily metrics:', error);
             }
 
-            // Calculate A/B ratios from time_entries
+            // Calculate A/B ratios from time_entries (uses shared cache)
             try {
-                const timeEntries = await fetchAllRows('/rest/v1/time_entries?select=*');
+                const timeEntries = await getTimeEntries();
 
                 if (timeEntries.length > 0) {
 
@@ -8174,8 +8218,8 @@
             console.log('loadYTDAB: Starting...');
 
             try {
-                // Fetch all time entries (paginated — Supabase caps at 1000/request)
-                const timeEntries = await fetchAllRows('/rest/v1/time_entries?select=*');
+                // Fetch all time entries via shared cache (avoids redundant full-table scans)
+                const timeEntries = await getTimeEntries();
 
                 if (!timeEntries.length) {
                     document.getElementById('ytdABTable').innerHTML = '<tr><td colspan="6" style="text-align:center; color:#94a3b8;">No time data available yet</td></tr>';
@@ -8259,8 +8303,8 @@
             console.log('loadMonthlyAB: Starting...');
 
             try {
-                // Fetch all 2026 time entries (paginated)
-                const timeEntries = await fetchAllRows('/rest/v1/time_entries?select=*');
+                // Fetch all 2026 time entries via shared cache
+                const timeEntries = await getTimeEntries();
 
                 if (!timeEntries.length) {
                     document.getElementById('monthlyABTable').innerHTML = '<tr><td colspan="7" style="text-align:center; color:#94a3b8;">No time data available yet</td></tr>';
