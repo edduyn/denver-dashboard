@@ -51,6 +51,7 @@
         .tab-rankings { border-left: 3px solid #eab308; }
         .tab-wip { border-left: 3px solid #22c55e; }
         .tab-training { border-left: 3px solid #a855f7; }
+        .tab-billedwo { border-left: 3px solid #f472b6; }
         .tab-financials { border-left: 3px solid #22d3ee; }
         
         /* Content */
@@ -352,6 +353,7 @@
             <div class="tab tab-overview" data-tab="overview">📊 Overview</div>
             <div class="tab tab-employees" data-tab="employees">👥 Employees</div>
             <div class="tab tab-workorders" data-tab="workorders">📋 Work Orders</div>
+            <div class="tab tab-billedwo" data-tab="billedwo">🧾 Billed WO</div>
             <div class="tab tab-training" data-tab="training">📚 Training</div>
             <div class="tab tab-quality" data-tab="quality">✅ Quality</div>
             <div class="tab tab-wip" data-tab="wip">💰 WIP</div>
@@ -1418,6 +1420,63 @@
                     </thead>
                     <tbody id="over30Table">
                         <tr><td colspan="5" style="text-align:center;">No over 30 work orders</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- BILLED WO TAB -->
+        <div class="content" id="billedwo">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">🧾 Billed Work Orders — Invoice Tracker</span>
+                    <span class="badge" id="billedWOBadge">Loading...</span>
+                </div>
+                <div style="margin-bottom: 16px; padding: 10px 14px; background: #1e293b; border-left: 4px solid #f472b6; border-radius: 6px;">
+                    <div style="color: #f9a8d4; font-weight: bold;">📄 Invoice Status: Flags WOs that need invoice PDFs pulled from AS400</div>
+                    <div style="color: #94a3b8; font-size: 0.85em; margin-top: 4px;">Drop invoice PDFs/ZIPs into <code style="background:#334155;padding:2px 6px;border-radius:3px;">My Drive/2026_Goals_Project/Invoices/incoming/</code> — auto-processed every 15 min</div>
+                </div>
+                <div class="card-grid">
+                    <div class="metric">
+                        <div class="metric-value" id="billedWOTotal">--</div>
+                        <div class="metric-label">Total Billed</div>
+                        <div class="metric-sub">All Time</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" style="color: #10b981;" id="billedWOHasInvoice">--</div>
+                        <div class="metric-label">Have Invoice</div>
+                        <div class="metric-sub">PDF Processed</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" style="color: #ef4444;" id="billedWOMissing">--</div>
+                        <div class="metric-label">Need Invoice</div>
+                        <div class="metric-sub">Pull from AS400</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" style="color: #f59e0b;" id="billedWORevenue">--</div>
+                        <div class="metric-label">Billed Revenue</div>
+                        <div class="metric-sub">From Invoices</div>
+                    </div>
+                </div>
+                <!-- Filter buttons -->
+                <div style="margin: 12px 0; display: flex; gap: 8px; flex-wrap: wrap;">
+                    <button onclick="filterBilledWO('all')" id="bwoFilterAll" style="padding: 6px 14px; border: 1px solid #475569; border-radius: 6px; background: #f472b6; color: #0f172a; cursor: pointer; font-weight: bold; font-size: 0.85em;">All</button>
+                    <button onclick="filterBilledWO('missing')" id="bwoFilterMissing" style="padding: 6px 14px; border: 1px solid #475569; border-radius: 6px; background: #1e293b; color: #94a3b8; cursor: pointer; font-size: 0.85em;">🔴 Need Invoice</button>
+                    <button onclick="filterBilledWO('has')" id="bwoFilterHas" style="padding: 6px 14px; border: 1px solid #475569; border-radius: 6px; background: #1e293b; color: #94a3b8; cursor: pointer; font-size: 0.85em;">🟢 Has Invoice</button>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>WO #</th>
+                            <th>Customer</th>
+                            <th>Tail #</th>
+                            <th>Billed Date</th>
+                            <th>Invoice</th>
+                            <th>Billed $</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="billedWOTable">
+                        <tr><td colspan="7" style="text-align:center; color: #94a3b8;">Click tab to load data...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -2802,7 +2861,7 @@
         let tabSwitchInterval = null;
         let pauseTimeout = null;
         let currentTab = 0;
-        const tabs = ['goals', 'actions', 'overview', 'employees', 'workorders', 'training', 'quality', 'wip', 'rankings', 'financials'];
+        const tabs = ['goals', 'actions', 'overview', 'employees', 'workorders', 'billedwo', 'training', 'quality', 'wip', 'rankings', 'financials'];
         
         // Login function (backup - button uses inline code)
         function login() {
@@ -2861,6 +2920,9 @@
             }
             if (tabId === 'employees') {
                 loadEvalTracker();
+            }
+            if (tabId === 'billedwo') {
+                loadBilledWorkOrders();
             }
         }
         
@@ -5582,6 +5644,121 @@
                 document.getElementById('workOrdersBadge').textContent = 'Error';
                 document.getElementById('workOrdersBadge').className = 'badge badge-red';
             }
+        }
+
+        // ========================================
+        // BILLED WO TAB — Invoice Tracker
+        // ========================================
+        let _billedWOData = null; // cache for filter toggling
+
+        async function loadBilledWorkOrders() {
+            // Use cached data if available (only re-fetch on full reload)
+            if (_billedWOData) {
+                renderBilledWOTable(_billedWOData.woList, _billedWOData.invoiceSet);
+                return;
+            }
+            try {
+                document.getElementById('billedWOBadge').textContent = 'Loading...';
+                document.getElementById('billedWOBadge').className = 'badge';
+
+                // TWO minimal queries — egress-conscious
+                const [woResp, invResp] = await Promise.all([
+                    fetch(`${SUPABASE_URL}/rest/v1/work_orders?select=work_order_number,customer_name,customer_id,tail_number,billed_date,billed_amount,open_date&status=eq.billed&work_order_number=neq.DUM0A&order=billed_date.desc.nullslast&limit=500`, {
+                        headers: HEADERS
+                    }),
+                    fetch(`${SUPABASE_URL}/rest/v1/invoices?select=wo_code,invoice_number,final_billed_amount`, {
+                        headers: HEADERS
+                    })
+                ]);
+
+                const woList = await woResp.json();
+                const invoices = await invResp.json();
+
+                if (!Array.isArray(woList) || !Array.isArray(invoices)) {
+                    throw new Error('Invalid response');
+                }
+
+                // Build invoice lookup: wo_code → {invoice_number, final_billed_amount}
+                const invoiceMap = {};
+                const invoiceSet = new Set();
+                invoices.forEach(inv => {
+                    if (inv.wo_code) {
+                        invoiceMap[inv.wo_code] = inv;
+                        invoiceSet.add(inv.wo_code);
+                    }
+                });
+
+                // Cache for filtering
+                _billedWOData = { woList, invoiceSet, invoiceMap };
+
+                renderBilledWOTable(woList, invoiceSet);
+
+            } catch (error) {
+                console.error('Error loading billed WOs:', error);
+                document.getElementById('billedWOBadge').textContent = 'Error';
+                document.getElementById('billedWOBadge').className = 'badge badge-red';
+            }
+        }
+
+        function renderBilledWOTable(woList, invoiceSet, filter) {
+            filter = filter || 'all';
+            const invoiceMap = _billedWOData ? _billedWOData.invoiceMap : {};
+
+            // Stats
+            const total = woList.length;
+            const hasInvoice = woList.filter(w => invoiceSet.has(w.work_order_number)).length;
+            const missing = total - hasInvoice;
+            const totalRevenue = Object.values(invoiceMap).reduce((sum, inv) => sum + (parseFloat(inv.final_billed_amount) || 0), 0);
+
+            document.getElementById('billedWOTotal').textContent = total;
+            document.getElementById('billedWOHasInvoice').textContent = hasInvoice;
+            document.getElementById('billedWOMissing').textContent = missing;
+            document.getElementById('billedWORevenue').textContent = '$' + totalRevenue.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0});
+            document.getElementById('billedWOBadge').textContent = `${missing} need invoice`;
+            document.getElementById('billedWOBadge').className = missing > 0 ? 'badge badge-red' : 'badge badge-green';
+
+            // Filter
+            let filtered = woList;
+            if (filter === 'missing') {
+                filtered = woList.filter(w => !invoiceSet.has(w.work_order_number));
+            } else if (filter === 'has') {
+                filtered = woList.filter(w => invoiceSet.has(w.work_order_number));
+            }
+
+            // Render rows
+            const rows = filtered.map(wo => {
+                const hasInv = invoiceSet.has(wo.work_order_number);
+                const inv = invoiceMap[wo.work_order_number];
+                const billedDate = wo.billed_date ? new Date(wo.billed_date + 'T00:00:00').toLocaleDateString('en-US', {month: 'short', day: 'numeric'}) : '--';
+                const billedAmt = inv ? '$' + parseFloat(inv.final_billed_amount || 0).toLocaleString('en-US', {minimumFractionDigits: 2}) : (wo.billed_amount ? '$' + parseFloat(wo.billed_amount).toLocaleString('en-US', {minimumFractionDigits: 2}) : '--');
+                const custDisplay = wo.customer_name || wo.customer_id || '--';
+
+                return `<tr style="border-left: 3px solid ${hasInv ? '#10b981' : '#ef4444'};">
+                    <td><strong>${wo.work_order_number}</strong></td>
+                    <td style="max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${custDisplay}</td>
+                    <td>${wo.tail_number || '--'}</td>
+                    <td>${billedDate}</td>
+                    <td>${hasInv ? '<span style="color:#10b981;">✅ ' + (inv.invoice_number || 'Yes') + '</span>' : '<span style="color:#ef4444; font-weight:bold;">🔴 NEED</span>'}</td>
+                    <td style="text-align: right;">${billedAmt}</td>
+                    <td>${hasInv ? '<span style="color:#10b981;">Complete</span>' : '<span style="color:#ef4444;">Pull PDF</span>'}</td>
+                </tr>`;
+            }).join('');
+
+            document.getElementById('billedWOTable').innerHTML = rows || '<tr><td colspan="7" style="text-align:center; color: #94a3b8;">No billed work orders found</td></tr>';
+        }
+
+        function filterBilledWO(filter) {
+            if (!_billedWOData) return;
+            // Update button styles
+            ['All', 'Missing', 'Has'].forEach(f => {
+                const btn = document.getElementById('bwoFilter' + f);
+                if (btn) {
+                    btn.style.background = f.toLowerCase() === filter ? '#f472b6' : '#1e293b';
+                    btn.style.color = f.toLowerCase() === filter ? '#0f172a' : '#94a3b8';
+                    btn.style.fontWeight = f.toLowerCase() === filter ? 'bold' : 'normal';
+                }
+            });
+            renderBilledWOTable(_billedWOData.woList, _billedWOData.invoiceSet, filter);
         }
 
         // Load Billing Priority Work Orders (7-Day Tracking)
