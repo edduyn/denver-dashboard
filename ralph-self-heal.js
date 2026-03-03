@@ -9,6 +9,9 @@ class RalphSelfHeal {
         this.lastHealthCheck = null;
         this.consecutiveErrors = {};
         this.autoRepairEnabled = true;
+        this.healAttemptsThisHour = 0; // Circuit breaker: max 2 heal attempts per hour
+        this.healHourReset = Date.now();
+        this.MAX_HEALS_PER_HOUR = 2;
     }
 
     // Initialize self-healing monitoring
@@ -189,6 +192,17 @@ class RalphSelfHeal {
 
     // Attempt to automatically heal detected issues
     async healIssues(issues) {
+        // Circuit breaker: reset counter every hour, limit heals to prevent egress cascade
+        if (Date.now() - this.healHourReset > 3600000) {
+            this.healAttemptsThisHour = 0;
+            this.healHourReset = Date.now();
+        }
+        if (this.healAttemptsThisHour >= this.MAX_HEALS_PER_HOUR) {
+            console.warn('⚠️ Ralph: Circuit breaker — max heal attempts reached this hour. Skipping.');
+            return;
+        }
+        this.healAttemptsThisHour++;
+
         console.log('🔧 Ralph: Initiating auto-heal procedures...');
 
         for (const issue of issues) {
@@ -235,8 +249,8 @@ class RalphSelfHeal {
             }
         }
 
-        // Re-run health check after healing
-        setTimeout(() => this.performHealthCheck(), 5000);
+        // NOTE: Removed immediate post-heal re-check to prevent egress cascade.
+        // Next regular health check at 5-minute interval will verify healing worked.
     }
 
     // Heal database connection issues
