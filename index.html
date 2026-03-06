@@ -1474,10 +1474,11 @@
                             <th>Invoice</th>
                             <th>Billed $</th>
                             <th>Status</th>
+                            <th>Audit</th>
                         </tr>
                     </thead>
                     <tbody id="billedWOTable">
-                        <tr><td colspan="8" style="text-align:center; color: #94a3b8;">Click tab to load data...</td></tr>
+                        <tr><td colspan="9" style="text-align:center; color: #94a3b8;">Click tab to load data...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -5668,18 +5669,22 @@
                 document.getElementById('billedWOBadge').textContent = 'Loading...';
                 document.getElementById('billedWOBadge').className = 'badge';
 
-                // TWO minimal queries — egress-conscious
-                const [woResp, invResp] = await Promise.all([
+                // THREE minimal queries — egress-conscious
+                const [woResp, invResp, compResp] = await Promise.all([
                     fetch(`${SUPABASE_URL}/rest/v1/work_orders?select=work_order_number,customer_name,customer_id,tail_number,billed_date,billed_amount,open_date&status=eq.billed&work_order_number=neq.DUM0A&order=billed_date.desc.nullslast&limit=500`, {
                         headers: HEADERS
                     }),
                     fetch(`${SUPABASE_URL}/rest/v1/invoices?select=wo_code,invoice_number,final_billed_amount`, {
+                        headers: HEADERS
+                    }),
+                    fetch(`${SUPABASE_URL}/rest/v1/compliance_findings?select=wo_code,overall_status,critical_count,moderate_count,minor_count&order=audit_date.desc`, {
                         headers: HEADERS
                     })
                 ]);
 
                 const woList = await woResp.json();
                 const invoices = await invResp.json();
+                const compFindings = await compResp.json();
 
                 if (!Array.isArray(woList) || !Array.isArray(invoices)) {
                     throw new Error('Invalid response');
@@ -5695,8 +5700,18 @@
                     }
                 });
 
+                // Build compliance lookup: wo_code → {overall_status, critical_count, ...}
+                const complianceMap = {};
+                if (Array.isArray(compFindings)) {
+                    compFindings.forEach(cf => {
+                        if (cf.wo_code && !complianceMap[cf.wo_code]) {
+                            complianceMap[cf.wo_code] = cf; // most recent per WO (ordered desc)
+                        }
+                    });
+                }
+
                 // Cache for filtering
-                _billedWOData = { woList, invoiceSet, invoiceMap };
+                _billedWOData = { woList, invoiceSet, invoiceMap, complianceMap };
 
                 renderBilledWOTable(woList, invoiceSet);
 
@@ -5710,6 +5725,7 @@
         function renderBilledWOTable(woList, invoiceSet, filter) {
             filter = filter || 'all';
             const invoiceMap = _billedWOData ? _billedWOData.invoiceMap : {};
+            const complianceMap = _billedWOData ? (_billedWOData.complianceMap || {}) : {};
 
             // Stats
             const total = woList.length;
@@ -5740,6 +5756,20 @@
                 const billedAmt = inv ? '$' + parseFloat(inv.final_billed_amount || 0).toLocaleString('en-US', {minimumFractionDigits: 2}) : (wo.billed_amount ? '$' + parseFloat(wo.billed_amount).toLocaleString('en-US', {minimumFractionDigits: 2}) : '--');
                 const custDisplay = wo.customer_name || wo.customer_id || '--';
 
+                // Compliance audit status
+                const comp = complianceMap[wo.work_order_number];
+                let auditCell;
+                if (!comp) {
+                    auditCell = '<span style="color:#64748b;" title="Not yet audited">⏳</span>';
+                } else if (comp.overall_status === 'PASS') {
+                    auditCell = '<span style="color:#10b981;" title="Compliance audit passed">🟢</span>';
+                } else if (comp.overall_status === 'FAIL') {
+                    const tip = (comp.critical_count || 0) + ' critical, ' + (comp.moderate_count || 0) + ' moderate';
+                    auditCell = '<span style="color:#ef4444; cursor:help;" title="' + tip + '">🔴</span>';
+                } else {
+                    auditCell = '<span style="color:#f59e0b;" title="Needs review">🟡</span>';
+                }
+
                 return `<tr style="border-left: 3px solid ${hasInv ? '#10b981' : '#ef4444'};">
                     <td><strong>${wo.work_order_number}</strong></td>
                     <td style="font-family: monospace; font-size: 0.85em; color: #94a3b8;">${wo.customer_id || '--'}</td>
@@ -5749,10 +5779,11 @@
                     <td>${hasInv ? '<span style="color:#10b981;">✅ ' + (inv.invoice_number || 'Yes') + '</span>' : '<span style="color:#ef4444; font-weight:bold;">🔴 NEED</span>'}</td>
                     <td style="text-align: right;">${billedAmt}</td>
                     <td>${hasInv ? '<span style="color:#10b981;">Complete</span>' : '<span style="color:#ef4444;">Pull PDF</span>'}</td>
+                    <td style="text-align: center;">${auditCell}</td>
                 </tr>`;
             }).join('');
 
-            document.getElementById('billedWOTable').innerHTML = rows || '<tr><td colspan="8" style="text-align:center; color: #94a3b8;">No billed work orders found</td></tr>';
+            document.getElementById('billedWOTable').innerHTML = rows || '<tr><td colspan="9" style="text-align:center; color: #94a3b8;">No billed work orders found</td></tr>';
         }
 
         function filterBilledWO(filter) {
