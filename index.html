@@ -5351,19 +5351,25 @@
         }
 
         // Load all dashboard data — throttled to prevent rapid-fire reloads
-        // Uses sessionStorage so throttle survives full page reloads (Fire tablet kiosk)
+        // Throttle ONLY applies to setInterval refreshes, NOT to initial page load
         const MIN_LOAD_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes minimum between full reloads
+        let _initialLoadDone = false; // Track whether first load has completed
 
-        async function loadDashboardData() {
+        async function loadDashboardData(force = false) {
             const loadTs = Date.now();
-            try {
-                const lastLoad = parseInt(sessionStorage.getItem('sb_last_full_load') || '0');
-                if (loadTs - lastLoad < MIN_LOAD_INTERVAL_MS) {
-                    console.log(`[Throttle] Skipping reload — last load was ${Math.round((loadTs - lastLoad)/1000)}s ago (min ${MIN_LOAD_INTERVAL_MS/1000}s)`);
-                    return;
-                }
-            } catch (e) { /* ignore */ }
+            // Always allow initial page load; throttle only subsequent refreshes
+            if (!force && _initialLoadDone) {
+                try {
+                    const lastLoad = parseInt(sessionStorage.getItem('sb_last_full_load') || '0');
+                    if (loadTs - lastLoad < MIN_LOAD_INTERVAL_MS) {
+                        console.log(`[Throttle] Skipping reload — last load was ${Math.round((loadTs - lastLoad)/1000)}s ago (min ${MIN_LOAD_INTERVAL_MS/1000}s)`);
+                        return;
+                    }
+                } catch (e) { /* ignore */ }
+            }
+            console.log(`[Data] ${_initialLoadDone ? 'Refreshing' : 'Initial load'} — fetching all data...`);
             sessionStorage.setItem('sb_last_full_load', loadTs.toString());
+            _initialLoadDone = true;
             // Clear shared caches so this cycle fetches fresh data
             _timeEntriesCache = null;
             _timeEntriesCacheTs = 0;
