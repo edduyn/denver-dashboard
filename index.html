@@ -3096,7 +3096,11 @@
         // M-F 7:30 AM - 5:00 PM Mountain Time only. Fire tablet was hammering
         // 24/7 and blew through 17GB egress. This cuts to 47.5 hrs/week (72% reduction).
         // =====================================================================
+        // ?force=1 in URL bypasses work hours gate (for manual testing/access)
+        const _forceBypass = new URLSearchParams(window.location.search).has('force');
+
         function isWithinWorkHours() {
+            if (_forceBypass) return true;
             const now = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Denver' }));
             const day = now.getDay(); // 0=Sun, 6=Sat
             const hour = now.getHours();
