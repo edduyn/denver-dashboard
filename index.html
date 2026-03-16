@@ -6939,35 +6939,44 @@
 
                 if (timeEntries.length > 0) {
 
-                    // Calculate Denver real-time A/B
+                    // Calculate Denver real-time A/B (dynamic month-aware)
+                    const nowDate = new Date();
+                    const currMonthNum = nowDate.getMonth() + 1; // 1-based
+                    const currYear = nowDate.getFullYear();
+                    const prevMonthNum = currMonthNum === 1 ? 12 : currMonthNum - 1;
+                    const monthNames = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                    const currMonthName = monthNames[currMonthNum];
+                    const prevMonthName = monthNames[prevMonthNum];
+
                     let totalHours = 0;
                     let billableHours = 0;
-                    let janTotal = 0;
-                    let janBillable = 0;
-                    let febTotal = 0;
-                    let febBillable = 0;
+                    let prevTotal = 0;
+                    let prevBillable = 0;
+                    let currTotal = 0;
+                    let currBillable = 0;
 
                     timeEntries.forEach(entry => {
                         const hours = parseFloat(entry.hours) || 0;
                         const isBillable = entry.wo_type !== 'Shop' && hours > 0;
                         const entryDate = new Date(entry.entry_date);
                         const month = entryDate.getMonth() + 1;
+                        const year = entryDate.getFullYear();
 
                         totalHours += hours;
                         if (isBillable) billableHours += hours;
 
-                        if (month === 1) {
-                            janTotal += hours;
-                            if (isBillable) janBillable += hours;
-                        } else if (month === 2) {
-                            febTotal += hours;
-                            if (isBillable) febBillable += hours;
+                        if (month === prevMonthNum && year === (prevMonthNum === 12 ? currYear - 1 : currYear)) {
+                            prevTotal += hours;
+                            if (isBillable) prevBillable += hours;
+                        } else if (month === currMonthNum && year === currYear) {
+                            currTotal += hours;
+                            if (isBillable) currBillable += hours;
                         }
                     });
 
                     const denverAB = totalHours > 0 ? (billableHours / totalHours * 100) : 0;
-                    const janAB = janTotal > 0 ? (janBillable / janTotal * 100) : 0;
-                    const febAB = febTotal > 0 ? (febBillable / febTotal * 100) : 0;
+                    const prevAB = prevTotal > 0 ? (prevBillable / prevTotal * 100) : 0;
+                    const currAB = currTotal > 0 ? (currBillable / currTotal * 100) : 0;
 
                     // Calculate 1-month rolling (last 30 days)
                     const thirtyDaysAgo = new Date();
@@ -6990,11 +6999,11 @@
                     // Update Denver side (right - green/blue)
                     document.getElementById('denverAB').textContent = `${denverAB.toFixed(1)}%`;
                     document.getElementById('denverRolling').textContent = `1-Month Rolling: ${rollingAB.toFixed(1)}%`;
-                    document.getElementById('denverFebOnly').textContent = `Feb-only: ${febAB.toFixed(1)}% ${febAB >= 50 ? '✅ Improving!' : ''}`;
+                    document.getElementById('denverFebOnly').textContent = `${currMonthName}-only: ${currAB.toFixed(1)}% ${currAB >= 50 ? '✅ Improving!' : ''}`;
 
                     // Update comparison stats
-                    document.getElementById('janFinal').textContent = `${janAB.toFixed(1)}%`;
-                    document.getElementById('febTrend').textContent = `${febAB.toFixed(1)}%`;
+                    document.getElementById('janFinal').textContent = `${prevAB.toFixed(1)}%`;
+                    document.getElementById('febTrend').textContent = `${currAB.toFixed(1)}%`;
                     document.getElementById('rollingAvg').textContent = `${rollingAB.toFixed(1)}%`;
 
                     // Update status message
@@ -7003,23 +7012,23 @@
                     let statusBorder = '';
                     let statusColor = '';
 
-                    if (febAB >= 58.5) {
-                        statusMsg = `🎉 Feb is EXCELLENT! ${febAB.toFixed(1)}% Feb-only A/B vs ${janAB.toFixed(1)}% Jan final. AT TARGET! Keep it up!`;
+                    if (currAB >= 58.5) {
+                        statusMsg = `🎉 ${currMonthName} is EXCELLENT! ${currAB.toFixed(1)}% ${currMonthName}-only A/B vs ${prevAB.toFixed(1)}% ${prevMonthName} final. AT TARGET! Keep it up!`;
                         statusBg = '#065f46';
                         statusBorder = '#10b981';
                         statusColor = '#10b981';
-                    } else if (febAB >= 50) {
-                        statusMsg = `✅ Feb is STRONG! ${febAB.toFixed(1)}% Feb-only A/B vs ${janAB.toFixed(1)}% Jan final. Nearly at 58.5% target! Keep pushing.`;
+                    } else if (currAB >= 50) {
+                        statusMsg = `✅ ${currMonthName} is STRONG! ${currAB.toFixed(1)}% ${currMonthName}-only A/B vs ${prevAB.toFixed(1)}% ${prevMonthName} final. Nearly at 58.5% target! Keep pushing.`;
                         statusBg = '#065f46';
                         statusBorder = '#10b981';
                         statusColor = '#10b981';
-                    } else if (febAB > janAB) {
-                        statusMsg = `📈 Feb is improving! ${febAB.toFixed(1)}% Feb-only A/B vs ${janAB.toFixed(1)}% Jan final. Still below 58.5% target - push harder!`;
+                    } else if (currAB > prevAB) {
+                        statusMsg = `📈 ${currMonthName} is improving! ${currAB.toFixed(1)}% ${currMonthName}-only A/B vs ${prevAB.toFixed(1)}% ${prevMonthName} final. Still below 58.5% target - push harder!`;
                         statusBg = '#78350f';
                         statusBorder = '#f59e0b';
                         statusColor = '#fbbf24';
                     } else {
-                        statusMsg = `🔴 Feb needs work! ${febAB.toFixed(1)}% Feb-only A/B vs ${janAB.toFixed(1)}% Jan final. Below 58.5% target - critical!`;
+                        statusMsg = `🔴 ${currMonthName} needs work! ${currAB.toFixed(1)}% ${currMonthName}-only A/B vs ${prevAB.toFixed(1)}% ${prevMonthName} final. Below 58.5% target - critical!`;
                         statusBg = '#7f1d1d';
                         statusBorder = '#ef4444';
                         statusColor = '#ef4444';
