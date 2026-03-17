@@ -7564,7 +7564,7 @@
                 // ====================================
                 // FETCH DATA IN PARALLEL
                 // ====================================
-                const [rankingsResp, npsYearResp, trainingResp] = await Promise.all([
+                const [rankingsResp, npsYearResp, trainingResp, monthlyMetricsResp] = await Promise.all([
                     cachedFetch(`${SUPABASE_URL}/rest/v1/rankings?select=*&order=week_ending.desc&limit=1`, {
                         headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
                     }),
@@ -7573,14 +7573,18 @@
                     }),
                     cachedFetch(`${SUPABASE_URL}/rest/v1/training?select=*&order=due_date.asc`, {
                         headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+                    }),
+                    cachedFetch(`${SUPABASE_URL}/rest/v1/metrics?select=month,ab_ratio,year&year=eq.2026&ab_ratio=not.is.null`, {
+                        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
                     })
                 ]);
 
                 const rankings = await rankingsResp.json();
                 const npsYear = await npsYearResp.json();
                 const training = await trainingResp.json();
+                const monthlyMetrics = await monthlyMetricsResp.json();
 
-                console.log('loadGoalsData: Data fetched — rankings:', rankings.length, 'npsYear:', npsYear.length, 'training:', training.length);
+                console.log('loadGoalsData: Data fetched — rankings:', rankings.length, 'npsYear:', npsYear.length, 'training:', training.length, 'monthlyMetrics:', monthlyMetrics.length);
 
                 // ====================================
                 // GOAL #1: Financial Objectives (A/B 58.5%, ELR)
@@ -7590,22 +7594,44 @@
                     const abPercentage = rank.denver_ab_actual;
                     const yearlyTarget = 58.5;
                     const gap = (yearlyTarget - abPercentage).toFixed(1);
-                    const progress = Math.min((abPercentage / yearlyTarget * 100), 100);
+
+                    // Annual progress: each month contributes up to 1/12th (8.33%)
+                    // weighted by how close that month's A/B was to the 58.5% target.
+                    // Months with no data yet contribute 0%.
+                    let annualProgress = 0;
+                    let monthsWithData = 0;
+                    let ytdAbSum = 0;
+                    if (Array.isArray(monthlyMetrics) && monthlyMetrics.length > 0) {
+                        monthlyMetrics.forEach(m => {
+                            const ab = parseFloat(m.ab_ratio);
+                            if (!isNaN(ab)) {
+                                annualProgress += Math.min(ab, yearlyTarget) / yearlyTarget * (100 / 12);
+                                ytdAbSum += ab;
+                                monthsWithData++;
+                            }
+                        });
+                    }
+                    const progress = Math.min(annualProgress, 100);
+                    const ytdAbAvg = monthsWithData > 0 ? (ytdAbSum / monthsWithData).toFixed(1) : abPercentage;
 
                     document.getElementById('currentAB').textContent = `${abPercentage}%`;
                     document.getElementById('networkRank').textContent = `#${rank.denver_position}`;
                     document.getElementById('abGap').textContent = abPercentage >= yearlyTarget ? 'None' : `${gap}pp`;
 
                     let badge, badgeClass, barClass, pctColor, abPaceText, abPaceClass;
-                    if (abPercentage >= yearlyTarget) {
-                        badge = '✅ On Target'; badgeClass = 'badge-green'; barClass = 'progress-fill progress-green'; pctColor = '#10b981';
-                        abPaceText = `▲ Meeting yearly target of 58.5%`; abPaceClass = 'pace-ahead';
-                    } else if (progress >= 95) {
+                    // Pace check: are we on track if we extrapolate YTD average to full year?
+                    const onPace = parseFloat(ytdAbAvg) >= yearlyTarget;
+                    const expectedProgress = (yr.monthsElapsed / 12) * 100;
+
+                    if (onPace) {
+                        badge = '✅ On Pace'; badgeClass = 'badge-green'; barClass = 'progress-fill progress-green'; pctColor = '#10b981';
+                        abPaceText = `▲ YTD avg ${ytdAbAvg}% across ${monthsWithData} month(s) — on pace for 58.5% annual target`; abPaceClass = 'pace-ahead';
+                    } else if (progress >= expectedProgress * 0.85) {
                         badge = `${gap}pp gap`; badgeClass = 'badge-amber'; barClass = 'progress-fill progress-amber'; pctColor = '#f59e0b';
-                        abPaceText = `● Close to yearly target — need +${gap}pp to reach 58.5%`; abPaceClass = 'pace-ontrack';
+                        abPaceText = `● YTD avg ${ytdAbAvg}% across ${monthsWithData} month(s) — close but need improvement to hit 58.5%`; abPaceClass = 'pace-ontrack';
                     } else {
                         badge = `${gap}pp gap`; badgeClass = 'badge-red'; barClass = 'progress-fill progress-red'; pctColor = '#ef4444';
-                        abPaceText = `▼ ${gap}pp below yearly target of 58.5%`; abPaceClass = 'pace-behind';
+                        abPaceText = `▼ YTD avg ${ytdAbAvg}% across ${monthsWithData} month(s) — behind pace for 58.5% annual target (${progress.toFixed(1)}% of 12-month goal)`; abPaceClass = 'pace-behind';
                     }
 
                     setGoalStatus('ab', {
@@ -7614,7 +7640,7 @@
                         paceText: abPaceText, paceClass: abPaceClass
                     });
 
-                    scorecard.push({ num: 1, name: 'Financial Objectives (A/B, ELR)', target: '58.5%', current: `${abPercentage}%`, status: abPercentage >= yearlyTarget ? 'green' : (progress >= 95 ? 'amber' : 'red'), statusText: abPercentage >= yearlyTarget ? 'On Target' : `${gap}pp gap` });
+                    scorecard.push({ num: 1, name: 'Financial Objectives (A/B, ELR)', target: '58.5%', current: `${abPercentage}% (YTD avg ${ytdAbAvg}%)`, status: onPace ? 'green' : (progress >= expectedProgress * 0.85 ? 'amber' : 'red'), statusText: onPace ? 'On Pace' : `${progress.toFixed(1)}% of annual` });
                 }
 
                 // ====================================
