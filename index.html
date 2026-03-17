@@ -7811,12 +7811,20 @@
                             paceText: expPaceText, paceClass: expVariance <= 0 ? 'pace-ahead' : 'pace-behind'
                         });
 
+                        // Update pace text and month indicator (HTML uses goal6* IDs, not expBudget* prefix)
+                        const g6Pace = document.getElementById('goal6PaceText');
+                        if (g6Pace) { g6Pace.textContent = expPaceText; g6Pace.className = expVariance <= 0 ? 'pace-ahead' : 'pace-behind'; }
+                        const g6Month = document.getElementById('goal6CurrentMonth');
+                        if (g6Month) g6Month.textContent = yr.monthsElapsed;
+
                         scorecard.push({ num: 6, name: 'Expense Budget', target: `${formatCurrency(annualBudget)}/yr`, current: `${formatCurrency(ytdExpenses)} (${monthCount} mo)`, status: expStatus, statusText: expStatusText });
                     } else {
                         throw new Error('No financial data');
                     }
                 } catch(e) {
                     setGoalStatus('expBudget', { value: '--', pct: 0, badge: 'No Data', badgeClass: 'badge-gray', barClass: 'progress-fill progress-green', pctColor: '#94a3b8', paceText: '● Expense data unavailable — see Financials tab', paceClass: 'pace-ontrack' });
+                    const g6PaceErr = document.getElementById('goal6PaceText');
+                    if (g6PaceErr) { g6PaceErr.textContent = '● Expense data unavailable — see Financials tab'; g6PaceErr.className = 'pace-ontrack'; }
                     scorecard.push({ num: 6, name: 'Expense Budget', target: 'Within budget', current: '--', status: 'gray', statusText: 'No Data' });
                 }
 
