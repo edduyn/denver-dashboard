@@ -7757,19 +7757,32 @@
 
                 // ====================================
                 // GOAL #6: Expense Budget Management (Dynamic - from monthly_financials)
+                // Annual goal: stay within budget across all 12 months.
+                // Compare YTD actual expenses vs YTD budget (only months with data).
+                // Progress bar = months with expense data / 12.
                 // ====================================
                 try {
-                    const finResp6 = await cachedFetch(`${SUPABASE_URL}/rest/v1/monthly_financials?select=total_expenses,net_income,year&year=eq.2026`, { headers: HEADERS });
+                    const finResp6 = await cachedFetch(`${SUPABASE_URL}/rest/v1/monthly_financials?select=month,total_expenses,total_expenses_budget,year&year=eq.2026&order=month.asc`, { headers: HEADERS });
                     const finData6 = await finResp6.json();
 
                     if (Array.isArray(finData6) && finData6.length > 0) {
-                        const ytdExpenses = finData6.reduce((s,r) => s + parseFloat(r.total_expenses || 0), 0);
-                        const budgetExpenses = 1115865; // 2026 budget (using 2025 baseline until 2026 budget loaded)
-                        const expVariance = ytdExpenses - budgetExpenses;
-                        const expPct = budgetExpenses > 0 ? Math.min((ytdExpenses / budgetExpenses * 100), 120) : 0;
+                        // Only count months that have actual expense data (> 0)
+                        const monthsWithExpenses = finData6.filter(r => parseFloat(r.total_expenses || 0) > 0);
+                        const monthCount = monthsWithExpenses.length;
+                        const ytdExpenses = monthsWithExpenses.reduce((s,r) => s + parseFloat(r.total_expenses || 0), 0);
+                        const ytdBudget = monthsWithExpenses.reduce((s,r) => s + parseFloat(r.total_expenses_budget || 0), 0);
+                        const annualBudget = 1115865; // Full year 2026 budget baseline
+
+                        // If no monthly budgets stored yet, prorate annual budget
+                        const compareBudget = ytdBudget > 0 ? ytdBudget : (annualBudget / 12 * monthCount);
+                        const expVariance = ytdExpenses - compareBudget;
+                        const variancePct = compareBudget > 0 ? (expVariance / compareBudget * 100) : 0;
+
+                        // Progress = months with expense data / 12 (annual goal completion)
+                        const expProgress = Math.min((monthCount / 12) * 100, 100);
 
                         document.getElementById('goal6Expenses').textContent = formatCurrency(ytdExpenses);
-                        document.getElementById('goal6Budget').textContent = formatCurrency(budgetExpenses);
+                        document.getElementById('goal6Budget').textContent = `${formatCurrency(compareBudget)} (${monthCount} mo)`;
                         document.getElementById('goal6Variance').textContent = `${expVariance >= 0 ? '+' : ''}${formatCurrency(expVariance)}`;
                         document.getElementById('goal6Variance').style.color = expVariance <= 0 ? '#10b981' : '#ef4444';
 
@@ -7777,28 +7790,28 @@
                         if (expVariance <= 0) {
                             expBadge = '✅ Under Budget'; expBadgeClass = 'badge-green';
                             expBarClass = 'progress-fill progress-green'; expPctColor = '#10b981';
-                            expPaceText = `▲ ${formatCurrency(Math.abs(expVariance))} under budget — excellent expense control`;
+                            expPaceText = `▲ ${formatCurrency(Math.abs(expVariance))} under YTD budget across ${monthCount} month(s) — ${expProgress.toFixed(1)}% of annual goal tracked`;
                             expStatus = 'green'; expStatusText = 'Under Budget';
-                        } else if (expVariance / budgetExpenses <= 0.05) {
+                        } else if (variancePct <= 5) {
                             expBadge = '⚠️ Near Budget'; expBadgeClass = 'badge-amber';
                             expBarClass = 'progress-fill progress-amber'; expPctColor = '#f59e0b';
-                            expPaceText = `● ${formatCurrency(expVariance)} over budget (${(expVariance/budgetExpenses*100).toFixed(1)}%) — monitor closely`;
+                            expPaceText = `● ${formatCurrency(expVariance)} over YTD budget (${variancePct.toFixed(1)}%) across ${monthCount} month(s) — monitor closely`;
                             expStatus = 'amber'; expStatusText = 'Near Budget';
                         } else {
                             expBadge = '🔴 Over Budget'; expBadgeClass = 'badge-red';
                             expBarClass = 'progress-fill progress-red'; expPctColor = '#ef4444';
-                            expPaceText = `▼ ${formatCurrency(expVariance)} over budget (${(expVariance/budgetExpenses*100).toFixed(1)}%) — needs attention`;
+                            expPaceText = `▼ ${formatCurrency(expVariance)} over YTD budget (${variancePct.toFixed(1)}%) across ${monthCount} month(s) — needs attention`;
                             expStatus = 'red'; expStatusText = 'Over Budget';
                         }
 
                         setGoalStatus('expBudget', {
-                            value: formatCurrency(ytdExpenses), pct: Math.min(expPct, 100),
+                            value: formatCurrency(ytdExpenses), pct: expProgress,
                             badge: expBadge, badgeClass: expBadgeClass,
                             barClass: expBarClass, pctColor: expPctColor,
                             paceText: expPaceText, paceClass: expVariance <= 0 ? 'pace-ahead' : 'pace-behind'
                         });
 
-                        scorecard.push({ num: 6, name: 'Expense Budget', target: formatCurrency(budgetExpenses), current: formatCurrency(ytdExpenses), status: expStatus, statusText: expStatusText });
+                        scorecard.push({ num: 6, name: 'Expense Budget', target: `${formatCurrency(annualBudget)}/yr`, current: `${formatCurrency(ytdExpenses)} (${monthCount} mo)`, status: expStatus, statusText: expStatusText });
                     } else {
                         throw new Error('No financial data');
                     }
