@@ -2516,6 +2516,28 @@
                         <div style="color: #ef4444; font-size: 22px; font-weight: bold;" id="ftMissingWOs">--</div>
                     </div>
                 </div>
+                <!-- Freight P&L Summary -->
+                <div id="ftPLSummary" style="margin-bottom: 16px;"></div>
+                <!-- Matched WO Status Table -->
+                <div style="color: #a3e635; font-weight: bold; margin-bottom: 8px; font-size: 12px;">🔗 Matched WOs — Freight Cost vs Recovery</div>
+                <div class="table-container" style="max-height: 220px; margin-bottom: 16px;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="color: #a3e635;">WO#</th>
+                                <th style="color: #a3e635; text-align: center;">Ships</th>
+                                <th style="color: #a3e635; text-align: right;">Actual Cost</th>
+                                <th style="color: #a3e635; text-align: right;">Flat Rate</th>
+                                <th style="color: #a3e635; text-align: right;">Net P&L</th>
+                                <th style="color: #a3e635;">WO Status</th>
+                                <th style="color: #a3e635;">Recovery</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ftMatchedWOsTable">
+                            <tr><td colspan="7" style="text-align: center; color: #a3e635;">Loading...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
                 <!-- Missing Freight Alerts -->
                 <div id="ftMissingAlerts" style="margin-bottom: 16px;"></div>
                 <!-- Tracking Records Table -->
@@ -4750,6 +4772,95 @@
                 document.getElementById('ftTotalToBill').textContent = formatCurrency(totalToBill);
                 document.getElementById('ftPostedCount').textContent = posted.length;
                 document.getElementById('ftMissingWOs').textContent = missingWOs.length;
+
+                // --- Freight P&L from invoice actuals ---
+                const invData = Array.isArray(invoiceData) ? invoiceData : [];
+                const plRecovered = invData.filter(r => r.recovery_status === 'recovered').reduce((s, r) => s + (parseFloat(r.actual_charge) || 0), 0);
+                const plPending   = invData.filter(r => r.recovery_status === 'pending').reduce((s, r) => s + (parseFloat(r.actual_charge) || 0), 0);
+                const plInternal  = invData.filter(r => r.recovery_status === 'internal').reduce((s, r) => s + (parseFloat(r.actual_charge) || 0), 0);
+                const plUnbilled  = invData.filter(r => r.recovery_status === 'unbilled').reduce((s, r) => s + (parseFloat(r.actual_charge) || 0), 0);
+                const plTotal     = invData.reduce((s, r) => s + (parseFloat(r.actual_charge) || 0), 0);
+                const plPct       = plTotal > 0 ? Math.round(plRecovered / plTotal * 100) : 0;
+                const plBarColor  = plPct >= 60 ? '#10b981' : plPct >= 30 ? '#fbbf24' : '#ef4444';
+
+                // Build flat_rate lookup from trackData keyed by tracking_number
+                const ftByTracking = {};
+                trackData.forEach(r => { if (r.tracking_number) ftByTracking[r.tracking_number] = r; });
+
+                document.getElementById('ftPLSummary').innerHTML = `
+                    <div style="background:rgba(0,0,0,0.35);border:1px solid #10b981;border-radius:8px;padding:12px;">
+                        <div style="color:#6ee7b7;font-weight:bold;font-size:12px;margin-bottom:10px;">💰 YTD Freight P&amp;L — Actual Cost vs Recovery (Goal: Break Even)</div>
+                        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:10px;">
+                            <div style="text-align:center;background:rgba(239,68,68,0.15);border-radius:6px;padding:8px;">
+                                <div style="color:#fca5a5;font-size:10px;">YTD Cost</div>
+                                <div style="color:#f87171;font-size:16px;font-weight:bold;">${formatCurrency(plTotal)}</div>
+                            </div>
+                            <div style="text-align:center;background:rgba(16,185,129,0.15);border-radius:6px;padding:8px;">
+                                <div style="color:#6ee7b7;font-size:10px;">Recovered ✅</div>
+                                <div style="color:#10b981;font-size:16px;font-weight:bold;">${formatCurrency(plRecovered)}</div>
+                            </div>
+                            <div style="text-align:center;background:rgba(251,191,36,0.15);border-radius:6px;padding:8px;">
+                                <div style="color:#fde68a;font-size:10px;">Pending (Open WO)</div>
+                                <div style="color:#fbbf24;font-size:16px;font-weight:bold;">${formatCurrency(plPending)}</div>
+                            </div>
+                            <div style="text-align:center;background:rgba(129,140,248,0.15);border-radius:6px;padding:8px;">
+                                <div style="color:#a5b4fc;font-size:10px;">Internal (N/A)</div>
+                                <div style="color:#818cf8;font-size:16px;font-weight:bold;">${formatCurrency(plInternal)}</div>
+                            </div>
+                            <div style="text-align:center;background:rgba(239,68,68,0.25);border:1px solid rgba(239,68,68,0.4);border-radius:6px;padding:8px;">
+                                <div style="color:#fca5a5;font-size:10px;">Unmatched ⚠️</div>
+                                <div style="color:#ef4444;font-size:16px;font-weight:bold;">${formatCurrency(plUnbilled)}</div>
+                            </div>
+                        </div>
+                        <div>
+                            <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+                                <span style="color:#94a3b8;font-size:11px;">Recovery rate (of all freight cost)</span>
+                                <span style="color:${plBarColor};font-size:11px;font-weight:bold;">${plPct}% recovered — ${formatCurrency(plTotal - plRecovered)} still at risk</span>
+                            </div>
+                            <div style="background:rgba(0,0,0,0.4);border-radius:4px;height:8px;overflow:hidden;">
+                                <div style="background:${plBarColor};height:100%;width:${plPct}%;transition:width 0.5s;"></div>
+                            </div>
+                        </div>
+                    </div>`;
+
+                // --- Matched WOs Table ---
+                const matchedInvoices = invData.filter(inv => inv.wo_number && inv.wo_number.trim() !== '');
+                const woGroups = {};
+                matchedInvoices.forEach(inv => {
+                    const wo = inv.wo_number;
+                    if (!woGroups[wo]) woGroups[wo] = { shipments: 0, actualCost: 0, flatRate: 0, recovery_status: inv.recovery_status };
+                    woGroups[wo].shipments++;
+                    woGroups[wo].actualCost += parseFloat(inv.actual_charge) || 0;
+                    const ft = ftByTracking[inv.tracking_number];
+                    if (ft) woGroups[wo].flatRate += parseFloat(ft.flat_rate_cost) || 0;
+                    // Keep most significant status: recovered > pending > internal > unbilled
+                    const rank = { recovered: 4, pending: 3, internal: 2, unbilled: 1 };
+                    if ((rank[inv.recovery_status] || 0) > (rank[woGroups[wo].recovery_status] || 0)) woGroups[wo].recovery_status = inv.recovery_status;
+                });
+                let matchedHTML = '';
+                Object.entries(woGroups).sort((a, b) => b[1].actualCost - a[1].actualCost).forEach(([wo, g]) => {
+                    const net = g.flatRate - g.actualCost;
+                    const netColor = net >= 0 ? '#10b981' : '#ef4444';
+                    const netSign  = net >= 0 ? '+' : '';
+                    let woBadge;
+                    if (g.recovery_status === 'recovered')     woBadge = '<span style="background:#10b981;color:#000;padding:2px 6px;border-radius:4px;font-size:10px;">BILLED ✅</span>';
+                    else if (g.recovery_status === 'pending')  woBadge = '<span style="background:#fbbf24;color:#000;padding:2px 6px;border-radius:4px;font-size:10px;">OPEN WO ⏳</span>';
+                    else if (g.recovery_status === 'internal') woBadge = '<span style="background:#818cf8;color:#fff;padding:2px 6px;border-radius:4px;font-size:10px;">INTERNAL</span>';
+                    else                                        woBadge = '<span style="background:#ef4444;color:#fff;padding:2px 6px;border-radius:4px;font-size:10px;">UNBILLED ⚠️</span>';
+                    const recCell = g.flatRate > 0
+                        ? `<span style="color:#a3e635;font-size:11px;">${formatCurrency(g.flatRate)} charged</span>`
+                        : `<span style="color:#ef4444;font-size:11px;">No flat rate ⚠️</span>`;
+                    matchedHTML += `<tr>
+                        <td style="font-size:11px;font-weight:bold;">${wo}</td>
+                        <td style="font-size:11px;text-align:center;">${g.shipments}</td>
+                        <td style="font-size:11px;text-align:right;color:#fca5a5;">${formatCurrency(g.actualCost)}</td>
+                        <td style="font-size:11px;text-align:right;">${g.flatRate > 0 ? formatCurrency(g.flatRate) : '--'}</td>
+                        <td style="font-size:11px;text-align:right;color:${netColor};font-weight:bold;">${g.flatRate > 0 ? netSign + formatCurrency(Math.abs(net)) : '--'}</td>
+                        <td style="font-size:11px;">${woBadge}</td>
+                        <td style="font-size:11px;">${recCell}</td>
+                    </tr>`;
+                });
+                document.getElementById('ftMatchedWOsTable').innerHTML = matchedHTML || '<tr><td colspan="7" style="text-align:center;color:#6ee7b7;">No matched invoices yet</td></tr>';
 
                 // --- Missing Freight Alerts ---
                 if (missingWOs.length > 0) {
