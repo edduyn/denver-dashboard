@@ -7822,6 +7822,7 @@
                         throw new Error('No financial data');
                     }
                 } catch(e) {
+                    console.error('Goal #6 Expense error:', e);
                     setGoalStatus('expBudget', { value: '--', pct: 0, badge: 'No Data', badgeClass: 'badge-gray', barClass: 'progress-fill progress-green', pctColor: '#94a3b8', paceText: '● Expense data unavailable — see Financials tab', paceClass: 'pace-ontrack' });
                     const g6PaceErr = document.getElementById('goal6PaceText');
                     if (g6PaceErr) { g6PaceErr.textContent = '● Expense data unavailable — see Financials tab'; g6PaceErr.className = 'pace-ontrack'; }
@@ -8454,7 +8455,9 @@
 
                     // TL deadline display
                     let tlStr;
-                    if (emp.eval_responsible === 'Edduyn Pita') {
+                    if (emp.eval_status === 'completed') {
+                        tlStr = '<span style="color:#22c55e;">✅ Done</span>';
+                    } else if (emp.eval_responsible === 'Edduyn Pita') {
                         tlStr = '<span style="color:#64748b;">N/A (you)</span>';
                     } else if (tlDaysLeft < 0) {
                         tlStr = `<span style="color:#ef4444; font-weight:bold;">⚠️ ${Math.abs(tlDaysLeft)}d overdue</span>`;
