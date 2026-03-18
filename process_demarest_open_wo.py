@@ -178,10 +178,24 @@ def upsert_to_supabase(records):
 # =============================================================================
 # MAIN
 # =============================================================================
+def clear_demarest_table():
+    """Delete all rows from demarest_open_wo before refreshing with today's data."""
+    url = f'{SUPABASE_URL}/rest/v1/demarest_open_wo?id=gt.0'
+    req = urllib.request.Request(url, headers=HEADERS, method='DELETE')
+    try:
+        resp = urllib.request.urlopen(req, context=ctx)
+        print(f'  Cleared demarest_open_wo table (HTTP {resp.status})')
+    except urllib.error.HTTPError as e:
+        print(f'  WARNING: Could not clear table (HTTP {e.code})')
+
+
 def process_files(file_paths):
     """Process one or more Demarest CSV files."""
     total_records = 0
     total_flagged = 0
+
+    # Clear stale data before inserting fresh snapshot
+    clear_demarest_table()
 
     for path in file_paths:
         fname = os.path.basename(path)
