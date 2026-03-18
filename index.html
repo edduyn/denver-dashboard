@@ -2496,6 +2496,28 @@
                 <div id="freightAtRiskContent">
                     <div style="color: #fb923c; font-size: 12px; text-align: center; padding: 20px;">Analyzing freight risk across open and billed WOs...</div>
                 </div>
+                <!-- Freight Reconciliation vs GL 49800 -->
+                <div style="margin-top: 14px; border-top: 1px solid rgba(249,115,22,0.3); padding-top: 14px;">
+                    <div style="color: #fb923c; font-weight: bold; font-size: 12px; margin-bottom: 10px;">📊 Invoice Freight vs FedEx CSV — Reconciliation (GL 49800)</div>
+                    <div style="display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-bottom: 12px;">
+                        <div style="background:rgba(0,0,0,0.3);border-radius:8px;padding:10px;text-align:center;">
+                            <div style="color:#fda4af;font-size:10px;margin-bottom:2px;">Billed to Customers (invoices)</div>
+                            <div style="color:#f43f5e;font-size:20px;font-weight:bold;" id="reconcBilled">$--</div>
+                            <div style="color:#fda4af;font-size:10px;" id="reconcBilledWOs">-- WOs</div>
+                        </div>
+                        <div style="background:rgba(0,0,0,0.3);border-radius:8px;padding:10px;text-align:center;">
+                            <div style="color:#a5b4fc;font-size:10px;margin-bottom:2px;">FedEx CSV Cost (tracked)</div>
+                            <div style="color:#818cf8;font-size:20px;font-weight:bold;" id="reconcFedex">$--</div>
+                            <div style="color:#a5b4fc;font-size:10px;" id="reconcFedexShips">-- shipments</div>
+                        </div>
+                        <div style="background:rgba(0,0,0,0.3);border-radius:8px;padding:10px;text-align:center;">
+                            <div style="color:#6ee7b7;font-size:10px;margin-bottom:2px;">Untracked (vendor frt + handling)</div>
+                            <div style="color:#10b981;font-size:20px;font-weight:bold;" id="reconcGap">$--</div>
+                            <div style="color:#6ee7b7;font-size:10px;">not in FedEx CSV</div>
+                        </div>
+                    </div>
+                    <div id="reconcWOTable" style="font-size:11px;"></div>
+                </div>
             </div>
 
             <!-- Freight Tracking Management (Phase 3) -->
@@ -4962,17 +4984,21 @@
         // ============================================
         async function loadFreightAtRiskWarnings() {
             try {
-                const [invResp, woResp] = await Promise.all([
+                const [invResp, woResp, allInvResp] = await Promise.all([
                     fetch(`${SUPABASE_URL}/rest/v1/freight_invoices?select=id,wo_number,actual_charge,tracking_number,recovery_status,reference_number&recovery_status=in.(unbilled,pending)&wo_number=not.is.null`, {
                         headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
                     }),
-                    fetch(`${SUPABASE_URL}/rest/v1/work_orders?select=work_order_number,customer_name,status,billed_date,open_date`, {
+                    fetch(`${SUPABASE_URL}/rest/v1/work_orders?select=work_order_number,customer_name,status,billed_date,open_date,customer_billed_freight,freight_invoice_ref`, {
+                        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+                    }),
+                    fetch(`${SUPABASE_URL}/rest/v1/freight_invoices?select=wo_number,actual_charge&wo_number=not.is.null`, {
                         headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
                     })
                 ]);
                 if (!invResp.ok || !woResp.ok) return;
                 const invoices = await invResp.json();
                 const workOrders = await woResp.json();
+                const allInvoices = allInvResp.ok ? await allInvResp.json() : [];
 
                 if (!invoices || invoices.length === 0) {
                     document.getElementById('freightAtRiskBadge').textContent = '✅ All Clear';
@@ -5092,6 +5118,56 @@
                 }
 
                 document.getElementById('freightAtRiskContent').innerHTML = html;
+
+                // --- Reconciliation: Invoice freight vs FedEx CSV vs GL ---
+                const reconcWOs = workOrders.filter(wo => parseFloat(wo.customer_billed_freight) > 0);
+                if (reconcWOs.length > 0) {
+                    // Build FedEx cost per WO from ALL invoices (not just unbilled)
+                    const fedexByWO = {};
+                    allInvoices.forEach(inv => {
+                        const wn = (inv.wo_number || '').trim();
+                        if (!wn) return;
+                        if (!fedexByWO[wn]) fedexByWO[wn] = 0;
+                        fedexByWO[wn] += parseFloat(inv.actual_charge) || 0;
+                    });
+
+                    const totalBilled = reconcWOs.reduce((s, wo) => s + parseFloat(wo.customer_billed_freight), 0);
+                    const totalFedex  = reconcWOs.reduce((s, wo) => s + (fedexByWO[wo.work_order_number] || 0), 0);
+                    const totalGap    = totalBilled - totalFedex;
+
+                    document.getElementById('reconcBilled').textContent    = formatCurrency(totalBilled);
+                    document.getElementById('reconcBilledWOs').textContent = `${reconcWOs.length} WO${reconcWOs.length!==1?'s':''}`;
+                    document.getElementById('reconcFedex').textContent     = formatCurrency(totalFedex);
+                    document.getElementById('reconcFedexShips').textContent = `${allInvoices.filter(i=>reconcWOs.find(w=>w.work_order_number===i.wo_number)).length} shipments`;
+                    document.getElementById('reconcGap').textContent       = formatCurrency(totalGap);
+
+                    let tableHTML = `<table style="width:100%;border-collapse:collapse;">
+                        <thead><tr>
+                            <th style="color:#fb923c;font-size:11px;text-align:left;padding:4px 6px;border-bottom:1px solid rgba(249,115,22,0.3);">WO#</th>
+                            <th style="color:#fb923c;font-size:11px;text-align:left;padding:4px 6px;border-bottom:1px solid rgba(249,115,22,0.3);">Customer</th>
+                            <th style="color:#fb923c;font-size:11px;text-align:left;padding:4px 6px;border-bottom:1px solid rgba(249,115,22,0.3);">Invoice Ref</th>
+                            <th style="color:#f43f5e;font-size:11px;text-align:right;padding:4px 6px;border-bottom:1px solid rgba(249,115,22,0.3);">Billed to Cust</th>
+                            <th style="color:#818cf8;font-size:11px;text-align:right;padding:4px 6px;border-bottom:1px solid rgba(249,115,22,0.3);">FedEx CSV</th>
+                            <th style="color:#10b981;font-size:11px;text-align:right;padding:4px 6px;border-bottom:1px solid rgba(249,115,22,0.3);">Untracked</th>
+                        </tr></thead><tbody>`;
+                    reconcWOs.sort((a,b)=>parseFloat(b.customer_billed_freight)-parseFloat(a.customer_billed_freight)).forEach(wo => {
+                        const billed  = parseFloat(wo.customer_billed_freight) || 0;
+                        const fedex   = fedexByWO[wo.work_order_number] || 0;
+                        const gap     = billed - fedex;
+                        const pct     = billed > 0 ? Math.round((fedex/billed)*100) : 0;
+                        tableHTML += `<tr style="border-bottom:1px solid rgba(249,115,22,0.1);">
+                            <td style="font-size:11px;font-weight:bold;color:#fff;padding:4px 6px;">${wo.work_order_number}</td>
+                            <td style="font-size:11px;color:#cbd5e1;padding:4px 6px;">${wo.customer_name||'—'}</td>
+                            <td style="font-size:11px;color:#94a3b8;padding:4px 6px;">${wo.freight_invoice_ref||'—'}</td>
+                            <td style="font-size:11px;color:#f43f5e;font-weight:bold;text-align:right;padding:4px 6px;">${formatCurrency(billed)}</td>
+                            <td style="font-size:11px;color:#818cf8;text-align:right;padding:4px 6px;">${formatCurrency(fedex)} <span style="color:#475569;font-size:10px;">(${pct}%)</span></td>
+                            <td style="font-size:11px;color:#10b981;font-weight:bold;text-align:right;padding:4px 6px;">${formatCurrency(gap)}</td>
+                        </tr>`;
+                    });
+                    tableHTML += `</tbody></table>
+                        <div style="color:#475569;font-size:10px;margin-top:6px;font-style:italic;">Untracked = vendor freight pass-throughs + stock handling billed on invoice but not in FedEx CSV. Add invoices to grow this table.</div>`;
+                    document.getElementById('reconcWOTable').innerHTML = tableHTML;
+                }
 
             } catch (error) {
                 console.error('Error loading freight at-risk warnings:', error);
