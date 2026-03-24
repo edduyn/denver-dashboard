@@ -8524,7 +8524,7 @@
             try {
                 // 1. Get billed work orders (now includes customer_id from AS400 Billed WO report)
                 const [billedWOsResp, custEmailsResp, anchorResp] = await Promise.all([
-                    cachedFetch(`${SUPABASE_URL}/rest/v1/work_orders?select=work_order_number,tail_number,billed_date,customer_id,customer_name&status=eq.billed&work_order_number=neq.DUM0A&order=billed_date.desc&limit=50`, {
+                    cachedFetch(`${SUPABASE_URL}/rest/v1/work_orders?select=work_order_number,tail_number,billed_date,customer_id,customer_name&status=eq.billed&billed_date=not.is.null&work_order_number=neq.DUM0A&order=billed_date.desc.nullslast&limit=50`, {
                         headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
                     }),
                     cachedFetch(`${SUPABASE_URL}/rest/v1/customers?select=customer_number,email,customer_name`, {
