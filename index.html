@@ -5873,7 +5873,7 @@
         async function loadWorkOrders() {
             try {
                 // Fetch pending work orders
-                const woResponse = await cachedFetch(`${SUPABASE_URL}/rest/v1/work_orders?select=*&status=eq.pending_billing&order=signoff_date.asc`, {
+                const woResponse = await cachedFetch(`${SUPABASE_URL}/rest/v1/work_orders?select=*&or=(status.eq.signed_off,and(signoff_date.not.is.null,billed_date.is.null))&order=signoff_date.asc.nullslast`, {
                     headers: {
                         'apikey': SUPABASE_KEY,
                         'Authorization': `Bearer ${SUPABASE_KEY}`
@@ -6030,7 +6030,7 @@
                         <tr>
                             <td><strong>${wo.work_order_number}</strong></td>
                             <td>${wo.tail_number}</td>
-                            <td>${new Date(wo.signoff_date).toLocaleDateString()}</td>
+                            <td>${wo.signoff_date ? new Date(wo.signoff_date + 'T12:00:00').toLocaleDateString() : '--'}</td>
                             <td>${wo.daysPending} days</td>
                             <td><span class="badge ${badgeClass}">${statusText}</span></td>
                             <td>${warning || '<span style="color: #10b981;">✓ Will not exceed 30 days</span>'}</td>
@@ -6196,7 +6196,7 @@
             try {
                 // Fetch pending and billed WOs in parallel
                 const [pendingResp, billedResp] = await Promise.all([
-                    cachedFetch(`${SUPABASE_URL}/rest/v1/work_orders?select=*&status=eq.pending_billing&order=signoff_date.asc`, {
+                    cachedFetch(`${SUPABASE_URL}/rest/v1/work_orders?select=*&or=(status.eq.signed_off,and(signoff_date.not.is.null,billed_date.is.null))&order=signoff_date.asc.nullslast`, {
                         headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
                     }),
                     cachedFetch(`${SUPABASE_URL}/rest/v1/work_orders?select=work_order_number&status=eq.billed`, {
