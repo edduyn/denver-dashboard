@@ -4988,7 +4988,7 @@
                     fetch(`${SUPABASE_URL}/rest/v1/freight_crossref?freight_status=neq.OK&select=wo_code,invoice_number,customer_name,aircraft,invoice_freight_net,carrier_cost,billing_discrepancy,freight_status&order=billing_discrepancy.desc`, {
                         headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
                     }),
-                    fetch(`${SUPABASE_URL}/rest/v1/work_orders?select=work_order_number,status,billed_date&billed_date=not.is.null`, {
+                    fetch(`${SUPABASE_URL}/rest/v1/work_orders?select=work_order_number,status,billed_date`, {
                         headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
                     })
                 ]);
@@ -5011,6 +5011,7 @@
 
                 issues.forEach(issue => {
                     const wo = woMap[issue.wo_code];
+                    if (!wo) return; // not a Denver WO — skip
                     const disc = parseFloat(issue.billing_discrepancy) || 0;
                     const item = { ...issue, total: disc, billed_date: wo ? wo.billed_date : null, wo_status: wo ? wo.status : 'unknown' };
                     if (issue.freight_status === 'NO_TRACKING') {
