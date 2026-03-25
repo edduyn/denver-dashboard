@@ -1396,6 +1396,11 @@
                         <tr><td colspan="8" style="text-align:center;">No active work orders tracked</td></tr>
                     </tbody>
                 </table>
+                <div id="billingEmailAction" style="margin-top: 12px; display: none;">
+                    <button onclick="generateBillingEmail()" style="padding: 10px 20px; background: #ef4444; color: #fff; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">
+                        📧 Email Kim — Bill Urgent WOs
+                    </button>
+                </div>
             </div>
 
             <!-- Over 30 Days Work Orders -->
@@ -6259,9 +6264,11 @@
                     if (urgentCount > 0) {
                         document.getElementById('billingPriorityBadge').textContent = `${urgentCount} Urgent`;
                         document.getElementById('billingPriorityBadge').className = 'badge badge-red';
+                        document.getElementById('billingEmailAction').style.display = 'block';
                     } else {
                         document.getElementById('billingPriorityBadge').textContent = `${workOrders.length} Active`;
                         document.getElementById('billingPriorityBadge').className = 'badge badge-amber';
+                        document.getElementById('billingEmailAction').style.display = 'none';
                     }
                 } else {
                     document.getElementById('billingPriorityTable').innerHTML = '<tr><td colspan="8" style="text-align:center; color:#10b981;">✅ All tracked work orders have been billed!</td></tr>';
@@ -6829,6 +6836,31 @@
             const subject = encodeURIComponent(`Denver 889 SDV Special WIP — ${monthName}`);
             const body = encodeURIComponent(`Hi Matt,\n\nBelow are the Denver 889 SDV Special WIP work orders for ${monthName}:\n\n${woList}\nRate: $80/hr + 12% parts margin\n\nPlease let me know if you need any adjustments.\n\nThank you,\nEdduyn`);
             window.open(`mailto:matt.nelson@duncanaviation.com?subject=${subject}&body=${body}`, '_blank');
+        }
+
+        function generateBillingEmail() {
+            const rows = document.querySelectorAll('#billingPriorityTable tr');
+            let urgentList = '';
+            let allList = '';
+            rows.forEach(row => {
+                const cells = row.querySelectorAll('td');
+                if (cells.length < 7) return;
+                const wo = cells[0].textContent.trim();
+                const customer = cells[1].textContent.trim();
+                const tail = cells[2].textContent.trim();
+                const date = cells[3].textContent.trim();
+                const days = cells[4].textContent.trim();
+                const priority = cells[6].textContent.trim();
+                const line = `  • WO ${wo} — ${customer || 'N/A'} — Tail: ${tail || 'N/A'} — Signed off: ${date} (${days})\n`;
+                if (priority.includes('URGENT')) urgentList += line;
+                else allList += line;
+            });
+            const woSection = urgentList || allList;
+            const subject = encodeURIComponent('Billing Request – Urgent Work Orders Pending (Denver 889)');
+            const body = encodeURIComponent(
+                `Hi Kim,\n\nHope you're doing well! I wanted to flag the following work orders that are showing as urgent in our billing tracker. Could you please help get these billed as soon as possible?\n\n${woSection}\nPlease let me know if you need any documentation or have any questions.\n\nThank you,\nEdduyn`
+            );
+            window.open(`mailto:kim.LASTNAME@duncanaviation.com?subject=${subject}&body=${body}`, '_blank');
         }
 
         // (anchor date fetched inside loadWIP directly)
