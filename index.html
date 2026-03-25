@@ -6856,11 +6856,11 @@
                 else allList += line;
             });
             const woSection = urgentList || allList;
-            const subject = encodeURIComponent('Billing Request – Urgent Work Orders Pending (Denver 889)');
+            const subject = encodeURIComponent('Billing request');
             const body = encodeURIComponent(
                 `Hi Kim,\n\nHope you're doing well! I wanted to flag the following work orders that are showing as urgent in our billing tracker. Could you please help get these billed as soon as possible?\n\n${woSection}\nPlease let me know if you need any documentation or have any questions.\n\nThank you,\nEdduyn`
             );
-            window.open(`mailto:kim.LASTNAME@duncanaviation.com?subject=${subject}&body=${body}`, '_blank');
+            window.open(`mailto:Kim.Owen@duncanaviation.com?subject=${subject}&body=${body}`, '_blank');
         }
 
         // (anchor date fetched inside loadWIP directly)
