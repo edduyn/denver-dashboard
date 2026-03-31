@@ -347,6 +347,10 @@
             </div>
         </div>
         
+        <div id="importStatusBanner" class="alert-banner" style="display:none; margin-bottom: 10px;">
+            Import status: Checking...
+        </div>
+        
         <div class="tabs">
             <div class="tab tab-goals active" data-tab="goals">🎯 Goals</div>
             <div class="tab tab-actions" data-tab="actions">⚡ Actions</div>
@@ -5702,6 +5706,63 @@
             dropZone.style.background = 'rgba(0,0,0,0.2)';
         }
 
+        async function checkImportHealth() {
+            const banner = document.getElementById('importStatusBanner');
+            if (!banner) return;
+
+            try {
+                banner.style.display = 'block';
+                banner.style.background = 'linear-gradient(90deg, #94a3b8, #475569)';
+                banner.textContent = 'Import status: checking...';
+
+                const now = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Denver' }));
+                const todayStr = now.toISOString().slice(0, 10);
+
+                const resp = await cachedFetch(
+                    `${SUPABASE_URL}/rest/v1/import_runs?select=run_date,status,files_processed,rows_upserted,error_msg,created_at&order=created_at.desc&limit=1`,
+                    { headers: HEADERS }
+                );
+                const runs = await resp.json().catch(() => []);
+
+                if (!Array.isArray(runs) || runs.length === 0) {
+                    banner.style.background = 'linear-gradient(90deg, #f59e0b, #b45309)';
+                    banner.textContent = `No import runs logged yet (expected row in import_runs after next cron). Today: ${todayStr}`;
+                    return;
+                }
+
+                const last = runs[0];
+                const runDay = (last.run_date || '').slice(0, 10);
+                const st = (last.status || '').toLowerCase();
+                const detail = [last.files_processed != null ? `${last.files_processed} files` : null, last.rows_upserted != null ? `${last.rows_upserted} rows` : null]
+                    .filter(Boolean).join(' · ');
+                const err = last.error_msg ? ` — ${last.error_msg}` : '';
+
+                if (runDay !== todayStr) {
+                    banner.style.background = 'linear-gradient(90deg, #f59e0b, #b45309)';
+                    banner.textContent = `No import for today yet. Last run: ${runDay} (${st})${detail ? ' · ' + detail : ''}${err}. Today (Denver): ${todayStr}`;
+                    return;
+                }
+
+                if (st === 'failed') {
+                    banner.style.background = 'linear-gradient(90deg, #ef4444, #dc2626)';
+                    banner.textContent = `Import failed (${runDay})${detail ? ' · ' + detail : ''}${err}`;
+                    return;
+                }
+
+                if (st === 'partial') {
+                    banner.style.background = 'linear-gradient(90deg, #f59e0b, #b45309)';
+                    banner.textContent = `Import partial (${runDay})${detail ? ' · ' + detail : ''}${err}`;
+                    return;
+                }
+
+                banner.style.background = 'linear-gradient(90deg, #10b981, #059669)';
+                banner.textContent = `Import OK (${runDay})${detail ? ' · ' + detail : ''}`;
+            } catch (e) {
+                banner.style.display = 'none';
+                console.error('checkImportHealth failed:', e);
+            }
+        }
+
         // Load all dashboard data — throttled to prevent rapid-fire reloads
         // Throttle ONLY applies to setInterval refreshes, NOT to initial page load
         const MIN_LOAD_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes minimum between full reloads
@@ -5733,6 +5794,8 @@
             // Clear shared caches so this cycle fetches fresh data
             _timeEntriesCache = null;
             _timeEntriesCacheTs = 0;
+
+            try { await checkImportHealth(); } catch (e) { console.error('Import health check error:', e); }
 
             await loadAnchorWorkOrders();
             await loadRankings();
