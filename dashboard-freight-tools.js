@@ -506,17 +506,32 @@ async function importAnalysisResults() {
             }
         } else if (currentAnalysisType === 'tfm_invoice') {
             const shipments = extracted.shipments || [];
+            // Denver WO pattern: 4-6 alphanumeric chars ending in A (or B/C for sub-jobs)
+            const denverWOPattern = /^[A-Z0-9]{4,6}[ABC]$/i;
+            let skipped = 0;
             for (const s of shipments) {
+                // Filter: if a reference/WO is present and clearly NOT a Denver WO, skip it
+                const ref = (s.reference || '').trim().replace(/\s+.*/, ''); // take first token
+                if (ref && !denverWOPattern.test(ref)) {
+                    skipped++;
+                    continue;
+                }
                 const record = {
+                    dept_number: '889',
+                    shop_id: extracted.shop_id || 'SDN',
                     tracking_number: s.tracking_number || null,
                     carrier: s.carrier || 'TFM',
-                    service_level: s.service_level || 'Standard',
-                    actual_cost: s.charges || 0,
-                    weight_lbs: s.weight || null,
-                    source: 'tfm_invoice_ai',
-                    status: 'pending'
+                    service_type: s.service_type || s.service_level || null,
+                    ship_date: s.ship_date || null,
+                    origin: s.origin || null,
+                    destination: s.destination || null,
+                    weight_lbs: s.weight_lbs || s.weight || null,
+                    actual_charge: s.charge || s.charges || 0,
+                    net_amount: s.charge || s.charges || 0,
+                    wo_number: ref || null,
+                    reference_number: s.reference || null,
+                    source: 'tfm_invoice_ai'
                 };
-                // Insert into freight_invoices
                 const res = await cachedFetch(`${SUPABASE_URL}/rest/v1/freight_invoices`, {
                     method: 'POST',
                     headers: {
@@ -529,6 +544,7 @@ async function importAnalysisResults() {
                 });
                 if (res.ok) imported++;
             }
+            if (skipped > 0) console.log(`[FreightImport] Skipped ${skipped} non-Denver shipments`);
         }
 
         alert(`✅ Imported ${imported} record${imported !== 1 ? 's' : ''} to freight tracking!`);
