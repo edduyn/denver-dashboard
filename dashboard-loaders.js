@@ -25,7 +25,6 @@ async function loadDashboardData(force = false) {
     _timeEntriesCache = null;
     _timeEntriesCacheTs = 0;
 
-    try { await checkImportHealth(); } catch (e) { console.error('Import health check error:', e); }
 
     await loadAnchorWorkOrders();
     await loadRankings();
