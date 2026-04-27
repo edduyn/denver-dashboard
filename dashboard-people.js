@@ -207,8 +207,10 @@ async function loadNPSRecommendations(existingSurveys) {
             };
         });
 
-        // 8. Render table
-        const recommendHTML = enriched.slice(0, 5).map(wo => {
+        // 8. Render table — show ALL actionable customers (was capped at 5)
+        const actionableEnriched = enriched.filter(wo => !wo.alreadySurveyedThisMonth);
+        const dedupedThisMonthCount = enriched.length - actionableEnriched.length;
+        const recommendHTML = enriched.slice(0, 20).map(wo => {
             const hasEmail = !!wo.email;
             const displayName = wo.customerName || `Unknown (${wo.tail_number || 'N/A'})`;
             const displayEmail = hasEmail ? wo.email : '';
@@ -257,9 +259,17 @@ async function loadNPSRecommendations(existingSurveys) {
 
         // Count actionable (have email + not surveyed this month)
         const actionable = enriched.filter(wo => wo.email && !wo.alreadySurveyedThisMonth).length;
+        const actionableCustomerCount = actionableEnriched.length;
         const noEmail = enriched.filter(wo => !wo.email).length;
-        document.getElementById('recommendBadge').textContent = `${unsurveyed.length} Pending${noEmail > 0 ? ' | ' + noEmail + ' ⚠️' : ''}`;
-        document.getElementById('recommendBadge').className = noEmail > 0 ? 'badge badge-red' : unsurveyed.length > 5 ? 'badge badge-amber' : 'badge badge-green';
+        document.getElementById('recommendBadge').textContent = `${actionableCustomerCount} Actionable${noEmail > 0 ? ' | ' + noEmail + ' ⚠️' : ''}`;
+        document.getElementById('recommendBadge').className = noEmail > 0 ? 'badge badge-red' : actionableCustomerCount > 5 ? 'badge badge-amber' : 'badge badge-green';
+
+        // Footer counter — explains why list may be short
+        const footerEl = document.getElementById('recommendFooter');
+        if (footerEl) {
+            footerEl.textContent = `${unsurveyed.length} unsurveyed billed WO${unsurveyed.length === 1 ? '' : 's'} → ${actionableCustomerCount} actionable customer${actionableCustomerCount === 1 ? '' : 's'} shown` +
+                (dedupedThisMonthCount > 0 ? ` (${dedupedThisMonthCount} hidden: customer already surveyed this month)` : '');
+        }
 
     } catch (error) {
         console.error('Error loading NPS recommendations:', error);
@@ -538,85 +548,104 @@ async function loadYTDAB() {
 async function loadMonthlyAB() {
     console.log('loadMonthlyAB: Starting...');
 
+    const MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
     try {
         // Fetch all 2026 time entries via shared cache
         const timeEntries = await getTimeEntries();
 
+        const headerEl = document.getElementById('monthlyABHeader');
+        const bodyEl = document.getElementById('monthlyABTable');
+
         if (!timeEntries.length) {
-            document.getElementById('monthlyABTable').innerHTML = '<tr><td colspan="7" style="text-align:center; color:#94a3b8;">No time data available yet</td></tr>';
+            bodyEl.innerHTML = '<tr><td colspan="13" style="text-align:center; color:#94a3b8;">No time data available yet</td></tr>';
             return;
         }
 
+        // Determine year + months that have any data, up to current month
+        const now = new Date();
+        const currentYear = now.getFullYear();
+        const currentMonth = now.getMonth() + 1; // 1-indexed
+
+        // Find which months in current year actually have entries — render only those (avoids empty future cols)
+        const monthsWithData = new Set();
+        timeEntries.forEach(e => {
+            if (!e.entry_date) return;
+            const d = new Date(e.entry_date);
+            if (d.getFullYear() !== currentYear) return;
+            const m = d.getMonth() + 1;
+            if (m <= currentMonth) monthsWithData.add(m);
+        });
+        const months = Array.from(monthsWithData).sort((a, b) => a - b);
+
+        if (!months.length) {
+            bodyEl.innerHTML = '<tr><td colspan="13" style="text-align:center; color:#94a3b8;">No 2026 monthly data yet</td></tr>';
+            return;
+        }
+
+        // Build dynamic header: Employee + (Total, Bill, A/B) per month
+        const headerCells = ['<th>Employee</th>'];
+        months.forEach(m => {
+            const isMTD = (m === currentMonth);
+            const label = MONTH_NAMES[m - 1] + (isMTD ? ' MTD' : '');
+            headerCells.push(`<th>${label} Total</th>`);
+            headerCells.push(`<th>${label} Bill</th>`);
+            headerCells.push(`<th>${label} A/B</th>`);
+        });
+        headerEl.innerHTML = `<tr>${headerCells.join('')}</tr>`;
+        const colspan = headerCells.length;
+
         // Group by employee and month
         const employeeMonthly = {};
-
         timeEntries.forEach(entry => {
             const empCode = entry.emp_code;
-            if (!empCode) return;
+            if (!empCode || !entry.entry_date) return;
+            const entryDate = new Date(entry.entry_date);
+            if (entryDate.getFullYear() !== currentYear) return;
+            const m = entryDate.getMonth() + 1;
+            if (!months.includes(m)) return;
 
             if (!employeeMonthly[empCode]) {
-                employeeMonthly[empCode] = {
-                    name: entry.emp_name,
-                    code: empCode,
-                    jan: { total: 0, billable: 0 },
-                    feb: { total: 0, billable: 0 }
-                };
+                employeeMonthly[empCode] = { name: entry.emp_name, code: empCode, byMonth: {} };
+                months.forEach(mm => { employeeMonthly[empCode].byMonth[mm] = { total: 0, billable: 0 }; });
             }
-
             const hours = parseFloat(entry.hours) || 0;
-            const entryDate = new Date(entry.entry_date);
-            const month = entryDate.getMonth() + 1; // 1 = Jan, 2 = Feb
-
-            if (month === 1) {
-                employeeMonthly[empCode].jan.total += hours;
-                if (entry.wo_type !== 'Shop' && hours > 0) {
-                    employeeMonthly[empCode].jan.billable += hours;
-                }
-            } else if (month === 2) {
-                employeeMonthly[empCode].feb.total += hours;
-                if (entry.wo_type !== 'Shop' && hours > 0) {
-                    employeeMonthly[empCode].feb.billable += hours;
-                }
+            employeeMonthly[empCode].byMonth[m].total += hours;
+            if (entry.wo_type !== 'Shop' && hours > 0) {
+                employeeMonthly[empCode].byMonth[m].billable += hours;
             }
         });
 
-        // Convert to array
         const employeeData = Object.values(employeeMonthly);
-
-        // Sort by February A/B percentage (descending - best to worst)
+        // Sort by latest month's A/B descending (best at top)
+        const sortMonth = months[months.length - 1];
         employeeData.sort((a, b) => {
-            const febAB_a = a.feb.total > 0 ? (a.feb.billable / a.feb.total * 100) : 0;
-            const febAB_b = b.feb.total > 0 ? (b.feb.billable / b.feb.total * 100) : 0;
-            return febAB_b - febAB_a;
+            const aT = a.byMonth[sortMonth].total, aB = a.byMonth[sortMonth].billable;
+            const bT = b.byMonth[sortMonth].total, bB = b.byMonth[sortMonth].billable;
+            const aAB = aT > 0 ? aB / aT : 0;
+            const bAB = bT > 0 ? bB / bT : 0;
+            return bAB - aAB;
         });
 
-        // Generate HTML
-        const monthlyHTML = employeeData.map(emp => {
-            const janAB = emp.jan.total > 0 ? (emp.jan.billable / emp.jan.total * 100) : 0;
-            const febAB = emp.feb.total > 0 ? (emp.feb.billable / emp.feb.total * 100) : 0;
+        const colorFor = ab => ab >= 58.5 ? '#10b981' : ab >= 40 ? '#f59e0b' : '#ef4444';
 
-            const janABColor = janAB >= 58.5 ? '#10b981' : janAB >= 40 ? '#f59e0b' : '#ef4444';
-            const febABColor = febAB >= 58.5 ? '#10b981' : febAB >= 40 ? '#f59e0b' : '#ef4444';
-
-            return `
-                <tr>
-                    <td><strong>${emp.name}</strong></td>
-                    <td>${emp.jan.total.toFixed(1)}</td>
-                    <td>${emp.jan.billable.toFixed(1)}</td>
-                    <td style="color:${janABColor}; font-weight:bold;">${janAB.toFixed(1)}%</td>
-                    <td>${emp.feb.total.toFixed(1)}</td>
-                    <td>${emp.feb.billable.toFixed(1)}</td>
-                    <td style="color:${febABColor}; font-weight:bold;">${febAB.toFixed(1)}%</td>
-                </tr>
-            `;
+        const rowsHTML = employeeData.map(emp => {
+            const cells = [`<td><strong>${emp.name || emp.code}</strong></td>`];
+            months.forEach(m => {
+                const d = emp.byMonth[m];
+                const ab = d.total > 0 ? (d.billable / d.total * 100) : 0;
+                cells.push(`<td>${d.total.toFixed(1)}</td>`);
+                cells.push(`<td>${d.billable.toFixed(1)}</td>`);
+                cells.push(`<td style="color:${colorFor(ab)}; font-weight:bold;">${ab.toFixed(1)}%</td>`);
+            });
+            return `<tr>${cells.join('')}</tr>`;
         }).join('');
 
-        document.getElementById('monthlyABTable').innerHTML = monthlyHTML || '<tr><td colspan="7" style="text-align:center; color:#94a3b8;">No monthly data</td></tr>';
-
-        console.log('loadMonthlyAB: Complete');
+        bodyEl.innerHTML = rowsHTML || `<tr><td colspan="${colspan}" style="text-align:center; color:#94a3b8;">No monthly data</td></tr>`;
+        console.log(`loadMonthlyAB: Complete — rendered ${months.length} month columns: ${months.map(m => MONTH_NAMES[m-1]).join(', ')}`);
     } catch (error) {
         console.error('Error loading monthly A/B:', error);
-        document.getElementById('monthlyABTable').innerHTML = '<tr><td colspan="7" style="text-align:center; color:#ef4444;">Error loading monthly A/B data</td></tr>';
+        document.getElementById('monthlyABTable').innerHTML = '<tr><td colspan="13" style="text-align:center; color:#ef4444;">Error loading monthly A/B data</td></tr>';
     }
 }
 
