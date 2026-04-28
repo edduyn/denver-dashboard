@@ -100,14 +100,20 @@ async function loadNPSRecommendations(existingSurveys) {
         if (!Array.isArray(billedWOs)) { console.log('billedWOs not array'); return; }
 
         // 2. Build customer_number → email AND name lookups from customers table
+        // Plus a customer_name → email index for fallback when customer_id misses.
         const emailByCustomerId = {};
         const nameByCustomerId = {};
+        const emailByCustomerName = {};   // lowercased name → email (best-effort fallback)
+        const nameKey = s => (s || '').toString().toLowerCase().replace(/\s+/g, ' ').trim();
         if (Array.isArray(custEmails)) custEmails.forEach(c => {
             if (c.customer_number && c.email) {
                 emailByCustomerId[c.customer_number] = c.email;
             }
             if (c.customer_number && c.customer_name) {
                 nameByCustomerId[c.customer_number] = c.customer_name;
+            }
+            if (c.email && c.customer_name) {
+                emailByCustomerName[nameKey(c.customer_name)] = c.email;
             }
         });
 
@@ -169,12 +175,15 @@ async function loadNPSRecommendations(existingSurveys) {
             // Customer name: from work_orders → ANCHOR → customers table
             const customerName = wo.customer_name || customerIdToName[customerId] || nameByCustomerId[customerId] || null;
 
-            // Look up email from Customers email.xlsx database by customer_id
+            // Look up email — primary by customer_id, fallback by lowercased customer_name
             let email = null;
             let emailSource = null;
             if (customerId && emailByCustomerId[customerId]) {
                 email = emailByCustomerId[customerId];
-                emailSource = 'database';
+                emailSource = 'cust_id';
+            } else if (customerName && emailByCustomerName[nameKey(customerName)]) {
+                email = emailByCustomerName[nameKey(customerName)];
+                emailSource = 'name_fallback';
             }
 
             // Check one-per-customer-per-month rule:
@@ -207,16 +216,45 @@ async function loadNPSRecommendations(existingSurveys) {
             };
         });
 
-        // 8. Render table — show ALL actionable customers (was capped at 5)
-        const actionableEnriched = enriched.filter(wo => !wo.alreadySurveyedThisMonth);
-        const dedupedThisMonthCount = enriched.length - actionableEnriched.length;
-        const recommendHTML = enriched.slice(0, 20).map(wo => {
+        // 8. COLLAPSE same-customer dupes to ONE row per customer (most-recent WO wins,
+        //    additional WOs become a "+N more" indicator under the kept row).
+        //    Dedup key: customer_id when present, else lowercased customer_name.
+        const dedupKey = wo => wo.customerId || nameKey(wo.customerName || '__unknown__');
+        const collapsed = [];
+        const dupesByKey = {};       // key → [wo_number, ...] additional WOs
+        const seenKey = new Set();
+        // enriched is already sorted billed_date.desc.nullslast from the SQL fetch
+        // so the first occurrence per key IS the most-recent WO.
+        enriched.forEach(wo => {
+            const k = dedupKey(wo);
+            if (!seenKey.has(k)) {
+                seenKey.add(k);
+                collapsed.push(wo);
+                dupesByKey[k] = [];
+            } else {
+                dupesByKey[k].push(wo.work_order_number);
+            }
+        });
+        const collapsedDuplicateCount = enriched.length - collapsed.length;
+
+        const actionableEnriched = collapsed.filter(wo => !wo.alreadySurveyedThisMonth);
+        const dedupedThisMonthCount = collapsed.length - actionableEnriched.length;
+        const recommendHTML = collapsed.slice(0, 30).map(wo => {
+            const additionalWOs = dupesByKey[dedupKey(wo)] || [];
             const hasEmail = !!wo.email;
             const displayName = wo.customerName || `Unknown (${wo.tail_number || 'N/A'})`;
             const displayEmail = hasEmail ? wo.email : '';
-            const emailWarning = !hasEmail
-                ? '<span style="color:#ef4444;font-weight:bold;" title="Email not in Customers email.xlsx database">⚠️ NOT IN DB</span>'
-                : `<span style="color:#94a3b8;font-size:0.85em;">${displayEmail}</span>`;
+            // Email cell — mailto link when present, "(no email)" with red flag when missing.
+            // Source badge clarifies whether email came from cust_id match or fallback name match.
+            let emailCell;
+            if (hasEmail) {
+                const sourceBadge = wo.emailSource === 'name_fallback'
+                    ? '<span title="Matched by customer name (cust# missed)" style="color:#fbbf24;font-size:0.7em;margin-left:4px;">⚡name</span>'
+                    : '';
+                emailCell = `<a href="mailto:${displayEmail}" style="color:#93c5fd;font-size:0.85em;text-decoration:none;">${displayEmail}</a>${sourceBadge}`;
+            } else {
+                emailCell = '<span style="color:#ef4444;font-weight:bold;" title="No email in Customers database for this customer_id or name">— (no email)</span>';
+            }
 
             // One-per-month badge
             let monthBadge = '';
@@ -233,13 +271,17 @@ async function loadNPSRecommendations(existingSurveys) {
                 ? ''
                 : `onclick="fillNPSForm('${(wo.customerName || '').replace(/'/g, "\\'")}', '${wo.email || ''}', '${wo.work_order_number}', '${wo.tail_number || ''}')"`;
 
+            const moreWOsBadge = additionalWOs.length > 0
+                ? `<br><span style="color:#94a3b8;font-size:0.7em;" title="Other open billed WOs for this customer (deduped): ${additionalWOs.join(', ')}">+${additionalWOs.length} more WO${additionalWOs.length > 1 ? 's' : ''} for this customer</span>`
+                : '';
+
             return `
                 <tr style="${wo.alreadySurveyedThisMonth ? 'opacity:0.5;' : ''}">
                     <td><strong>${displayName}</strong>${wo.customerId ? '<br><span style="color:#64748b;font-size:0.75em;">Cust# ' + wo.customerId + '</span>' : ''}${monthBadge}</td>
                     <td>${wo.tail_number || '--'}</td>
-                    <td>${emailWarning}</td>
+                    <td>${emailCell}</td>
                     <td><strong style="color:#10b981;">${wo.work_order_number}</strong><br>
-                        <span style="color:#64748b;font-size:0.85em;">Billed: ${wo.billedDateStr}</span>
+                        <span style="color:#64748b;font-size:0.85em;">Billed: ${wo.billedDateStr}</span>${moreWOsBadge}
                     </td>
                     <td><span style="color:${wo.daysSince > 7 ? '#ef4444' : wo.daysSince > 3 ? '#f59e0b' : '#10b981'};">${wo.daysSince}d</span></td>
                     <td>
@@ -257,18 +299,26 @@ async function loadNPSRecommendations(existingSurveys) {
 
         document.getElementById('customerRecommendations').innerHTML = recommendHTML;
 
-        // Count actionable (have email + not surveyed this month)
-        const actionable = enriched.filter(wo => wo.email && !wo.alreadySurveyedThisMonth).length;
+        // Count actionable (have email + not surveyed this month) — over the deduped customer list
         const actionableCustomerCount = actionableEnriched.length;
-        const noEmail = enriched.filter(wo => !wo.email).length;
+        const actionableWithEmail = actionableEnriched.filter(wo => wo.email).length;
+        const noEmail = collapsed.filter(wo => !wo.email).length;
         document.getElementById('recommendBadge').textContent = `${actionableCustomerCount} Actionable${noEmail > 0 ? ' | ' + noEmail + ' ⚠️' : ''}`;
         document.getElementById('recommendBadge').className = noEmail > 0 ? 'badge badge-red' : actionableCustomerCount > 5 ? 'badge badge-amber' : 'badge badge-green';
 
-        // Footer counter — explains why list may be short
+        // Footer counter — explains the list size at a glance
         const footerEl = document.getElementById('recommendFooter');
         if (footerEl) {
-            footerEl.textContent = `${unsurveyed.length} unsurveyed billed WO${unsurveyed.length === 1 ? '' : 's'} → ${actionableCustomerCount} actionable customer${actionableCustomerCount === 1 ? '' : 's'} shown` +
-                (dedupedThisMonthCount > 0 ? ` (${dedupedThisMonthCount} hidden: customer already surveyed this month)` : '');
+            const parts = [
+                `${unsurveyed.length} unsurveyed billed WO${unsurveyed.length === 1 ? '' : 's'}`,
+                `${collapsed.length} unique customer${collapsed.length === 1 ? '' : 's'}`,
+                `${actionableCustomerCount} actionable (${actionableWithEmail} with email)`
+            ];
+            const hides = [];
+            if (collapsedDuplicateCount > 0) hides.push(`${collapsedDuplicateCount} dup WO${collapsedDuplicateCount === 1 ? '' : 's'} merged`);
+            if (dedupedThisMonthCount > 0) hides.push(`${dedupedThisMonthCount} customer${dedupedThisMonthCount === 1 ? '' : 's'} already surveyed this month`);
+            if (noEmail > 0) hides.push(`${noEmail} need email lookup`);
+            footerEl.textContent = parts.join(' → ') + (hides.length ? ` (${hides.join(', ')})` : '');
         }
 
     } catch (error) {
