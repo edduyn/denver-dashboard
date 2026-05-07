@@ -1700,7 +1700,7 @@
                                 <th>Shop</th>
                                 <th>Customer</th>
                                 <th>Description</th>
-                                <th>Feb Hours</th>
+                                <th>Hours</th>
                                 <th>WIP Value</th>
                                 <th>Status</th>
                             </tr>
@@ -1728,7 +1728,7 @@
                                 <th>WO</th>
                                 <th>Customer</th>
                                 <th>Description</th>
-                                <th>Feb Hours</th>
+                                <th>Hours</th>
                                 <th>Expected</th>
                                 <th>WIP @ $80/hr</th>
                                 <th>Risk</th>
@@ -1746,31 +1746,35 @@
                 </div>
             </div>
 
-            <!-- WIP Reconciliation History -->
+            <!-- WIP Position — Month-over-Month -->
             <div class="card">
                 <div class="card-header">
-                    <span class="card-title">📈 WIP Position — Are We Ahead?</span>
-                    <span style="color: #64748b; font-size: 0.8em;">WIP accrued vs actual billing when WOs close</span>
+                    <span class="card-title">📈 WIP Position — Month-over-Month</span>
+                    <span style="color: #64748b; font-size: 0.8em;" id="wipPositionSourceNote">Live from monthly_financials + GL WIP balances</span>
                 </div>
-                <div class="card-grid" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); margin-bottom: 12px;">
-                    <div class="metric">
-                        <div class="metric-value" id="wipAccrued" style="font-size: 1.4em;">--</div>
-                        <div class="metric-label">WIP Accrued (Jan)</div>
-                        <div class="metric-sub">Labor + Parts WIP booked</div>
-                    </div>
-                    <div class="metric">
-                        <div class="metric-value" id="wipActualBilled" style="font-size: 1.4em;">--</div>
-                        <div class="metric-label">Actual Billed</div>
-                        <div class="metric-sub">From closed WOs</div>
-                    </div>
-                    <div class="metric">
-                        <div class="metric-value" id="wipVariance" style="font-size: 1.4em;">--</div>
-                        <div class="metric-label">Position</div>
-                        <div class="metric-sub" id="wipPositionNote">Ahead = green, Hole = red</div>
-                    </div>
+                <div class="card-grid" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); margin-bottom: 12px;" id="wipPositionTiles">
+                    <div class="metric"><div class="metric-value" style="font-size: 1.4em;">--</div><div class="metric-label">Loading…</div></div>
                 </div>
-                <div id="wipReconciliationTable" style="margin-top: 8px;">
-                    <p style="color: #64748b; font-size: 0.85em; text-align: center;">Reconciliation data populated as WOs bill. Jan data from AS400: Labor WIP $13,996, Parts WIP $12,662.</p>
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead id="wipPositionHeader">
+                            <tr>
+                                <th>Month</th>
+                                <th>Cost of Work Billed</th>
+                                <th>Cost-side WIP End Balance</th>
+                                <th>Net Change in WIP</th>
+                                <th>Position</th>
+                            </tr>
+                        </thead>
+                        <tbody id="wipPositionTable">
+                            <tr><td colspan="5" style="text-align:center; color:#94a3b8;">Loading…</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div style="margin-top: 10px; padding: 6px 12px; color: #94a3b8; font-size: 0.8em; font-style: italic;">
+                    Cost of Work Billed = labor cost + parts cost from monthly P&amp;L.
+                    Cost-side WIP End = GL accounts 0889.45015 + 0889.45115.
+                    Position = "Clearing well" if billed cost ≥ 4× WIP change, "Steady" if ≥ 1×, "Building" if WIP grows faster than billing.
                 </div>
             </div>
 

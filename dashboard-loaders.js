@@ -740,20 +740,96 @@ async function loadWIP() {
             document.getElementById('sdvSpecialActions').style.display = 'none';
         }
 
-        // ===== RECONCILIATION =====
-        // Use January AS400 data as baseline
-        const janLaborWIP = 13996.16;  // from 45015 COST OF LABOR-CUST (WIP) Jan net
-        const janPartsWIP = 12661.88;  // from 45115 COST OF PARTS-CUST (WIP) Jan net
-        const janLaborActual = 19098.52; // from 45010 COST OF LABOR SALES-CUST Jan end bal
-        const janPartsActual = 19179.24; // from 45110 COST OF PART SALES-CUST Jan end bal
+        // ===== WIP POSITION — Month-over-month from live data =====
+        // Pull monthly_financials (cost of work billed) + GL WIP cost-side end balances
+        try {
+            const [mfRes, glWipRes] = await Promise.all([
+                cachedFetch(`${SUPABASE_URL}/rest/v1/monthly_financials?select=year,month,cos_labor,cos_parts_wo&order=year.asc,month.asc`, { headers: HEADERS }),
+                cachedFetch(`${SUPABASE_URL}/rest/v1/wip_entries?select=month,shop,wip_value&shop=in.(GL.45015_LBR_COST,GL.45115_PRT_COST)&order=month.asc`, { headers: HEADERS })
+            ]);
+            const mfRows = await mfRes.json();
+            const glRows = await glWipRes.json();
 
-        document.getElementById('wipAccrued').textContent = fmtCurrency(janLaborWIP + janPartsWIP);
-        document.getElementById('wipActualBilled').textContent = fmtCurrency(janLaborActual + janPartsActual);
-        const janVariance = (janLaborActual + janPartsActual) - (janLaborWIP + janPartsWIP);
-        const varianceEl = document.getElementById('wipVariance');
-        varianceEl.textContent = (janVariance >= 0 ? '+' : '') + fmtCurrency(janVariance);
-        varianceEl.style.color = janVariance >= 0 ? '#10b981' : '#ef4444';
-        document.getElementById('wipPositionNote').textContent = janVariance >= 0 ? '✅ Ahead — billed more than WIP' : '🔴 In the hole — WIP exceeded billing';
+            // Aggregate GL cost-WIP end balance per month
+            const wipByMonth = {};
+            (Array.isArray(glRows) ? glRows : []).forEach(r => {
+                if (!wipByMonth[r.month]) wipByMonth[r.month] = 0;
+                wipByMonth[r.month] += parseFloat(r.wip_value) || 0;
+            });
+
+            // Build per-month rows — months that have both billed cost AND WIP balance
+            const MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+            const positionRows = [];
+            let prevWip = 0;
+            (Array.isArray(mfRows) ? mfRows : []).forEach(mf => {
+                const mKey = `${mf.year}-${String(mf.month).padStart(2,'0')}`;
+                const billedCost = (parseFloat(mf.cos_labor) || 0) + (parseFloat(mf.cos_parts_wo) || 0);
+                const wipEnd = wipByMonth[mKey];
+                if (wipEnd === undefined) return;  // skip months without GL WIP loaded
+                const wipChange = wipEnd - prevWip;
+                prevWip = wipEnd;
+                positionRows.push({
+                    mKey,
+                    label: `${MONTH_NAMES[mf.month - 1]} ${mf.year}`,
+                    billedCost, wipEnd, wipChange,
+                });
+            });
+
+            // Render the trend table
+            const tbody = document.getElementById('wipPositionTable');
+            if (positionRows.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:#94a3b8;">No reconciled months loaded yet.</td></tr>';
+            } else {
+                tbody.innerHTML = positionRows.map(r => {
+                    let positionLabel, positionColor;
+                    if (r.wipChange <= 0) {
+                        positionLabel = '✅ Clearing (WIP shrank)'; positionColor = '#10b981';
+                    } else if (r.billedCost >= r.wipChange * 4) {
+                        positionLabel = '✅ Clearing well'; positionColor = '#10b981';
+                    } else if (r.billedCost >= r.wipChange) {
+                        positionLabel = '🟡 Steady'; positionColor = '#f59e0b';
+                    } else {
+                        positionLabel = '🔴 Building (WIP outgrowing billing)'; positionColor = '#ef4444';
+                    }
+                    return `<tr>
+                        <td><strong>${r.label}</strong></td>
+                        <td>${fmtCurrency(r.billedCost)}</td>
+                        <td>${fmtCurrency(r.wipEnd)}</td>
+                        <td style="color:${r.wipChange >= 0 ? '#94a3b8' : '#10b981'};">${r.wipChange >= 0 ? '+' : ''}${fmtCurrency(r.wipChange)}</td>
+                        <td style="color:${positionColor}; font-weight:bold;">${positionLabel}</td>
+                    </tr>`;
+                }).join('');
+            }
+
+            // Update the summary tiles with the LATEST month
+            const tilesEl = document.getElementById('wipPositionTiles');
+            if (positionRows.length > 0) {
+                const latest = positionRows[positionRows.length - 1];
+                tilesEl.innerHTML = `
+                    <div class="metric">
+                        <div class="metric-value" style="font-size: 1.4em;">${fmtCurrency(latest.billedCost)}</div>
+                        <div class="metric-label">Cost of Work Billed</div>
+                        <div class="metric-sub">${latest.label}</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" style="font-size: 1.4em;">${fmtCurrency(latest.wipEnd)}</div>
+                        <div class="metric-label">Cost-side WIP End Balance</div>
+                        <div class="metric-sub">GL 0889.45015 + 45115</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" style="font-size: 1.4em; color:${latest.wipChange >= 0 ? '#94a3b8' : '#10b981'};">${latest.wipChange >= 0 ? '+' : ''}${fmtCurrency(latest.wipChange)}</div>
+                        <div class="metric-label">WIP Net Change</div>
+                        <div class="metric-sub">vs prior month-end</div>
+                    </div>
+                `;
+            } else {
+                tilesEl.innerHTML = '<div class="metric"><div class="metric-value" style="font-size: 1.2em; color:#94a3b8;">No data</div><div class="metric-label">Load monthly_financials + GL WIP</div></div>';
+            }
+        } catch (posErr) {
+            console.error('WIP position render failed:', posErr);
+            const tbody = document.getElementById('wipPositionTable');
+            if (tbody) tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:#ef4444;">Error loading position data</td></tr>';
+        }
 
         // ===== SMART RECOMMENDATIONS =====
         const recommendations = [];
