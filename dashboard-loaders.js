@@ -878,10 +878,7 @@ async function loadWIP() {
             recommendations.push({ severity: 'amber', icon: '📝', text: `${sdvNoExpected.length} SDV WO${sdvNoExpected.length > 1 ? 's' : ''} with 20+ hrs but NO expected hours set: ${sdvNoExpected.map(w=>w.wo_number).join(', ')}. Add expected hours for proper WIP tracking.` });
         }
 
-        // 6. WIP position health
-        if (janVariance < 0) {
-            recommendations.push({ severity: 'red', icon: '💰', text: `January WIP was in the hole by ${fmtCurrency(Math.abs(janVariance))}. Focus on closing WOs at or above WIP-estimated value this month.` });
-        }
+        // 6. WIP position health — handled by the live WIP Position table now (no static jan-based check)
 
         // 7. Rate comparison — are we billing above WIP rate?
         if (stdWIP > 0) {
