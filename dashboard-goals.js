@@ -119,7 +119,7 @@ async function updateMonthTimeline(timelineId, currentMonthId, currentMonth, goa
 
         if (month < currentMonth) {
             // Past month - color based on actual performance
-            if (perfStatus === 'met' || perfStatus === 'exceeded') {
+            if (perfStatus === 'met' || perfStatus === 'exceeded' || perfStatus === 'on_track') {
                 block.classList.add('met'); // Green
             } else if (perfStatus === 'missed') {
                 block.classList.add('missed'); // Red
