@@ -393,41 +393,10 @@ let freightTrackingByWO = {};
 // Load ANCHOR Work Orders (Primary Source of Truth)
 async function loadAnchorWorkOrders() {
     try {
-        const [response, demarestResp, freightTrackResp] = await Promise.all([
-            cachedFetch(`${SUPABASE_URL}/rest/v1/anchor_work_orders?select=*&order=days_open.desc.nullslast`, {
+        const response = await cachedFetch(`${SUPABASE_URL}/rest/v1/anchor_work_orders?select=*&order=days_open.desc.nullslast`, {
                 headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
-            }),
-            cachedFetch(`${SUPABASE_URL}/rest/v1/demarest_open_wo?select=wo_number,shop,parts,outside_services,freight_flag,report_date&order=report_date.desc`, {
-                headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
-            }),
-            cachedFetch(`${SUPABASE_URL}/rest/v1/freight_tracking?select=wo_number,carrier,flat_rate_cost,status,tracking_number,notes,ship_date&order=created_at.desc`, {
-                headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
-            })
-        ]);
+            });
         const data = await response.json();
-        // Build Demarest freight flag lookup (latest report per WO)
-        demarestFreightFlags = {};
-        try {
-            const demarestData = await demarestResp.json();
-            if (Array.isArray(demarestData)) {
-                demarestData.forEach(d => {
-                    if (!demarestFreightFlags[d.wo_number]) {
-                        demarestFreightFlags[d.wo_number] = d;
-                    }
-                });
-            }
-        } catch (e) { console.log('Demarest data not available:', e); }
-        // Build freight_tracking lookup (wo_number → array of records)
-        freightTrackingByWO = {};
-        try {
-            const ftData = await freightTrackResp.json();
-            if (Array.isArray(ftData)) {
-                ftData.forEach(r => {
-                    if (!freightTrackingByWO[r.wo_number]) freightTrackingByWO[r.wo_number] = [];
-                    freightTrackingByWO[r.wo_number].push(r);
-                });
-            }
-        } catch (e) { console.log('freight_tracking not available:', e); }
 
         if (!Array.isArray(data)) {
             console.log('anchor_work_orders returned non-array:', data);
@@ -441,14 +410,11 @@ async function loadAnchorWorkOrders() {
         const total = data.length;
         const totalExpHrs = data.reduce((sum, wo) => sum + (wo.expected_hours || 0), 0);
         const over30Count = data.filter(wo => wo.days_open && wo.days_open > 30).length;
-        const freightMissing = data.filter(wo => demarestFreightFlags[wo.wo_number] && demarestFreightFlags[wo.wo_number].freight_flag === 'missing' && !freightTrackingByWO[wo.wo_number]).length;
         const reportDate = data.length > 0 ? data[0].report_date : '--';
 
         document.getElementById('anchorTotal').textContent = total;
         document.getElementById('anchorExpHrs').textContent = Math.round(totalExpHrs) + 'h';
         document.getElementById('anchorOver30').textContent = over30Count;
-        document.getElementById('anchorFreightWarn').textContent = freightMissing;
-        document.getElementById('anchorFreightWarn').style.color = freightMissing > 0 ? '#ef4444' : '#22c55e';
         document.getElementById('anchorReportDate').textContent = reportDate ? new Date(reportDate + 'T00:00:00').toLocaleDateString() : '--';
 
         // Shop breakdown
@@ -554,34 +520,10 @@ function filterAnchorTable() {
             billingStatusCell = `<span class="badge ${billingClass}">${billingLabel}</span>`;
         }
 
-        // Freight
-        const dem = demarestFreightFlags[wo.wo_number];
-        const ftRecords = freightTrackingByWO[wo.wo_number];
-        let freightCell = '<span style="color:#475569;font-size:0.8em;">--</span>';
-        if (ftRecords && ftRecords.length > 0) {
-            const totalCost = ftRecords.reduce((s, r) => s + (parseFloat(r.flat_rate_cost) || 0), 0);
-            const carriers = [...new Set(ftRecords.map(r => r.carrier).filter(Boolean))].join(', ');
-            const statuses = [...new Set(ftRecords.map(r => r.status).filter(Boolean))].join(', ');
-            const notes = ftRecords.map(r => r.notes).filter(Boolean).join(' | ');
-            const countLabel = ftRecords.length > 1 ? ` (${ftRecords.length})` : '';
-            if (totalCost > 0) {
-                freightCell = `<span title="${carriers} | Status: ${statuses}${notes ? ' | ' + notes : ''}" style="color:#22c55e;font-weight:bold;font-size:0.8em;cursor:help;">$${totalCost.toFixed(2)}${countLabel}</span>`;
-            } else {
-                freightCell = `<span title="${carriers || 'Carrier TBD'} | Status: ${statuses || 'pending'}${notes ? ' | ' + notes : ''}" style="background:#3b82f6;color:#fff;padding:2px 6px;border-radius:4px;font-weight:bold;font-size:0.75em;cursor:help;">TRACKED${countLabel}</span>`;
-            }
-        } else if (dem) {
-            if (dem.freight_flag === 'missing') {
-                freightCell = `<span title="Parts: $${Number(dem.parts).toLocaleString()} | O/S: $0" style="background:#ef4444;color:#fff;padding:2px 6px;border-radius:4px;font-weight:bold;font-size:0.75em;cursor:help;">NO FRT</span>`;
-            } else if (dem.freight_flag === 'ok') {
-                freightCell = `<span title="Parts: $${Number(dem.parts).toLocaleString()} | O/S: $${Number(dem.outside_services).toLocaleString()}" style="color:#22c55e;font-size:0.8em;cursor:help;">OK</span>`;
-            }
-        }
-
-        // Row highlight: urgent billing > freight warning > aging
+        // Row highlight: urgent billing > aging
         let rowStyle = '';
         if (billing && billing.daysPending >= 7) rowStyle = 'background:rgba(239,68,68,0.13);border-left:3px solid #ef4444;';
         else if (billing && billing.daysPending >= 5) rowStyle = 'background:rgba(251,146,60,0.10);border-left:3px solid #f97316;';
-        else if (dem && dem.freight_flag === 'missing' && !ftRecords) rowStyle = 'background:rgba(239,68,68,0.08);';
         else if (daysOpen >= 30) rowStyle = 'background:rgba(239,68,68,0.06);';
 
         return `
@@ -597,11 +539,10 @@ function filterAnchorTable() {
                 <td style="font-size:0.85em;">${signoffCell}</td>
                 <td>${daysToBillCell}</td>
                 <td>${billingStatusCell}</td>
-                <td>${freightCell}</td>
             </tr>
         `;
     }).join('');
 
-    document.getElementById('anchorWorkOrdersList').innerHTML = tableHTML || '<tr><td colspan="12" style="text-align:center; color:#94a3b8;">No work orders found</td></tr>';
+    document.getElementById('anchorWorkOrdersList').innerHTML = tableHTML || '<tr><td colspan="11" style="text-align:center; color:#94a3b8;">No work orders found</td></tr>';
 }
 
