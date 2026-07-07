@@ -40,19 +40,10 @@ async function loadFinancialData() {
             document.getElementById('finNetVsBudget').textContent = 'Load 2026 GL121 to populate';
             document.getElementById('finTotalExpenses').textContent = '--';
             document.getElementById('finExpVsBudget').textContent = 'No data yet';
-            document.getElementById('finFreightCost').textContent = '--';
-            document.getElementById('finFreightVsBudget').textContent = 'No data yet';
             document.getElementById('finMonthlyTable').innerHTML =
-                '<tr><td colspan="8" style="text-align:center; padding: 20px; color: #f59e0b;">No 2026 P&L data yet. Provide GL121 reports to populate.</td></tr>';
+                '<tr><td colspan="7" style="text-align:center; padding: 20px; color: #f59e0b;">No 2026 P&L data yet. Provide GL121 reports to populate.</td></tr>';
             document.getElementById('finExpenseTable').innerHTML =
                 '<tr><td colspan="6" style="text-align:center; padding: 20px; color: #f59e0b;">Awaiting 2026 expense data from GL121 reports.</td></tr>';
-            document.getElementById('finFreightYTD').textContent = '--';
-            document.getElementById('finFreightBudgetAmt').textContent = '--';
-            document.getElementById('finFreightVariance').textContent = '--';
-            document.getElementById('finFreightMonthlyAvg').textContent = '--';
-            document.getElementById('finFreightStatus').textContent = 'No Data';
-            document.getElementById('finFreightStatus').className = 'badge badge-amber';
-            document.getElementById('finFreightByMonth').innerHTML = '<div style="color: #fda4af; padding: 10px;">Awaiting 2026 freight data</div>';
             console.log('loadFinancialData: No 2026 data available, showing awaiting state');
             return;
         }
@@ -60,7 +51,7 @@ async function loadFinancialData() {
         // Calculate YTD totals for 2026
         const ytd = {
             rev_labor: 0, rev_parts_wo: 0, rev_other: 0, total_revenue: 0,
-            cos_labor: 0, cos_parts_wo: 0, cos_other: 0, cos_freight: 0, total_cos: 0,
+            cos_labor: 0, cos_parts_wo: 0, cos_other: 0, total_cos: 0,
             gross_profit: 0, total_expenses: 0, net_income: 0
         };
 
@@ -72,7 +63,6 @@ async function loadFinancialData() {
             ytd.cos_labor += parseFloat(r.cos_labor || 0);
             ytd.cos_parts_wo += parseFloat(r.cos_parts_wo || 0);
             ytd.cos_other += parseFloat(r.cos_other || 0);
-            ytd.cos_freight += parseFloat(r.cos_freight || 0);
             ytd.total_cos += parseFloat(r.total_cos || 0);
             ytd.gross_profit += parseFloat(r.gross_profit || 0);
             ytd.total_expenses += parseFloat(r.total_expenses || 0);
@@ -86,7 +76,6 @@ async function loadFinancialData() {
             gross_profit: 2112952,
             net_income: 997087,
             total_expenses: 1115865,
-            freight: 0,  // Denver 889 has no specific freight budget per BZ scorecard Jan-26
             rev_labor: 2147317,
             rev_parts: 3200000,
             rev_other: 3485000
@@ -118,12 +107,6 @@ async function loadFinancialData() {
         document.getElementById('finExpVsBudget').textContent =
             `${expVar <= 0 ? '' : '+'}${formatCurrency(expVar)} vs budget`;
         document.getElementById('finExpVsBudget').style.color = expVar <= 0 ? '#e9d5ff' : '#fca5a5';
-
-        document.getElementById('finFreightCost').textContent = formatCurrency(ytd.cos_freight);
-        const frtVar = ytd.cos_freight - budget.freight;
-        document.getElementById('finFreightVsBudget').textContent =
-            `${frtVar >= 0 ? '+' : ''}${formatCurrency(frtVar)} vs budget`;
-        document.getElementById('finFreightVsBudget').style.color = frtVar <= 0 ? '#6ee7b7' : '#fca5a5';
 
         // Revenue by Department
         const depts = [
@@ -165,7 +148,7 @@ async function loadFinancialData() {
 
         // Monthly P&L Table
         const months = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-        let runningRevenue = 0, runningGP = 0, runningNI = 0, runningFreight = 0;
+        let runningRevenue = 0, runningGP = 0, runningNI = 0;
         let tableHTML = '';
 
         data2026.forEach(r => {
@@ -175,15 +158,11 @@ async function loadFinancialData() {
             const gpPct = rev > 0 ? (gp / rev * 100) : 0;
             const exp = parseFloat(r.total_expenses || 0);
             const ni = parseFloat(r.net_income || 0);
-            const frt = parseFloat(r.cos_freight || 0);
-
             runningRevenue += rev;
             runningGP += gp;
             runningNI += ni;
-            runningFreight += frt;
 
             const niColor = ni >= 0 ? '#10b981' : '#ef4444';
-            const frtColor = frt <= 0 ? '#10b981' : '#ef4444';
 
             tableHTML += `
                 <tr>
@@ -194,7 +173,6 @@ async function loadFinancialData() {
                     <td style="text-align: right; color: ${gpPct >= 25 ? '#10b981' : '#f59e0b'};">${gpPct.toFixed(1)}%</td>
                     <td style="text-align: right; color: #a855f7;">${formatCurrency(exp)}</td>
                     <td style="text-align: right; color: ${niColor}; font-weight: bold;">${formatCurrency(ni)}</td>
-                    <td style="text-align: right; color: ${frtColor};">${formatCurrency(frt)}</td>
                 </tr>`;
         });
 
@@ -209,7 +187,6 @@ async function loadFinancialData() {
                 <td style="text-align: right; color: #10b981;">${ytdGPPct.toFixed(1)}%</td>
                 <td style="text-align: right; color: #a855f7;">${formatCurrency(ytd.total_expenses)}</td>
                 <td style="text-align: right; color: ${ytd.net_income >= 0 ? '#10b981' : '#ef4444'};">${formatCurrency(ytd.net_income)}</td>
-                <td style="text-align: right; color: ${ytd.cos_freight <= 0 ? '#10b981' : '#ef4444'};">${formatCurrency(ytd.cos_freight)}</td>
             </tr>`;
 
         document.getElementById('finMonthlyTable').innerHTML = tableHTML;
@@ -266,49 +243,12 @@ async function loadFinancialData() {
 
         document.getElementById('finExpenseTable').innerHTML = expHTML;
 
-        // Freight Budget Monitor
-        document.getElementById('finFreightYTD').textContent = formatCurrency(ytd.cos_freight);
-        document.getElementById('finFreightBudgetAmt').textContent = formatCurrency(budget.freight);
-        const freightVar = ytd.cos_freight - budget.freight;
-        document.getElementById('finFreightVariance').textContent =
-            `${freightVar >= 0 ? '+' : ''}${formatCurrency(freightVar)}`;
-        document.getElementById('finFreightVariance').style.color = freightVar <= 0 ? '#10b981' : '#f43f5e';
-
-        const freightMonthlyAvg = data2026.length > 0 ? ytd.cos_freight / data2026.length : 0;
-        document.getElementById('finFreightMonthlyAvg').textContent = formatCurrency(freightMonthlyAvg);
-
-        // Freight status
-        const freightStatus = document.getElementById('finFreightStatus');
-        if (ytd.cos_freight > 0) {
-            freightStatus.textContent = 'Over Budget';
-            freightStatus.className = 'badge badge-red';
-        } else if (ytd.cos_freight > budget.freight) {
-            freightStatus.textContent = 'Over Budget';
-            freightStatus.className = 'badge badge-red';
-        } else {
-            freightStatus.textContent = 'Under Budget';
-            freightStatus.className = 'badge badge-green';
-        }
-
-        // Freight by month
-        let freightByMonthHTML = '';
-        data2026.forEach(r => {
-            const frt = parseFloat(r.cos_freight || 0);
-            const frtColor = frt <= 0 ? '#10b981' : '#f43f5e';
-            freightByMonthHTML += `
-                <div style="background: rgba(0,0,0,0.3); padding: 6px 10px; border-radius: 6px; text-align: center;">
-                    <div style="font-weight: 600;">${months[r.month]}</div>
-                    <div style="color: ${frtColor}; font-weight: bold;">${formatCurrency(frt)}</div>
-                </div>`;
-        });
-        document.getElementById('finFreightByMonth').innerHTML = freightByMonthHTML;
-
         console.log('loadFinancialData: Complete');
 
     } catch (error) {
         console.error('Error loading financial data:', error);
         document.getElementById('finMonthlyTable').innerHTML =
-            '<tr><td colspan="8" style="text-align:center; color:#ef4444;">Error loading financial data</td></tr>';
+            '<tr><td colspan="7" style="text-align:center; color:#ef4444;">Error loading financial data</td></tr>';
     }
 }
 

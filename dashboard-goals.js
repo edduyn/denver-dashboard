@@ -525,19 +525,13 @@ async function loadGoalsData() {
             const frcData = await frcResp.json();
             const frcCount = Array.isArray(frcData) ? frcData.length : 0;
 
-            const finResp4 = await cachedFetch(`${SUPABASE_URL}/rest/v1/monthly_financials?select=cos_freight,year&year=eq.2026`, { headers: HEADERS });
-            const finData4 = await finResp4.json();
-            const ytdFreight = Array.isArray(finData4) ? finData4.reduce((s,r) => s + parseFloat(r.cos_freight || 0), 0) : 0;
-
             document.getElementById('goal4FlatRateCount').textContent = frcCount;
-            document.getElementById('goal4Freight').textContent = formatCurrency(ytdFreight);
-            document.getElementById('goal4FreightBudget').textContent = formatCurrency(-3000);
 
             const frcBadge = document.getElementById('flatRateGoalBadge');
             if (frcCount >= 30) {
                 frcBadge.textContent = `${frcCount} Rates Loaded`;
                 frcBadge.className = 'badge badge-green';
-                scorecard.push({ num: 4, name: 'Flat-Rate Re-evaluation', target: 'Data analysis', current: `${frcCount} rates + freight data`, status: 'green', statusText: 'Data Ready' });
+                scorecard.push({ num: 4, name: 'Flat-Rate Re-evaluation', target: 'Data analysis', current: `${frcCount} rates loaded`, status: 'green', statusText: 'Data Ready' });
             } else {
                 frcBadge.textContent = 'In Progress';
                 frcBadge.className = 'badge badge-amber';

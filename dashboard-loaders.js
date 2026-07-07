@@ -44,10 +44,6 @@ async function loadDashboardData(force = false) {
     await loadFinancialIntelligence();
     await loadRevenueReconciliation();
     await loadFlatRateChart();
-    await loadFreightInvoices();
-    await loadFreightTracking();
-    await loadFreightAtRiskWarnings();
-    await loadPartsWeightDb();
 
     // Update last refreshed timestamp
     const now = new Date();
