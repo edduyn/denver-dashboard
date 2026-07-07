@@ -1,3 +1,6 @@
+const MIN_LOAD_INTERVAL_MS = 5 * 60 * 1000;
+let _initialLoadDone = false;
+
 async function loadDashboardData(force = false) {
     // WORK HOURS GATE — zero API calls outside M-F 7:30-5 MT
     if (!isWithinWorkHours()) {
