@@ -2,9 +2,6 @@
 // FINANCIAL DATA FUNCTIONS
 // ============================================
 
-// Global flat rate chart data
-let flatRateData = [];
-
 async function loadFinancialData() {
     console.log('loadFinancialData: Loading financial performance data...');
     try {
@@ -1047,76 +1044,6 @@ function renderScenario4() {
 }
 
 // Load flat rate chart for calculator
-async function loadFlatRateChart() {
-    try {
-        const resp = await fetch(
-            `${SUPABASE_URL}/rest/v1/flat_rate_chart?select=*&order=weight_lb.asc`,
-            { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
-        );
-        const data = await resp.json();
-        if (Array.isArray(data) && data.length > 0) {
-            flatRateData = data;
-            console.log('loadFlatRateChart: Loaded', data.length, 'weight tiers');
-            calculateFreightRate(); // Initial calc
-        }
-    } catch (error) {
-        console.error('Error loading flat rate chart:', error);
-    }
-}
-
-function calculateFreightRate() {
-    if (flatRateData.length === 0) {
-        document.getElementById('freightFlatRate').textContent = 'No data';
-        return;
-    }
-
-    const weight = parseInt(document.getElementById('freightWeight').value) || 1;
-    const carrier = document.getElementById('freightCarrier').value;
-    const service = document.getElementById('freightService').value;
-
-    // Map service + carrier to column name
-    const columnMap = {
-        'fedex_overnight_first': 'fedex_first_overnight',
-        'ups_overnight_first': 'ups_early_am',
-        'fedex_overnight_priority': 'fedex_priority_overnight',
-        'ups_overnight_priority': 'ups_next_day_air',
-        'fedex_overnight_standard': 'fedex_standard_overnight',
-        'ups_overnight_standard': 'ups_next_day_saver',
-        'fedex_2day': 'fedex_2day',
-        'ups_2day': 'ups_2day_air',
-        'fedex_3day': 'fedex_express_saver',
-        'ups_3day': 'ups_3day_select',
-        'fedex_ground': 'fedex_ground',
-        'ups_ground': 'ups_ground'
-    };
-
-    const colKey = `${carrier}_${service}`;
-    const column = columnMap[colKey];
-
-    if (!column) {
-        document.getElementById('freightFlatRate').textContent = '$--';
-        return;
-    }
-
-    // Find the correct weight tier (round up to next tier)
-    let matchedRow = flatRateData[flatRateData.length - 1]; // default to max
-    for (let i = 0; i < flatRateData.length; i++) {
-        if (flatRateData[i].weight_lb >= weight) {
-            matchedRow = flatRateData[i];
-            break;
-        }
-    }
-
-    const flatRate = parseFloat(matchedRow[column] || 0);
-    const markup = flatRate * 0.20;
-    const billAmount = flatRate + markup;
-    const loanerTotal = billAmount * 4;
-
-    document.getElementById('freightFlatRate').textContent = `$${flatRate.toFixed(2)}`;
-    document.getElementById('freightMarkup').textContent = `$${markup.toFixed(2)}`;
-    document.getElementById('freightBillAmount').textContent = `$${billAmount.toFixed(2)}`;
-    document.getElementById('freightLoanerTotal').textContent = `$${loanerTotal.toFixed(2)}`;
-}
 
 // Load TFM freight invoice data from Supabase
 async function loadFreightInvoices() {
