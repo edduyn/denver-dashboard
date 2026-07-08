@@ -46,7 +46,6 @@ async function loadDashboardData(force = false) {
     await loadFinancialData();
     await loadFinancialIntelligence();
     await loadRevenueReconciliation();
-    await loadFlatRateChart();
 
     // Update last refreshed timestamp
     const now = new Date();
