@@ -841,3 +841,84 @@ if (localStorage.getItem('denver_auth') === 'true') {
 // Refresh data every 30 minutes (reduced from 5min to stay within Supabase free tier)
 // Work hours gate is inside loadDashboardData — interval still fires but gets blocked off-hours
 setInterval(loadDashboardData, 30 * 60 * 1000);
+
+// ─── On-Call Schedule ──────────────────────────────────────────────────────
+
+const AGENT_DASH = 'http://192.168.4.141:8096';
+
+async function loadOncallSchedule() {
+    try {
+        const resp = await fetch(`${AGENT_DASH}/api/oncall`);
+        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+        const data = await resp.json();
+
+        const upcoming = data.upcoming || [];
+        const today = data.today;
+
+        // Badge
+        const badge = document.getElementById('oncallBadge');
+        if (badge) badge.textContent = upcoming.length + ' upcoming';
+
+        // Current weekend = first entry whose start_date <= today+6
+        let current = null, next = null;
+        for (let i = 0; i < upcoming.length; i++) {
+            const daysAway = Math.ceil((new Date(upcoming[i].start_date) - new Date(today)) / 86400000);
+            if (daysAway <= 5 && !current) { current = upcoming[i]; }
+            else if (current && !next) { next = upcoming[i]; break; }
+            else if (!current && !next) { next = upcoming[i]; }
+        }
+        if (!current && upcoming.length) { current = upcoming[0]; next = upcoming[1] || null; }
+
+        function fmtDate(d) {
+            const [y,m,day] = d.split('-');
+            return new Date(y, m-1, day).toLocaleDateString('en-US', {month:'short', day:'numeric'});
+        }
+
+        if (current) {
+            document.getElementById('oncallCurrentName').textContent = current.technician;
+            document.getElementById('oncallCurrentDates').textContent = `${fmtDate(current.start_date)} – ${fmtDate(current.end_date)}`;
+            document.getElementById('oncallCurrentEmail').textContent = current.email || '';
+        }
+        if (next) {
+            document.getElementById('oncallNextName').textContent = next.technician;
+            document.getElementById('oncallNextDates').textContent = `${fmtDate(next.start_date)} – ${fmtDate(next.end_date)}`;
+        }
+
+        // Table
+        const tbody = document.getElementById('oncallTableBody');
+        if (tbody) {
+            tbody.innerHTML = upcoming.map(e => `
+                <tr>
+                    <td>${fmtDate(e.start_date)} – ${fmtDate(e.end_date)}</td>
+                    <td>${e.technician}</td>
+                    <td style="color:#94a3b8;">${e.phone || '—'}</td>
+                    <td style="color:#64748b;">${e.notes || ''}</td>
+                </tr>`).join('') || '<tr><td colspan="4" style="text-align:center;color:#94a3b8;">No upcoming weekends</td></tr>';
+        }
+    } catch (e) {
+        const badge = document.getElementById('oncallBadge');
+        if (badge) badge.textContent = 'offline';
+        const tbody = document.getElementById('oncallTableBody');
+        if (tbody) tbody.innerHTML = `<tr><td colspan="4" style="color:#f87171;text-align:center;">Cannot reach agent dashboard: ${e.message}</td></tr>`;
+    }
+}
+
+async function sendOncallReminder() {
+    const btn = document.getElementById('sendOncallBtn');
+    const status = document.getElementById('oncallSendStatus');
+    if (btn) btn.disabled = true;
+    if (status) status.textContent = 'Sending...';
+    try {
+        const resp = await fetch(`${AGENT_DASH}/api/send-oncall-reminder`, { method: 'POST' });
+        const data = await resp.json();
+        if (data.success) {
+            if (status) status.textContent = '✓ ' + data.message;
+        } else {
+            if (status) status.textContent = '✗ ' + (data.error || 'Failed');
+        }
+    } catch (e) {
+        if (status) status.textContent = '✗ ' + e.message;
+    } finally {
+        setTimeout(() => { if (btn) btn.disabled = false; }, 10000);
+    }
+}

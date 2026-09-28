@@ -64,6 +64,7 @@ function showTab(tabId) {
     }
     if (tabId === 'employees') {
         loadEvalTracker();
+        loadOncallSchedule();
     }
     if (tabId === 'billedwo') {
         loadBilledWorkOrders();

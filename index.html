@@ -1113,6 +1113,43 @@
             </div>
         </div>
         <div class="content" id="employees">
+            <!-- ON-CALL ROTATION -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">📟 Weekend On-Call Rotation</span>
+                    <span class="badge" id="oncallBadge" style="background:#1e40af;">Loading...</span>
+                </div>
+                <div style="padding: 16px;">
+                    <div style="display:flex; gap:16px; flex-wrap:wrap; margin-bottom:16px;">
+                        <div style="background:rgba(0,0,0,0.3); border-radius:8px; padding:16px; flex:1; min-width:200px;">
+                            <div style="color:#e9d5ff; font-size:12px; margin-bottom:4px;">THIS WEEKEND</div>
+                            <div id="oncallCurrentName" style="color:#a78bfa; font-size:20px; font-weight:bold;">—</div>
+                            <div id="oncallCurrentDates" style="color:#94a3b8; font-size:13px; margin-top:4px;">—</div>
+                            <div id="oncallCurrentEmail" style="color:#64748b; font-size:11px; margin-top:2px;">—</div>
+                        </div>
+                        <div style="background:rgba(0,0,0,0.3); border-radius:8px; padding:16px; flex:1; min-width:200px;">
+                            <div style="color:#e9d5ff; font-size:12px; margin-bottom:4px;">NEXT WEEKEND</div>
+                            <div id="oncallNextName" style="color:#c4b5fd; font-size:20px; font-weight:bold;">—</div>
+                            <div id="oncallNextDates" style="color:#94a3b8; font-size:13px; margin-top:4px;">—</div>
+                        </div>
+                        <div style="background:rgba(0,0,0,0.3); border-radius:8px; padding:16px; flex:1; min-width:200px; display:flex; flex-direction:column; gap:8px;">
+                            <div style="color:#e9d5ff; font-size:12px;">MONDAY REMINDER</div>
+                            <div style="color:#94a3b8; font-size:12px;">Auto-sends Mon 8 AM MT.<br>Or trigger now:</div>
+                            <button id="sendOncallBtn" onclick="sendOncallReminder()" style="background:#1e40af; color:#fff; border:none; border-radius:6px; padding:8px 12px; cursor:pointer; font-size:13px;">Send Reminder Now</button>
+                            <div id="oncallSendStatus" style="color:#86efac; font-size:12px; min-height:16px;"></div>
+                        </div>
+                    </div>
+                    <div style="color:#e9d5ff; font-weight:bold; margin-bottom:8px; font-size:14px;">Upcoming Schedule</div>
+                    <table class="table" style="font-size:0.85em;">
+                        <thead><tr><th>Weekend</th><th>Technician</th><th>Phone</th><th>Notes</th></tr></thead>
+                        <tbody id="oncallTableBody">
+                            <tr><td colspan="4" style="text-align:center;color:#94a3b8;">Loading...</td></tr>
+                        </tbody>
+                    </table>
+                    <div style="color:#64748b; font-size:11px; margin-top:8px;">Policy: Person on-call must take 4h off during the prior week (2h Sat + 2h Sun offset) to maintain 40h sold.</div>
+                </div>
+            </div>
+
             <!-- EVAL TRACKER -->
             <div class="card">
                 <div class="card-header">
