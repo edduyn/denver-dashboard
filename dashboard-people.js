@@ -848,12 +848,14 @@ const AGENT_DASH = 'http://192.168.4.141:8096';
 
 async function loadOncallSchedule() {
     try {
-        const resp = await fetch(`${AGENT_DASH}/api/oncall`);
+        const resp = await fetch('./oncall_schedule.json');
         if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-        const data = await resp.json();
+        const schedule = await resp.json();
 
-        const upcoming = data.upcoming || [];
-        const today = data.today;
+        const today = new Date().toISOString().split('T')[0];
+        const upcoming = schedule
+            .filter(e => !e.is_holiday && e.start_date >= today)
+            .slice(0, 6);
 
         // Badge
         const badge = document.getElementById('oncallBadge');

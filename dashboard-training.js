@@ -523,43 +523,42 @@ async function loadDailyMetrics() {
                 statusEl.innerHTML = `<div style="color: ${statusColor}; font-weight: bold;">${statusMsg}</div>`;
             }
 
-            // Matt's numbers from latest rankings data - fetch from database
-            try {
-                const rankingsResponse = await cachedFetch(`${SUPABASE_URL}/rest/v1/rankings?select=*&order=week_ending.desc&limit=1`, {
-                    headers: HEADERS
-                });
-
-                if (rankingsResponse.status === 200) {
-                    const rankings = await rankingsResponse.json();
-                    if (rankings.length > 0) {
-                        const rank = rankings[0];
-                        const mattAB = rank.denver_ab_actual;
-                        const mattBudget = rank.denver_ab_budget;
-                        const mattGap = (mattAB - mattBudget).toFixed(1);
-
-                        // Parse date correctly (add time to avoid timezone issues)
-                        const weekEnding = new Date(rank.week_ending + 'T12:00:00');
-                        const monthName = weekEnding.toLocaleDateString('en-US', { month: 'short' });
-                        const dayNum = weekEnding.getDate();
-
-                        document.getElementById('mattAB').textContent = `${mattAB}%`;
-                        document.getElementById('mattPeriod').textContent = `Latest (${monthName} ${dayNum} Update)`;
-                        document.getElementById('mattRank').textContent = `Rank: ${rank.denver_position}${getOrdinalSuffix(rank.denver_position)}/${rank.total_shops} | Gap: ${mattGap} pts`;
-                        document.getElementById('janRank').textContent = `${rank.denver_position}${getOrdinalSuffix(rank.denver_position)}`;
-
-                        // Update previous month summary from rankings
-                        const prevMonthEl = document.getElementById('abPrevMonthText');
-                        if (prevMonthEl) {
-                            prevMonthEl.textContent = `📧 Latest: ${mattAB}% A/B | ${rank.denver_position}${getOrdinalSuffix(rank.denver_position)}/${rank.total_shops} shops | Gap: ${mattGap} pts vs budget ${mattBudget}%`;
-                        }
-                    }
-                }
-            } catch (error) {
-                console.error('Error loading Matt rankings:', error);
-            }
         }
     } catch (error) {
         console.error('Error calculating A/B ratios:', error);
+    }
+
+    // Matt's numbers from latest rankings — runs independently of time_entries
+    try {
+        const rankingsResponse = await cachedFetch(`${SUPABASE_URL}/rest/v1/rankings?select=*&order=week_ending.desc&limit=1`, {
+            headers: HEADERS
+        });
+
+        if (rankingsResponse.status === 200) {
+            const rankings = await rankingsResponse.json();
+            if (rankings.length > 0) {
+                const rank = rankings[0];
+                const mattAB = rank.denver_ab_actual;
+                const mattBudget = rank.denver_ab_budget;
+                const mattGap = (mattAB - mattBudget).toFixed(1);
+
+                const weekEnding = new Date(rank.week_ending + 'T12:00:00');
+                const monthName = weekEnding.toLocaleDateString('en-US', { month: 'short' });
+                const dayNum = weekEnding.getDate();
+
+                document.getElementById('mattAB').textContent = `${mattAB}%`;
+                document.getElementById('mattPeriod').textContent = `Latest (${monthName} ${dayNum} Update)`;
+                document.getElementById('mattRank').textContent = `Rank: ${rank.denver_position}${getOrdinalSuffix(rank.denver_position)}/${rank.total_shops} | Gap: ${mattGap} pts`;
+                document.getElementById('janRank').textContent = `${rank.denver_position}${getOrdinalSuffix(rank.denver_position)}`;
+
+                const prevMonthEl = document.getElementById('abPrevMonthText');
+                if (prevMonthEl) {
+                    prevMonthEl.textContent = `📧 Latest: ${mattAB}% A/B | ${rank.denver_position}${getOrdinalSuffix(rank.denver_position)}/${rank.total_shops} shops | Gap: ${mattGap} pts vs budget ${mattBudget}%`;
+                }
+            }
+        }
+    } catch (error) {
+        console.error('Error loading Matt rankings:', error);
     }
 }
 
