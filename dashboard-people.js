@@ -845,12 +845,14 @@ setInterval(loadDashboardData, 30 * 60 * 1000);
 // ─── On-Call Schedule ──────────────────────────────────────────────────────
 
 const AGENT_DASH = 'http://192.168.4.141:8096';
+let _oncallScheduleCache = null;
 
 async function loadOncallSchedule() {
     try {
         const resp = await fetch('./oncall_schedule.json');
         if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
         const schedule = await resp.json();
+        _oncallScheduleCache = schedule;
 
         const today = new Date().toISOString().split('T')[0];
         const upcoming = schedule
@@ -905,13 +907,12 @@ async function loadOncallSchedule() {
     }
 }
 
-async function sendOncallReminder() {
-    const btn = document.getElementById('sendOncallBtn');
+function sendOncallReminder() {
     const status = document.getElementById('oncallSendStatus');
 
     try {
-        const resp = await fetch('./oncall_schedule.json');
-        const schedule = await resp.json();
+        const schedule = _oncallScheduleCache;
+        if (!schedule) { if (status) status.textContent = 'Schedule not loaded yet — please wait and try again.'; return; }
         const today = new Date().toISOString().split('T')[0];
         const upcoming = schedule.filter(e => !e.is_holiday && e.start_date >= today);
         if (!upcoming.length) {
