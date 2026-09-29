@@ -908,19 +908,57 @@ async function loadOncallSchedule() {
 async function sendOncallReminder() {
     const btn = document.getElementById('sendOncallBtn');
     const status = document.getElementById('oncallSendStatus');
-    if (btn) btn.disabled = true;
-    if (status) status.textContent = 'Sending...';
+
     try {
-        const resp = await fetch(`${AGENT_DASH}/api/send-oncall-reminder`, { method: 'POST' });
-        const data = await resp.json();
-        if (data.success) {
-            if (status) status.textContent = '✓ ' + data.message;
-        } else {
-            if (status) status.textContent = '✗ ' + (data.error || 'Failed');
+        const resp = await fetch('./oncall_schedule.json');
+        const schedule = await resp.json();
+        const today = new Date().toISOString().split('T')[0];
+        const upcoming = schedule.filter(e => !e.is_holiday && e.start_date >= today);
+        if (!upcoming.length) {
+            if (status) status.textContent = 'No upcoming on-call weekends found.';
+            return;
         }
+
+        const next = upcoming[0];
+
+        function fmtFull(d) {
+            const [y, m, day] = d.split('-');
+            return new Date(y, m - 1, day).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+        }
+
+        // Find the Monday of the week before the on-call weekend so tech can plan offset hours
+        const satDate = new Date(next.start_date + 'T12:00:00');
+        const prevMon = new Date(satDate);
+        prevMon.setDate(satDate.getDate() - 5); // Mon before the weekend
+        const prevFri = new Date(satDate);
+        prevFri.setDate(satDate.getDate() - 1); // Fri before weekend
+        const weekRange = `${prevMon.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} – ${prevFri.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`;
+
+        const subject = encodeURIComponent(`On-Call Reminder — ${fmtFull(next.start_date)} & ${fmtFull(next.end_date)}`);
+        const body = encodeURIComponent(
+`Hi ${next.technician.split(' ')[0]},
+
+This is a reminder that you are scheduled for on-call duty this coming weekend:
+
+  Saturday:  ${fmtFull(next.start_date)}
+  Sunday:    ${fmtFull(next.end_date)}
+
+Per management policy, please plan to take 4 hours off during the prior week (${weekRange}) to offset the on-call time:
+  • 2 hours to offset Saturday coverage
+  • 2 hours to offset Sunday coverage
+
+Coordinate with Edduyn to schedule your offset hours before the weekend.
+
+If you have any conflicts or questions, please reach out as soon as possible.
+
+Thank you,
+Edduyn Pita
+Denver Satellite 889`
+        );
+
+        window.open(`mailto:${next.email}?subject=${subject}&body=${body}`, '_blank');
+        if (status) status.textContent = `✓ Email opened for ${next.technician}`;
     } catch (e) {
         if (status) status.textContent = '✗ ' + e.message;
-    } finally {
-        setTimeout(() => { if (btn) btn.disabled = false; }, 10000);
     }
 }
