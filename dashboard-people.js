@@ -921,18 +921,31 @@ async function sendOncallReminder() {
 
         const next = upcoming[0];
 
+        // Previous 2 (past weekends closest to today) and next 2 after the target
+        const past = schedule
+            .filter(e => !e.is_holiday && e.start_date < today)
+            .slice(-2);
+        const nextTwo = upcoming.slice(1, 3); // upcoming[0] is the target; [1] and [2] are next 2
+
         function fmtFull(d) {
             const [y, m, day] = d.split('-');
             return new Date(y, m - 1, day).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
         }
+        function fmtShort(d) {
+            const [y, m, day] = d.split('-');
+            return new Date(y, m - 1, day).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        }
 
-        // Find the Monday of the week before the on-call weekend so tech can plan offset hours
+        // Offset week window (Mon–Fri before the on-call weekend)
         const satDate = new Date(next.start_date + 'T12:00:00');
         const prevMon = new Date(satDate);
-        prevMon.setDate(satDate.getDate() - 5); // Mon before the weekend
+        prevMon.setDate(satDate.getDate() - 5);
         const prevFri = new Date(satDate);
-        prevFri.setDate(satDate.getDate() - 1); // Fri before weekend
+        prevFri.setDate(satDate.getDate() - 1);
         const weekRange = `${prevMon.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} – ${prevFri.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`;
+
+        const prevLines = past.map(e => `  ${fmtShort(e.start_date)} – ${fmtShort(e.end_date)}:  ${e.technician}`).join('\n');
+        const nextLines = nextTwo.map(e => `  ${fmtShort(e.start_date)} – ${fmtShort(e.end_date)}:  ${e.technician}`).join('\n');
 
         const subject = encodeURIComponent(`On-Call Reminder — ${fmtFull(next.start_date)} & ${fmtFull(next.end_date)}`);
         const body = encodeURIComponent(
@@ -951,9 +964,15 @@ Coordinate with Edduyn to schedule your offset hours before the weekend.
 
 If you have any conflicts or questions, please reach out as soon as possible.
 
-Thank you,
-Edduyn Pita
-Denver Satellite 889`
+--- On-Call Schedule Context ---
+Previous rotations:
+${prevLines || '  (none on record)'}
+
+Upcoming rotations:
+  ${fmtShort(next.start_date)} – ${fmtShort(next.end_date)}:  ${next.technician}  ← YOU
+${nextLines || '  (end of schedule)'}
+
+Best Regards,`
         );
 
         window.open(`mailto:${next.email}?subject=${subject}&body=${body}`, '_blank');
