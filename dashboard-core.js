@@ -529,7 +529,7 @@ function filterAnchorTable() {
 
         return `
             <tr style="${rowStyle}">
-                <td><strong>${wo.wo_number}</strong></td>
+                <td><a href="https://myduncan.aero/online/portal/workOrder/detail/squawks.jsf?workOrder=${wo.wo_number}&squawk=1&menu=true" target="_blank" style="color:#60a5fa;font-weight:600;text-decoration:none;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">${wo.wo_number}</a></td>
                 <td><span style="color:${shopColor};font-weight:600;">${wo.shop}</span></td>
                 <td style="font-size:0.85em;">${wo.customer || '--'}</td>
                 <td>${wo.tail_number || '--'}</td>
