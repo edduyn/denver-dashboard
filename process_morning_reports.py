@@ -1155,6 +1155,37 @@ def process_anchor(filepath, report_date, dry_run=False):
     if aog_count:
         print(f"  AOG work orders: {aog_count}")
 
+    # Fetch existing rts_complete_date values before the full-table DELETE.
+    # The anchor table is wiped and re-inserted every run, so we must carry
+    # rts_complete_date forward from the previous snapshot.
+    existing_rts = {}
+    try:
+        rts_url = f"{SUPABASE_URL}/rest/v1/anchor_work_orders?select=wo_number,rts_complete_date&rts_complete_date=not.is.null"
+        rts_r = requests.get(rts_url, headers=HEADERS)
+        if rts_r.status_code == 200:
+            for rec in rts_r.json():
+                if rec.get('wo_number') and rec.get('rts_complete_date'):
+                    existing_rts[rec['wo_number']] = rec['rts_complete_date']
+            print(f"  Loaded {len(existing_rts)} existing rts_complete_date values")
+    except Exception as e:
+        print(f"  WARNING: Could not load existing rts_complete_date values: {e}")
+
+    # Assign rts_complete_date: carry forward existing, or stamp today for newly-RTS WOs.
+    RTS_STATUS = "RTS inspection complete"
+    rts_new = 0
+    for r in rows:
+        wo = r['wo_number']
+        if r.get('anchor_status') == RTS_STATUS:
+            if wo in existing_rts:
+                r['rts_complete_date'] = existing_rts[wo]  # preserve original date
+            else:
+                r['rts_complete_date'] = report_date        # first day seen as RTS
+                rts_new += 1
+        else:
+            r['rts_complete_date'] = None
+    if rts_new:
+        print(f"  New RTS completions recorded today: {rts_new}")
+
     # Cross-check against work_orders: remove already-billed WOs from the anchor snapshot.
     # This prevents billed WOs from appearing as "open" in any dashboard tab.
     try:
@@ -1170,20 +1201,25 @@ def process_anchor(filepath, report_date, dry_run=False):
     except Exception as e:
         print(f"  WARNING: Could not cross-check billed WOs: {e}")
 
-    # Push ac_out_date to work_orders for any open WO that has a departure date.
-    # This ensures ac_out_date is available on work_orders when the WO later gets billed,
-    # enabling true billing-lag calculation (departure → invoice) in the dashboard.
-    wo_with_ac_out = [r for r in rows if r.get('ac_out_date') and r.get('wo_number')]
-    if wo_with_ac_out and not dry_run:
-        ac_out_updates = [
-            {"work_order_number": r['wo_number'], "ac_out_date": r['ac_out_date']}
-            for r in wo_with_ac_out
-        ]
+    # Push ac_out_date and rts_complete_date to work_orders for open WOs that have them.
+    # These fields travel with the WO so they're available after it gets billed, enabling
+    # accurate billing-lag calculation (RTS complete → invoice) in the dashboard.
+    wo_to_update = [r for r in rows if r.get('wo_number') and
+                    (r.get('ac_out_date') or r.get('rts_complete_date'))]
+    if wo_to_update and not dry_run:
+        date_updates = []
+        for r in wo_to_update:
+            upd = {"work_order_number": r['wo_number']}
+            if r.get('ac_out_date'):
+                upd['ac_out_date'] = r['ac_out_date']
+            if r.get('rts_complete_date'):
+                upd['rts_complete_date'] = r['rts_complete_date']
+            date_updates.append(upd)
         try:
-            updated = supabase_upsert("work_orders", ac_out_updates, on_conflict="work_order_number")
-            print(f"  Updated ac_out_date on {updated} work_orders records")
+            updated = supabase_upsert("work_orders", date_updates, on_conflict="work_order_number")
+            print(f"  Updated ac_out_date/rts_complete_date on {updated} work_orders records")
         except Exception as e:
-            print(f"  WARNING: Could not update ac_out_date on work_orders: {e}")
+            print(f"  WARNING: Could not update dates on work_orders: {e}")
 
     if dry_run:
         print(f"  [DRY RUN] Would delete ALL existing anchor_work_orders and insert {len(rows)} rows")

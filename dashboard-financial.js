@@ -329,7 +329,7 @@ async function loadFinancialIntelligence() {
             cachedFetch(`${SUPABASE_URL}/rest/v1/daily_metrics?select=report_date,total_sold_hours,total_paid_hours,employee_count,billed_wo_count&report_date=gte.${monthStart}&report_date=lte.${monthEnd}&order=report_date.asc`, { headers: HEADERS }),
             cachedFetch(`${SUPABASE_URL}/rest/v1/time_entries?select=wo_number,shop,hours,emp_code,emp_name,entry_date,wo_type&entry_date=gte.${monthStart}&entry_date=lte.${monthEnd}&limit=5000&order=hours.desc`, { headers: HEADERS }),
             cachedFetch(`${SUPABASE_URL}/rest/v1/anchor_work_orders?select=report_date&order=report_date.desc&limit=1`, { headers: HEADERS }),
-            cachedFetch(`${SUPABASE_URL}/rest/v1/work_orders?select=work_order_number,status,billed_date,customer_name,customer_id,tail_number,open_date,ac_out_date,total_amount,labor_amount,parts_amount,os_amount&status=eq.billed&billed_date=gte.${monthStart}&billed_date=lte.${monthEnd}&limit=500`, { headers: HEADERS }),
+            cachedFetch(`${SUPABASE_URL}/rest/v1/work_orders?select=work_order_number,status,billed_date,customer_name,customer_id,tail_number,open_date,ac_out_date,rts_complete_date,total_amount,labor_amount,parts_amount,os_amount&status=eq.billed&billed_date=gte.${monthStart}&billed_date=lte.${monthEnd}&limit=500`, { headers: HEADERS }),
             cachedFetch(`${SUPABASE_URL}/rest/v1/budget_vs_actual?period_year=eq.${currentYear}&period_month=eq.${currentMonth}&select=*`, { headers: HEADERS }),
             cachedFetch(`${SUPABASE_URL}/rest/v1/wip_entries?select=*&order=month.desc&limit=12`, { headers: HEADERS }),
             cachedFetch(`${SUPABASE_URL}/rest/v1/revenue_reconciliation?period=eq.${currentYear}-${String(currentMonth).padStart(2,'0')}&order=source.asc,shop.asc`, { headers: HEADERS }),
@@ -504,24 +504,22 @@ async function loadFinancialIntelligence() {
         });
         const totalShopHrs = Object.values(shopHrsMap).reduce((a,b) => a+b, 0);
 
-        // WO Cycle Time (open_date → billed_date = full time in shop, NOT billing lag)
-        // Billing lag (departure → invoice, ~4 days per AS400 reports) requires ac_out_date
-        // on work_orders — see process_morning_reports.py TODO to carry ac_out_date forward.
+        // Days to Bill: measured from RTS inspection complete → billed_date.
+        // rts_complete_date is stamped daily by the processor the first time a WO
+        // appears with "RTS inspection complete" status in the anchor snapshot.
+        // Fallback chain: rts_complete_date → ac_out_date → (skip, not comparable).
         let totalDTB = 0, dtbCount = 0;
+        let dtbSource = 'none';
         billedWOs.forEach(wo => {
-            if (wo.billed_date && wo.ac_out_date) {
-                // Use aircraft departure date → billed date (true billing lag)
+            if (wo.billed_date && wo.rts_complete_date) {
+                const diff = Math.round((new Date(wo.billed_date) - new Date(wo.rts_complete_date)) / 86400000);
+                if (diff >= 0 && diff < 60) { totalDTB += diff; dtbCount++; dtbSource = 'rts'; }
+            } else if (wo.billed_date && wo.ac_out_date) {
                 const diff = Math.round((new Date(wo.billed_date) - new Date(wo.ac_out_date)) / 86400000);
-                if (diff >= 0 && diff < 90) { totalDTB += diff; dtbCount++; }
-            } else if (wo.billed_date && wo.open_date) {
-                // Fallback: full cycle time (not the same metric — label accordingly)
-                const diff = Math.round((new Date(wo.billed_date) - new Date(wo.open_date)) / 86400000);
-                if (diff >= 0 && diff < 365) { totalDTB += diff; dtbCount++; }
+                if (diff >= 0 && diff < 60) { totalDTB += diff; dtbCount++; if (dtbSource === 'none') dtbSource = 'ac_out'; }
             }
         });
         const avgDaysToBill = dtbCount > 0 ? totalDTB / dtbCount : 0;
-        // Flag whether we computed true billing lag or fallback WO cycle time
-        const dtbIsTrueLag = dtbCount > 0 && billedWOs.some(wo => wo.ac_out_date);
 
         // Revenue concentration
         const custRevMap = {};
@@ -635,29 +633,26 @@ async function loadFinancialIntelligence() {
             }
         });
 
-        // Rule 7: Billing Lag / WO Cycle Time
-        if (avgDaysToBill > 0) {
-            if (dtbIsTrueLag) {
-                // We have actual departure→invoice data
-                if (avgDaysToBill > 10) {
-                    recommendations.push({ severity: 'red', icon: '⏱️',
-                        text: `Avg billing lag (departure → invoice): <strong>${avgDaysToBill.toFixed(0)} days</strong> — goal is ${DAYS_TO_BILL_GOAL} days. Revenue recognition is delayed.` });
-                } else if (avgDaysToBill > DAYS_TO_BILL_GOAL) {
-                    recommendations.push({ severity: 'amber', icon: '⏱️',
-                        text: `Avg billing lag: <strong>${avgDaysToBill.toFixed(0)} days</strong> (goal: ${DAYS_TO_BILL_GOAL} days). Faster invoicing = faster revenue recognition.` });
-                } else {
-                    recommendations.push({ severity: 'green', icon: '⚡',
-                        text: `Avg billing lag: <strong>${avgDaysToBill.toFixed(0)} days</strong> (departure → invoice) — within the ${DAYS_TO_BILL_GOAL}-day goal!` });
-                }
+        // Rule 7: Days to Bill (RTS inspection complete → invoice)
+        if (avgDaysToBill > 0 && dtbSource === 'rts') {
+            if (avgDaysToBill > 10) {
+                recommendations.push({ severity: 'red', icon: '⏱️',
+                    text: `Avg days to bill (RTS → invoice): <strong>${avgDaysToBill.toFixed(0)} days</strong> — goal is ${DAYS_TO_BILL_GOAL} days. Revenue recognition is delayed.` });
+            } else if (avgDaysToBill > DAYS_TO_BILL_GOAL) {
+                recommendations.push({ severity: 'amber', icon: '⏱️',
+                    text: `Avg days to bill (RTS → invoice): <strong>${avgDaysToBill.toFixed(0)} days</strong> (goal: ${DAYS_TO_BILL_GOAL} days). Faster invoicing = faster revenue recognition.` });
             } else {
-                // Fallback: showing WO lifecycle (open→billed), thresholds are different
-                if (avgDaysToBill > 60) {
-                    recommendations.push({ severity: 'amber', icon: '⏱️',
-                        text: `Avg WO cycle time (open → billed): <strong>${avgDaysToBill.toFixed(0)} days</strong>. Note: this is total time in shop, not billing lag — AS400 Direct shows billing lag ~4 days.` });
-                } else {
-                    recommendations.push({ severity: 'green', icon: '⏱️',
-                        text: `Avg WO cycle time (open → billed): <strong>${avgDaysToBill.toFixed(0)} days</strong>. Note: billing lag (departure → invoice) tracked separately via AS400 Direct.` });
-                }
+                recommendations.push({ severity: 'green', icon: '⚡',
+                    text: `Avg days to bill (RTS → invoice): <strong>${avgDaysToBill.toFixed(0)} days</strong> — within the ${DAYS_TO_BILL_GOAL}-day goal!` });
+            }
+        } else if (avgDaysToBill > 0 && dtbSource === 'ac_out') {
+            // ac_out_date fallback — less precise, note it
+            if (avgDaysToBill > DAYS_TO_BILL_GOAL) {
+                recommendations.push({ severity: 'amber', icon: '⏱️',
+                    text: `Avg days to bill (departure → invoice): <strong>${avgDaysToBill.toFixed(0)} days</strong> (goal: ${DAYS_TO_BILL_GOAL} days). RTS date tracking activates tomorrow's processor run.` });
+            } else {
+                recommendations.push({ severity: 'green', icon: '⚡',
+                    text: `Avg days to bill (departure → invoice): <strong>${avgDaysToBill.toFixed(0)} days</strong> — within goal. RTS date tracking activates tomorrow's processor run.` });
             }
         }
 
