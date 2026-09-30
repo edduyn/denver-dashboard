@@ -12,25 +12,36 @@ async function loadFinancialData() {
         const curMonthEnd = `${curYear}-${String(curMonth).padStart(2,'0')}-${new Date(curYear, curMonth, 0).getDate()}`;
 
         // Fetch monthly financials + current month live actuals in parallel
-        const [resp, bvaResp, billedResp] = await Promise.all([
+        const curPeriod = `${curYear}-${String(curMonth).padStart(2,'0')}`;
+        const [resp, bvaResp, billedResp, reconResp] = await Promise.all([
             fetch(`${SUPABASE_URL}/rest/v1/monthly_financials?select=*&order=year.asc,month.asc`,
                 { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }),
             fetch(`${SUPABASE_URL}/rest/v1/budget_vs_actual?period_year=eq.${curYear}&period_month=eq.${curMonth}&category=eq.total&select=actual_revenue`,
                 { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }),
             fetch(`${SUPABASE_URL}/rest/v1/work_orders?select=total_amount&status=eq.billed&billed_date=gte.${curMonthStart}&billed_date=lte.${curMonthEnd}&limit=500`,
+                { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }),
+            // AS400 reconciliation row has live GP from billed WOs (updated daily)
+            fetch(`${SUPABASE_URL}/rest/v1/revenue_reconciliation?period=eq.${curPeriod}&source=eq.as400&shop=eq.ALL&select=total_gp,gp_pct,total_revenue&limit=1`,
                 { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } })
         ]);
         const data = await resp.json();
 
-        // Compute live MTD revenue using same logic as loadFinancialIntelligence
+        // Compute live MTD revenue + GP using same logic as loadFinancialIntelligence
         let liveMonthRevenue = 0;
+        let liveMonthGP = null; // null = no live data, fall back to stored estimate
         try {
             const bvaData = await bvaResp.json();
             const billed = await billedResp.json();
+            const reconData = await reconResp.json();
             const actualFromGL = parseFloat(bvaData?.[0]?.actual_revenue) || 0;
             const fromBilledWOs = Array.isArray(billed)
                 ? billed.reduce((s, w) => s + (parseFloat(w.total_amount) || 0), 0) : 0;
             liveMonthRevenue = Math.max(actualFromGL, fromBilledWOs);
+            // AS400 row has GP from actual billed WO data — authoritative for open month
+            const as400Row = Array.isArray(reconData) ? reconData[0] : null;
+            if (as400Row && parseFloat(as400Row.total_gp) > 0) {
+                liveMonthGP = parseFloat(as400Row.total_gp);
+            }
         } catch(e) {}
 
         if (!data || !Array.isArray(data) || data.length === 0 || data.code) {
@@ -78,13 +89,14 @@ async function loadFinancialData() {
             ytd.rev_parts_wo += parseFloat(r.rev_parts_wo || 0);
             ytd.rev_other += parseFloat(r.rev_other || 0);
             const storedRevYTD = parseFloat(r.total_revenue || 0);
+            const storedGPYTD = parseFloat(r.gross_profit || 0);
             const isCurrentMonthYTD = r.year === curYear && r.month === curMonth;
             ytd.total_revenue += (isCurrentMonthYTD && liveMonthRevenue > storedRevYTD) ? liveMonthRevenue : storedRevYTD;
+            ytd.gross_profit += (isCurrentMonthYTD && liveMonthGP !== null && liveMonthGP > storedGPYTD) ? liveMonthGP : storedGPYTD;
             ytd.cos_labor += parseFloat(r.cos_labor || 0);
             ytd.cos_parts_wo += parseFloat(r.cos_parts_wo || 0);
             ytd.cos_other += parseFloat(r.cos_other || 0);
             ytd.total_cos += parseFloat(r.total_cos || 0);
-            ytd.gross_profit += parseFloat(r.gross_profit || 0);
             ytd.total_expenses += parseFloat(r.total_expenses || 0);
             ytd.net_income += parseFloat(r.net_income || 0);
         });
@@ -174,11 +186,13 @@ async function loadFinancialData() {
         data2026.forEach(r => {
             const isCurrentMonth = r.year === curYear && r.month === curMonth;
             const isEstimate = r.source === 'wo_estimate';
-            // For the current open month, use live MTD revenue instead of the stale estimate
+            // For the current open month, use live figures instead of the stale estimate
             const storedRev = parseFloat(r.total_revenue || 0);
             const rev = (isCurrentMonth && liveMonthRevenue > storedRev) ? liveMonthRevenue : storedRev;
-            const cos = parseFloat(r.total_cos || 0);
-            const gp = parseFloat(r.gross_profit || 0);
+            const storedGP = parseFloat(r.gross_profit || 0);
+            const gp = (isCurrentMonth && liveMonthGP !== null && liveMonthGP > storedGP) ? liveMonthGP : storedGP;
+            // COS = Rev − GP (live estimate for current month; stored for closed months)
+            const cos = isCurrentMonth ? Math.max(0, rev - gp) : parseFloat(r.total_cos || 0);
             const gpPct = rev > 0 ? (gp / rev * 100) : 0;
             const exp = parseFloat(r.total_expenses || 0);
             const ni = parseFloat(r.net_income || 0);
