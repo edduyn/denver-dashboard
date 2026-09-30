@@ -329,7 +329,7 @@ async function loadFinancialIntelligence() {
             cachedFetch(`${SUPABASE_URL}/rest/v1/daily_metrics?select=report_date,total_sold_hours,total_paid_hours,employee_count,billed_wo_count&report_date=gte.${monthStart}&report_date=lte.${monthEnd}&order=report_date.asc`, { headers: HEADERS }),
             cachedFetch(`${SUPABASE_URL}/rest/v1/time_entries?select=wo_number,shop,hours,emp_code,emp_name,entry_date,wo_type&entry_date=gte.${monthStart}&entry_date=lte.${monthEnd}&limit=5000&order=hours.desc`, { headers: HEADERS }),
             cachedFetch(`${SUPABASE_URL}/rest/v1/anchor_work_orders?select=report_date&order=report_date.desc&limit=1`, { headers: HEADERS }),
-            cachedFetch(`${SUPABASE_URL}/rest/v1/work_orders?select=work_order_number,status,billed_date,customer_name,customer_id,tail_number,open_date,ac_out_date,rts_complete_date,total_amount,labor_amount,parts_amount,os_amount&status=eq.billed&billed_date=gte.${monthStart}&billed_date=lte.${monthEnd}&limit=500`, { headers: HEADERS }),
+            cachedFetch(`${SUPABASE_URL}/rest/v1/work_orders?select=work_order_number,status,billed_date,customer_name,customer_id,tail_number,open_date,total_amount,labor_amount,parts_amount,os_amount&status=eq.billed&billed_date=gte.${monthStart}&billed_date=lte.${monthEnd}&limit=500`, { headers: HEADERS }),
             cachedFetch(`${SUPABASE_URL}/rest/v1/budget_vs_actual?period_year=eq.${currentYear}&period_month=eq.${currentMonth}&select=*`, { headers: HEADERS }),
             cachedFetch(`${SUPABASE_URL}/rest/v1/wip_entries?select=*&order=month.desc&limit=12`, { headers: HEADERS }),
             cachedFetch(`${SUPABASE_URL}/rest/v1/revenue_reconciliation?period=eq.${currentYear}-${String(currentMonth).padStart(2,'0')}&order=source.asc,shop.asc`, { headers: HEADERS }),
@@ -340,7 +340,11 @@ async function loadFinancialIntelligence() {
         const dailyMetrics = await dailyMetricsRes.json() || [];
         const timeEntries = await timeEntriesRes.json() || [];
         const anchorDateData = await anchorDateRes.json() || [];
-        const billedWOs = await billedWOsRes.json() || [];
+        let billedWOs = [];
+        try {
+            const bwRaw = await billedWOsRes.json();
+            if (Array.isArray(bwRaw)) billedWOs = bwRaw;
+        } catch(e) {}
         const budgetData = await budgetRes.json() || [];
         const wipEntries = await wipRes.json() || [];
         const reconData = await reconRes.json() || [];
