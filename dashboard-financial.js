@@ -20,15 +20,16 @@ async function loadFinancialData() {
                 { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }),
             fetch(`${SUPABASE_URL}/rest/v1/work_orders?select=total_amount&status=eq.billed&billed_date=gte.${curMonthStart}&billed_date=lte.${curMonthEnd}&limit=500`,
                 { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }),
-            // AS400 reconciliation row has live GP from billed WOs (updated daily)
-            fetch(`${SUPABASE_URL}/rest/v1/revenue_reconciliation?period=eq.${curPeriod}&source=eq.as400&shop=eq.ALL&select=total_gp,gp_pct,total_revenue&limit=1`,
+            // AS400 reconciliation row has live GP + revenue breakdown from billed WOs (updated daily)
+            fetch(`${SUPABASE_URL}/rest/v1/revenue_reconciliation?period=eq.${curPeriod}&source=eq.as400&shop=eq.ALL&select=total_gp,gp_pct,total_revenue,labor_revenue,parts_revenue,os_revenue&limit=1`,
                 { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } })
         ]);
         const data = await resp.json();
 
-        // Compute live MTD revenue + GP using same logic as loadFinancialIntelligence
+        // Compute live MTD revenue + GP + dept breakdown using same logic as loadFinancialIntelligence
         let liveMonthRevenue = 0;
         let liveMonthGP = null; // null = no live data, fall back to stored estimate
+        let liveMonthLabor = 0, liveMonthParts = 0, liveMonthOS = 0;
         try {
             const bvaData = await bvaResp.json();
             const billed = await billedResp.json();
@@ -37,10 +38,15 @@ async function loadFinancialData() {
             const fromBilledWOs = Array.isArray(billed)
                 ? billed.reduce((s, w) => s + (parseFloat(w.total_amount) || 0), 0) : 0;
             liveMonthRevenue = Math.max(actualFromGL, fromBilledWOs);
-            // AS400 row has GP from actual billed WO data — authoritative for open month
+            // AS400 row has GP + revenue breakdown from actual billed WO data — authoritative for open month
             const as400Row = Array.isArray(reconData) ? reconData[0] : null;
             if (as400Row && parseFloat(as400Row.total_gp) > 0) {
                 liveMonthGP = parseFloat(as400Row.total_gp);
+            }
+            if (as400Row) {
+                liveMonthLabor = parseFloat(as400Row.labor_revenue) || 0;
+                liveMonthParts = parseFloat(as400Row.parts_revenue) || 0;
+                liveMonthOS    = parseFloat(as400Row.os_revenue)    || 0;
             }
         } catch(e) {}
 
@@ -85,20 +91,23 @@ async function loadFinancialData() {
         };
 
         data2026.forEach(r => {
-            ytd.rev_labor += parseFloat(r.rev_labor || 0);
-            ytd.rev_parts_wo += parseFloat(r.rev_parts_wo || 0);
-            ytd.rev_other += parseFloat(r.rev_other || 0);
-            const storedRevYTD = parseFloat(r.total_revenue || 0);
-            const storedGPYTD = parseFloat(r.gross_profit || 0);
-            const isCurrentMonthYTD = r.year === curYear && r.month === curMonth;
-            ytd.total_revenue += (isCurrentMonthYTD && liveMonthRevenue > storedRevYTD) ? liveMonthRevenue : storedRevYTD;
-            ytd.gross_profit += (isCurrentMonthYTD && liveMonthGP !== null && liveMonthGP > storedGPYTD) ? liveMonthGP : storedGPYTD;
-            ytd.cos_labor += parseFloat(r.cos_labor || 0);
+            const isCurMo = r.year === curYear && r.month === curMonth;
+            const storedRev = parseFloat(r.total_revenue || 0);
+            const storedGP  = parseFloat(r.gross_profit  || 0);
+            const liveRev = (isCurMo && liveMonthRevenue > storedRev) ? liveMonthRevenue : storedRev;
+            const liveGP  = (isCurMo && liveMonthGP !== null && liveMonthGP > storedGP) ? liveMonthGP : storedGP;
+            ytd.total_revenue += liveRev;
+            ytd.gross_profit  += liveGP;
+            // For current month: derive COS from live Rev−GP; use live dept breakdown from AS400
+            ytd.rev_labor    += (isCurMo && liveMonthLabor > 0) ? liveMonthLabor : parseFloat(r.rev_labor    || 0);
+            ytd.rev_parts_wo += (isCurMo && liveMonthParts > 0) ? liveMonthParts : parseFloat(r.rev_parts_wo || 0);
+            ytd.rev_other    += (isCurMo && liveMonthOS    > 0) ? liveMonthOS    : parseFloat(r.rev_other    || 0);
+            ytd.cos_labor    += parseFloat(r.cos_labor    || 0);
             ytd.cos_parts_wo += parseFloat(r.cos_parts_wo || 0);
-            ytd.cos_other += parseFloat(r.cos_other || 0);
-            ytd.total_cos += parseFloat(r.total_cos || 0);
+            ytd.cos_other    += parseFloat(r.cos_other    || 0);
+            ytd.total_cos    += isCurMo ? Math.max(0, liveRev - liveGP) : parseFloat(r.total_cos || 0);
             ytd.total_expenses += parseFloat(r.total_expenses || 0);
-            ytd.net_income += parseFloat(r.net_income || 0);
+            ytd.net_income     += parseFloat(r.net_income     || 0);
         });
 
         // Budget targets for 2026 (will be updated when 2026 budget is loaded)
@@ -248,7 +257,7 @@ async function loadFinancialData() {
             { name: 'Utilities', key: 'exp_utilities', budget: 20000 },
             { name: 'Depreciation', key: 'exp_depreciation', budget: 6102 },
             { name: 'Taxes', key: 'exp_taxes', budget: 5000 },
-            { name: 'Auto', key: 'exp_travel', budget: 5000 }
+            { name: 'Auto', key: 'exp_auto', budget: 5000 }
         ];
 
         let expHTML = '';
@@ -416,6 +425,9 @@ async function loadFinancialIntelligence() {
 
         // ===== WIP CALCULATION BY SHOP (from wip_entries — authoritative cumulative data) =====
         // wip_entries has TOTAL hours on open WOs including prior month carryover
+        const monthAbbr = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        const curMonthName = monthAbbr[currentMonth - 1];
+        const prevMonthName = monthAbbr[prevMonthDate.getMonth()];
         const wipByShop = {};
         let totalWIPValue = 0, totalWIPHours = 0, totalWIPWOs = 0;
         let janWIPTotal = 0;
@@ -731,7 +743,7 @@ async function loadFinancialIntelligence() {
         document.getElementById('fiProjBilled').textContent = fmtCurrency(estimatedMTDRevenue);
         document.getElementById('fiProjBilledNote').textContent = `${billedWOCount} WOs invoiced this month`;
         document.getElementById('fiProjWIP').textContent = fmtCurrency(totalWIPValue);
-        const carryoverNote = janCarryover > 0 ? ` (incl. ${fmtCurrency(janCarryover)} Jan carryover)` : '';
+        const carryoverNote = janCarryover > 0 ? ` (incl. ${fmtCurrency(janCarryover)} ${prevMonthName} carryover)` : '';
         document.getElementById('fiProjWIPNote').textContent = `${totalWIPHours.toFixed(0)} hrs across open WOs${carryoverNote}`;
 
         // Parts estimate tile
@@ -784,7 +796,7 @@ async function loadFinancialIntelligence() {
         const carryoverEl = document.getElementById('fiProjCarryoverNote');
         if (janCarryover > 0 && carryoverEl) {
             carryoverEl.style.display = 'block';
-            carryoverEl.textContent = `WIP includes ${fmtCurrency(janCarryover)} from Jan open WOs carried forward + ${fmtCurrency(febOnlyWIP)} new Feb labor`;
+            carryoverEl.textContent = `WIP includes ${fmtCurrency(janCarryover)} from ${prevMonthName} open WOs carried forward + ${fmtCurrency(febOnlyWIP)} new ${curMonthName} labor`;
         }
 
         // WIP Breakdown by Shop
@@ -862,7 +874,7 @@ async function loadRevenueReconciliation() {
         const sources = [
             { label: '📡 AS400 (Authoritative)', data: as400Row, color: '#10b981', key: 'as400' },
             { label: '📊 Dashboard (work_orders)', data: dashRow, color: '#3b82f6', key: 'dashboard' },
-            { label: '📒 GL (budget_vs_actual)', data: glRow, color: '#f59e0b', key: 'gl' }
+            { label: '📒 GL (monthly_financials)', data: glRow, color: '#f59e0b', key: 'gl' }
         ];
 
         // Build comparison grid
@@ -1148,16 +1160,13 @@ async function loadFreightInvoices() {
             byWeek[w].count++;
             byWeek[w].total += parseFloat(r.actual_charge);
         });
-        const weekOrder = ['Dec 26', 'Jan 9', 'Jan 16', 'Jan 23', 'Jan 30'];
         let weekHTML = '';
-        weekOrder.forEach(w => {
-            if (byWeek[w]) {
-                const color = byWeek[w].total > 100 ? '#f43f5e' : byWeek[w].total > 50 ? '#fbbf24' : '#10b981';
-                weekHTML += `<div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
-                    <span>${w}</span>
-                    <span style="color: ${color};">${byWeek[w].count} items · ${formatCurrency(byWeek[w].total)}</span>
-                </div>`;
-            }
+        Object.entries(byWeek).sort((a, b) => a[0].localeCompare(b[0])).forEach(([w, info]) => {
+            const color = info.total > 100 ? '#f43f5e' : info.total > 50 ? '#fbbf24' : '#10b981';
+            weekHTML += `<div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                <span>${w}</span>
+                <span style="color: ${color};">${info.count} items · ${formatCurrency(info.total)}</span>
+            </div>`;
         });
         document.getElementById('tfmByWeek').innerHTML = weekHTML;
 
