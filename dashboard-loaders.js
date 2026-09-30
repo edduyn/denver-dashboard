@@ -691,7 +691,7 @@ async function loadWIP() {
 
             const shopBadge = isSDV ? '<span class="badge badge-blue">SDV</span>' : `<span class="badge badge-green">${wo.shop}</span>`;
             return `<tr>
-                <td><strong>${wo.wo_number}</strong></td>
+                <td><a href="https://myduncan.aero/online/portal/workOrder/detail/squawks.jsf?workOrder=${wo.wo_number}&squawk=1&menu=true" target="_blank" style="color:#60a5fa;font-weight:600;text-decoration:none;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">${wo.wo_number}</a></td>
                 <td>${shopBadge}</td>
                 <td style="max-width:150px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${wo.customer || '--'}</td>
                 <td style="max-width:180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${wo.description || '--'}</td>
@@ -720,7 +720,7 @@ async function loadWIP() {
                     riskBadge = '<span class="badge badge-green">OK</span>';
                 }
                 return `<tr>
-                    <td><strong>${wo.wo_number}</strong></td>
+                    <td><a href="https://myduncan.aero/online/portal/workOrder/detail/squawks.jsf?workOrder=${wo.wo_number}&squawk=1&menu=true" target="_blank" style="color:#60a5fa;font-weight:600;text-decoration:none;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">${wo.wo_number}</a></td>
                     <td style="max-width:140px; overflow:hidden; text-overflow:ellipsis;">${wo.customer || '--'}</td>
                     <td style="max-width:160px; overflow:hidden; text-overflow:ellipsis;">${wo.description || '--'}</td>
                     <td>${wo.hours.toFixed(1)}</td>
