@@ -638,7 +638,7 @@ async function loadFinancialIntelligence() {
                 else if (wo.days_open > 30) badge = '<span class="badge badge-red">Aging</span>';
                 else badge = '<span class="badge badge-gray">Open</span>';
                 return `<tr>
-                    <td><strong>${wo.wo_number}</strong></td>
+                    <td><a href="https://myduncan.aero/online/portal/workOrder/detail/squawks.jsf?workOrder=${wo.wo_number}&squawk=1&menu=true" target="_blank" style="color:#60a5fa;font-weight:600;text-decoration:none;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">${wo.wo_number}</a></td>
                     <td><span class="badge ${wo.shop === 'SDV' ? 'badge-blue' : 'badge-green'}">${wo.shop}</span></td>
                     <td style="max-width:140px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${wo.customer}</td>
                     <td>${wo.actual_hours.toFixed(1)}</td>
@@ -975,7 +975,7 @@ function renderScenario3() {
         return `<label style="display: flex; align-items: center; gap: 8px; padding: 6px 8px; background: rgba(0,0,0,0.2); border-radius: 6px; cursor: pointer;">
             <input type="checkbox" onchange="updateScenario3()" data-idx="${i}" data-value="${wo.est_value}"
                 style="accent-color: #f59e0b; width: 16px; height: 16px;">
-            <span style="color: #e2e8f0; font-weight: 600; min-width: 65px;">${wo.wo_number}</span>
+            <a href="https://myduncan.aero/online/portal/workOrder/detail/squawks.jsf?workOrder=${wo.wo_number}&squawk=1&menu=true" target="_blank" style="color:#60a5fa;font-weight:600;min-width:65px;text-decoration:none;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">${wo.wo_number}</a>
             <span style="color: #94a3b8; font-size: 0.8em; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
                 ${wo.shop} | ${wo.customer} | ${wo.actual_hours.toFixed(0)} hrs
             </span>
@@ -1287,7 +1287,7 @@ async function loadFreightTracking() {
                     ? '<span style="background:#3b82f6;color:#fff;padding:1px 5px;border-radius:4px;font-size:10px;margin-left:6px;">TRACKED</span>'
                     : '<span style="background:#ef4444;color:#fff;padding:1px 5px;border-radius:4px;font-size:10px;margin-left:6px;">UNTRACKED</span>';
                 alertsHTML += `<div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid rgba(239,68,68,0.2);">
-                    <span style="color:#fca5a5;font-size:12px;"><strong>${wo.wo_number}</strong> (${wo.shop}) — ${wo.customer || ''}${statusBadge}</span>
+                    <span style="color:#fca5a5;font-size:12px;"><a href="https://myduncan.aero/online/portal/workOrder/detail/squawks.jsf?workOrder=${wo.wo_number}&squawk=1&menu=true" target="_blank" style="color:#60a5fa;font-weight:bold;text-decoration:none;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">${wo.wo_number}</a> (${wo.shop}) — ${wo.customer || ''}${statusBadge}</span>
                     <span style="color:#fca5a5;font-size:12px;">Parts: <strong>${formatCurrency(parseFloat(wo.parts))}</strong> | O/S: $0</span>
                 </div>`;
             });
@@ -1307,7 +1307,7 @@ async function loadFreightTracking() {
             const weight = r.weight_lbs ? `${r.weight_lbs} lbs` : '--';
             const desc = r.part_description ? ` title="${r.part_description}"` : '';
             trackHTML += `<tr>
-                <td style="font-size:11px;font-weight:bold;"${desc}>${r.wo_number}</td>
+                <td style="font-size:11px;font-weight:bold;"${desc}><a href="https://myduncan.aero/online/portal/workOrder/detail/squawks.jsf?workOrder=${r.wo_number}&squawk=1&menu=true" target="_blank" style="color:#60a5fa;text-decoration:none;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">${r.wo_number}</a></td>
                 <td style="font-size:11px;">${carrier}</td>
                 <td style="font-size:11px;">${weight}</td>
                 <td style="font-size:11px;text-align:right;">${flatRate > 0 ? formatCurrency(flatRate) : '--'}</td>
@@ -1322,7 +1322,7 @@ async function loadFreightTracking() {
                 const billAmt = parseFloat(r.total_billed) || 0;
                 const carrier = (r.carrier || 'TBD').replace('FedEx ', 'FX ');
                 trackHTML += `<tr style="opacity:0.5;">
-                    <td style="font-size:11px;">${r.wo_number}</td>
+                    <td style="font-size:11px;"><a href="https://myduncan.aero/online/portal/workOrder/detail/squawks.jsf?workOrder=${r.wo_number}&squawk=1&menu=true" target="_blank" style="color:#60a5fa;text-decoration:none;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">${r.wo_number}</a></td>
                     <td style="font-size:11px;">${carrier}</td>
                     <td style="font-size:11px;">${r.weight_lbs ? r.weight_lbs + ' lbs' : '--'}</td>
                     <td style="font-size:11px;text-align:right;">${formatCurrency(parseFloat(r.flat_rate_cost) || 0)}</td>
