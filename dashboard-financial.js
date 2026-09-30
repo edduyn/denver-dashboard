@@ -425,6 +425,8 @@ async function loadFinancialIntelligence() {
 
         // ===== WIP CALCULATION BY SHOP (from wip_entries — authoritative cumulative data) =====
         // wip_entries has TOTAL hours on open WOs including prior month carryover
+        const prevMonthDate = new Date(currentYear, currentMonth - 2, 1);
+        const prevMonthStr = `${prevMonthDate.getFullYear()}-${String(prevMonthDate.getMonth()+1).padStart(2,'0')}`;
         const monthAbbr = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
         const curMonthName = monthAbbr[currentMonth - 1];
         const prevMonthName = monthAbbr[prevMonthDate.getMonth()];
@@ -433,8 +435,6 @@ async function loadFinancialIntelligence() {
         let janWIPTotal = 0;
         const janWIPByShop = {};
         const currentMonthStr = `${currentYear}-${String(currentMonth).padStart(2,'0')}`;
-        const prevMonthDate = new Date(currentYear, currentMonth - 2, 1);
-        const prevMonthStr = `${prevMonthDate.getFullYear()}-${String(prevMonthDate.getMonth()+1).padStart(2,'0')}`;
 
         (Array.isArray(wipEntries) ? wipEntries : []).forEach(w => {
             const shop = w.shop || '??';
