@@ -5,12 +5,33 @@
 async function loadFinancialData() {
     console.log('loadFinancialData: Loading financial performance data...');
     try {
-        // Fetch all monthly financials
-        const resp = await fetch(
-            `${SUPABASE_URL}/rest/v1/monthly_financials?select=*&order=year.asc,month.asc`,
-            { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
-        );
+        const now = new Date();
+        const curYear = now.getFullYear();
+        const curMonth = now.getMonth() + 1;
+        const curMonthStart = `${curYear}-${String(curMonth).padStart(2,'0')}-01`;
+        const curMonthEnd = `${curYear}-${String(curMonth).padStart(2,'0')}-${new Date(curYear, curMonth, 0).getDate()}`;
+
+        // Fetch monthly financials + current month live actuals in parallel
+        const [resp, bvaResp, billedResp] = await Promise.all([
+            fetch(`${SUPABASE_URL}/rest/v1/monthly_financials?select=*&order=year.asc,month.asc`,
+                { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }),
+            fetch(`${SUPABASE_URL}/rest/v1/budget_vs_actual?period_year=eq.${curYear}&period_month=eq.${curMonth}&category=eq.total&select=actual_revenue`,
+                { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }),
+            fetch(`${SUPABASE_URL}/rest/v1/work_orders?select=total_amount&status=eq.billed&billed_date=gte.${curMonthStart}&billed_date=lte.${curMonthEnd}&limit=500`,
+                { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } })
+        ]);
         const data = await resp.json();
+
+        // Compute live MTD revenue using same logic as loadFinancialIntelligence
+        let liveMonthRevenue = 0;
+        try {
+            const bvaData = await bvaResp.json();
+            const billed = await billedResp.json();
+            const actualFromGL = parseFloat(bvaData?.[0]?.actual_revenue) || 0;
+            const fromBilledWOs = Array.isArray(billed)
+                ? billed.reduce((s, w) => s + (parseFloat(w.total_amount) || 0), 0) : 0;
+            liveMonthRevenue = Math.max(actualFromGL, fromBilledWOs);
+        } catch(e) {}
 
         if (!data || !Array.isArray(data) || data.length === 0 || data.code) {
             console.log('loadFinancialData: No monthly financial data available');
@@ -56,7 +77,9 @@ async function loadFinancialData() {
             ytd.rev_labor += parseFloat(r.rev_labor || 0);
             ytd.rev_parts_wo += parseFloat(r.rev_parts_wo || 0);
             ytd.rev_other += parseFloat(r.rev_other || 0);
-            ytd.total_revenue += parseFloat(r.total_revenue || 0);
+            const storedRevYTD = parseFloat(r.total_revenue || 0);
+            const isCurrentMonthYTD = r.year === curYear && r.month === curMonth;
+            ytd.total_revenue += (isCurrentMonthYTD && liveMonthRevenue > storedRevYTD) ? liveMonthRevenue : storedRevYTD;
             ytd.cos_labor += parseFloat(r.cos_labor || 0);
             ytd.cos_parts_wo += parseFloat(r.cos_parts_wo || 0);
             ytd.cos_other += parseFloat(r.cos_other || 0);
@@ -149,7 +172,11 @@ async function loadFinancialData() {
         let tableHTML = '';
 
         data2026.forEach(r => {
-            const rev = parseFloat(r.total_revenue || 0);
+            const isCurrentMonth = r.year === curYear && r.month === curMonth;
+            const isEstimate = r.source === 'wo_estimate';
+            // For the current open month, use live MTD revenue instead of the stale estimate
+            const storedRev = parseFloat(r.total_revenue || 0);
+            const rev = (isCurrentMonth && liveMonthRevenue > storedRev) ? liveMonthRevenue : storedRev;
             const cos = parseFloat(r.total_cos || 0);
             const gp = parseFloat(r.gross_profit || 0);
             const gpPct = rev > 0 ? (gp / rev * 100) : 0;
@@ -161,9 +188,8 @@ async function loadFinancialData() {
 
             const niColor = ni >= 0 ? '#10b981' : '#ef4444';
 
-            const isEstimate = r.source === 'wo_estimate';
             const monthLabel = isEstimate
-                ? `<strong>${months[r.month]} ${r.year}</strong> <span style="font-size:10px;color:#f59e0b;background:rgba(245,158,11,0.15);padding:1px 5px;border-radius:3px;">EST</span>`
+                ? `<strong>${months[r.month]} ${r.year}</strong> <span style="font-size:10px;color:#f59e0b;background:rgba(245,158,11,0.15);padding:1px 5px;border-radius:3px;">LIVE</span>`
                 : `<strong>${months[r.month]} ${r.year}</strong>`;
             tableHTML += `
                 <tr${isEstimate ? ' style="opacity:0.85;"' : ''}>
