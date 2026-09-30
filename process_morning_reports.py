@@ -1170,6 +1170,21 @@ def process_anchor(filepath, report_date, dry_run=False):
     except Exception as e:
         print(f"  WARNING: Could not cross-check billed WOs: {e}")
 
+    # Push ac_out_date to work_orders for any open WO that has a departure date.
+    # This ensures ac_out_date is available on work_orders when the WO later gets billed,
+    # enabling true billing-lag calculation (departure → invoice) in the dashboard.
+    wo_with_ac_out = [r for r in rows if r.get('ac_out_date') and r.get('wo_number')]
+    if wo_with_ac_out and not dry_run:
+        ac_out_updates = [
+            {"work_order_number": r['wo_number'], "ac_out_date": r['ac_out_date']}
+            for r in wo_with_ac_out
+        ]
+        try:
+            updated = supabase_upsert("work_orders", ac_out_updates, on_conflict="work_order_number")
+            print(f"  Updated ac_out_date on {updated} work_orders records")
+        except Exception as e:
+            print(f"  WARNING: Could not update ac_out_date on work_orders: {e}")
+
     if dry_run:
         print(f"  [DRY RUN] Would delete ALL existing anchor_work_orders and insert {len(rows)} rows")
         for r in rows[:5]:
