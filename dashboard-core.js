@@ -394,10 +394,19 @@ let freightTrackingByWO = {};
 // Load ANCHOR Work Orders (Primary Source of Truth)
 async function loadAnchorWorkOrders() {
     try {
-        const response = await cachedFetch(`${SUPABASE_URL}/rest/v1/anchor_work_orders?select=*&order=days_open.desc.nullslast`, {
+        const [response, billedRes] = await Promise.all([
+            cachedFetch(`${SUPABASE_URL}/rest/v1/anchor_work_orders?select=*&order=days_open.desc.nullslast`, {
                 headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
-            });
-        const data = await response.json();
+            }),
+            cachedFetch(`${SUPABASE_URL}/rest/v1/work_orders?select=work_order_number&status=eq.billed&limit=2000`, {
+                headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+            })
+        ]);
+        let data = await response.json();
+        let billedWOs = [];
+        try { billedWOs = await billedRes.json(); } catch(e) {}
+        if (!Array.isArray(billedWOs)) billedWOs = [];
+        const billedSet = new Set(billedWOs.map(b => b.work_order_number));
 
         if (!Array.isArray(data)) {
             console.log('anchor_work_orders returned non-array:', data);
@@ -405,6 +414,8 @@ async function loadAnchorWorkOrders() {
             document.getElementById('anchorBadge').className = 'badge badge-gray';
             return;
         }
+        // Exclude any WOs already marked billed — defensive guard against pipeline lag
+        if (billedSet.size > 0) data = data.filter(wo => !billedSet.has(wo.wo_number));
         anchorWorkOrdersData = data;
 
         // Summary metrics

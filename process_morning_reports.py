@@ -1155,6 +1155,21 @@ def process_anchor(filepath, report_date, dry_run=False):
     if aog_count:
         print(f"  AOG work orders: {aog_count}")
 
+    # Cross-check against work_orders: remove already-billed WOs from the anchor snapshot.
+    # This prevents billed WOs from appearing as "open" in any dashboard tab.
+    try:
+        billed_url = f"{SUPABASE_URL}/rest/v1/work_orders?select=work_order_number&status=eq.billed&limit=2000"
+        br = requests.get(billed_url, headers=HEADERS)
+        if br.status_code == 200:
+            billed_wo_set = {r['work_order_number'] for r in br.json() if r.get('work_order_number')}
+            before = len(rows)
+            rows = [r for r in rows if r['wo_number'] not in billed_wo_set]
+            excluded = before - len(rows)
+            if excluded:
+                print(f"  Excluded {excluded} already-billed WOs from anchor snapshot")
+    except Exception as e:
+        print(f"  WARNING: Could not cross-check billed WOs: {e}")
+
     if dry_run:
         print(f"  [DRY RUN] Would delete ALL existing anchor_work_orders and insert {len(rows)} rows")
         for r in rows[:5]:

@@ -161,15 +161,19 @@ async function loadFinancialData() {
 
             const niColor = ni >= 0 ? '#10b981' : '#ef4444';
 
+            const isEstimate = r.source === 'wo_estimate';
+            const monthLabel = isEstimate
+                ? `<strong>${months[r.month]} ${r.year}</strong> <span style="font-size:10px;color:#f59e0b;background:rgba(245,158,11,0.15);padding:1px 5px;border-radius:3px;">EST</span>`
+                : `<strong>${months[r.month]} ${r.year}</strong>`;
             tableHTML += `
-                <tr>
-                    <td><strong>${months[r.month]} ${r.year}</strong></td>
+                <tr${isEstimate ? ' style="opacity:0.85;"' : ''}>
+                    <td>${monthLabel}</td>
                     <td style="text-align: right;">${formatCurrency(rev)}</td>
                     <td style="text-align: right; color: #94a3b8;">${formatCurrency(cos)}</td>
                     <td style="text-align: right; color: #3b82f6;">${formatCurrency(gp)}</td>
                     <td style="text-align: right; color: ${gpPct >= 25 ? '#10b981' : '#f59e0b'};">${gpPct.toFixed(1)}%</td>
-                    <td style="text-align: right; color: #a855f7;">${formatCurrency(exp)}</td>
-                    <td style="text-align: right; color: ${niColor}; font-weight: bold;">${formatCurrency(ni)}</td>
+                    <td style="text-align: right; color: #a855f7;">${isEstimate ? '—' : formatCurrency(exp)}</td>
+                    <td style="text-align: right; color: ${niColor}; font-weight: bold;">${isEstimate ? '—' : formatCurrency(ni)}</td>
                 </tr>`;
         });
 
@@ -272,14 +276,16 @@ async function loadFinancialIntelligence() {
         const monthName = now.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
 
         // ===== PARALLEL DATA FETCH (7 sources) =====
-        const [dailyMetricsRes, timeEntriesRes, anchorDateRes, billedWOsRes, budgetRes, wipRes, reconRes] = await Promise.all([
+        const [dailyMetricsRes, timeEntriesRes, anchorDateRes, billedWOsRes, budgetRes, wipRes, reconRes, allBilledWOsRes] = await Promise.all([
             cachedFetch(`${SUPABASE_URL}/rest/v1/daily_metrics?select=report_date,total_sold_hours,total_paid_hours,employee_count,billed_wo_count&report_date=gte.${monthStart}&report_date=lte.${monthEnd}&order=report_date.asc`, { headers: HEADERS }),
             cachedFetch(`${SUPABASE_URL}/rest/v1/time_entries?select=wo_number,shop,hours,emp_code,emp_name,entry_date,wo_type&entry_date=gte.${monthStart}&entry_date=lte.${monthEnd}&limit=5000&order=hours.desc`, { headers: HEADERS }),
             cachedFetch(`${SUPABASE_URL}/rest/v1/anchor_work_orders?select=report_date&order=report_date.desc&limit=1`, { headers: HEADERS }),
             cachedFetch(`${SUPABASE_URL}/rest/v1/work_orders?select=work_order_number,status,billed_date,customer_name,customer_id,tail_number,open_date,total_amount,labor_amount,parts_amount,os_amount&status=eq.billed&billed_date=gte.${monthStart}&billed_date=lte.${monthEnd}&limit=500`, { headers: HEADERS }),
             cachedFetch(`${SUPABASE_URL}/rest/v1/budget_vs_actual?period_year=eq.${currentYear}&period_month=eq.${currentMonth}&select=*`, { headers: HEADERS }),
             cachedFetch(`${SUPABASE_URL}/rest/v1/wip_entries?select=*&order=month.desc&limit=12`, { headers: HEADERS }),
-            cachedFetch(`${SUPABASE_URL}/rest/v1/revenue_reconciliation?period=eq.${currentYear}-${String(currentMonth).padStart(2,'0')}&order=source.asc,shop.asc`, { headers: HEADERS })
+            cachedFetch(`${SUPABASE_URL}/rest/v1/revenue_reconciliation?period=eq.${currentYear}-${String(currentMonth).padStart(2,'0')}&order=source.asc,shop.asc`, { headers: HEADERS }),
+            // All-time billed WO numbers — used to purge any stale entries from anchor data
+            cachedFetch(`${SUPABASE_URL}/rest/v1/work_orders?select=work_order_number&status=eq.billed&limit=2000`, { headers: HEADERS })
         ]);
 
         const dailyMetrics = await dailyMetricsRes.json() || [];
@@ -289,6 +295,10 @@ async function loadFinancialIntelligence() {
         const budgetData = await budgetRes.json() || [];
         const wipEntries = await wipRes.json() || [];
         const reconData = await reconRes.json() || [];
+        let allBilledWOs = [];
+        try { allBilledWOs = await allBilledWOsRes.json(); } catch(e) {}
+        if (!Array.isArray(allBilledWOs)) allBilledWOs = [];
+        const allBilledSet = new Set(allBilledWOs.map(b => b.work_order_number));
 
         // Extract AS400 reconciliation ratios for parts estimate
         const as400All = (Array.isArray(reconData) ? reconData : []).find(r => r.source === 'as400' && r.shop === 'ALL');
@@ -302,6 +312,10 @@ async function loadFinancialIntelligence() {
         let anchorData = [];
         try { anchorData = await anchorRes.json(); } catch(e) {}
         if (!Array.isArray(anchorData)) anchorData = [];
+        // Defensive: exclude any WOs already marked billed in work_orders
+        if (allBilledSet.size > 0) {
+            anchorData = anchorData.filter(a => !allBilledSet.has(a.wo_number));
+        }
 
         // ===== AGGREGATION =====
 
