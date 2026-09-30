@@ -21,7 +21,8 @@ async function loadFinancialData() {
             fetch(`${SUPABASE_URL}/rest/v1/work_orders?select=total_amount&status=eq.billed&billed_date=gte.${curMonthStart}&billed_date=lte.${curMonthEnd}&limit=500`,
                 { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }),
             // AS400 reconciliation row has live GP + revenue breakdown from billed WOs (updated daily)
-            fetch(`${SUPABASE_URL}/rest/v1/revenue_reconciliation?period=eq.${curPeriod}&source=eq.as400&shop=eq.ALL&select=total_gp,gp_pct,total_revenue,labor_revenue,parts_revenue,os_revenue&limit=1`,
+            // order=snapshot_date.desc ensures we always use the freshest snapshot, not a stale one
+            fetch(`${SUPABASE_URL}/rest/v1/revenue_reconciliation?period=eq.${curPeriod}&source=eq.as400&shop=eq.ALL&select=total_gp,gp_pct,total_revenue,labor_revenue,parts_revenue,os_revenue&order=snapshot_date.desc&limit=1`,
                 { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } })
         ]);
         const data = await resp.json();
@@ -38,10 +39,19 @@ async function loadFinancialData() {
             const fromBilledWOs = Array.isArray(billed)
                 ? billed.reduce((s, w) => s + (parseFloat(w.total_amount) || 0), 0) : 0;
             liveMonthRevenue = Math.max(actualFromGL, fromBilledWOs);
-            // AS400 row has GP + revenue breakdown from actual billed WO data — authoritative for open month
+            // AS400 row has GP + revenue breakdown from actual billed WO data — authoritative for open month.
+            // The reconciliation may lag behind work_orders by a day or two (browse CSV adds WOs without GP).
+            // When live WO revenue exceeds the reconciliation revenue, extrapolate GP for the gap using
+            // the reconciliation's GP% so the income statement stays current with all billed WOs.
             const as400Row = Array.isArray(reconData) ? reconData[0] : null;
             if (as400Row && parseFloat(as400Row.total_gp) > 0) {
-                liveMonthGP = parseFloat(as400Row.total_gp);
+                const reconRev = parseFloat(as400Row.total_revenue) || 0;
+                const reconGP  = parseFloat(as400Row.total_gp);
+                const reconGPpct = reconRev > 0 ? reconGP / reconRev : 0;
+                // If live WOs report more revenue than the reconciliation covered, extrapolate GP for the gap
+                const revenueGap = fromBilledWOs - reconRev;
+                const gpGap = (revenueGap > 0 && reconGPpct > 0) ? revenueGap * reconGPpct : 0;
+                liveMonthGP = reconGP + gpGap;
             }
             if (as400Row) {
                 liveMonthLabor = parseFloat(as400Row.labor_revenue) || 0;
