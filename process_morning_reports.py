@@ -58,13 +58,106 @@ HEADERS = {
 }
 
 # Morning Report folder paths (try multiple locations)
+# Primary: rclone-synced folder (pulls from Google Drive API every 10 min — reliable)
+# Fallback: Google Drive for Desktop paths (local sync — unreliable)
 REPORT_DIRS = [
+    os.path.expanduser("~/Morning_Report"),
     os.path.expanduser("~/My Drive/2026_Goals_Project/Morning_Report"),
     os.path.expanduser("~/Library/CloudStorage/GoogleDrive-edduyn@gmail.com/My Drive/2026_Goals_Project/Morning_Report"),
-    os.path.expanduser("~/Morning_Report"),
 ]
 
 BATCH_SIZE = 200  # Supabase REST API batch limit
+
+# Google Drive folder ID for Morning_Report
+GDRIVE_FOLDER_ID = "1253Kvd23ff48AR_4OLkXZLsMwkTdVoo6"
+GDRIVE_TOKEN_PATH = os.path.expanduser("~/.config/gdrive_morning_token.json")
+GDRIVE_CLIENT_SECRET = os.path.expanduser("~/.config/gphotos-sync/client_secret.json")
+
+
+# ============================================================
+# GOOGLE DRIVE API
+# ============================================================
+def gdrive_download_reports(target_date=None):
+    """
+    Download morning report CSVs from Google Drive API to a temp directory.
+    Returns the temp directory path with downloaded files.
+    """
+    try:
+        from google.oauth2.credentials import Credentials
+        from google.auth.transport.requests import Request
+        from googleapiclient.discovery import build
+        import io
+    except ImportError:
+        print("ERROR: Google API libraries not installed.")
+        print("  pip3 install google-api-python-client google-auth-oauthlib")
+        sys.exit(1)
+
+    if not os.path.exists(GDRIVE_TOKEN_PATH):
+        print(f"ERROR: No Google Drive token at {GDRIVE_TOKEN_PATH}")
+        print("  Run with --gdrive-auth first to authorize.")
+        sys.exit(1)
+
+    creds = Credentials.from_authorized_user_file(
+        GDRIVE_TOKEN_PATH,
+        ["https://www.googleapis.com/auth/drive.readonly"]
+    )
+    if creds.expired and creds.refresh_token:
+        creds.refresh(Request())
+        with open(GDRIVE_TOKEN_PATH, "w") as f:
+            f.write(creds.to_json())
+
+    service = build("drive", "v3", credentials=creds)
+
+    # List all CSVs in the folder
+    results = service.files().list(
+        q=f"'{GDRIVE_FOLDER_ID}' in parents and mimeType='text/csv'",
+        orderBy="modifiedTime desc",
+        pageSize=100,
+        fields="files(id, name, modifiedTime, size)"
+    ).execute()
+    all_files = results.get("files", [])
+
+    # Filter to target date if specified
+    if target_date:
+        # target_date is like "03-04-26"
+        date_files = [f for f in all_files if target_date in f["name"]]
+        # Also grab undated files (shop OPEN_WO, BILLED_WO, Customers_emails)
+        # — take the most recent version of each
+        undated_prefixes = ["SDN_OPEN_WO", "SDV_OPEN_WO", "SDR_OPEN_WO", "SHC_OPEN_WO",
+                           "SDN_BILLED", "SDV_BILLED", "SDR_BILLED", "SHC_BILLED",
+                           "Customers_emails"]
+        seen_prefixes = set()
+        for f in all_files:
+            for pfx in undated_prefixes:
+                if f["name"].startswith(pfx) and pfx not in seen_prefixes:
+                    date_files.append(f)
+                    seen_prefixes.add(pfx)
+                    break
+        files_to_dl = date_files
+    else:
+        # No date specified — grab the latest of each report type
+        files_to_dl = all_files[:30]
+
+    if not files_to_dl:
+        print(f"  No files found in Google Drive for date {target_date}")
+        return None
+
+    # Download to temp directory
+    import tempfile
+    tmp_dir = tempfile.mkdtemp(prefix="morning_reports_")
+    print(f"📥 Downloading {len(files_to_dl)} files from Google Drive → {tmp_dir}")
+
+    for f in files_to_dl:
+        file_id = f["id"]
+        fname = f["name"]
+        content = service.files().get_media(fileId=file_id).execute()
+        local_path = os.path.join(tmp_dir, fname)
+        with open(local_path, "wb") as out:
+            out.write(content)
+        size_kb = len(content) / 1024
+        print(f"  ✅ {fname} ({size_kb:.1f} KB)")
+
+    return tmp_dir
 
 
 # ============================================================
@@ -401,14 +494,11 @@ def safe_float(val):
 
 
 def parse_billed_date(date_str):
-    """Parse MM/DD/YY date from BILLED_WO CSV, return 'YYYY-MM-DD' or None."""
-    if not date_str or date_str.strip() in ('', '01/01/01'):
+    """Parse MM/DD/YY or MM/DD/YYYY date from BILLED_WO CSV, return 'YYYY-MM-DD' or None."""
+    if not date_str or date_str.strip() in ('', '01/01/01', '01/01/1901'):
         return None
-    parts = date_str.strip().split('/')
-    if len(parts) == 3:
-        mm, dd, yy = parts
-        return f"20{yy}-{mm}-{dd}"
-    return None
+    # Delegate to parse_anchor_date which handles both 2-digit and 4-digit years correctly
+    return parse_anchor_date(date_str)
 
 
 def process_billed_wos(filepath, report_date, dry_run=False):
@@ -787,43 +877,63 @@ def generate_reconciliation_snapshot(period, fin_records=None):
     except Exception as e:
         print(f"  ⚠️ Dashboard reconciliation warning: {e}")
 
-    # --- SOURCE 3: GL (from budget_vs_actual table) ---
+    # --- SOURCE 3: GL (from monthly_financials — GL121 parsed actuals) ---
+    # Falls back to budget_vs_actual budget note when no GL121 data exists yet (current open month)
     try:
         year, month = period.split('-')
-        gl_url = (f"{SUPABASE_URL}/rest/v1/budget_vs_actual"
-                  f"?select=category,budget_revenue,actual_revenue"
-                  f"&period_year=eq.{year}&period_month=eq.{int(month)}")
-        gl_resp = requests.get(gl_url, headers=HEADERS)
-        if gl_resp.status_code == 200:
-            gl_data = gl_resp.json()
-            gl_by_cat = {}
-            for g in gl_data:
-                cat = g.get('category', '')
-                gl_by_cat[cat] = {
-                    'budget': safe_float(g.get('budget_revenue')),
-                    'actual': safe_float(g.get('actual_revenue'))
+        gl_row = {}
+
+        # Primary: monthly_financials (GL121 parsed actuals — available after month closes)
+        mf_url = (f"{SUPABASE_URL}/rest/v1/monthly_financials"
+                  f"?select=total_revenue,rev_labor,rev_parts_wo,rev_other,gross_profit"
+                  f"&year=eq.{year}&month=eq.{int(month)}&limit=1")
+        mf_resp = requests.get(mf_url, headers=HEADERS)
+        if mf_resp.status_code == 200:
+            mf_data = mf_resp.json()
+            if mf_data and safe_float(mf_data[0].get('total_revenue')) > 0:
+                mf = mf_data[0]
+                total_rev = safe_float(mf.get('total_revenue'))
+                gp = safe_float(mf.get('gross_profit'))
+                gl_row = {
+                    "total_revenue": round(total_rev, 2),
+                    "labor_revenue": round(safe_float(mf.get('rev_labor')), 2),
+                    "parts_revenue": round(safe_float(mf.get('rev_parts_wo')), 2),
+                    "os_revenue": round(safe_float(mf.get('rev_other')), 2),
+                    "total_gp": round(gp, 2),
+                    "gp_pct": round(gp / total_rev * 100, 2) if total_rev > 0 else 0,
+                    "parts_labor_ratio": round(
+                        safe_float(mf.get('rev_parts_wo')) / safe_float(mf.get('rev_labor')), 4
+                    ) if safe_float(mf.get('rev_labor')) > 0 else 0,
                 }
-            gl_total = gl_by_cat.get('total', {})
-            gl_labor = gl_by_cat.get('labor', {})
-            gl_parts = gl_by_cat.get('parts', {})
-            gl_other = gl_by_cat.get('other', {})
-            snapshot_rows.append({
-                "period": period, "shop": "ALL", "source": "gl",
-                "total_revenue": round(gl_total.get('actual', 0), 2),
-                "labor_revenue": round(gl_labor.get('actual', 0), 2),
-                "parts_revenue": round(gl_parts.get('actual', 0), 2),
-                "os_revenue": round(gl_other.get('actual', 0), 2),
-                "total_gp": 0,
-                "gp_pct": 0,
-                "wo_count": 0,
-                "actual_hours": 0,
-                "billed_hours": 0,
-                "avg_elr": 0,
-                "parts_labor_ratio": 0,
-                "billed_actual_ratio": 0,
-                "snapshot_date": today_str,
-                "notes": f"Budget: ${gl_total.get('budget', 0):,.0f}",
-            })
+
+        # Budget note: always pull from budget_vs_actual for the notes field
+        budget_note = f"Budget: $0"
+        bva_url = (f"{SUPABASE_URL}/rest/v1/budget_vs_actual"
+                   f"?select=category,budget_revenue"
+                   f"&period_year=eq.{year}&period_month=eq.{int(month)}&category=eq.total&limit=1")
+        bva_resp = requests.get(bva_url, headers=HEADERS)
+        if bva_resp.status_code == 200:
+            bva_data = bva_resp.json()
+            if bva_data:
+                budget_note = f"Budget: ${safe_float(bva_data[0].get('budget_revenue')):,.0f}"
+
+        snapshot_rows.append({
+            "period": period, "shop": "ALL", "source": "gl",
+            "total_revenue": gl_row.get("total_revenue", 0),
+            "labor_revenue": gl_row.get("labor_revenue", 0),
+            "parts_revenue": gl_row.get("parts_revenue", 0),
+            "os_revenue": gl_row.get("os_revenue", 0),
+            "total_gp": gl_row.get("total_gp", 0),
+            "gp_pct": gl_row.get("gp_pct", 0),
+            "wo_count": 0,
+            "actual_hours": 0,
+            "billed_hours": 0,
+            "avg_elr": 0,
+            "parts_labor_ratio": gl_row.get("parts_labor_ratio", 0),
+            "billed_actual_ratio": 0,
+            "snapshot_date": today_str,
+            "notes": budget_note,
+        })
     except Exception as e:
         print(f"  ⚠️ GL reconciliation warning: {e}")
 
@@ -838,7 +948,7 @@ def generate_reconciliation_snapshot(period, fin_records=None):
 # ANCHOR → anchor_work_orders
 # ============================================================
 DENVER_SHOPS = {"SDV", "SDN", "SDR", "SHC"}
-ANCHOR_SENTINEL_DATES = {"01/01/01", "12/31/69", "01/01/1901", "12/31/1969"}
+ANCHOR_SENTINEL_DATES = {"01/01/01", "12/31/69", "01/01/1901", "12/31/1969", "01/01/2001", "12/31/2069"}
 
 
 def clean_customer(name):
@@ -854,21 +964,26 @@ def clean_customer(name):
 
 
 def parse_anchor_date(date_str):
-    """Parse MM/DD/YY date from ANCHOR CSV, return 'YYYY-MM-DD' or None for sentinel dates."""
+    """Parse MM/DD/YY or MM/DD/YYYY date from ANCHOR CSV, return 'YYYY-MM-DD' or None for sentinel dates."""
     if not date_str or date_str.strip() == "":
         return None
     date_str = date_str.strip()
+    # Strip time component if present (e.g. "12/31/2069 00:00:00")
+    if " " in date_str:
+        date_str = date_str.split(" ")[0]
     if date_str in ANCHOR_SENTINEL_DATES:
         return None
-    try:
-        dt = datetime.strptime(date_str, "%m/%d/%y")
-        result = dt.strftime("%Y-%m-%d")
-        # Check if the parsed result is a sentinel
-        if result in {"1901-01-01", "1969-12-31", "2001-01-01"}:
-            return None
-        return result
-    except ValueError:
-        return None
+    # Try 4-digit year first, then 2-digit
+    for fmt in ("%m/%d/%Y", "%m/%d/%y"):
+        try:
+            dt = datetime.strptime(date_str, fmt)
+            result = dt.strftime("%Y-%m-%d")
+            if result in {"1901-01-01", "1969-12-31", "2001-01-01", "2069-12-31"}:
+                return None
+            return result
+        except ValueError:
+            continue
+    return None
 
 
 def parse_anchor_float(val):
@@ -1193,6 +1308,7 @@ def process_shop_billed(filepath, dry_run=False):
 # CUSTOMERS_EMAILS.CSV → customers table
 # ============================================================
 CUSTOMER_EMAIL_PATHS = [
+    os.path.expanduser("~/NET_Promoter_results/Customers_emails.csv"),
     os.path.expanduser("~/My Drive/2026_Goals_Project/NET_Promoter_results/Customers_emails.csv"),
     os.path.expanduser("~/Library/CloudStorage/GoogleDrive-edduyn@gmail.com/My Drive/2026_Goals_Project/NET_Promoter_results/Customers_emails.csv"),
 ]
@@ -1288,6 +1404,7 @@ def main():
     parser.add_argument("--dry-run", action="store_true", help="Preview only, no uploads")
     parser.add_argument("--sold-only", action="store_true", help="Process only SOLD_HOURS")
     parser.add_argument("--dir", help="Override Morning_Report directory path")
+    parser.add_argument("--gdrive", action="store_true", help="Download files from Google Drive API instead of local filesystem")
     args = parser.parse_args()
 
     if not SUPABASE_KEY:
@@ -1295,7 +1412,14 @@ def main():
         print("  export SUPABASE_KEY='your-key-here'")
         sys.exit(1)
 
-    report_dir = args.dir or find_report_dir()
+    # Google Drive mode: download files first, then process from temp dir
+    if args.gdrive:
+        report_dir = gdrive_download_reports(args.date)
+        if not report_dir:
+            print("ERROR: No files downloaded from Google Drive.")
+            sys.exit(1)
+    else:
+        report_dir = args.dir or find_report_dir()
     print(f"📁 Report directory: {report_dir}")
 
     # Find files for target date
