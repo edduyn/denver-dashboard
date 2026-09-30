@@ -376,7 +376,7 @@ async function loadOver30WOs() {
                 return divider + `
                     <tr style="${rowStyle}">
                         <td><strong>${wo.shop || '--'}</strong></td>
-                        <td><strong>${wo.wo_number || '--'}</strong></td>
+                        <td>${wo.wo_number ? `<a href="https://myduncan.aero/online/portal/workOrder/detail/squawks.jsf?workOrder=${wo.wo_number}&squawk=1&menu=true" target="_blank" style="color:#60a5fa;font-weight:600;text-decoration:none;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">${wo.wo_number}</a>` : '--'}</td>
                         <td>${daysLabel}</td>
                         <td style="${reasonStyle};font-size:0.88em;">${reason}</td>
                         <td style="max-width:360px;font-size:0.83em;color:#94a3b8;">${wo.explanation || '--'}</td>
