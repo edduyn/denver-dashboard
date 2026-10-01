@@ -120,16 +120,14 @@ async function loadFinancialData() {
             ytd.net_income     += parseFloat(r.net_income     || 0);
         });
 
-        // Budget targets for 2026 (will be updated when 2026 budget is loaded)
-        // Using 2025 budget as placeholder until 2026 budget data is provided
         const budget = {
-            total_revenue: 8832317,
-            gross_profit: 2112952,
-            net_income: 997087,
-            total_expenses: 1115865,
-            rev_labor: 2147317,
-            rev_parts: 3200000,
-            rev_other: 3485000
+            total_revenue: 8429649,
+            gross_profit: 2372542,
+            net_income: 1200273,
+            total_expenses: 1172269,
+            rev_labor: 2429649,
+            rev_parts: 3500000,
+            rev_other: 2500000
         };
 
         // Update header badge with month count
