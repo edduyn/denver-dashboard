@@ -502,6 +502,7 @@ async function loadEmployeeData() {
     ];
 
     // Load A/B Performance data from Supabase
+    loadABLeaderboard();
     loadYTDAB();
     loadMonthlyAB();
     loadIndividualAB();
@@ -634,11 +635,14 @@ async function loadMonthlyAB() {
         }
 
         // Build dynamic header: Employee + (Total, Bill, A/B) per month
+        const COMPLETE_MONTHS = [1, 2]; // Jan and Feb have full time_entries data
         const headerCells = ['<th>Employee</th>'];
         months.forEach(m => {
             const isMTD = (m === currentMonth);
-            const label = MONTH_NAMES[m - 1] + (isMTD ? ' MTD' : '');
-            headerCells.push(`<th>${label} Total</th>`);
+            const isComplete = COMPLETE_MONTHS.includes(m);
+            const quality = isComplete ? ' ●' : (isMTD ? ' MTD' : ' ◌');
+            const label = MONTH_NAMES[m - 1] + quality;
+            headerCells.push(`<th title="${isComplete ? 'Full month — complete data' : 'Partial/rolling window data'}">${label} Total</th>`);
             headerCells.push(`<th>${label} Bill</th>`);
             headerCells.push(`<th>${label} A/B</th>`);
         });
@@ -818,6 +822,174 @@ async function loadIndividualAB() {
         console.error('Error loading individual A/B:', error);
         document.getElementById('individualABTable').innerHTML = '<tr><td colspan="7" style="text-align:center; color:#ef4444;">Error loading A/B data</td></tr>';
     }
+}
+
+// ─── A/B Leaderboard ───────────────────────────────────────────────────────
+
+const AB_COMPLETE_MONTHS = [1, 2]; // Jan and Feb — full time_entries data
+let _abLeaderData = null;          // cached: { timeEntries grouped, paidMap, hasPaid }
+let _abLeaderActiveMonth = 1;
+
+async function loadABLeaderboard() {
+    console.log('loadABLeaderboard: Starting...');
+    const el = id => document.getElementById(id);
+    if (!el('abLeaderContent')) return;
+
+    const TARGET = 58.5;
+    const now = new Date();
+    const currentYear = now.getFullYear();
+
+    try {
+        const timeEntries = await getTimeEntries();
+
+        // Group sold + total hours by (month, emp_code)
+        // monthData[m][code] = { name, sold, total }
+        const monthData = {};
+        timeEntries.forEach(entry => {
+            if (!entry.entry_date || !entry.emp_code) return;
+            const d = new Date(entry.entry_date);
+            if (d.getFullYear() !== currentYear) return;
+            const m = d.getMonth() + 1;
+            if (!monthData[m]) monthData[m] = {};
+            if (!monthData[m][entry.emp_code]) {
+                monthData[m][entry.emp_code] = { name: entry.emp_name || entry.emp_code, sold: 0, total: 0 };
+            }
+            const hrs = parseFloat(entry.hours) || 0;
+            monthData[m][entry.emp_code].total += hrs;
+            if (entry.wo_type !== 'Shop' && hrs > 0) {
+                monthData[m][entry.emp_code].sold += hrs;
+            }
+        });
+
+        // Try paid_hours_monthly — may not exist yet
+        let paidMap = {};
+        let hasPaid = false;
+        try {
+            const paidRows = await fetchAllRows(
+                '/rest/v1/paid_hours_monthly?period_year=eq.' + currentYear +
+                '&select=emp_code,period_month,paid_hours_total'
+            );
+            if (paidRows && paidRows.length > 0) {
+                hasPaid = true;
+                paidRows.forEach(r => { paidMap[r.emp_code + '_' + r.period_month] = r.paid_hours_total; });
+            }
+        } catch (_) { /* table not yet created */ }
+
+        _abLeaderData = { monthData, paidMap, hasPaid };
+        abLeaderRender(_abLeaderActiveMonth, TARGET);
+        console.log('loadABLeaderboard: Complete — hasPaid=' + hasPaid);
+    } catch (err) {
+        console.error('loadABLeaderboard error:', err);
+        const c = document.getElementById('abLeaderContent');
+        if (c) c.innerHTML = '<p style="color:#ef4444;padding:8px;">Error loading leaderboard</p>';
+    }
+}
+
+function abLeaderSwitch(month) {
+    _abLeaderActiveMonth = month;
+    // Update tab styles
+    [1, 2, 10].forEach(m => {
+        const btn = document.getElementById('abLeaderTab' + m);
+        if (btn) {
+            btn.style.background = m === month ? '#3b82f6' : '#1e293b';
+            btn.style.color      = m === month ? '#fff'    : '#94a3b8';
+        }
+    });
+    if (_abLeaderData) abLeaderRender(month, 58.5);
+}
+
+function abLeaderRender(month, TARGET) {
+    const el = id => document.getElementById(id);
+    if (!_abLeaderData || !el('abLeaderContent')) return;
+
+    const { monthData, paidMap, hasPaid } = _abLeaderData;
+    const techMap = monthData[month] || {};
+    const now = new Date();
+    const currentMonth = now.getMonth() + 1;
+    const isComplete = AB_COMPLETE_MONTHS.includes(month);
+    const isMTD = month === currentMonth;
+
+    const rows = Object.entries(techMap)
+        .map(([code, d]) => {
+            const paid = hasPaid ? (paidMap[code + '_' + month] || 0) : 0;
+            const denom = (hasPaid && paid > 0) ? paid : d.total;
+            const ab = denom > 0 ? (d.sold / denom * 100) : 0;
+            return { code, name: d.name, sold: d.sold, total: d.total, paid, denom, ab };
+        })
+        .filter(r => r.total > 0)
+        .sort((a, b) => b.ab - a.ab);
+
+    const qualityLabel = isComplete ? '● Full Month Data' : isMTD ? '◌ Month-to-Date' : '◌ Partial Data';
+    const qualityColor = isComplete ? '#10b981' : '#f59e0b';
+    const denomHeader  = hasPaid ? 'Paid Hrs' : 'Logged Hrs';
+    const sourceNote   = hasPaid
+        ? ''
+        : '<span style="color:#64748b;font-size:10px;margin-left:8px;">(paid_hours table not loaded — using logged hours as denominator)</span>';
+
+    const teamSold  = rows.reduce((s, r) => s + r.sold, 0);
+    const teamDenom = rows.reduce((s, r) => s + r.denom, 0);
+    const teamAB    = teamDenom > 0 ? (teamSold / teamDenom * 100) : 0;
+    const aboveTarget = rows.filter(r => r.ab >= TARGET).length;
+
+    // Update badge
+    const badge = el('abLeaderBadge');
+    if (badge) {
+        badge.textContent = 'Team ' + teamAB.toFixed(1) + '%';
+        badge.className = teamAB >= TARGET ? 'badge badge-green' : teamAB >= 40 ? 'badge badge-amber' : 'badge badge-red';
+    }
+
+    let html = `
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;flex-wrap:wrap;">
+            <span style="color:${qualityColor};font-size:12px;font-weight:600;">${qualityLabel}</span>
+            ${sourceNote}
+        </div>
+        <div style="overflow-x:auto;">
+        <table style="width:100%;border-collapse:collapse;font-size:0.85em;min-width:480px;">
+            <thead>
+                <tr style="color:#64748b;border-bottom:1px solid #334155;text-align:right;">
+                    <th style="padding:5px 8px;text-align:left;">#</th>
+                    <th style="padding:5px 8px;text-align:left;">Technician</th>
+                    <th style="padding:5px 8px;">Sold Hrs</th>
+                    <th style="padding:5px 8px;">${denomHeader}</th>
+                    <th style="padding:5px 8px;">A/B %</th>
+                    <th style="padding:5px 8px;">vs 58.5%</th>
+                </tr>
+            </thead>
+            <tbody>
+    `;
+
+    rows.forEach((r, i) => {
+        const abColor  = r.ab >= TARGET ? '#10b981' : r.ab >= 40 ? '#f59e0b' : '#ef4444';
+        const delta    = r.ab - TARGET;
+        const deltaStr = (delta >= 0 ? '+' : '') + delta.toFixed(1) + '%';
+        const deltaClr = delta >= 0 ? '#10b981' : '#ef4444';
+        const denom    = hasPaid ? r.paid : r.total;
+        html += `
+            <tr style="border-bottom:1px solid #1e293b;">
+                <td style="padding:5px 8px;color:#64748b;">${i + 1}</td>
+                <td style="padding:5px 8px;font-weight:600;">${r.name}</td>
+                <td style="padding:5px 8px;text-align:right;">${r.sold.toFixed(1)}</td>
+                <td style="padding:5px 8px;text-align:right;">${denom.toFixed(1)}</td>
+                <td style="padding:5px 8px;text-align:right;"><strong style="color:${abColor};">${r.ab.toFixed(1)}%</strong></td>
+                <td style="padding:5px 8px;text-align:right;font-size:0.9em;color:${deltaClr};">${deltaStr}</td>
+            </tr>
+        `;
+    });
+
+    if (rows.length === 0) {
+        html += `<tr><td colspan="6" style="padding:14px;text-align:center;color:#64748b;">No data for this month</td></tr>`;
+    }
+
+    html += `
+            </tbody>
+        </table>
+        </div>
+        <div style="margin-top:8px;font-size:11px;color:#64748b;">
+            ${aboveTarget} of ${rows.length} technicians at or above target (${TARGET}%) · Team sold ${teamSold.toFixed(0)}h / ${teamDenom.toFixed(0)}h = ${teamAB.toFixed(1)}%
+        </div>
+    `;
+
+    el('abLeaderContent').innerHTML = html;
 }
 
 // Check for saved auth on page load

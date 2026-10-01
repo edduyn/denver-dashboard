@@ -1179,6 +1179,23 @@
                 </div>
             </div>
 
+            <!-- A/B LEADERBOARD — PAID HOURS DENOMINATOR -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">🏆 A/B Leaderboard — Sold vs Paid Hours</span>
+                    <span class="badge" id="abLeaderBadge">Loading...</span>
+                </div>
+                <div style="padding:16px;">
+                    <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;align-items:center;">
+                        <button id="abLeaderTab1"  onclick="abLeaderSwitch(1)"  style="padding:5px 14px;border:1px solid #334155;border-radius:6px;background:#3b82f6;color:#fff;cursor:pointer;font-size:0.82em;font-weight:600;">Jan 2026</button>
+                        <button id="abLeaderTab2"  onclick="abLeaderSwitch(2)"  style="padding:5px 14px;border:1px solid #334155;border-radius:6px;background:#1e293b;color:#94a3b8;cursor:pointer;font-size:0.82em;">Feb 2026</button>
+                        <button id="abLeaderTab10" onclick="abLeaderSwitch(10)" style="padding:5px 14px;border:1px solid #334155;border-radius:6px;background:#1e293b;color:#94a3b8;cursor:pointer;font-size:0.82em;">Oct MTD</button>
+                        <span style="color:#64748b;font-size:11px;margin-left:8px;">Jan &amp; Feb = full month · Target <strong style="color:#a3e635;">58.5%</strong></span>
+                    </div>
+                    <div id="abLeaderContent" style="color:#94a3b8;font-size:13px;">Loading leaderboard...</div>
+                </div>
+            </div>
+
             <!-- Individual A/B Performance -->
             <div class="card">
                 <div class="card-title" id="individualABTitle">⏱️ Individual A/B Performance - Loading...</div>
@@ -2425,12 +2442,12 @@
         </div>
     </div>
 
-    <script src="dashboard-core.js?v=202610011233"></script>
-    <script src="dashboard-financial.js?v=202610011233"></script>
+    <script src="dashboard-core.js?v=202610011257"></script>
+    <script src="dashboard-financial.js?v=202610011257"></script>
 
-    <script src="dashboard-loaders.js?v=202610011233"></script>
-    <script src="dashboard-training.js?v=202610011233"></script>
-    <script src="dashboard-goals.js?v=202610011233"></script>
-    <script src="dashboard-people.js?v=202610011233"></script>
+    <script src="dashboard-loaders.js?v=202610011257"></script>
+    <script src="dashboard-training.js?v=202610011257"></script>
+    <script src="dashboard-goals.js?v=202610011257"></script>
+    <script src="dashboard-people.js?v=202610011257"></script>
 </body>
 </html>
