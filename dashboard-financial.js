@@ -303,6 +303,9 @@ async function loadFinancialData() {
 
         document.getElementById('finExpenseTable').innerHTML = expHTML;
 
+        // Q4 Forecast
+        renderQ4Forecast(data2026, curYear, curMonth);
+
         console.log('loadFinancialData: Complete');
 
     } catch (error) {
@@ -1646,6 +1649,94 @@ async function markFreightPosted(recordId) {
     } catch (error) {
         console.error('Error marking freight as posted:', error);
     }
+}
+
+// ===== Q4 FORECAST ===== //
+
+function renderQ4Forecast(data2026, curYear, curMonth) {
+    const el = id => document.getElementById(id);
+    if (!el('q4ForecastBadge')) return;
+
+    const ANNUAL_BUDGET  = 8429649;
+    const Q4_MONTHLY     = [730043, 630545, 718776]; // Oct, Nov, Dec
+    const Q4_BUDGET      = Q4_MONTHLY.reduce((s, v) => s + v, 0); // 2,079,364
+
+    // Months completed = rows in data2026 that are not the live open month
+    const closedRows = data2026.filter(r => r.source !== 'wo_estimate');
+    const completedCount = closedRows.length;      // e.g. 9 after Sep GL lands
+    const remainingCount = 12 - completedCount;
+
+    if (completedCount === 0) return;
+
+    const ytdRevenue = closedRows.reduce((s, r) => s + parseFloat(r.total_revenue || 0), 0);
+
+    // Q4 budget still remaining
+    const completedInQ4 = Math.max(0, completedCount - 9);
+    const remainingQ4Budget = Q4_MONTHLY.slice(completedInQ4).reduce((s, v) => s + v, 0);
+
+    // YTD monthly average
+    const ytdAvg = ytdRevenue / completedCount;
+
+    // H2 average: last 3 closed months
+    const last3 = closedRows.slice(-3);
+    const h2Avg = last3.reduce((s, r) => s + parseFloat(r.total_revenue || 0), 0) / Math.max(last3.length, 1);
+
+    // Sep (best-month) pace
+    const sepRev = parseFloat(closedRows[closedRows.length - 1]?.total_revenue || 0);
+
+    const s1Q4  = ytdAvg * remainingCount;
+    const s2Q4  = h2Avg  * remainingCount;
+    const s3Q4  = sepRev * remainingCount;
+
+    const s1EOY = ytdRevenue + s1Q4;
+    const s2EOY = ytdRevenue + s2Q4;
+    const s3EOY = ytdRevenue + s3Q4;
+
+    const needed        = ANNUAL_BUDGET - ytdRevenue;
+    const monthlyNeeded = remainingCount > 0 ? needed / remainingCount : 0;
+    const q4BudgetAvg   = Q4_BUDGET / 3;
+
+    const fmt = v => formatCurrency(v);
+    const pct = v => (v / ANNUAL_BUDGET * 100).toFixed(1) + '% of budget';
+
+    // Badge
+    const badge = el('q4ForecastBadge');
+    if (s2EOY >= ANNUAL_BUDGET * 0.97) {
+        badge.textContent = 'Budget Within Reach'; badge.className = 'badge badge-green';
+    } else if (s2EOY >= ANNUAL_BUDGET * 0.92) {
+        badge.textContent = 'Close to Budget';     badge.className = 'badge badge-amber';
+    } else {
+        badge.textContent = 'Stretch Goal';         badge.className = 'badge badge-red';
+    }
+
+    // Progress bar
+    const ytdPct = ytdRevenue / ANNUAL_BUDGET * 100;
+    el('q4YTDBar').style.width    = `${Math.min(ytdPct, 100)}%`;
+    el('q4YTDLabel').textContent  = `${fmt(ytdRevenue)} YTD (${ytdPct.toFixed(1)}% of budget)`;
+    el('q4GapLabel').textContent  = `${fmt(needed)} remaining`;
+
+    // Scenarios
+    el('q4Scenario1EOY').textContent = fmt(s1EOY);
+    el('q4Scenario1Pct').textContent = pct(s1EOY);
+    el('q4Scenario1Q4').textContent  = `Q4: ${fmt(s1Q4)}`;
+
+    el('q4Scenario2EOY').textContent = fmt(s2EOY);
+    el('q4Scenario2Pct').textContent = pct(s2EOY);
+    el('q4Scenario2Q4').textContent  = `Q4: ${fmt(s2Q4)}`;
+
+    el('q4Scenario3EOY').textContent = fmt(s3EOY);
+    el('q4Scenario3Pct').textContent = pct(s3EOY);
+    el('q4Scenario3Q4').textContent  = `Q4: ${fmt(s3Q4)}`;
+
+    // Needed to hit budget
+    const varVsQ4 = needed - remainingQ4Budget;
+    el('q4NeededTotal').textContent    = fmt(needed);
+    el('q4NeededVsBudget').textContent =
+        `${varVsQ4 >= 0 ? '+' : ''}${fmt(varVsQ4)} vs remaining Q4 budget (${fmt(remainingQ4Budget)})`;
+    el('q4NeededVsBudget').style.color = varVsQ4 > 0 ? '#fca5a5' : '#6ee7b7';
+    el('q4MonthlyNeeded').textContent  = fmt(monthlyNeeded);
+    el('q4MonthlyVsBudget').textContent = `vs Q4 budget avg ${fmt(q4BudgetAvg)}/mo`;
+    el('q4MonthlyVsBudget').style.color = monthlyNeeded > q4BudgetAvg ? '#fca5a5' : '#6ee7b7';
 }
 
 // ===== PHASE 4: Parts Weight Database & Freight Calculator =====

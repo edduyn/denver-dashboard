@@ -2354,15 +2354,83 @@
                 </div>
             </div>
 
+            <!-- ===== Q4 FORECAST ===== -->
+            <div style="border-top: 2px solid rgba(168,85,247,0.3); margin: 24px 0 16px 0;"></div>
+            <div class="card" style="border-left: 3px solid #a855f7; margin-bottom: 16px;">
+                <div class="card-header">
+                    <span class="card-title">📈 Q4 Forecast &amp; Full-Year Outlook</span>
+                    <span class="badge badge-amber" id="q4ForecastBadge">Loading...</span>
+                </div>
+
+                <!-- YTD Progress Bar -->
+                <div style="margin-bottom: 20px;">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+                        <span style="color:#94a3b8; font-size:12px;">YTD Progress</span>
+                        <span style="color:#94a3b8; font-size:12px;">Annual Budget: $8.43M</span>
+                    </div>
+                    <div style="background:rgba(255,255,255,0.08); border-radius:8px; height:14px; overflow:hidden;">
+                        <div id="q4YTDBar" style="background:linear-gradient(90deg,#10b981,#3b82f6); height:100%; border-radius:8px; width:0%; transition:width 1s;"></div>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; margin-top:5px;">
+                        <span style="color:#10b981; font-size:12px;" id="q4YTDLabel">$-- YTD</span>
+                        <span style="color:#ef4444; font-size:12px;" id="q4GapLabel">$-- gap remaining</span>
+                    </div>
+                </div>
+
+                <!-- Three Scenarios -->
+                <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:16px;">
+                    <div style="background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.5); border-radius:8px; padding:14px; text-align:center;">
+                        <div style="color:#fca5a5; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:6px;">YTD Avg Pace</div>
+                        <div style="color:#fca5a5; font-size:10px; margin-bottom:8px;">Jan–Sep monthly avg</div>
+                        <div style="color:#ef4444; font-size:22px; font-weight:bold;" id="q4Scenario1EOY">$--</div>
+                        <div style="color:#94a3b8; font-size:11px; margin-top:3px;" id="q4Scenario1Pct">--</div>
+                        <div style="color:#fca5a5; font-size:11px; margin-top:8px; padding-top:8px; border-top:1px solid rgba(239,68,68,0.3);" id="q4Scenario1Q4">Q4: $--</div>
+                    </div>
+                    <div style="background:rgba(245,158,11,0.1); border:1px solid rgba(245,158,11,0.5); border-radius:8px; padding:14px; text-align:center;">
+                        <div style="color:#fcd34d; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:6px;">H2 Run Rate</div>
+                        <div style="color:#fcd34d; font-size:10px; margin-bottom:8px;">Jul–Sep monthly avg</div>
+                        <div style="color:#f59e0b; font-size:22px; font-weight:bold;" id="q4Scenario2EOY">$--</div>
+                        <div style="color:#94a3b8; font-size:11px; margin-top:3px;" id="q4Scenario2Pct">--</div>
+                        <div style="color:#fcd34d; font-size:11px; margin-top:8px; padding-top:8px; border-top:1px solid rgba(245,158,11,0.3);" id="q4Scenario2Q4">Q4: $--</div>
+                    </div>
+                    <div style="background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.5); border-radius:8px; padding:14px; text-align:center;">
+                        <div style="color:#6ee7b7; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:6px;">September Pace</div>
+                        <div style="color:#6ee7b7; font-size:10px; margin-bottom:8px;">If Sep repeats × 3</div>
+                        <div style="color:#10b981; font-size:22px; font-weight:bold;" id="q4Scenario3EOY">$--</div>
+                        <div style="color:#94a3b8; font-size:11px; margin-top:3px;" id="q4Scenario3Pct">--</div>
+                        <div style="color:#6ee7b7; font-size:11px; margin-top:8px; padding-top:8px; border-top:1px solid rgba(16,185,129,0.3);" id="q4Scenario3Q4">Q4: $--</div>
+                    </div>
+                </div>
+
+                <!-- What's Needed -->
+                <div style="background:rgba(168,85,247,0.1); border:1px solid rgba(168,85,247,0.4); border-radius:8px; padding:14px;">
+                    <div style="color:#e9d5ff; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:10px;">To Hit Annual Budget</div>
+                    <div style="display:flex; justify-content:space-between; align-items:center; gap:16px;">
+                        <div>
+                            <div style="color:#94a3b8; font-size:11px; margin-bottom:2px;">Q4 revenue needed</div>
+                            <div style="color:#a855f7; font-size:24px; font-weight:bold;" id="q4NeededTotal">$--</div>
+                            <div style="font-size:11px; margin-top:3px;" id="q4NeededVsBudget">vs Q4 budget</div>
+                        </div>
+                        <div style="width:1px; background:rgba(168,85,247,0.3); align-self:stretch;"></div>
+                        <div>
+                            <div style="color:#94a3b8; font-size:11px; margin-bottom:2px;">Monthly pace needed</div>
+                            <div style="color:#a855f7; font-size:24px; font-weight:bold;" id="q4MonthlyNeeded">$--</div>
+                            <div style="font-size:11px; margin-top:3px;" id="q4MonthlyVsBudget">vs Q4 budget avg/mo</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- ===== END Q4 FORECAST ===== -->
+
         </div>
     </div>
 
-    <script src="dashboard-core.js?v=202609301530"></script>
-    <script src="dashboard-financial.js?v=202609301530"></script>
+    <script src="dashboard-core.js?v=202610011233"></script>
+    <script src="dashboard-financial.js?v=202610011233"></script>
 
-    <script src="dashboard-loaders.js?v=202609301530"></script>
-    <script src="dashboard-training.js?v=202609301530"></script>
-    <script src="dashboard-goals.js?v=202609301530"></script>
-    <script src="dashboard-people.js?v=202609301530"></script>
+    <script src="dashboard-loaders.js?v=202610011233"></script>
+    <script src="dashboard-training.js?v=202610011233"></script>
+    <script src="dashboard-goals.js?v=202610011233"></script>
+    <script src="dashboard-people.js?v=202610011233"></script>
 </body>
 </html>
