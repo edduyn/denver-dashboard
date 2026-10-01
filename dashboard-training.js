@@ -534,7 +534,7 @@ async function loadDailyMetrics() {
             headers: HEADERS
         });
 
-        if (rankingsResponse.status === 200) {
+        if (rankingsResponse.ok || rankingsResponse.status === 200) {
             const rankings = await rankingsResponse.json();
             if (rankings.length > 0) {
                 const rank = rankings[0];
