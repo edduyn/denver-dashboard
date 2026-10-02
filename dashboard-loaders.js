@@ -300,7 +300,7 @@ function renderBilledWOTable(woList, invoiceSet, filter) {
             <td>${wo.tail_number || '--'}</td>
             <td>${billedDate}</td>
             <td>${hasInv
-                ? `<a href="https://myduncan.aero/online/rest/service/customerDocs/pdf/${inv.invoice_number}/JobStmt.pdf" target="_blank" style="color:#10b981;text-decoration:none;font-weight:600;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">✅ ${inv.invoice_number || 'Yes'}</a>`
+                ? `<span style="color:#10b981;font-weight:600;">✅ ${inv.invoice_number || 'Yes'}</span>`
                 : `<a href="${worUrl}" target="_blank" style="${linkStyle}" onmouseover="${linkHover}" onmouseout="${linkOut}">🔴 NEED</a>`
             }</td>
             <td>${isReviewed
