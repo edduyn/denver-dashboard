@@ -184,7 +184,7 @@ async function loadBilledWorkOrders() {
         document.getElementById('billedWOBadge').className = 'badge';
 
         // Fetch billed WOs with full pagination — count is 850+ and growing
-        const woListPromise = fetchAllRows(`/rest/v1/work_orders?select=work_order_number,customer_name,customer_id,tail_number,billed_date,billed_amount,open_date&status=eq.billed&work_order_number=neq.DUM0A&order=billed_date.desc.nullslast`);
+        const woListPromise = fetchAllRows(`/rest/v1/work_orders?select=work_order_number,customer_name,customer_id,tail_number,billed_date,billed_amount,open_date,amdb_processed_at&status=eq.billed&work_order_number=neq.DUM0A&order=billed_date.desc.nullslast`);
 
         const [invResp, compResp] = await Promise.all([
             cachedFetch(`${SUPABASE_URL}/rest/v1/invoices?select=wo_code,invoice_number,final_billed_amount`, {
@@ -289,23 +289,26 @@ function renderBilledWOTable(woList, invoiceSet, filter) {
 
         const worUrl = buildWORUrl(wo.work_order_number);
         const detailUrl = `https://myduncan.aero/online/portal/workOrder/detail/squawks.jsf?workOrder=${wo.work_order_number}&squawk=1&menu=true`;
-        return `<tr style="border-left: 3px solid ${hasInv ? '#10b981' : '#ef4444'};">
+        const isReviewed = !!wo.amdb_processed_at;
+        const needsPdf = !hasInv || !isReviewed;
+        return `<tr style="border-left: 3px solid ${hasInv && isReviewed ? '#10b981' : '#ef4444'};">
             <td><a href="${detailUrl}" target="_blank" style="color:#60a5fa;font-weight:600;text-decoration:none;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">${wo.work_order_number}</a></td>
             <td style="font-family: monospace; font-size: 0.85em; color: #94a3b8;">${wo.customer_id || '--'}</td>
             <td style="max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${custDisplay}</td>
             <td>${wo.tail_number || '--'}</td>
             <td>${billedDate}</td>
             <td>${hasInv ? '<span style="color:#10b981;">✅ ' + (inv.invoice_number || 'Yes') + '</span>' : '<span style="color:#ef4444; font-weight:bold;">🔴 NEED</span>'}</td>
+            <td>${isReviewed ? '<span style="color:#10b981;">✅ Reviewed</span>' : '<span style="color:#ef4444; font-weight:bold;">🔴 Missing</span>'}</td>
             <td style="text-align: right;">${billedAmt}</td>
-            <td>${hasInv
-                ? '<span style="color:#10b981;">✅ Complete</span>'
-                : `<a href="${worUrl}" target="_blank" style="color:#f87171;font-weight:bold;text-decoration:none;background:rgba(239,68,68,0.1);padding:2px 8px;border-radius:4px;border:1px solid #ef4444;" onmouseover="this.style.background='rgba(239,68,68,0.25)'" onmouseout="this.style.background='rgba(239,68,68,0.1)'">📥 Pull PDF →</a>`
+            <td>${needsPdf
+                ? `<a href="${worUrl}" target="_blank" style="color:#f87171;font-weight:bold;text-decoration:none;background:rgba(239,68,68,0.1);padding:2px 8px;border-radius:4px;border:1px solid #ef4444;" onmouseover="this.style.background='rgba(239,68,68,0.25)'" onmouseout="this.style.background='rgba(239,68,68,0.1)'">📥 Pull PDF →</a>`
+                : '<span style="color:#10b981;">✅ Complete</span>'
             }</td>
             <td style="text-align: center;">${auditCell}</td>
         </tr>`;
     }).join('');
 
-    document.getElementById('billedWOTable').innerHTML = rows || '<tr><td colspan="9" style="text-align:center; color: #94a3b8;">No billed work orders found</td></tr>';
+    document.getElementById('billedWOTable').innerHTML = rows || '<tr><td colspan="10" style="text-align:center; color: #94a3b8;">No billed work orders found</td></tr>';
 }
 
 function filterBilledWO(filter) {
