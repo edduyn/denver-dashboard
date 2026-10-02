@@ -290,7 +290,9 @@ function renderBilledWOTable(woList, invoiceSet, filter) {
         const worUrl = buildWORUrl(wo.work_order_number);
         const detailUrl = `https://myduncan.aero/online/portal/workOrder/detail/squawks.jsf?workOrder=${wo.work_order_number}&squawk=1&menu=true`;
         const isReviewed = !!wo.amdb_processed_at;
-        const needsPdf = !hasInv || !isReviewed;
+        const linkStyle = 'color:#ef4444;font-weight:bold;text-decoration:none;background:rgba(239,68,68,0.08);padding:2px 6px;border-radius:4px;border:1px solid #ef4444;';
+        const linkHover = "this.style.background='rgba(239,68,68,0.22)'";
+        const linkOut = "this.style.background='rgba(239,68,68,0.08)'";
         return `<tr style="border-left: 3px solid ${hasInv && isReviewed ? '#10b981' : '#ef4444'};">
             <td><a href="${detailUrl}" target="_blank" style="color:#60a5fa;font-weight:600;text-decoration:none;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">${wo.work_order_number}</a></td>
             <td style="font-family: monospace; font-size: 0.85em; color: #94a3b8;">${wo.customer_id || '--'}</td>
@@ -299,19 +301,18 @@ function renderBilledWOTable(woList, invoiceSet, filter) {
             <td>${billedDate}</td>
             <td>${hasInv
                 ? `<a href="https://myduncan.aero/online/rest/service/customerDocs/pdf/${inv.invoice_number}/JobStmt.pdf" target="_blank" style="color:#10b981;text-decoration:none;font-weight:600;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">✅ ${inv.invoice_number || 'Yes'}</a>`
-                : '<span style="color:#ef4444; font-weight:bold;">🔴 NEED</span>'
+                : `<a href="${worUrl}" target="_blank" style="${linkStyle}" onmouseover="${linkHover}" onmouseout="${linkOut}">🔴 NEED</a>`
             }</td>
-            <td>${isReviewed ? '<span style="color:#10b981;">✅ Reviewed</span>' : '<span style="color:#ef4444; font-weight:bold;">🔴 Missing</span>'}</td>
+            <td>${isReviewed
+                ? '<span style="color:#10b981;">✅ Reviewed</span>'
+                : `<a href="${worUrl}" target="_blank" style="${linkStyle}" onmouseover="${linkHover}" onmouseout="${linkOut}">🔴 Missing</a>`
+            }</td>
             <td style="text-align: right;">${billedAmt}</td>
-            <td>${needsPdf
-                ? `<a href="${worUrl}" target="_blank" style="color:#f87171;font-weight:bold;text-decoration:none;background:rgba(239,68,68,0.1);padding:2px 8px;border-radius:4px;border:1px solid #ef4444;" onmouseover="this.style.background='rgba(239,68,68,0.25)'" onmouseout="this.style.background='rgba(239,68,68,0.1)'">📥 Pull PDF →</a>`
-                : '<span style="color:#10b981;">✅ Complete</span>'
-            }</td>
             <td style="text-align: center;">${auditCell}</td>
         </tr>`;
     }).join('');
 
-    document.getElementById('billedWOTable').innerHTML = rows || '<tr><td colspan="10" style="text-align:center; color: #94a3b8;">No billed work orders found</td></tr>';
+    document.getElementById('billedWOTable').innerHTML = rows || '<tr><td colspan="9" style="text-align:center; color: #94a3b8;">No billed work orders found</td></tr>';
 }
 
 function filterBilledWO(filter) {
