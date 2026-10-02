@@ -297,7 +297,10 @@ function renderBilledWOTable(woList, invoiceSet, filter) {
             <td style="max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${custDisplay}</td>
             <td>${wo.tail_number || '--'}</td>
             <td>${billedDate}</td>
-            <td>${hasInv ? '<span style="color:#10b981;">✅ ' + (inv.invoice_number || 'Yes') + '</span>' : '<span style="color:#ef4444; font-weight:bold;">🔴 NEED</span>'}</td>
+            <td>${hasInv
+                ? `<a href="https://myduncan.aero/online/rest/service/customerDocs/pdf/${inv.invoice_number}/JobStmt.pdf" target="_blank" style="color:#10b981;text-decoration:none;font-weight:600;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">✅ ${inv.invoice_number || 'Yes'}</a>`
+                : '<span style="color:#ef4444; font-weight:bold;">🔴 NEED</span>'
+            }</td>
             <td>${isReviewed ? '<span style="color:#10b981;">✅ Reviewed</span>' : '<span style="color:#ef4444; font-weight:bold;">🔴 Missing</span>'}</td>
             <td style="text-align: right;">${billedAmt}</td>
             <td>${needsPdf
