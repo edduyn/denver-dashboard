@@ -277,15 +277,19 @@ function renderBilledWOTable(woList, invoiceSet, filter) {
             auditCell = '<span style="color:#f59e0b;" title="Needs review">🟡</span>';
         }
 
+        const myDuncanUrl = `https://myduncan.aero/online/portal/workOrder/detail/squawks.jsf?workOrder=${wo.work_order_number}&squawk=1&menu=true`;
         return `<tr style="border-left: 3px solid ${hasInv ? '#10b981' : '#ef4444'};">
-            <td><strong>${wo.work_order_number}</strong></td>
+            <td><a href="${myDuncanUrl}" target="_blank" style="color:#60a5fa;font-weight:600;text-decoration:none;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">${wo.work_order_number}</a></td>
             <td style="font-family: monospace; font-size: 0.85em; color: #94a3b8;">${wo.customer_id || '--'}</td>
             <td style="max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${custDisplay}</td>
             <td>${wo.tail_number || '--'}</td>
             <td>${billedDate}</td>
             <td>${hasInv ? '<span style="color:#10b981;">✅ ' + (inv.invoice_number || 'Yes') + '</span>' : '<span style="color:#ef4444; font-weight:bold;">🔴 NEED</span>'}</td>
             <td style="text-align: right;">${billedAmt}</td>
-            <td>${hasInv ? '<span style="color:#10b981;">Complete</span>' : '<span style="color:#ef4444;">Pull PDF</span>'}</td>
+            <td>${hasInv
+                ? '<span style="color:#10b981;">✅ Complete</span>'
+                : `<a href="${myDuncanUrl}" target="_blank" style="color:#f87171;font-weight:bold;text-decoration:none;background:rgba(239,68,68,0.1);padding:2px 8px;border-radius:4px;border:1px solid #ef4444;" onmouseover="this.style.background='rgba(239,68,68,0.25)'" onmouseout="this.style.background='rgba(239,68,68,0.1)'">📥 Pull PDF →</a>`
+            }</td>
             <td style="text-align: center;">${auditCell}</td>
         </tr>`;
     }).join('');

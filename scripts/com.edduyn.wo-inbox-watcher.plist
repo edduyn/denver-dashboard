@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.edduyn.wo-inbox-watcher</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/bash</string>
+        <string>/Users/edduynpita/denver-dashboard/scripts/wo_inbox_watcher.sh</string>
+    </array>
+
+    <!-- Run at login and keep running -->
+    <key>RunAtLoad</key>
+    <true/>
+    <key>KeepAlive</key>
+    <true/>
+
+    <!-- Restart after 30s if it crashes -->
+    <key>ThrottleInterval</key>
+    <integer>30</integer>
+
+    <key>StandardOutPath</key>
+    <string>/Users/edduynpita/.wo_inbox_watcher.log</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/edduynpita/.wo_inbox_watcher.log</string>
+</dict>
+</plist>
