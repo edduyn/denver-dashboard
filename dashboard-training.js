@@ -481,11 +481,14 @@ async function loadDailyMetrics() {
             // Update Denver side (right - green/blue)
             document.getElementById('denverAB').textContent = `${denverAB.toFixed(1)}%`;
             document.getElementById('denverRolling').textContent = `1-Month Rolling: ${rollingAB.toFixed(1)}%`;
-            document.getElementById('denverFebOnly').textContent = `${currMonthName}-only: ${currAB.toFixed(1)}% ${currAB >= 50 ? '✅ Improving!' : ''}`;
+            const currLabel = currTotal < 80
+                ? `${currMonthName}-only: insufficient data (${currTotal.toFixed(0)} hrs)`
+                : `${currMonthName}-only: ${currAB.toFixed(1)}% ${currAB >= 50 ? '✅ Improving!' : ''}`;
+            document.getElementById('denverFebOnly').textContent = currLabel;
 
             // Update comparison stats
             document.getElementById('janFinal').textContent = `${prevAB.toFixed(1)}%`;
-            document.getElementById('febTrend').textContent = `${currAB.toFixed(1)}%`;
+            document.getElementById('febTrend').textContent = currTotal < 80 ? 'N/A' : `${currAB.toFixed(1)}%`;
             document.getElementById('rollingAvg').textContent = `${rollingAB.toFixed(1)}%`;
 
             // Update status message
