@@ -340,7 +340,7 @@ function clearApiCache() {
 // Uses Range header to fetch all pages and merges into one array.
 // Now uses cachedFetch to avoid redundant API calls within cache window.
 async function fetchAllRows(path) {
-    const cacheKey = 'sb_pag_' + path;
+    const cacheKey = 'sb_pag_v2_' + path;
     try {
         const cached = sessionStorage.getItem(cacheKey);
         if (cached) {

@@ -497,7 +497,12 @@ async function loadDailyMetrics() {
             let statusBorder = '';
             let statusColor = '';
 
-            if (currAB >= 58.5) {
+            if (currTotal < 80) {
+                statusMsg = `⏳ ${currMonthName} is early — only ${currTotal.toFixed(0)} hrs recorded so far. ${prevMonthName} final was ${prevAB.toFixed(1)}%. Check back as hours load.`;
+                statusBg = '#1e293b';
+                statusBorder = '#94a3b8';
+                statusColor = '#94a3b8';
+            } else if (currAB >= 58.5) {
                 statusMsg = `🎉 ${currMonthName} is EXCELLENT! ${currAB.toFixed(1)}% ${currMonthName}-only A/B vs ${prevAB.toFixed(1)}% ${prevMonthName} final. AT TARGET! Keep it up!`;
                 statusBg = '#065f46';
                 statusBorder = '#10b981';
