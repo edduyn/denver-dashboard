@@ -301,7 +301,7 @@ function renderBilledWOTable(woList, invoiceSet, filter) {
             <td>${billedDate}</td>
             <td>${hasInv
                 ? `<span style="color:#10b981;font-weight:600;">✅ ${inv.invoice_number || 'Yes'}</span>`
-                : `<a href="${worUrl}" target="_blank" style="${linkStyle}" onmouseover="${linkHover}" onmouseout="${linkOut}">🔴 NEED</a>`
+                : `<a href="${detailUrl}" target="_blank" style="${linkStyle}" onmouseover="${linkHover}" onmouseout="${linkOut}">🔴 NEED</a>`
             }</td>
             <td>${isReviewed
                 ? '<span style="color:#10b981;">✅ Reviewed</span>'
