@@ -173,11 +173,10 @@ async function loadBilledWorkOrders() {
         document.getElementById('billedWOBadge').textContent = 'Loading...';
         document.getElementById('billedWOBadge').className = 'badge';
 
-        // THREE minimal queries — egress-conscious
-        const [woResp, invResp, compResp] = await Promise.all([
-            cachedFetch(`${SUPABASE_URL}/rest/v1/work_orders?select=work_order_number,customer_name,customer_id,tail_number,billed_date,billed_amount,open_date&status=eq.billed&work_order_number=neq.DUM0A&order=billed_date.desc.nullslast&limit=500`, {
-                headers: HEADERS
-            }),
+        // Fetch billed WOs with full pagination — count is 850+ and growing
+        const woListPromise = fetchAllRows(`/rest/v1/work_orders?select=work_order_number,customer_name,customer_id,tail_number,billed_date,billed_amount,open_date&status=eq.billed&work_order_number=neq.DUM0A&order=billed_date.desc.nullslast`);
+
+        const [invResp, compResp] = await Promise.all([
             cachedFetch(`${SUPABASE_URL}/rest/v1/invoices?select=wo_code,invoice_number,final_billed_amount`, {
                 headers: HEADERS
             }),
@@ -186,7 +185,7 @@ async function loadBilledWorkOrders() {
             })
         ]);
 
-        const woList = await woResp.json();
+        const woList = await woListPromise;
         const invoices = await invResp.json();
         const compFindings = await compResp.json();
 
@@ -235,7 +234,11 @@ function renderBilledWOTable(woList, invoiceSet, filter) {
     const total = woList.length;
     const hasInvoice = woList.filter(w => invoiceSet.has(w.work_order_number)).length;
     const missing = total - hasInvoice;
-    const totalRevenue = Object.values(invoiceMap).reduce((sum, inv) => sum + (parseFloat(inv.final_billed_amount) || 0), 0);
+    // Use invoice amount when available; fall back to wo.billed_amount for WOs without an invoice record
+    const totalRevenue = woList.reduce((sum, wo) => {
+        const inv = invoiceMap[wo.work_order_number];
+        return sum + (inv ? (parseFloat(inv.final_billed_amount) || 0) : (parseFloat(wo.billed_amount) || 0));
+    }, 0);
 
     document.getElementById('billedWOTotal').textContent = total;
     document.getElementById('billedWOHasInvoice').textContent = hasInvoice;
@@ -314,7 +317,7 @@ async function loadOver30WOs() {
             cachedFetch(`${SUPABASE_URL}/rest/v1/over_30_wos?select=*&order=days_open.desc`, {
                 headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
             }),
-            cachedFetch(`${SUPABASE_URL}/rest/v1/work_orders?select=work_order_number&status=eq.billed&limit=500`, {
+            cachedFetch(`${SUPABASE_URL}/rest/v1/work_orders?select=work_order_number&status=eq.billed&limit=2000`, {
                 headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
             })
         ]);
@@ -507,7 +510,7 @@ async function loadWIP() {
                 headers: HEADERS
             }),
             // Billed WOs — these are OUT of WIP (already billed = no longer WIP factor)
-            cachedFetch(`${SUPABASE_URL}/rest/v1/work_orders?select=work_order_number,status,billed_date&status=eq.billed&limit=500`, {
+            cachedFetch(`${SUPABASE_URL}/rest/v1/work_orders?select=work_order_number,status,billed_date&status=eq.billed&limit=2000`, {
                 headers: HEADERS
             })
         ]);
