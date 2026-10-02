@@ -493,7 +493,7 @@ async function loadWIP() {
                     const dateRes = await cachedFetch(`${SUPABASE_URL}/rest/v1/anchor_work_orders?select=report_date&order=report_date.desc&limit=1`, { headers: HEADERS });
                     const dateData = await dateRes.json();
                     const latestDate = dateData?.[0]?.report_date || monthEnd;
-                    const aRes = await cachedFetch(`${SUPABASE_URL}/rest/v1/anchor_work_orders?select=wo_number,shop,customer,description,expected_hours,open_date&report_date=eq.${latestDate}&order=shop&limit=500`, { headers: HEADERS });
+                    const aRes = await cachedFetch(`${SUPABASE_URL}/rest/v1/anchor_work_orders?select=wo_number,shop,customer,description,expected_hours,open_date&report_date=eq.${latestDate}&order=shop&limit=1000`, { headers: HEADERS });
                     return aRes;
                 } catch(e) { return { json: async () => [] }; }
             })(),
@@ -576,6 +576,7 @@ async function loadWIP() {
             const shop = wo.shop;
             const rates = WIP_RATES[shop] || WIP_RATES.SDN; // default to SDN rate
             const laborWIP = wo.hours * rates.labor;
+            const partsWIP = laborWIP * (rates.partsPct / 100);
 
             if (!shopTotals[shop]) {
                 shopTotals[shop] = { shop, hours: 0, woCount: 0, laborWIP: 0, partsWIP: 0, totalWIP: 0, rate: rates.labor };
@@ -583,7 +584,8 @@ async function loadWIP() {
             shopTotals[shop].hours += wo.hours;
             shopTotals[shop].woCount++;
             shopTotals[shop].laborWIP += laborWIP;
-            shopTotals[shop].totalWIP += laborWIP;
+            shopTotals[shop].partsWIP += partsWIP;
+            shopTotals[shop].totalWIP += laborWIP + partsWIP;
         });
 
         // Compute grand totals
@@ -710,7 +712,7 @@ async function loadWIP() {
             .sort((a, b) => b.hours - a.hours);
         if (sdvWOs.length > 0) {
             const sdvRows = sdvWOs.map(wo => {
-                const wipVal = wo.hours * 80;
+                const wipVal = wo.hours * WIP_RATES.SDV.labor;
                 const expected = wo.expected_hours || 0;
                 let riskBadge = '';
                 if (expected > 0 && wo.hours > expected * 1.1) {
